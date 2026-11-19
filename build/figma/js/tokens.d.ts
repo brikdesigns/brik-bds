@@ -502,3 +502,23 @@ export const pageAccentRed: string;
 export const pageAccentPurple: string;
 /** Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%). */
 export const contentWidthXl: string;
+/** Band — feature grids, CTA bands. CSS --bds-content-width-lg. */
+export const contentWidthLg: string;
+/** Band — standard text-led body section. CSS --bds-content-width-md. */
+export const contentWidthMd: string;
+/** Band — narrow band, focused forms. CSS --bds-content-width-sm. */
+export const contentWidthSm: string;
+/** Text column — long-form prose, rich-text body (ADR-041). Same in every mode: a text measure does not widen with the page band. CSS --bds-content-width-text-md. */
+export const contentWidthTextMd: string;
+/** Decelerate — most UI transitions. CSS --bds-ease-out. */
+export const easeOut: string;
+/** Accelerate — exits, collapses. CSS --bds-ease-in. */
+export const easeIn: string;
+/** Symmetric — looping, continuous. CSS --bds-ease-in-out. */
+export const easeInOut: string;
+/** Overshoot bounce — pop-in, badge appear. CSS --bds-ease-spring. */
+export const easeSpring: string;
+/** Gentle overshoot settle — media/panel entrance. CSS --bds-ease-spring-soft. */
+export const easeSpringSoft: string;
+/** Constant velocity — marquees, continuous loops. CSS --bds-ease-linear. */
+export const easeLinear: string;

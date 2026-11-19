@@ -306,14 +306,13 @@
 
      THE COLUMN RULE: a column has one content width and one left edge. The
      element that OWNS the column sets the width; blocks nested inside it never
-     re-cap themselves. Two caps in one column is the defect, not the fix. */
+     re-cap themselves. Two caps in one column is the defect, not the fix.
+
+     --bds-content-width-{sm,md,lg,xl,text-md} come from the Figma
+     `content-width` collection (tokens/figma-tokens.css, #3278). The three
+     below have no Figma variable yet. */
   --bds-content-width-text-xs:   448px;  /* text — short intro: eyebrow + one-line title */
   --bds-content-width-text-sm:   600px;  /* text — section intro: title + description (the default) */
-  --bds-content-width-text-md:   720px;  /* text — long-form prose, rich-text body */
-  --bds-content-width-sm:        640px;  /* band — narrow band, focused forms */
-  --bds-content-width-md:        800px;  /* band — standard text-led body section */
-  --bds-content-width-lg:       1024px;  /* band — feature grids, CTA bands */
-  --bds-content-width-xl:       1280px;  /* band — the page band: hero, header, footer */
   --bds-content-width-full:      100%;   /* band — full-bleed (use sparingly — prefer explicit widths) */
 
   /* ── Page inset (ADR-025 recipe; ADR-042 value) ──
@@ -411,8 +410,7 @@
   --bds-state-disabled-opacity: 0.5;
 
   /* ── Motion semantic aliases ──
-     Easing and the periodic durations below are repo-owned (no Figma semantic
-     motion layer). Transition durations are the Figma `--bds-duration-{100,200,300,400}`
+     The periodic durations below are repo-owned (no Figma variable). Transition durations are the Figma `--bds-duration-{100,200,300,400}`
      primitives; components read them directly. */
 
   /* Periodic / loop durations — role tokens, NOT steps on the transition ramp
@@ -423,12 +421,8 @@
   --bds-duration-marquee:  55s;  /* full marquee loop period — logo tickers, continuous scroll */
   --bds-duration-autoplay: 10s;  /* dwell before auto-advance — carousels, media tabs */
 
-  --bds-ease-out:         cubic-bezier(0.16, 1, 0.3, 1);     /* decelerate — most UI transitions */
-  --bds-ease-in:          cubic-bezier(0.7, 0, 0.84, 0);     /* accelerate — exits, collapses */
-  --bds-ease-in-out:      cubic-bezier(0.65, 0, 0.35, 1);    /* symmetric — looping, continuous */
-  --bds-ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
-  --bds-ease-spring-soft: cubic-bezier(0, 1.08, 0.77, 1.01); /* gentle overshoot settle — media/panel entrance */
-  --bds-ease-linear:      linear;                            /* constant velocity — marquees, continuous loops */
+  /* --bds-ease-{out,in,in-out,spring,spring-soft,linear} come from the Figma
+     `motion` collection (tokens/figma-tokens.css, #3278). */
 
   /* ── DEPRECATED numeric-rung aliases (#2594) — DROP NEXT MINOR ──
      ADR-033 §3 renamed 13 ❖ Brik Foundations step words to numeric t-shirt

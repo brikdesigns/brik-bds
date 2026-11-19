@@ -112,6 +112,10 @@ const DEFAULT_MODES = {
   'border-width': 'default',
   elevation: 'subtle',
   typography: 'default',
+  // #3278: the :root value of each band rung is the `contained` mode;
+  // generate-modes-css.mjs re-emits wide / full-bleed under [data-mode-width].
+  'content-width': 'contained',
+  motion: 'default',
 };
 
 function deepMergeTree(target, source) {
@@ -181,6 +185,10 @@ function cleanTree(obj, warn) {
 // group wrapper. These need wrapping under the collection name so
 // they don't orphan into the global namespace.
 
+const LEGACY_COLLECTION_WRAP = new Set(
+  require('../../tokens/naming-grammar.json').body.legacyCollectionWrap.collections,
+);
+
 function needsWrapping(setData) {
   for (const val of Object.values(setData)) {
     if (val && typeof val === 'object' && val.$value !== undefined) {
@@ -235,11 +243,20 @@ function flattenTokensStudio(input, { modes = {}, log = noop, warn = noop } = {}
       continue;
     }
 
-    // Wrap rootless semantic sets under their collection name
-    // e.g. border-width/default → { "border-width": { sm, md, lg } }
-    //      breakpoint/default   → { "breakpoint": { web, tablet, mobile } }
+    // A name is the Figma path (#3278, tokens/naming-grammar.json `body`): no
+    // collection segment is added. The only exception is the legacy list of
+    // collections whose variables still sit at the root —
+    // e.g. border-width/default → { "border-width": { sm, md, lg } }.
+    // Any other rootless set would emit a name Figma never declared, so stop.
     if (col !== 'primitives' && needsWrapping(setData)) {
-      log(`    ↳ Wrapping "${setKey}" tokens under "${col}"`);
+      if (!LEGACY_COLLECTION_WRAP.has(col)) {
+        throw new Error(
+          `Set "${setKey}" has variables at its root. A token name is its Figma path ` +
+          `(tokens/naming-grammar.json body.rule), so rename them in Figma to start ` +
+          `with "${col}/" — the generator does not add the collection name.`,
+        );
+      }
+      log(`    ↳ Wrapping "${setKey}" tokens under "${col}" (legacy, naming-grammar body.legacyCollectionWrap)`);
       deepMergeTree(merged, { [col]: setData });
     } else {
       deepMergeTree(merged, setData);

@@ -5632,9 +5632,10 @@
       "typography/comfortable",
       "typography/spacious",
       "typography/expressive",
-      "width/contained",
-      "width/wide",
-      "width/full-bleed"
+      "content-width/contained",
+      "content-width/wide",
+      "content-width/full-bleed",
+      "motion/default"
     ]
   },
   "$themes": [],
@@ -8145,7 +8146,7 @@
       }
     }
   },
-  "width/contained": {
+  "content-width/contained": {
     "content-width": {
       "xl": {
         "$extensions": {
@@ -8156,10 +8157,50 @@
         "$type": "string",
         "$value": "1280px",
         "$description": "Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%)."
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "1024px",
+        "$description": "Band — feature grids, CTA bands. CSS --bds-content-width-lg."
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "800px",
+        "$description": "Band — standard text-led body section. CSS --bds-content-width-md."
+      },
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "640px",
+        "$description": "Band — narrow band, focused forms. CSS --bds-content-width-sm."
+      },
+      "text-md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "720px",
+        "$description": "Text column — long-form prose, rich-text body (ADR-041). Same in every mode: a text measure does not widen with the page band. CSS --bds-content-width-text-md."
       }
     }
   },
-  "width/wide": {
+  "content-width/wide": {
     "content-width": {
       "xl": {
         "$extensions": {
@@ -8170,10 +8211,50 @@
         "$type": "string",
         "$value": "1440px",
         "$description": "Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%)."
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "1280px",
+        "$description": "Band — feature grids, CTA bands. CSS --bds-content-width-lg."
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "1024px",
+        "$description": "Band — standard text-led body section. CSS --bds-content-width-md."
+      },
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "800px",
+        "$description": "Band — narrow band, focused forms. CSS --bds-content-width-sm."
+      },
+      "text-md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "720px",
+        "$description": "Text column — long-form prose, rich-text body (ADR-041). Same in every mode: a text measure does not widen with the page band. CSS --bds-content-width-text-md."
       }
     }
   },
-  "width/full-bleed": {
+  "content-width/full-bleed": {
     "content-width": {
       "xl": {
         "$extensions": {
@@ -8184,6 +8265,110 @@
         "$type": "string",
         "$value": "full",
         "$description": "Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%)."
+      },
+      "lg": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "full",
+        "$description": "Band — feature grids, CTA bands. CSS --bds-content-width-lg."
+      },
+      "md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "full",
+        "$description": "Band — standard text-led body section. CSS --bds-content-width-md."
+      },
+      "sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "full",
+        "$description": "Band — narrow band, focused forms. CSS --bds-content-width-sm."
+      },
+      "text-md": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "720px",
+        "$description": "Text column — long-form prose, rich-text body (ADR-041). Same in every mode: a text measure does not widen with the page band. CSS --bds-content-width-text-md."
+      }
+    }
+  },
+  "motion/default": {
+    "ease": {
+      "out": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "$description": "Decelerate — most UI transitions. CSS --bds-ease-out."
+      },
+      "in": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "cubic-bezier(0.7, 0, 0.84, 0)",
+        "$description": "Accelerate — exits, collapses. CSS --bds-ease-in."
+      },
+      "in-out": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "cubic-bezier(0.65, 0, 0.35, 1)",
+        "$description": "Symmetric — looping, continuous. CSS --bds-ease-in-out."
+      },
+      "spring": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "cubic-bezier(0.34, 1.56, 0.64, 1)",
+        "$description": "Overshoot bounce — pop-in, badge appear. CSS --bds-ease-spring."
+      },
+      "spring-soft": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "cubic-bezier(0, 1.08, 0.77, 1.01)",
+        "$description": "Gentle overshoot settle — media/panel entrance. CSS --bds-ease-spring-soft."
+      },
+      "linear": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "linear",
+        "$description": "Constant velocity — marquees, continuous loops. CSS --bds-ease-linear."
       }
     }
   }
