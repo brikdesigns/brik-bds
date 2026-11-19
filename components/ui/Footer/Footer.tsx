@@ -241,7 +241,7 @@ export function Footer({
     <footer
       className={bdsClass(
         'bds-footer',
-        `bds-footer--${variant}`,
+        `bds-footer--variant-${variant}`,
         containerMaxWidth && `bds-footer--constrain-${containerMaxWidth}`,
         className,
       )}
