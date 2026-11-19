@@ -99,9 +99,27 @@ describe('feedback widget page scoping', () => {
     expect(pinLabels()).toEqual([]);
   });
 
-  it('ignores query string and hash when matching the page', async () => {
-    await load(`${PAGE_X}?tab=billing#top`, [row('a', `${PAGE_X}/`)]);
+  it('ignores hash, trailing slash and non-tab query params when matching the page', async () => {
+    await load(`${PAGE_X}?utm=1#top`, [row('a', `${PAGE_X}/`)]);
     expect(pinLabels()).toEqual(['1']);
+  });
+
+  it('treats each ?tab= view of one path as its own page', async () => {
+    const rows = [row('a', `${PAGE_X}?tab=companies`), row('b', `${PAGE_X}?tab=activity`)];
+    await load(`${PAGE_X}?tab=companies`, rows);
+    expect(pinLabels()).toEqual(['1']);
+    document.body.innerHTML = '';
+    document.querySelectorAll('style').forEach((s) => s.remove());
+    await load(`${PAGE_X}?tab=details`, rows);
+    expect(pinLabels()).toEqual([]);
+  });
+
+  it('re-scopes when only the ?tab= changes (same pathname)', async () => {
+    await load(`${PAGE_X}?tab=companies`, [row('a', `${PAGE_X}?tab=companies`)]);
+    expect(pinLabels()).toEqual(['1']);
+    window.history.pushState({}, '', '/admin/companies?tab=activity');
+    await settle(900);
+    expect(pinLabels()).toEqual([]);
   });
 
   it('numbers pins within the current page, not across pages', async () => {
