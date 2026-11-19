@@ -2,7 +2,10 @@
 /* Chart family — ChartFrame chrome + SVG marks (ADR-050).
    Colour rule: every mark reads `currentColor`, and the only place a chart
    colour enters is the `[data-chart-color]` rules at the bottom, each
-   pointing at one `--bds-chart-*` token. No hex in this file (brik-bds issue 3182 greps for it). */
+   pointing at one `--bds-background-chart-*` token (the fill set; Figma also
+   carries a same-valued `--bds-border-chart-*` stroke set for line, outline
+   and axis marks — chart is a role under the background/border purposes, not
+   a purpose of its own). No hex in this file (brik-bds issue 3182 greps for it). */
 
 /* ─── Frame ───────────────────────────────────────────── */
 
@@ -293,18 +296,21 @@
   fill: currentColor;
 }
 
-/* ─── Chart colour — the only entry point for --bds-chart-* ── */
+/* ─── Chart colour — the only entry point for --bds-background-chart-* ──
+   `color` is the currentColor carrier every mark reads through fill/stroke
+   (ADR-050 § 1), so the fill token sits in the text slot on purpose; each rule
+   waives token-family for that reason. */
 
-[data-chart-color='brand'] { color: var(--bds-chart-brand); }
-[data-chart-color='neutral'] { color: var(--bds-chart-neutral); }
-[data-chart-color='categorical-1'] { color: var(--bds-chart-categorical-1); }
-[data-chart-color='categorical-2'] { color: var(--bds-chart-categorical-2); }
-[data-chart-color='categorical-3'] { color: var(--bds-chart-categorical-3); }
-[data-chart-color='categorical-4'] { color: var(--bds-chart-categorical-4); }
-[data-chart-color='categorical-5'] { color: var(--bds-chart-categorical-5); }
-[data-chart-color='categorical-6'] { color: var(--bds-chart-categorical-6); }
-[data-chart-color='positive'] { color: var(--bds-chart-positive); }
-[data-chart-color='warning'] { color: var(--bds-chart-warning); }
-[data-chart-color='negative'] { color: var(--bds-chart-negative); }
-[data-chart-color='info'] { color: var(--bds-chart-info); }
+[data-chart-color='brand'] { color: var(--bds-background-chart-brand); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='neutral'] { color: var(--bds-background-chart-neutral); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='categorical-1'] { color: var(--bds-background-chart-categorical-1); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='categorical-2'] { color: var(--bds-background-chart-categorical-2); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='categorical-3'] { color: var(--bds-background-chart-categorical-3); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='categorical-4'] { color: var(--bds-background-chart-categorical-4); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='categorical-5'] { color: var(--bds-background-chart-categorical-5); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='categorical-6'] { color: var(--bds-background-chart-categorical-6); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='positive'] { color: var(--bds-background-chart-positive); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='warning'] { color: var(--bds-background-chart-warning); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='negative'] { color: var(--bds-background-chart-negative); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='info'] { color: var(--bds-background-chart-info); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
 }

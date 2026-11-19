@@ -66,7 +66,7 @@ function TokenUsageTable({ tokens, maxCount }: { tokens: CoverageData['used']; m
           <tr key={t.token}>
             <td style={{ ...tableCell, fontFamily: 'var(--bds-font-family-system, monospace)', fontSize: 'var(--bds-body-xs)' }}>{t.token}</td>
             <td style={{ ...tableCell, textAlign: 'right' }}>{t.count}</td>
-            <td style={tableCell}><Bar value={t.count} max={maxCount} color="var(--bds-color-system-green)" /></td>
+            <td style={tableCell}><Bar value={t.count} max={maxCount} color="var(--bds-color-system-green-500)" /></td>
             <td style={{ ...tableCell, fontSize: 'var(--bds-body-xs)', color: 'var(--bds-text-muted)' }}>{t.components.slice(0, 5).join(', ')}{t.components.length > 5 ? ` +${t.components.length - 5}` : ''}</td>
           </tr>
         ))}
@@ -110,7 +110,7 @@ function HardcodedLeaderboard({ items }: { items: CoverageData['hardcoded'] }) {
           <tr key={item.component}>
             <td style={{ ...tableCell, width: 180 }}>{item.component}</td>
             <td style={{ ...tableCell, textAlign: 'right', width: 50 }}>{item.count}</td>
-            <td style={tableCell}><Bar value={item.count} max={max} color="var(--bds-color-system-yellow)" /></td>
+            <td style={tableCell}><Bar value={item.count} max={max} color="var(--bds-color-system-yellow-500)" /></td>
           </tr>
         ))}
       </tbody>
@@ -149,9 +149,9 @@ function TokenCoverageDashboard() {
       <DashboardSection title="Summary">
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--bds-gap-md)' }}>
           <div style={card}><div style={metric}>{data.totalDefined}</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Total defined</div></div>
-          <div style={card}><div style={{ ...metric, color: 'var(--bds-color-system-green)' }}>{data.totalUsed}</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Used in components</div></div>
-          <div style={card}><div style={{ ...metric, color: data.totalOrphaned > 50 ? 'var(--bds-color-system-yellow)' : 'var(--bds-text-primary)' }}>{data.totalOrphaned}</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Orphaned</div></div>
-          <div style={card}><div style={{ ...metric, color: 'var(--bds-color-system-green)' }}>{data.usagePct}%</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Usage rate</div></div>
+          <div style={card}><div style={{ ...metric, color: 'var(--bds-color-system-green-500)' }}>{data.totalUsed}</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Used in components</div></div>
+          <div style={card}><div style={{ ...metric, color: data.totalOrphaned > 50 ? 'var(--bds-color-system-yellow-500)' : 'var(--bds-text-primary)' }}>{data.totalOrphaned}</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Orphaned</div></div>
+          <div style={card}><div style={{ ...metric, color: 'var(--bds-color-system-green-500)' }}>{data.usagePct}%</div><div style={{ fontFamily: 'var(--bds-font-family-body)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-muted)' }}>Usage rate</div></div>
         </div>
       </DashboardSection>
 

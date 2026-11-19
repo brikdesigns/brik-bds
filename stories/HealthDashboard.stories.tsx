@@ -68,14 +68,14 @@ const badge = (pass: boolean): CSSProperties => ({
   fontSize: 'var(--bds-body-xs)',
   fontFamily: 'var(--bds-font-family-label)',
   fontWeight: 'var(--bds-font-weight-semibold)' as unknown as number,
-  backgroundColor: pass ? 'var(--bds-color-system-green)' : 'var(--bds-color-system-red)',
+  backgroundColor: pass ? 'var(--bds-color-system-green-500)' : 'var(--bds-color-system-red-500)',
   color: '#fff', // bds-lint-ignore — badge text always white
 });
 
 // ─── Components ─────────────────────────────────────────────────────
 
 function MetricCard({ value, label, status }: { value: string; label: string; status?: 'good' | 'warn' | 'bad' }) {
-  const color = status === 'good' ? 'var(--bds-color-system-green)' : status === 'bad' ? 'var(--bds-color-system-red)' : 'var(--bds-text-primary)';
+  const color = status === 'good' ? 'var(--bds-color-system-green-500)' : status === 'bad' ? 'var(--bds-color-system-red-500)' : 'var(--bds-text-primary)';
   return (
     <div style={card}>
       <div style={{ ...metric, color }}>{value}</div>
@@ -179,7 +179,7 @@ function HealthDashboard() {
             {data.grid.categories.map(cat => (
               <div key={cat.name} style={{ ...card, padding: 'var(--bds-padding-sm)' }}>
                 <div style={{ fontFamily: 'var(--bds-font-family-label)', fontSize: 'var(--bds-body-sm)', color: 'var(--bds-text-secondary)' }}>{cat.name}</div>
-                <div style={{ fontFamily: 'var(--bds-font-family-heading)', fontSize: 'var(--bds-heading-sm)', color: cat.offGrid === 0 ? 'var(--bds-color-system-green)' : 'var(--bds-text-primary)' }}>
+                <div style={{ fontFamily: 'var(--bds-font-family-heading)', fontSize: 'var(--bds-heading-sm)', color: cat.offGrid === 0 ? 'var(--bds-color-system-green-500)' : 'var(--bds-text-primary)' }}>
                   {cat.pct}% <span style={{ fontSize: 'var(--bds-body-xs)', color: 'var(--bds-text-muted)' }}>({cat.onGrid}/{cat.total})</span>
                 </div>
               </div>
