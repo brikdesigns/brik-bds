@@ -215,6 +215,7 @@
     "spacing": { "concept": "outer separation from adjacent blocks", "values": ["none", "sm", "md", "lg"] },
     "corner": { "concept": "viewport corner a fixed element docks to", "values": ["bottom-right", "bottom-left"] },
     "placement": { "concept": "side of its anchor a floating element opens on", "values": ["top", "bottom", "left", "right"] },
+    "side": { "concept": "viewport edge a docked panel anchors to", "values": ["right", "left", "bottom"] },
     "service-line": { "concept": "service line whose surface paints the block", "values": ["brand", "marketing", "information", "product", "back-office"] }
   },
   "docs": {
