@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Token Formula Reassessment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.55 -apple-system, "Segoe UI", sans-serif; max-width: 72rem; margin: 2rem auto; padding: 0 1rem; color: #222; background: #fff; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2.25rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  h3 { font-size: 1rem; margin-top: 1.25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; overflow-wrap: anywhere; }
+  .answer { background: #eef6ff; border-left: 4px solid #2b6cb0; padding: .75rem 1rem; margin: 1rem 0; }
+  .formula { font: 1.15rem/1.6 ui-monospace, Menlo, monospace; background: #f7f7f7; border: 1px solid #ddd; padding: .75rem 1rem; }
+  .open { background: #fff4e5; border-left: 4px solid #dd6b20; padding: .5rem 1rem; margin: .75rem 0; }
+  .HIGH { color: #b00020; font-weight: 600; } .MED { color: #9c4a00; font-weight: 600; } .LOW { color: #555; }
+  .wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<h1>Token Formula Reassessment — 2026-11-18</h1>
+<p><em>Updated 2026-11-19: primitive-colour rebuild, elevation refactor and the sync PR (section 2b).</em></p>
+
+<div class="answer">
+<p><strong>Agents drift because the system teaches four contradicting things, not because the formula is hard.</strong></p>
+<ol>
+<li><strong>Three name rules in the pipeline.</strong> Most collections derive the CSS name from the Figma path. Some prepend the collection name in code. One drops it. One (elevation) is hardcoded. An agent can't predict a name from Figma alone.</li>
+<li><strong>The wrong authority is injected every turn.</strong> <code>brik-llm/operations/hooks/critical-rules.sh:134</code> says "tokens (dist/tokens.css only)". Brik-bds <code>CLAUDE.md:17</code> says the opposite: the Figma-generated files are the authority, never dist.</li>
+<li><strong>Pre-#2670 bare names are still taught.</strong> Docs, skills and the edit hook show <code>--surface-primary</code> instead of <code>--bds-surface-primary</code>. The hook regex only checks bare names, so an invented <code>--bds-*</code> name passes.</li>
+<li><strong>An agent was allowed to mint a purpose.</strong> <code>docs/adrs/ADR-050-data-visualization-layer.md:41</code> ("AGENT DECIDED: <code>chart</code> is a new colour purpose") added <code>chart</code> to <code>tokens/naming-grammar.json:65,82,94</code>. The lint reads that file, so nothing failed.</li>
+</ol>
+</div>
+
+<h2>1. The one formula</h2>
+
+<p>OPERATOR CHOSE 2026-11-18: "Which single rule should every collection follow?" → <strong>Path = name</strong>.</p>
+
+<div class="formula">--bds-{figma variable path, "/" → "-"}</div>
+
+<table>
+<tr><th>Rule</th><th>Meaning</th></tr>
+<tr><td>The path is the name</td><td>Figma <code>content-width/xl</code> → <code>--bds-content-width-xl</code>. No exceptions in code.</td></tr>
+<tr><td>A collection never adds a segment</td><td>A collection is a folder of modes. Its name is not part of the token.</td></tr>
+<tr><td>A mode never adds a segment</td><td>Light/dark, compact/spacious and similar are mode values. Never <code>-on-dark</code>, <code>-dark</code> or <code>-compact</code> in a name.</td></tr>
+<tr><td>Colour Semantic = <code>{purpose}/{role}[/{state}]</code></td><td>Purpose is the CSS layer being painted: <code>page</code>, <code>surface</code>, <code>background</code>, <code>text</code>, <code>border</code>. Exactly five.</td></tr>
+<tr><td>A domain is a role group, never a purpose</td><td><code>background/chart/categorical-1</code> paints a fill. <code>border/chart/categorical-1</code> paints a stroke. The purpose says which layer.</td></tr>
+<tr><td>Non-colour = <code>{scale}/{step}</code></td><td><code>gap/md</code>, <code>ease/out</code>, <code>border-width/sm</code>.</td></tr>
+<tr><td>Names are born in Figma</td><td>Authority is the generated files: <code>tokens/figma-tokens*.css</code>, <code>modes-*.css</code>, <code>layout-fluid.css</code>. Never <code>dist/tokens.css</code>, which also bundles hand-written names.</td></tr>
+<tr><td>Agents never mint a name, purpose or scale</td><td>An agent can propose a value. A missing name goes to the operator as a gap. No "AGENT DECIDED" on a name.</td></tr>
+</table>
+
+<h3>Collections against the formula (Figma read 2026-11-18)</h3>
+<table>
+<tr><th>Collection</th><th>Figma names now</th><th>Fits?</th><th>Action</th></tr>
+<tr><td>color</td><td><code>background/info</code>, <code>background/chart/*</code>, <code>border/chart/*</code></td><td>Yes</td><td>none</td></tr>
+<tr><td>spacing, typography</td><td><code>gap/md</code>, <code>display/xl</code></td><td>Yes</td><td>none</td></tr>
+<tr><td>motion</td><td><code>ease/out</code> … <code>ease/linear</code></td><td>Yes</td><td>Wire the collection into the build</td></tr>
+<tr><td>content-width</td><td><code>content-width/{sm,md,lg,xl,text-md}</code></td><td>Yes (regrouped today)</td><td>Rename the generator's <code>width</code> key</td></tr>
+<tr><td>layout</td><td><code>page-inset</code>, <code>section-padding-block</code></td><td>Yes</td><td>none</td></tr>
+<tr><td>border-width</td><td>flat <code>sm</code>, <code>md</code> …</td><td>No</td><td>Regroup to <code>border-width/*</code></td></tr>
+<tr><td>border-radius</td><td>flat <code>sm</code>, <code>md</code> …</td><td>No</td><td>Regroup to <code>border-radius/*</code></td></tr>
+<tr><td>breakpoint</td><td>flat <code>tablet</code>, <code>desktop</code> …</td><td>No</td><td>Regroup to <code>breakpoint/*</code></td></tr>
+<tr><td>icon</td><td>flat <code>logo</code>, <code>icon</code></td><td>Check</td><td>Confirm the emitted name, then regroup</td></tr>
+<tr><td>elevation</td><td><code>shadow/{depth}/{part}</code> (rebuilt 2026-11-19)</td><td>Yes</td><td>Generator emits <code>--bds-shadow-{depth}</code> from the parts (section 2b)</td></tr>
+</table>
+<p>Regroup the flat collections only in the same PR that switches the generator to the path rule, so a sync never sees half the change. These are Figma-only renames, with 0 renames for consumers.</p>
+
+<h2>2. Figma changes made this session</h2>
+<table>
+<tr><th>Change</th><th>Variables</th><th>CSS result</th></tr>
+<tr><td>Motion: renamed the mode to <code>default</code>; added 6 curves (values from <code>tokens/gap-fills.css:463-468</code>)</td><td><code>ease/out</code> VariableID:28747:22 … <code>ease/linear</code> :27</td><td><code>--bds-ease-out</code> …</td></tr>
+<tr><td>Deleted the primitives placeholders <code>easing/ease-in</code>, <code>easing/ease-out</code>. Nothing aliased them. (OPERATOR CHOSE: Delete both)</td><td>VariableID:26534:3503, :3504</td><td>—</td></tr>
+<tr><td>Moved <code>chart/*</code> to <code>background/chart/*</code> and scoped it to fills. The IDs are kept, so existing bindings survive.</td><td>VariableID:28733:35 … :46 (12)</td><td><code>--bds-background-chart-categorical-1</code> …</td></tr>
+<tr><td>Added <code>border/chart/*</code>, stroke scope, with the same aliases as each background partner. OPERATOR SAID 2026-11-18 (chat): "yes borders need a chart set since tokens are a langauge for specifity as to what's being styled"</td><td>VariableID:28749:22 … :33 (12)</td><td><code>--bds-border-chart-categorical-1</code> …</td></tr>
+<tr><td>Regrouped content-width into <code>content-width/*</code>; fixed the copy-pasted descriptions on sm/md/lg</td><td>VariableID:28712:23, 28743:4103-4105</td><td>unchanged</td></tr>
+<tr><td>Added <code>content-width/text-md</code>, 720px in every mode</td><td>VariableID:28748:22</td><td><code>--bds-content-width-text-md</code></td></tr>
+</table>
+<p>Synced in <a href="https://github.com/brikdesigns/brik-bds/pull/3274">brik-bds#3274</a> (2026-11-19). Once released, the portal still consumes <code>--bds-chart-*</code> in <code>src/components/admin-portfolio-charts.tsx</code>, <code>theme-contract/contract.json</code> and <code>bds-theme-assets.generated.json</code>, so the consumer rename ships with the version bump.</p>
+
+<h2>2b. Primitive-colour and elevation rebuild (2026-11-19)</h2>
+<p>OPERATOR SAID 2026-11-19 (chat): "We approve the numeric approach for our foundation colors" and "let's refactor our elevation logic to ensure alignment across figma and code". Both Figma writes are done and read back.</p>
+<table>
+<tr><th>Change</th><th>Figma (Foundations)</th><th>CSS result</th></tr>
+<tr><td>System colours moved from one step to a 3-step ramp</td><td><code>color/system/{red,green,yellow,blue,orange,purple}/{200,500,800}</code>, <code>color/system/neutral/{200,500}</code></td><td><code>--bds-color-system-red-500</code> …</td></tr>
+<tr><td>New accent group; charts alias it</td><td><code>color/accent/{blue,orange,teal,violet,olive,amber}/{200,500,800}</code>, <code>cyan/{200,500}</code></td><td><code>--bds-color-accent-teal-500</code> …</td></tr>
+<tr><td>Chart primitives and the one-step <code>green</code> group deleted. OPERATOR SAID 2026-11-19: "why would we have primitives for our charts? … Let's remove our chart primitives."</td><td><code>color/chart/*</code> (7), <code>color/green/*</code></td><td>removed, except the held names below</td></tr>
+<tr><td>Grayscale is numeric only (50–950 plus white/black)</td><td><code>color/grayscale/*</code></td><td>unchanged names</td></tr>
+<tr><td>Elevation: one model, parts per depth; effect styles mirror 1:1; the elevation modes are gone</td><td><code>shadow/{sunken,flat,subtle,raised,lifted,dramatic}/{x,y,blur,spread,color}</code></td><td><code>--bds-shadow-{depth}</code> (code PR pending)</td></tr>
+<tr><td><code>background/info</code> and <code>surface/info</code> now Figma-backed</td><td>color collection</td><td>gap-fills declarations removed</td></tr>
+</table>
+<p><strong>Code side (#3274):</strong> 99 name changes in <code>tokens/figma-tokens*.css</code>; the 14 legacy one-step names map to <code>-500</code> (base) and <code>-200</code> (light) in <code>tokens/compat/renamed-knobs.json</code>; grammar closed lists, baseline, stories, Chart.css (token-family waivers, currentColor carrier) and ADR-050 amended. All gates and 2897 tests green locally.</p>
+<p><strong>Blocked on an operator UI step:</strong> the Foundations library must be <strong>published</strong> in Figma before the Brik Brand Kit can see the new names. Until then <code>design-tokens/brand-kits/brik.json</code> carries a hand patch to <code>.500</code>; revert it by re-pulling the brand kit after publish.</p>
+<p><strong>Held for operator review</strong> (still declared, not deleted): <code>color/green/950</code> and the six <code>color/chart/*-on-dark</code> primitives, pending a look at the 800 steps. Not created: <code>system/neutral/800</code>, <code>accent/cyan/800</code>. Value flags: <code>shadow/dramatic/blur</code> is a raw 32, and the <code>sunken</code> values need a check.</p>
+
+<h2>3. Open calls (operator)</h2>
+<div class="open">
+<p><strong>A. Chart primitives.</strong> RESOLVED 2026-11-19: deleted; charts alias <code>color/accent/*</code> (section 2b). Still open: delete the six <code>*-on-dark</code> names and <code>color/green/950</code> once the 800 steps are reviewed.</p>
+<p><strong>B. <code>background/chart/brand</code> and <code>border/chart/brand</code></strong> point at <code>border/brand-primary</code> (VariableID:25100:66), a Semantic token of another purpose. Re-point both to a primitive?</p>
+<p><strong>C. Elevation.</strong> RESOLVED 2026-11-19: <code>shadow/{depth}/{part}</code> authored in Figma; the generator composes <code>--bds-shadow-{depth}</code>. Code PR pending.</p>
+<p><strong>D. Publish Foundations</strong> in the Figma UI so the brand kits can adopt the numeric system colours. Agents cannot publish a library.</p>
+</div>
+
+<h2>4. Files that teach the wrong thing</h2>
+<p>An Explore agent produced 62 rows, and I added 4 from this session. I checked 6 of the 62 against the file and all 6 matched: component-build.md:123, token-anatomy.mdx:39, bds-check.sh:180, CLAUDE-CROSS-REPO.md:43, design-system.md:25 (the cited <code>tokens/TOKEN-REFERENCE.md</code> does not exist), and critical-rules.sh:134. The other rows are agent-reported and not checked line by line. One agent row said "add <code>chart</code> to the purpose list". It is reversed here to follow the operator's direction.</p>
+<p>Paths: <code>bds/</code> = brik-bds, <code>llm/</code> = brik-llm, <code>docs/</code> = <code>bds/docs-site/content/docs/</code>.</p>
+
+<h3>4a. Wrong authority (dist/tokens.css)</h3>
+<div class="wrap"><table>
+<tr><th>Sev</th><th>File:line</th><th>Says</th><th>Fix</th></tr>
+<tr><td class="HIGH">HIGH</td><td><code>llm/operations/hooks/critical-rules.sh:134</code></td><td>"tokens (dist/tokens.css only)", injected into every agent every turn</td><td>Point to the Figma-generated files</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>llm/CLAUDE-CROSS-REPO.md:43</code></td><td>"USE only token names in dist/tokens.css"</td><td>Same</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>llm/.claude/skills/canon-css/SKILL.md:179</code></td><td>Registry on disk is dist/tokens.css</td><td>Same</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>llm/.claude/skills/validate-token-names/SKILL.md:3,46,145</code></td><td>dist is the canonical registry</td><td>Grep the generated files</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>llm/operations/agents/design-system.md:25,71,88-91</code></td><td>Cites the nonexistent <code>tokens/TOKEN-REFERENCE.md</code>; treats dist as real</td><td>Cite figma-tokens.css</td></tr>
+<tr><td class="MED">MED</td><td><code>llm/operations/hooks/bds-check.sh:133,155-165</code></td><td>Greps dist as the registry</td><td>Read the generated files</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>bds/.claude/standards/component-build.md:123</code></td><td>"The canonical registry is dist/tokens.css"</td><td>Name the generated files</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>bds/.claude/skills/mobbin-research/SKILL.md:58</code></td><td>dist is the sole authority</td><td>Same</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>docs/foundation/token-anatomy.mdx:439</code></td><td>Not in dist means not real</td><td>Same</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/tokens/naming-grammar.json:13</code></td><td>The library "ships in dist/tokens.css"</td><td>Authored in Figma; dist is build output</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/.claude/standards/fumadocs-content.md:127</code></td><td>Calls <code>--color-*</code> Semantic; must resolve in dist</td><td>Primitive; check the source files</td></tr>
+</table></div>
+
+<h3>4b. Bare (pre-#2670) names taught as usable</h3>
+<div class="wrap"><table>
+<tr><th>Sev</th><th>File:line</th><th>Says</th><th>Fix</th></tr>
+<tr><td class="HIGH">HIGH</td><td><code>llm/operations/hooks/bds-check.sh:180,183</code></td><td>Regex matches bare prefixes only, so invented <code>--bds-*</code> names pass</td><td>Match <code>--bds-(text|surface|background|border|color)-</code></td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>llm/.claude/skills/validate-token-names/SKILL.md:61,68,75</code></td><td>Same bare-only regex</td><td>Same</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>llm/.claude/skills/canon-css/SKILL.md:160-162</code></td><td>The "RIGHT" example uses <code>--surface-primary</code> and <code>--border-width-1</code> (does not exist)</td><td><code>--bds-surface-primary</code>, <code>--bds-border-width-sm</code></td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>llm/.claude/skills/figma-workflow/SKILL.md:89-91</code></td><td>Presents one universal path rule, unprefixed</td><td>Show the formula with <code>--bds-</code> output</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>docs/foundation/token-anatomy.mdx:39,133,391-398</code></td><td>"Only the Component tier carries an ID today"</td><td>Every tier ships with <code>--bds-</code></td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>bds/.claude/standards/component-build.md:128-130</code></td><td>The "Right" example uses bare names</td><td>Prefix</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>docs/foundation/color.mdx:31-165</code></td><td>Swatches copy dead bare <code>var()</code></td><td>Prefix every cssVar</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>docs/theming/client-themes.mdx:146-153</code></td><td>Lists theme overrides by bare name</td><td>Prefix</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>bds/BDS-CONSUMER.md:102-104</code></td><td>Bare <code>--font-family-*</code> shown as the consumer API</td><td>Prefix</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/foundation/motion.mdx:11,51,69</code></td><td>Bare <code>--duration-*</code> and <code>--ease-*</code> in prose</td><td>Prefix</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/scripts/lint-mdx-tokens.mjs:53,101</code></td><td>Lets bare names pass if they resolve</td><td>Fail bare names</td></tr>
+<tr><td class="LOW">LOW</td><td><code>bds/docs/adrs/ADR-043:67</code></td><td>"Only Tier 4 carries an ID today"</td><td>Add a status note</td></tr>
+<tr><td class="LOW">LOW</td><td><code>bds/tokens/compat/bridge.css:12-13</code></td><td>Stale header</td><td>Delete the header</td></tr>
+</table></div>
+
+<h3>4c. Mixed name rules and stale Figma structure</h3>
+<div class="wrap"><table>
+<tr><th>Sev</th><th>File:line</th><th>Says</th><th>Fix</th></tr>
+<tr><td class="HIGH">HIGH</td><td><code>bds/docs/adrs/ADR-050-data-visualization-layer.md:41</code></td><td>Agent-minted <code>chart</code> purpose</td><td>Supersede: chart is a role group under background and border</td></tr>
+<tr><td class="HIGH">HIGH</td><td><code>bds/tokens/naming-grammar.json:37,42,65,82,94</code></td><td><code>chart</code> listed as a purpose and slot</td><td>Remove the purpose; add a chart role under background and border</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/scripts/generate-modes-css.mjs:194</code></td><td>Collection key <code>width:</code></td><td>Rename to <code>content-width</code>; switch to the path rule</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/scripts/sync-figma-mcp.js:347-349</code></td><td>Path = name, but the generator disagrees</td><td>Make the generator match the sync</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/scripts/lib/sd-bds.mjs:110-130</code></td><td>"Motion curves are repo-owned in gap-fills"</td><td>The Figma motion collection owns them</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/foundation/index.mdx:61,72</code></td><td>One rule; a <code>width</code> collection</td><td>The one formula; <code>content-width</code></td></tr>
+<tr><td class="MED">MED</td><td><code>bds/tokens/CASCADE.md:49,111,112,181,187-192</code></td><td><code>width</code> collection; hand-written shadow; editable generated file; recipe for new hand-written files</td><td>Sync with the formula and the freeze</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/tokens/modes-width.css:2,8,11</code></td><td>"BDS width Mode"</td><td>Regenerates once the key is renamed</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/getting-started/cascade.mdx:59,120-128</code></td><td>gap-fills is a bridge for new names; stale status</td><td>Frozen; sync the status</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/foundation/index.mdx:108</code></td><td>Add pre-Figma tokens to gap-fills with a TODO</td><td>Remove; gap-fills is frozen</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/foundation/token-anatomy.mdx:199,229,332,336,341,370</code></td><td>Purpose list; easing origin; dead line citation; "retire" vs "removed"</td><td>Five purposes; motion collection; drop the dead lines</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/getting-started/figma-library-architecture.mdx:16,22</code></td><td>Contradicts itself and CASCADE on ownership</td><td>Align</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/react-reference/utilities.mdx:67</code></td><td>Relay plus Tokens Studio is the only path</td><td>Name sync-figma-mcp</td></tr>
+<tr><td class="LOW">LOW</td><td><code>bds/scripts/generate-modes-css.mjs:9-16</code></td><td>Stale header list</td><td>Update</td></tr>
+<tr><td class="LOW">LOW</td><td><code>llm/operations/hooks/bds-check.sh:207,228</code></td><td>Points to a missing <code>docs/primitives/color.mdx</code></td><td>Fix the path</td></tr>
+</table></div>
+
+<h3>4d. Motion contradictions</h3>
+<div class="wrap"><table>
+<tr><th>Sev</th><th>File:line</th><th>Says</th><th>Fix</th></tr>
+<tr><td class="MED">MED</td><td><code>docs/foundation/motion.mdx:25</code></td><td>fast/normal/slow "grandfathered"</td><td>Retired; sm/md/lg</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/foundation/motion.mdx:55</code></td><td>"Four curves", but the table has six</td><td>Six</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/foundation/motion.mdx:66,96</code></td><td>Easing is hand-authored in gap-fills; <code>-normal/-slow</code></td><td>Figma motion collection; sm/md/lg/xl</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/foundation/motion.mdx:85-87,97</code> vs <code>docs/motion/tiers/lightweight.mdx:81</code></td><td>Two different homes for stagger</td><td>Pick one (<code>tokens/compat/bridge.css</code>)</td></tr>
+<tr><td class="MED">MED</td><td><code>docs/motion/index.mdx:33</code></td><td>"-normal/-slow and all four"</td><td>sm/md/lg/xl; six</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/tokens/gap-fills.css:72-81</code></td><td><code>--bds-easing-ease-*</code> with values that differ from <code>--bds-ease-*</code></td><td>Collapse into <code>--bds-ease-*</code> (#3247)</td></tr>
+</table></div>
+
+<h3>4e. Retired names still listed live</h3>
+<div class="wrap"><table>
+<tr><th>Sev</th><th>File:line</th><th>Says</th><th>Fix</th></tr>
+<tr><td class="MED">MED</td><td><code>bds/tokens/naming-grammar.json:68,128,213</code></td><td><code>measure</code> is a live role</td><td>Mark deprecated (ADR-041)</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/tokens/naming-grammar.json:160</code></td><td>Exceptions <code>--web/--tablet/--mobile</code></td><td>Remove</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/docs/adrs/README.md:70</code></td><td>ADR-032 Accepted</td><td>Superseded by ADR-041</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/docs/adrs/ADR-046:49-52</code></td><td>Mechanism is <code>color-mix()</code> in gap-fills</td><td>Amend to a Figma source</td></tr>
+<tr><td class="MED">MED</td><td><code>bds/docs/TOKEN-PR-CHECKLIST.md:39</code></td><td><code>color</code> may use <code>--color-*</code> primitives</td><td>Semantic <code>--bds-text-*</code> only</td></tr>
+<tr><td class="MED">MED</td><td><code>llm/.claude/skills/validate-token-names/SKILL.md:27,111</code></td><td>border-width counted as a primitive; surface list "as of 0.51.0"</td><td>Re-derive from source</td></tr>
+</table></div>
+
+<h2>5. Fix plan</h2>
+<table>
+<tr><th>#</th><th>PR</th><th>Repo</th><th>Size</th></tr>
+<tr><td>1</td><td>Every-turn and skill authority: critical-rules.sh, CLAUDE-CROSS-REPO, canon-css, validate-token-names, bds-check.sh (authority plus the <code>--bds-</code> regex), design-system.md</td><td>brik-llm</td><td>M</td></tr>
+<tr><td>2</td><td>Pipeline: generator to the path rule; <code>width</code> → <code>content-width</code>; wire motion; drop the placeholder filter; then regroup border-width, border-radius and breakpoint in Figma</td><td>brik-bds</td><td>M</td></tr>
+<tr><td>3</td><td>Chart + primitive colours: sync, rename <code>--bds-chart-*</code> to background/border chart tokens, grammar plus an ADR-050 amendment — <strong>open as <a href="https://github.com/brikdesigns/brik-bds/pull/3274">#3274</a></strong>; portal consumers follow the release</td><td>brik-bds + portal</td><td>M</td></tr>
+<tr><td>4</td><td>Docs: token-anatomy, motion, cascade, foundation index, color swatches, component-build</td><td>brik-bds</td><td>M</td></tr>
+<tr><td>5</td><td>#3247: delete the 8 aliases after the sync</td><td>brik-bds</td><td>S</td></tr>
+<tr><td>6</td><td>Elevation code: emit <code>--bds-shadow-{depth}</code> from the Figma parts, drop <code>modes-elevation.css</code> and the gap-fill shadows, rename component users (sm→subtle, md→raised, lg→lifted, overlay→dramatic)</td><td>brik-bds + portal</td><td>M</td></tr>
+<tr><td>7</td><td>Brand-kit re-pull after Foundations is published; revert the <code>brik.json</code> hand patch</td><td>brik-bds</td><td>S</td></tr>
+</table>
+<p>Order: 1 first, because every agent reads it on every turn. 3 is open. Then 2 → 6 → 5, with 7 as soon as the operator publishes. Item 4 can run in parallel.</p>
+
+</body>
+</html>
