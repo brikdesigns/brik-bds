@@ -251,7 +251,7 @@ export function composeButtonClasses({
     'bds-button',
     iconOnly && 'bds-icon-button',
     // `inverse` / `on-color` paint the primary form's fill, so they replace it.
-    axes.emphasis === 'on-color' ? 'bds-button--emphasis-on-color' : `bds-button--${axes.emphasis ?? axes.form}`,
+    axes.emphasis ? `bds-button--emphasis-${axes.emphasis}` : `bds-button--${axes.form}`,
     axes.tone && `bds-button--tone-${axes.tone}`,
     (() => {
       const s = resolveRetiredValue('Button', 'size', size, RETIRED_SIZES) ?? 'md';

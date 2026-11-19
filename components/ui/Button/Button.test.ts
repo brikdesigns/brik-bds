@@ -83,14 +83,14 @@ describe('Button tone × form (#1983)', () => {
 
   it('puts emphasis on a primary-form fill', () => {
     const c = cls({ emphasis: 'inverse' });
-    expect(c).toContain('bds-button--inverse');
+    expect(c).toContain('bds-button--emphasis-inverse');
     expect(c).not.toContain('bds-button--primary');
     expect(cls({ emphasis: 'on-color' })).toContain('bds-button--emphasis-on-color');
   });
 
   it('drops emphasis on outline / alongside tone, and warns', () => {
-    expect(cls({ variant: 'outline', emphasis: 'inverse' })).not.toContain('bds-button--inverse');
-    expect(cls({ tone: 'negative', emphasis: 'inverse' })).not.toContain('bds-button--inverse');
+    expect(cls({ variant: 'outline', emphasis: 'inverse' })).not.toContain('bds-button--emphasis-inverse');
+    expect(cls({ tone: 'negative', emphasis: 'inverse' })).not.toContain('bds-button--emphasis-inverse');
     expect(warn).toHaveBeenCalled();
   });
 
@@ -99,7 +99,7 @@ describe('Button tone × form (#1983)', () => {
     ['positive', 'bds-button--tone-positive'],
     ['destructive', 'bds-button--tone-negative'],
     ['danger-outline', 'bds-button--tone-negative'],
-    ['inverse', 'bds-button--inverse'],
+    ['inverse', 'bds-button--emphasis-inverse'],
     ['on-color', 'bds-button--emphasis-on-color'],
   ])('still honours retired variant="%s"', (variant, expected) => {
     expect(cls({ variant })).toContain(expected);

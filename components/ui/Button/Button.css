@@ -110,7 +110,7 @@
   color: var(--bds-text-primary);
 }
 
-.bds-button--inverse {
+.bds-button--emphasis-inverse {
   background-color: var(--bds-background-inverse);
   color: var(--bds-text-inverse);
 }
@@ -194,12 +194,12 @@
 }
 
 /* ── Inverse ── */
-.bds-button--inverse:hover:not(:disabled):not(.bds-button--loading) {
+.bds-button--emphasis-inverse:hover:not(:disabled):not(.bds-button--loading) {
   background-color: var(--bds-background-secondary-pressed);
   color: var(--bds-text-inverse);
 }
 
-.bds-button--inverse:active:not(:disabled) {
+.bds-button--emphasis-inverse:active:not(:disabled) {
   background-color: var(--bds-background-brand-primary-pressed);
   color: var(--bds-text-inverse);
   transform: translateY(var(--button-active-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
