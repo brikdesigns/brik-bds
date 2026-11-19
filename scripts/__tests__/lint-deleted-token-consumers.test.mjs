@@ -97,7 +97,10 @@ beforeAll(() => {
   // A test asserting on a generator's own output names a token, never reads it.
   mkdirSync(join(consumer, 'src', '__tests__'), { recursive: true });
   writeFileSync(join(consumer, 'src', '__tests__', 'gen.test.ts'), "expect(css).toContain('--bds-measure-md: 60ch;');\n");
-  git(['add', 'src/page.css', 'docs/reports/audit.html', 'src/__tests__/gen.test.ts'], consumer);
+  // A self-contained snapshot declares the name on the same line it reads it,
+  // so the `var()` resolves locally and never reaches BDS's deleted definition.
+  writeFileSync(join(consumer, 'src', 'snapshot.html'), '<style>:root{--bds-measure-md:60ch;--bds-measure-alias:var(--bds-measure-md)}</style>\n');
+  git(['add', 'src/page.css', 'src/snapshot.html', 'docs/reports/audit.html', 'src/__tests__/gen.test.ts'], consumer);
   git(['-c', 'user.email=t@t', '-c', 'user.name=t', 'commit', '-qm', 'consumer'], consumer);
 });
 
@@ -131,6 +134,8 @@ describe('lint-deleted-token-consumers', { timeout: 30_000 }, () => {
     expect(json.findings).toHaveLength(1);
     expect(json.findings[0]).toMatchObject({ repo: 'fake/consumer', token: '--bds-measure-md' });
     expect(json.findings[0].at).toContain('src/page.css');
+    // snapshot.html declares the name on its own line: not a finding.
+    expect(json.findings[0].at).not.toContain('snapshot.html');
   });
 
   it('never sweeps docs/reports', () => {
