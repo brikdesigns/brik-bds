@@ -1,6 +1,6 @@
 {
   "name": "@brikdesigns/bds",
-  "version": "0.244.0",
+  "version": "0.247.0",
   "description": "Brik Design System — React components, Figma-synced tokens, and Content System (BCS) vocabulary",
   "private": false,
   "main": "dist/lib-entry.cjs",
@@ -375,6 +375,12 @@
   },
   "homepage": "https://brik-bds.io/",
   "dependencies": {
+    "@floating-ui/react-dom": "^2.1.8",
+    "@fullcalendar/core": "^6.1.22",
+    "@fullcalendar/daygrid": "^6.1.22",
+    "@fullcalendar/interaction": "^6.1.22",
+    "@fullcalendar/react": "^6.1.22",
+    "@fullcalendar/timegrid": "^6.1.22",
     "@iconify-json/ph": "^1.2.2",
     "@iconify/react": ">=5.0.0",
     "@radix-ui/react-collapsible": "^1.1.12",

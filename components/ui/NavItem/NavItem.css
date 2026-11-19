@@ -15,8 +15,8 @@
   text-decoration: none;
   cursor: pointer;
   box-sizing: border-box;
-  transition: background-color var(--bds-duration-sm) var(--bds-ease-out),
-    color var(--bds-duration-sm) var(--bds-ease-out);
+  transition: background-color var(--bds-duration-100) var(--bds-ease-out),
+    color var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-nav-item:hover {

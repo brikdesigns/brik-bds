@@ -22,6 +22,10 @@ An event's optional `content` slot takes any node and renders it below `detail`,
 
 <Canvas of={Stories.WithContent} />
 
+`timestamp` takes a pre-formatted string, or a node that is its own `<time>` such as `<DateTime mode="relative" />`; the timeline wraps only the string form.
+
+<Canvas of={Stories.WithDateTimeTimestamp} />
+
 The category channel is the `icon` slot plus a `Tag` inside `content`. There is no per-category dot tint: category and status are orthogonal ([Indicators](/docs/build-standards/indicators) — "Category and status are orthogonal"), so a dot colour would conflate the two. Name the category with a `Tag`; name a status with a `Badge`.
 
 ## Props

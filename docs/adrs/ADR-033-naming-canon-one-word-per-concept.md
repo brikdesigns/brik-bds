@@ -556,7 +556,7 @@ Each value list is the component's union as it ships. The amendment admits what 
 **Does an existing § 2 word name this axis?** No. The axis is which corner of the viewport a fixed element docks to. TaskConsole emitted the value bare (`bds-task-console--bottom-right`). None of § 2's words or the amended ones fit: `align` is how content sits along a row or column (Stack, CardControl), not where a fixed box docks on screen, and `anchor` is the dimension a ratio is held from. Synonyms were searched across `components/ui/**/*.tsx` (stories and tests excluded) as prop keys and union type names, and across `components/ui/**/*.css` as `--{word}-*` modifiers, at this PR's base:
 
 - **`corner`, `dock`, `docked`, `edge`:** zero hits as a prop, a union type or a modifier.
-- **`placement`** ([Tooltip.tsx:32](../../components/ui/Tooltip/Tooltip.tsx), [Popover.tsx:21](../../components/ui/Popover/Popover.tsx), [Menu.tsx:125](../../components/ui/Menu/Menu.tsx)) and **`side`** ([Sheet.tsx:118](../../components/ui/Sheet/Sheet.tsx)) name a different concept: the side of a trigger a popup opens on, and the viewport edge a sheet slides in from. Their values are `top` · `bottom` · `left` · `right`, none of them a corner, and they stay baselined bare under #1927.
+- **`placement`** ([Tooltip.tsx:32](../../components/ui/Tooltip/Tooltip.tsx), [Popover.tsx:21](../../components/ui/Popover/Popover.tsx), [Menu.tsx:125](../../components/ui/Menu/Menu.tsx)) and **`side`** ([Sheet.tsx:118](../../components/ui/Sheet/Sheet.tsx)) name a different concept: the side of a trigger a popup opens on, and the viewport edge a sheet slides in from. Their values are `top` · `bottom` · `left` · `right`, none of them a corner. `placement` is admitted in its own section and `side` in the `side` section below (#1927).
 
 **Why not `position`, the word TaskConsole's prop uses.** `position` names four concepts across `components/ui`: TaskConsole's screen corner, Pagination's row alignment (`left` · `center` · `right`, [Pagination.tsx:11](../../components/ui/Pagination/Pagination.tsx)), SidebarNavigation's layout mode (`fixed` · `sticky`, [SidebarNavigation.tsx:15](../../components/ui/SidebarNavigation/SidebarNavigation.tsx)), and a media side or label side (`start` · `end` on MediaTabs and SyncedMediaSteps, `above` · `below` on Meter). § 2 gives each word exactly one axis. Admitting `position` was tried first: rule 5 judges a union by its type name, so every `*Position` union became governed and the gate reported 11 live members (`PaginationPosition.left`, `SidebarPosition.sticky`, `MeterLabelPosition.above`, …). A word that would fail 11 members of four other concepts is not one axis.
 
@@ -587,3 +587,35 @@ Each value list is the component's union as it ships. The amendment admits what 
 2. **A value on its own axis's list is not a retired word there.** `information` is retired as a valence (→ `info`). It is also the service line's name. A prefixed modifier is now checked against the retired-valence list only when its own axis's closed list does not hold the value. `--tone-information` still fails. `information` is the only retired valence word on any axis list.
 
 Rule 5's type-name match does not govern a `*ServiceLine` union: the axis key is hyphenated, and a type name never is. Planted cases in `scripts/__tests__/lint-naming-canon.test.mjs` admit the five modifiers and deny `--tint-brand`, `--service-line-service` and `--tone-information`. **Baseline:** −5. The `--tint-{brand,marketing,information,product,back-office}` rule-4 rows keyed to #1927 leave `tokens/naming-canon-baseline.json`.
+
+### `placement` axis (2026-11-18, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is the side of its anchor a floating element opens on. Three components already name it `placement` in their API: Tooltip (`TooltipPlacement`, [Tooltip.tsx:23](../../components/ui/Tooltip/Tooltip.tsx)), Popover (`PopoverPlacement`, [Popover.tsx:12](../../components/ui/Popover/Popover.tsx)) and Menu (`MenuPlacement`, [Menu.tsx:94](../../components/ui/Menu/Menu.tsx)). Tooltip and Menu already turn the prop into a modifier, and the gate baselined those as bare only because the prefix was on no axis list. Synonyms were searched across `components/ui/**` (`.tsx` + `.css`, stories and tests excluded) as prop keys and union type names:
+
+- **`side`:** Sheet only (`SheetSide`, [Sheet.tsx:38](../../components/ui/Sheet/Sheet.tsx)). That is the viewport edge a panel docks to, not a side of an anchor, so it is a different concept. Popover hands its `placement` to Radix as `side={placement}` ([Popover.tsx:98](../../components/ui/Popover/Popover.tsx)), which is Radix's word, not a BDS prop.
+- **`position`:** Pagination (`PaginationPosition`, `left | center | right`) is horizontal alignment. SidebarNavigation (`fixed | sticky`) is CSS `position`. TaskConsole's is the `corner` axis above. MediaTabs and SyncedMediaSteps (`start | end`) place media in a row. None names a side of an anchor.
+- **`anchorSide`, `edge`, `direction`:** zero hits.
+
+| Axis | Word | Closed values | Correct today |
+|---|---|---|---|
+| Side of its anchor a floating element opens on | `placement` | `top` · `bottom` · `left` · `right` | Tooltip, Popover (props); Menu (`bds-menu--placement-top`) |
+
+The value list is the three unions as they ship (Menu's is the `top | bottom` subset). The amendment admits what exists and invents no value.
+
+**Not admitted.** Meter's `labelPosition` (`above | below`) and TextInput's icon `before | after` use different values for a different relation (a label against a bar, an icon against text). They stay baselined under #1927 until their own search.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.placement`. `lint-naming-canon` reads it into `AXES` and `MODIFIER_AXES`, so `--placement-*` carries a blessed prefix and rule 5 default-denies any other value. `placement` joins `PREFIX_JUDGED_AXES`: `top`, `left` and `right` are also members of Pagination's and Sheet's unions, so judging by value would report those as a placement union. **Baseline:** −1. Only `--top` leaves `tokens/naming-canon-baseline.json`. `--bottom`, `--left` and `--right` stay because Sheet (`side`) and Pagination (`position`) still emit them bare, and each needs its own axis decision.
+
+### `side` axis (2026-11-18, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is the viewport edge a docked panel slides in from and anchors to. Sheet is the only component with it (`SheetSide`, [Sheet.tsx:38](../../components/ui/Sheet/Sheet.tsx)), and the prop is already `side` ([Sheet.tsx:118](../../components/ui/Sheet/Sheet.tsx)). Candidates checked:
+
+- **`placement`:** the side of an *anchor element* a floating popup opens on. Sheet docks to the *viewport*, so it is a different relation, and its value set (`right` · `left` · `bottom`, no `top`) is not the placement set.
+- **`corner`:** a viewport corner, not an edge.
+- **`align`:** content alignment along a row, not where a fixed panel docks.
+
+| Axis | Word | Closed values | Correct today |
+|---|---|---|---|
+| Viewport edge a docked panel anchors to | `side` | `right` · `left` · `bottom` | Sheet (`bds-sheet--side-right`) |
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.side`. `side` joins `PREFIX_JUDGED_AXES`: `left`, `right` and `bottom` are also members of `placement` and of Pagination's union, so judging by value would misread them. **Migrates:** Sheet `--right` · `--left` · `--bottom` → `--side-right` · `--side-left` · `--side-bottom`. Pagination's `--left` · `--center` · `--right` (prop `position`, horizontal alignment) go onto the existing `align` prefix as `--align-*`, with no amendment. No aliases ship. **Baseline:** −4. `--bottom`, `--center`, `--left` and `--right` leave `tokens/naming-canon-baseline.json`.

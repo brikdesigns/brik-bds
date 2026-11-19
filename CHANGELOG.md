@@ -18,6 +18,50 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** The `on-color` modifiers now carry the `emphasis` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). `on-color` was already admitted to `emphasis` by #1983. No aliases ship. Button's `--inverse` is a separate Rule 4 row and is untouched.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-button--on-color` | `bds-button--emphasis-on-color` | `emphasis="on-color"` |
+| `bds-{tab-bar,content-block,eyebrow,stat}--on-color` | `bds-{tab-bar,content-block,eyebrow,stat}--emphasis-on-color` | `onColor` |
+
+**Fix (consumer CSS):** Modal's `full` size rule is renamed `bds-modal--full` → `bds-modal--size-full`, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). `Modal.tsx` already emitted `bds-modal--size-full`, so the old selector never matched and `size="full"` got no `max-width: 95vw`; it does now. No alias ships.
+
+**Breaking (consumer CSS):** Sheet and Pagination side modifiers now carry an axis, per ADR-033 § 6 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). A new `side` axis (`right · left · bottom`) is admitted for Sheet. Pagination uses the existing `align` prefix. No aliases ship.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-sheet--{right,left,bottom}` | `bds-sheet--side-{right,left,bottom}` | `side` |
+| `bds-pagination--{left,center,right}` | `bds-pagination--align-{left,center,right}` | `position` |
+
+**Breaking (consumer CSS):** Tooltip and Menu side modifiers now carry the `placement` axis they derive from, per ADR-033 § 6 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). A new `placement` axis (`top · bottom · left · right`) is admitted. No aliases ship. Tooltip's `__bubble--*` placement rules were never emitted by the component; they are renamed with the arrow's, not removed.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-tooltip__{arrow,bubble}--{top,bottom,left,right}` | `bds-tooltip__{arrow,bubble}--placement-{top,bottom,left,right}` | `placement` |
+| `bds-menu--top` | `bds-menu--placement-top` | `placement` |
+
+**Breaking (consumer CSS):** Badge, Tag and Avatar fill modifiers now carry the `appearance` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector. Button's `--outline` is a different axis and is untouched.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-{badge,tag}--{solid,subtle,outline}` | `bds-{badge,tag}--appearance-{solid,subtle,outline}` | `appearance` |
+| `bds-avatar--subtle` | `bds-avatar--appearance-subtle` | `appearance` |
+
+**Breaking (consumer CSS):** ProgressStepper's step-state modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-progress-stepper__{circle,label}--{active,complete,upcoming}` | `bds-progress-stepper__{circle,label}--status-{active,complete,upcoming}` | `currentStep` |
+| `bds-progress-stepper__connector--{complete,incomplete}` | `bds-progress-stepper__connector--status-{complete,incomplete}` | `currentStep` |
+| `bds-progress-stepper__dot--{active,complete,inactive}` | `bds-progress-stepper__dot--status-{active,complete,inactive}` | `currentStep` |
+
+**Breaking (consumer CSS):** TaskConsole's item and icon state modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-task-console__{item,icon}--{completed,failed,in-progress,pending}` | `bds-task-console__{item,icon}--status-{completed,failed,in-progress,pending}` | `items[].status` |
+
 **Breaking (consumer CSS):** Card's control-status modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
 
 | Old | New | Prop |

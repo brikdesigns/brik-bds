@@ -78,11 +78,11 @@
 /* ─── On a filled brand / dark surface ───────────────────────── */
 /* Child combinator — a Stat nested in another's slot keeps its own colours. */
 
-.bds-stat--on-color > .bds-stat__value,
-.bds-stat--on-color > .bds-stat__label,
-.bds-stat--on-color > .bds-stat__detail,
-.bds-stat--on-color > .bds-stat__description,
-.bds-stat--on-color > .bds-stat__meta > .bds-stat__trend {
+.bds-stat--emphasis-on-color > .bds-stat__value,
+.bds-stat--emphasis-on-color > .bds-stat__label,
+.bds-stat--emphasis-on-color > .bds-stat__detail,
+.bds-stat--emphasis-on-color > .bds-stat__description,
+.bds-stat--emphasis-on-color > .bds-stat__meta > .bds-stat__trend {
   color: var(--bds-text-on-color-dark);
 }
 }

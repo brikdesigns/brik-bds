@@ -604,9 +604,12 @@ function collectUnions(componentsDir) {
  * measure and fail rule 3. `spacing` (#1927) is that union's own axis, and its
  * values are the same shared rungs, so it is prefix-judged too. `service-line`
  * (#1927) shares `brand` with emphasis, so a `'brand' | 'positive'` union would
- * read as three axes instead of emphasis + tone.
+ * read as three axes instead of emphasis + tone. `placement` (#1927) shares
+ * `top`, `left` and `right` with Sheet's `side` and Pagination's `position`
+ * unions, which are other concepts, so a value match would misread those. `side`
+ * (#1927) is Sheet's own axis and shares `left`, `right` and `bottom` with `placement`.
  */
-const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing', 'service-line']);
+const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing', 'service-line', 'placement', 'side']);
 
 /**
  * Every axis whose closed list claims this member. A SET, not one axis: ADR-033
@@ -1200,9 +1203,8 @@ function segmentFindings(names, aliases) {
  *
  * The Brik Brand Kit is read as its pulled variables (brik.json), NOT as the
  * compiled theme-brand-brik.generated.css: compileClientTheme re-emits
- * hand-written names beside the kit's own (`--bds-background-accent-blue-light`
- * has no `background/accent-blue-light` variable), so the compiled file would
- * launder them into canon.
+ * hand-written names beside the kit's own (a name with no matching Figma
+ * variable), so the compiled file would launder them into canon.
  */
 const FIGMA_GENERATED = [
   ...[

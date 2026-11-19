@@ -201,11 +201,6 @@
   --bds-page-service-blue: var(--bds-color-blue-200);
   --bds-chart-brand: var(--bds-border-brand-primary);
   --bds-border-focus: var(--bds-border-brand-primary);
-  --bds-background-accent-blue-light: var(--bds-surface-accent-blue);
-  --bds-background-accent-green-light: var(--bds-surface-accent-green);
-  --bds-background-accent-orange-light: var(--bds-surface-accent-orange);
-  --bds-background-accent-purple-light: var(--bds-surface-accent-purple);
-  --bds-background-accent-yellow-light: var(--bds-surface-accent-yellow);
 }
 
 :root[data-theme="dark"] .theme-brand-brik {
@@ -327,10 +322,5 @@
   --bds-page-service-blue: var(--bds-color-blue-200);
   --bds-chart-brand: var(--bds-border-brand-primary);
   --bds-border-focus: var(--bds-border-brand-primary);
-  --bds-background-accent-blue-light: var(--bds-surface-accent-blue);
-  --bds-background-accent-green-light: var(--bds-surface-accent-green);
-  --bds-background-accent-orange-light: var(--bds-surface-accent-orange);
-  --bds-background-accent-purple-light: var(--bds-surface-accent-purple);
-  --bds-background-accent-yellow-light: var(--bds-surface-accent-yellow);
   --bds-text-on-color-light-muted: color-mix(in srgb, var(--bds-text-on-color-light) 70%, transparent);
 }

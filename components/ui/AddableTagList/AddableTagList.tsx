@@ -6,6 +6,7 @@ import { Tag, type TagSize } from '../Tag';
 import { TextInput, type TextInputSize } from '../TextInput';
 import { useSuggestionFilter } from '../shared/useSuggestionFilter';
 import { useAddableList } from '../shared/useAddableList';
+import { useFloatingPanel } from '../shared/useFloatingPanel';
 import './AddableTagList.css';
 
 export type AddableTagListSize = 'sm' | 'md' | 'lg';
@@ -135,6 +136,7 @@ export function AddableTagList({
       if (values.length > 0) onChange(values.slice(0, -1));
     },
   });
+  useFloatingPanel(listboxRef, isComboMode && combo.isOpen && combo.filtered.length > 0);
 
   const reveal = () => {
     combo.reset();

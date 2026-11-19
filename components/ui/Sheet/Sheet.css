@@ -32,9 +32,9 @@
 
 /* ─── Side positions ─────────────────────────────────────────── */
 
-.bds-sheet--right  { top: 0; right: 0; bottom: 0; max-width: 90vw; }
-.bds-sheet--left   { top: 0; left: 0; bottom: 0; max-width: 90vw; }
-.bds-sheet--bottom { left: 0; right: 0; bottom: 0; max-height: 80vh; }
+.bds-sheet--side-right  { top: 0; right: 0; bottom: 0; max-width: 90vw; }
+.bds-sheet--side-left   { top: 0; left: 0; bottom: 0; max-width: 90vw; }
+.bds-sheet--side-bottom { left: 0; right: 0; bottom: 0; max-height: 80vh; }
 
 /* ─── Floating variant — no backdrop, rounded, elevated ─────── */
 
@@ -43,13 +43,13 @@
   box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — custom multi-layer elevation shadow; single-layer composites exist (--bds-shadow-sm..xl) but none is multi-layer, so this stays raw until a multi-layer composite is proposed */
 }
 
-.bds-sheet--floating.bds-sheet--right {
+.bds-sheet--floating.bds-sheet--side-right {
   top: var(--bds-padding-lg);
   right: var(--bds-padding-lg);
   bottom: var(--bds-padding-lg);
 }
 
-.bds-sheet--floating.bds-sheet--left {
+.bds-sheet--floating.bds-sheet--side-left {
   top: var(--bds-padding-lg);
   left: var(--bds-padding-lg);
   bottom: var(--bds-padding-lg);

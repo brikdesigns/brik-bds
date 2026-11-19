@@ -33,12 +33,4 @@
   --bds-aspect-16-9: 16 / 9;
   --bds-aspect-9-16: 9 / 16;
   --bds-aspect-21-9: 21 / 9;
-
-  /* ── Semantic aliases ──
-     Role-named. Use these when the role drives the choice (photo crop, hero,
-     cinema slot) and the literal ratio is incidental. */
-  --bds-aspect-square:          var(--bds-aspect-1-1);
-  --bds-aspect-photo-landscape: var(--bds-aspect-3-2);
-  --bds-aspect-photo-portrait:  var(--bds-aspect-2-3);
-  --bds-aspect-cinema:          var(--bds-aspect-16-9);
 }

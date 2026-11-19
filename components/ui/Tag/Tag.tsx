@@ -106,7 +106,7 @@ export function Tag({
   const classes = bdsClass(
     'bds-tag',
     `bds-tag--size-${size}`,
-    `bds-tag--${appearance}`,
+    `bds-tag--appearance-${appearance}`,
     `bds-tag--color-${color}`,
     density === 'compact' && 'bds-tag--density-compact',
     disabled && 'bds-tag--disabled',

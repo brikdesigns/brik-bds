@@ -118,14 +118,14 @@
   padding: var(--bds-padding-md) var(--bds-padding-lg);
   gap: var(--bds-gap-md);
   border-bottom: var(--bds-border-width-md) solid var(--bds-border-primary);
-  transition: background-color var(--bds-duration-sm) var(--bds-ease-out);
+  transition: background-color var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-task-console__item:last-child {
   border-bottom: none;
 }
 
-.bds-task-console__item--failed {
+.bds-task-console__item--status-failed {
   background-color: var(--bds-surface-negative);
 }
 
@@ -150,12 +150,12 @@
   text-overflow: ellipsis;
 }
 
-.bds-task-console__item--completed .bds-task-console__item-label,
-.bds-task-console__item--pending .bds-task-console__item-label {
+.bds-task-console__item--status-completed .bds-task-console__item-label,
+.bds-task-console__item--status-pending .bds-task-console__item-label {
   color: var(--bds-text-muted);
 }
 
-.bds-task-console__item--in-progress .bds-task-console__item-label {
+.bds-task-console__item--status-in-progress .bds-task-console__item-label {
   font-weight: var(--bds-font-weight-semibold);
   color: var(--bds-text-primary);
 }
@@ -192,25 +192,25 @@
   font-size: var(--bds-icon-lg);
 }
 
-.bds-task-console__icon--completed {
+.bds-task-console__icon--status-completed {
   color: var(--bds-text-positive);
 }
 
-.bds-task-console__icon--failed {
+.bds-task-console__icon--status-failed {
   color: var(--bds-text-negative);
 }
 
 /* Spinner overrides — size up to match the other 20px icons and lighten the
    3/4 track (default --bds-border-primary reads dark on white surfaces). The
    leading quadrant keeps the brand accent. */
-.bds-task-console .bds-task-console__icon--in-progress {
+.bds-task-console .bds-task-console__icon--status-in-progress {
   width: var(--bds-icon-lg);
   height: var(--bds-icon-lg);
   border-color: var(--bds-surface-muted); /* bds-lint-ignore token-family — intentional alias: spinner track needs surface-tracking lightness (no border token stays subtle in both light brand-theme + dark mode); see docs/TOKEN-PR-CHECKLIST.md, #777 */
   border-top-color: var(--bds-border-brand-primary);
 }
 
-.bds-task-console__icon--pending {
+.bds-task-console__icon--status-pending {
   color: var(--bds-text-muted);
 }
 }

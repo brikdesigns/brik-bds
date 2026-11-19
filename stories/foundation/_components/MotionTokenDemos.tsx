@@ -45,9 +45,9 @@ interface DurationEntry {
 }
 
 const DURATION_TOKENS: DurationEntry[] = [
-  { token: 'fast',   cssVar: '--bds-duration-sm',   value: '100ms', use: 'Hover, focus, micro-interactions' },
-  { token: 'normal', cssVar: '--bds-duration-md', value: '200ms', use: 'Buttons, cards, standard transitions' },
-  { token: 'slow',   cssVar: '--bds-duration-lg',   value: '300ms', use: 'Modals, sheets, emphasis reveals' },
+  { token: 'fast',   cssVar: '--bds-duration-100',   value: '100ms', use: 'Hover, focus, micro-interactions' },
+  { token: 'normal', cssVar: '--bds-duration-200', value: '200ms', use: 'Buttons, cards, standard transitions' },
+  { token: 'slow',   cssVar: '--bds-duration-300',   value: '300ms', use: 'Modals, sheets, emphasis reveals' },
 ];
 
 const DURATION_PRIMITIVES = [
@@ -238,7 +238,7 @@ function EasingDemo({ cssVar, bezier }: { cssVar: string; bezier: string }) {
             borderRadius: '50%',
             background: 'var(--bds-background-brand-primary)',
             transition: playing
-              ? `transform var(--bds-duration-lg, 300ms) var(${cssVar}, ${bezier})`
+              ? `transform var(--bds-duration-300, 300ms) var(${cssVar}, ${bezier})`
               : 'none',
           }}
         />
@@ -399,7 +399,7 @@ function KeyframeMiniPreview({ name }: { name: string }) {
     ? { ...squareBase, animation: `bds-spin 0.8s linear infinite` }
     : {
         ...squareBase,
-        animation: `${name} var(--bds-duration-lg, 300ms) var(--bds-ease-out, ease) both`,
+        animation: `${name} var(--bds-duration-300, 300ms) var(--bds-ease-out, ease) both`,
       };
 
   return (
@@ -473,14 +473,14 @@ interface UtilityEntry {
 
 const UTILITY_CLASSES: UtilityEntry[] = [
   // Entrance
-  { className: '.bds-enter-fade',       resolvedCSS: 'animation: bds-fade-in var(--bds-duration-md) var(--bds-ease-out) both',       group: 'Entrance' },
-  { className: '.bds-enter-slide-up',   resolvedCSS: 'animation: bds-slide-up var(--bds-duration-md) var(--bds-ease-out) both',     group: 'Entrance' },
-  { className: '.bds-enter-slide-down', resolvedCSS: 'animation: bds-slide-down var(--bds-duration-md) var(--bds-ease-out) both',   group: 'Entrance' },
-  { className: '.bds-enter-pop',        resolvedCSS: 'animation: bds-pop var(--bds-duration-lg) var(--bds-ease-spring) both',         group: 'Entrance' },
+  { className: '.bds-enter-fade',       resolvedCSS: 'animation: bds-fade-in var(--bds-duration-200) var(--bds-ease-out) both',       group: 'Entrance' },
+  { className: '.bds-enter-slide-up',   resolvedCSS: 'animation: bds-slide-up var(--bds-duration-200) var(--bds-ease-out) both',     group: 'Entrance' },
+  { className: '.bds-enter-slide-down', resolvedCSS: 'animation: bds-slide-down var(--bds-duration-200) var(--bds-ease-out) both',   group: 'Entrance' },
+  { className: '.bds-enter-pop',        resolvedCSS: 'animation: bds-pop var(--bds-duration-300) var(--bds-ease-spring) both',         group: 'Entrance' },
   // Attention
   { className: '.bds-anim-pulse',       resolvedCSS: 'animation: bds-pulse 1.4s var(--bds-ease-in-out) infinite',                   group: 'Attention' },
   { className: '.bds-anim-shake',       resolvedCSS: 'animation: bds-shake 0.5s var(--bds-ease-out)',                               group: 'Attention' },
-  { className: '.bds-anim-bounce',      resolvedCSS: 'animation: bds-pop var(--bds-duration-lg) var(--bds-ease-spring)',              group: 'Attention' },
+  { className: '.bds-anim-bounce',      resolvedCSS: 'animation: bds-pop var(--bds-duration-300) var(--bds-ease-spring)',              group: 'Attention' },
   // State
   { className: '.bds-anim-spin',        resolvedCSS: 'animation: bds-spin 0.8s linear infinite',                               group: 'State' },
   { className: '.bds-anim-shimmer',     resolvedCSS: 'animation: bds-shimmer 1.5s linear infinite',                            group: 'State' },
@@ -567,7 +567,7 @@ export function StaggerDemo() {
               height: `${(i + 1) * 10 + 20}px`,
               borderRadius: 'var(--bds-border-radius-sm, 2px)',
               background: 'var(--bds-background-brand-primary)',
-              animation: 'bds-fade-in var(--bds-duration-md, 200ms) var(--bds-ease-out) both',
+              animation: 'bds-fade-in var(--bds-duration-200, 200ms) var(--bds-ease-out) both',
               animationDelay: s.delay,
               opacity: 0,
             }}

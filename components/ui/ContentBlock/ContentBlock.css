@@ -84,7 +84,7 @@
    `description`/`actions` slot (a neutral card inside a brand band), which
    the parent does not own. */
 
-.bds-content-block--on-color > :is(
+.bds-content-block--emphasis-on-color > :is(
     .bds-content-block__title,
     .bds-content-block__subtitle,
     .bds-content-block__description

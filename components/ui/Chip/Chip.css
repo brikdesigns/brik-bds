@@ -28,7 +28,7 @@
      pill clusters. */
   border: var(--bds-border-width-md) solid transparent;
   overflow: clip;
-  transition: filter var(--bds-duration-sm) var(--bds-ease-out);
+  transition: filter var(--bds-duration-100) var(--bds-ease-out);
   box-sizing: border-box;
 }
 
