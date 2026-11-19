@@ -116,8 +116,7 @@ export function Dialog({
           </Button>
           <Button
             type="button"
-            variant="primary"
-            tone={resolvedVariant === 'negative' ? 'negative' : undefined}
+            variant={resolvedVariant === 'negative' ? 'negative' : 'primary'}
             onClick={() => onConfirm?.()}
           >
             {confirmLabel}

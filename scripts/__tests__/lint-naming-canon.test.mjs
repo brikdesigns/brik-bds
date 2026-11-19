@@ -622,16 +622,34 @@ describe('rule 5 — `inverse` on the emphasis axis (§ Amendments, #2279)', () 
     expect(out).toMatch(/needs a § 6 amendment/);
   });
 
-  it('makes ButtonVariant\'s three-axis mixing visible to rule 3', () => {
-    // The violation #2279 surfaced and #1983 then fixed — planted here so the
+  it('makes a variant union\'s emphasis + tone mixing visible to rule 3', () => {
+    // The shape #2279 surfaced on Button — planted on a non-exempt name so the
     // gate keeps catching it. Before `inverse` was on a closed list, only
     // `negative`/`positive` were claimed — one axis, so mixedAxes() returned
     // null and the union read as clean.
     const { code, out } = run({
-      tsx: `${CLEAN_TSX}export type ButtonVariant = 'primary' | 'ghost' | 'inverse' | 'negative';\n`,
+      tsx: `${CLEAN_TSX}export type ChipVariant = 'primary' | 'ghost' | 'inverse' | 'negative';\n`,
     });
     expect(code).toBe(1);
-    expect(out).toMatch(/ButtonVariant#mixed — mixes 2 axes \(emphasis \+ tone\)/);
+    expect(out).toMatch(/ChipVariant#mixed — mixes 2 axes \(emphasis \+ tone\)/);
+  });
+});
+
+describe('rule 3 — Button\'s curated style list (§ Amendments, #3275)', () => {
+  it('skips the mixed-axis check for ButtonVariant only', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ButtonVariant = 'primary' | 'outline' | 'inverse' | 'on-color' | 'negative' | 'negative-outline' | 'positive';\n`,
+    });
+    expect(out).not.toMatch(/ButtonVariant#mixed/);
+    expect(code).toBe(0);
+  });
+
+  it('still runs the retired-word check on ButtonVariant', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ButtonVariant = 'primary' | 'error';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/ButtonVariant — retired valence word/);
   });
 });
 

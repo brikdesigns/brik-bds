@@ -662,12 +662,22 @@ function mixedAxes(members) {
 
 // ── Rule 3 — a union carries one axis ──────────────────────────────────────
 
+/**
+ * Unions that are a curated list of complete styles, not one axis — ADR-033
+ * § Amendments, "Button's `variant` is a curated style list" (#3275). Each
+ * member names one finished look (`negative-outline` is one style, not
+ * `outline` + `negative`), so the rule 3 axis-mixing check is skipped for
+ * them. The retired-word checks still run. A name joins this set only by
+ * its own amendment.
+ */
+const CURATED_STYLE_UNIONS = new Set(['ButtonVariant']);
+
 function unionFindings(unions) {
   const findings = [];
   for (const u of unions) {
     const retired = u.members.filter((v) => Object.prototype.hasOwnProperty.call(RETIRED_VALENCE, v));
     const retiredAxis = u.members.filter((v) => Object.prototype.hasOwnProperty.call(RETIRED_AXIS_VALUES, v));
-    const mixed = mixedAxes(u.members);
+    const mixed = CURATED_STYLE_UNIONS.has(u.name) ? null : mixedAxes(u.members);
     const id = `${u.name}`;
 
     if (retired.length > 0) {

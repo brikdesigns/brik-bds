@@ -221,8 +221,8 @@ const priceCardRatio = imageRatio ?? 'square';
 // The pricing-card layout sits on an audience-tinted surface, so its single
 // action is the inverse button; the other layouts use the primary fill.
 const ctaClass = isPricingCard
-  ? 'bds-button bds-button--inverse bds-button--size-md'
-  : 'bds-button bds-button--primary bds-button--size-md';
+  ? 'bds-button bds-button--variant-inverse bds-button--size-md'
+  : 'bds-button bds-button--variant-primary bds-button--size-md';
 
 ---
 
@@ -341,7 +341,7 @@ const ctaClass = isPricingCard
         {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
           <HeroMediaCardPrice label={priceCard.priceLabel} value={priceCard.price}>
             {priceCard.cta && 'url' in priceCard.cta && (
-              <a href={priceCard.cta.url} class={`bds-button bds-button--primary bds-button--size-${priceCard.cta.size ?? 'sm'}`}>
+              <a href={priceCard.cta.url} class={`bds-button bds-button--variant-primary bds-button--size-${priceCard.cta.size ?? 'sm'}`}>
                 <span class="bds-button__content">{priceCard.cta.label}</span>
               </a>
             )}
@@ -757,23 +757,23 @@ const ctaClass = isPricingCard
   }
 
   /* ── Dark-mode, opt-in `data-inverse-scope="card"` (brik-bds#1028): the section is a light band and only the media card paints `-inverse`. The content-text flips above skip a flagged hero (stay `-on-light`); the card's primary CTA is repainted with the `-on-dark` tint + grayscale-950 text (the `-on-light` fill is `{hue}-darkest`, invisible on the card). Rest-state only so BDS hover/press feedback still wins. Text is the grayscale-950 primitive: the hero rebinds --bds-text-on-color-light to white. */
-  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"] .bds-hero__media-card .bds-button--primary {
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"] .bds-hero__media-card .bds-button--variant-primary {
     color: var(--bds-color-grayscale-950);
   }
-  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='brand'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active) {
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='brand'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active) {
     background-color: var(--bds-background-service-brand-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='marketing'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active) {
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='marketing'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active) {
     background-color: var(--bds-background-service-marketing-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='information'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active) {
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='information'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active) {
     background-color: var(--bds-background-service-information-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='product'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active) {
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='product'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active) {
     background-color: var(--bds-background-service-product-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='back-office'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active),
-  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='service'] .bds-hero__media-card .bds-button--primary:not(:hover):not(:active) {
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='back-office'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active),
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='service'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active) {
     background-color: var(--bds-background-service-back-office-on-dark);
   }
 

@@ -24,32 +24,24 @@ Triggers an event or action. A single unified component covering four render sha
 
 ## Variants
 
-Three orthogonal props, one concept each (ADR-033 § 2). `variant` is the **form**; `tone` is the **valence**; `emphasis` is the **hue source**. They collapse to Controls on the Playground rather than per-value stories (ADR-010 §components-without-a-variant-axis).
+One prop picks the style: `variant`, from a curated list of ten ([ADR-033 § Amendments](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#amendments), #3275). Every value is a complete style. The class is `bds-button--variant-{value}`. Switch it from the Playground's Controls rather than per-value stories (ADR-010 §components-without-a-variant-axis).
 
 <Canvas of={Stories.Default} />
 
-| Prop | Values | Default |
-|---|---|---|
-| `variant` (form) | `primary` · `outline` · `secondary` · `ghost` | `primary` |
-| `tone` (valence) | `negative` · `positive` | none |
-| `emphasis` (hue source) | `inverse` · `on-color` | none |
+| `variant` | Use for |
+|---|---|
+| `primary` (default) | The main action on a surface |
+| `secondary` | A supporting action — neutral fill |
+| `outline` | A lower-emphasis action — border, no fill |
+| `ghost` | The lowest emphasis — text only |
+| `inverse` | A primary action on an inverse (dark) surface |
+| `on-color` | A primary action on a brand-primary surface |
+| `negative` | A destructive action — solid system red |
+| `negative-outline` | A destructive action at outline emphasis — red text and border |
+| `negative-ghost` | A destructive action at ghost emphasis — red text |
+| `positive` | A confirming action — solid system green |
 
-### Combinations that ship
-
-| | `primary` | `outline` | `secondary` | `ghost` |
-|---|---|---|---|---|
-| (no tone) | yes | yes | yes | yes |
-| `tone="negative"` | yes — solid system red | yes — red text + border | **no** | yes — red text |
-| `tone="positive"` | yes — solid system green | **no** | **no** | **no** |
-| `emphasis="inverse"` | yes | **no** | **no** | **no** |
-| `emphasis="on-color"` | yes | **no** | **no** | **no** |
-
-A pairing that does not ship is dropped to its form with a one-time console warning, never half-styled. The reasons:
-
-- **`secondary` + any tone** — `secondary` is a neutral grayscale surface fill; a negative or positive tint on it needs a surface/text pairing the token set has not minted. Add it in Figma first.
-- **`positive` on `outline` / `ghost`** — `positive` confirms a completed action; no caller wants a low-emphasis confirmation, so default-deny (ADR-033 § 6) applies. The negative pair exists because a destructive action must be reachable at every emphasis rung.
-- **`emphasis` on `outline` / `secondary` / `ghost`** — `inverse` and `on-color` each paint the solid fill; a transparent or bordered form has no fill for them to paint.
-- **`emphasis` alongside `tone`** — both pick what colours the fill, so they cannot both win. `tone` takes it and `emphasis` is dropped.
+No other style ships. `secondary` has no negative or positive version because the token set has no tinted surface/text pair for it. `positive` has no outline or ghost version because a confirmation is never a low-emphasis action (default-deny, ADR-033 § 6).
 
 State props (`disabled`, `loading`, `fullWidth`, `selected`) and composition slots (`iconBefore`, `iconAfter`) are also Controls in the Playground, not standalone stories — per ADR-010 Q2.
 
@@ -57,16 +49,18 @@ State props (`disabled`, `loading`, `fullWidth`, `selected`) and composition slo
 
 ### Retired spellings
 
-These `variant` values resolve at runtime (`resolveRetiredValue`) and warn once. Per ADR-033 they're honoured for one minor then removed, and they are **not** members of the `ButtonVariant` type:
+These spellings still resolve at runtime and warn once. They are honoured for one minor, then removed:
 
 | Retired | Use instead |
 |---|---|
-| `variant="negative"` · `destructive` · `danger` · `danger-outline` · `danger-ghost` | `tone="negative"` |
-| `variant="positive"` | `tone="positive"` |
-| `variant="inverse"` | `emphasis="inverse"` |
-| `variant="on-color"` | `emphasis="on-color"` |
+| `variant="destructive"` · `variant="danger"` · `tone="negative"` | `variant="negative"` |
+| `variant="danger-outline"` · `variant="outline" tone="negative"` | `variant="negative-outline"` |
+| `variant="danger-ghost"` · `variant="ghost" tone="negative"` | `variant="negative-ghost"` |
+| `tone="positive"` | `variant="positive"` |
+| `emphasis="inverse"` | `variant="inverse"` |
+| `emphasis="on-color"` | `variant="on-color"` |
 
-An explicit `tone` / `emphasis` wins over the one a retired `variant` value implies.
+A retired `tone` or `emphasis` on a variant with no matching style (for example `variant="secondary" tone="negative"`) keeps the variant.
 
 ## Modes
 

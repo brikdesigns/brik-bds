@@ -65,7 +65,7 @@ import { Button, LinkButton, IconButton } from '@brikdesigns/bds';
 
 ## Variants
 
-Four forms (`variant`), plus a valence (`tone`) and a hue source (`emphasis`) that layer on top. Pick by **action emphasis** and **destructive intent**, not by aesthetics.
+One prop picks the style: `variant`, from a curated list of ten (#3275). Every value is a complete style. Pick by **action emphasis** and **destructive intent**, not by aesthetics.
 
 ### Standard ladder
 
@@ -97,27 +97,27 @@ Four forms (`variant`), plus a valence (`tone`) and a hue source (`emphasis`) th
 
 ### Destructive
 
-`tone="negative"` is the destructive action — confirm dialogs, delete-and-go flows. It is a separate axis from the form, so a destructive action can sit at any rung of the ladder it ships on: `primary`, `outline` or `ghost`.
+The `negative` styles are the destructive action — confirm dialogs, delete-and-go flows. There are three, one per emphasis rung: `negative`, `negative-outline` and `negative-ghost`.
 
-<ComponentPreview code={`<Button tone="negative">Delete project</Button>
-<Button variant="outline" tone="negative">Delete</Button>
-<Button variant="ghost" tone="negative">Remove</Button>`}>
-  <BDS.Button tone="negative">Delete project</BDS.Button>
-  <BDS.Button variant="outline" tone="negative">Delete</BDS.Button>
-  <BDS.Button variant="ghost" tone="negative">Remove</BDS.Button>
+<ComponentPreview code={`<Button variant="negative">Delete project</Button>
+<Button variant="negative-outline">Delete</Button>
+<Button variant="negative-ghost">Remove</Button>`}>
+  <BDS.Button variant="negative">Delete project</BDS.Button>
+  <BDS.Button variant="negative-outline">Delete</BDS.Button>
+  <BDS.Button variant="negative-ghost">Remove</BDS.Button>
 </ComponentPreview>
 
-`secondary` takes no tone, and `positive` ships on `primary` only — the full matrix and the reasons are in Storybook → Components/button → *Combinations that ship*.
+`secondary` has no negative style, and `positive` is solid only — the reasons are in Storybook → Components/button → *Variants*.
 
-The `danger` / `danger-outline` / `danger-ghost` trio was retired in #1957: it carried the brand accent-red rather than the system negative. `variant="negative"` and `variant="positive"` (#1983) and the old `destructive` / `danger*` spellings still resolve to `tone` for one minor and warn once in the console.
+The `danger` / `danger-outline` / `danger-ghost` trio was retired in #1957: it carried the brand accent-red rather than the system negative. Those spellings, `destructive`, and the `tone` / `emphasis` props still resolve to a `variant` for one minor and warn once in the console.
 
 ### State variants
 
-`tone="positive"` confirms a completed action. `emphasis="inverse"` and `emphasis="on-color"` are for placement on dark or branded surfaces. To mark the active option in a group, pass the boolean `selected` prop on top of any variant — it is a state modifier, not a variant value.
+`variant="positive"` confirms a completed action. `variant="inverse"` and `variant="on-color"` are for placement on dark or branded surfaces. To mark the active option in a group, pass the boolean `selected` prop on top of any variant — it is a state modifier, not a variant value.
 
-<ComponentPreview code={`<BDS.Button tone="positive">Saved</BDS.Button>
+<ComponentPreview code={`<BDS.Button variant="positive">Saved</BDS.Button>
 <BDS.Button variant="outline" selected>Selected</BDS.Button>`}>
-  <BDS.Button tone="positive">Saved</BDS.Button>
+  <BDS.Button variant="positive">Saved</BDS.Button>
   <BDS.Button variant="outline" selected>Selected</BDS.Button>
 </ComponentPreview>
 
@@ -197,7 +197,7 @@ An icon-only button with a **required** `label` prop for accessibility. The labe
 ```tsx
 // Preferred — unified Button API
 <Button icon={<CloseIcon />} label="Close dialog" variant="ghost" />
-<Button icon={<TrashIcon />} label="Delete item" tone="negative" />
+<Button icon={<TrashIcon />} label="Delete item" variant="negative" />
 
 // Deprecated — thin wrapper, same result
 <IconButton icon={<CloseIcon />} label="Close dialog" variant="ghost" />
@@ -230,8 +230,8 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 | Prop | Type | Default |
 |---|---|---|
 | `variant` | `ButtonVariant` | `'primary'` |
-| `tone` | `ButtonTone` | — |
-| `emphasis` | `ButtonEmphasis` | — |
+| `tone` | `ButtonTone` *(deprecated — use `variant`)* | — |
+| `emphasis` | `ButtonEmphasis` *(deprecated — use `variant`)* | — |
 | `size` | `ButtonSize` | `'md'` |
 | `iconBefore` | `ReactNode` | — |
 | `iconAfter` | `ReactNode` | — |
@@ -247,8 +247,8 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 |---|---|---|
 | `href` | `string` *(required)* | — |
 | `variant` | `ButtonVariant` | `'primary'` |
-| `tone` | `ButtonTone` | — |
-| `emphasis` | `ButtonEmphasis` | — |
+| `tone` | `ButtonTone` *(deprecated — use `variant`)* | — |
+| `emphasis` | `ButtonEmphasis` *(deprecated — use `variant`)* | — |
 | `size` | `ButtonSize` | `'md'` |
 | `iconBefore` | `ReactNode` | — |
 | `iconAfter` | `ReactNode` | — |
@@ -264,8 +264,8 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 | `icon` | `ReactNode` *(required)* | — |
 | `label` | `string` *(required)* | — |
 | `variant` | `ButtonVariant` | `'ghost'` |
-| `tone` | `ButtonTone` | — |
-| `emphasis` | `ButtonEmphasis` | — |
+| `tone` | `ButtonTone` *(deprecated — use `variant`)* | — |
+| `emphasis` | `ButtonEmphasis` *(deprecated — use `variant`)* | — |
 | `size` | `ButtonSize` | `'md'` |
 | `loading` | `boolean` | `false` |
 | `selected` | `boolean` | `false` |
@@ -273,8 +273,14 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 ### Type unions
 
 ```ts
-type ButtonVariant = 'primary' | 'outline' | 'secondary' | 'ghost';
+type ButtonVariant =
+  | 'primary' | 'secondary' | 'outline' | 'ghost'
+  | 'inverse' | 'on-color'
+  | 'negative' | 'negative-outline' | 'negative-ghost' | 'positive';
+
+/** @deprecated — fold into `variant` (#3275). */
 type ButtonTone     = 'negative' | 'positive';
+/** @deprecated — fold into `variant` (#3275). */
 type ButtonEmphasis = 'inverse' | 'on-color';
 
 type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';

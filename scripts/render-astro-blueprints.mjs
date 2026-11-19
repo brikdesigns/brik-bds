@@ -357,7 +357,7 @@ function assertStylesheetCoverage() {
   const ghlFormHtml = [readFileSync(join(outDir, 'GhlForm.html'), 'utf8')];
   const html = [...blockHtml, ...shellHtml, ...heroMediaCardHtml, ...ghlFormHtml].join('\n');
 
-  // Root class only — `bds-hero__title` and `bds-button--primary` are covered by
+  // Root class only — `bds-hero__title` and `bds-button--variant-primary` are covered by
   // whatever stylesheet owns `bds-hero` / `bds-button`.
   const roots = new Set([...html.matchAll(/class="([^"]*)"/g)].flatMap((m) => m[1].split(/\s+/))
     .filter((c) => c.startsWith('bds-'))

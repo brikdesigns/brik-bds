@@ -52,7 +52,7 @@ export default meta;
 type Story = StoryObj<typeof Banner>;
 
 const BannerAction = ({ children }: { children: string }) => (
-  <Button emphasis="on-color" size="md">{children}</Button>
+  <Button variant="on-color" size="md">{children}</Button>
 );
 
 /* ─── Default ────────────────────────────────────────────────── */

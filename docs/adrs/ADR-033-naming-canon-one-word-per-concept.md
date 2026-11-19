@@ -119,10 +119,10 @@ The prop layer migrates to the token layer's vocabulary, not the reverse. `error
 
 | Axis | Word | Closed value list | Correct today | Migrates |
 |---|---|---|---|---|
-| Valence — what this communicates about a state | `tone` | § 1's five words | Field (`helperTone`); Banner's prop *name* | Badge, Counter, Dot, Meter, ProgressCircle (`status` → `tone`); Toast, Button (valence members leave `variant`); Banner (`announcement` leaves the union) |
+| Valence — what this communicates about a state | `tone` | § 1's five words | Field (`helperTone`); Banner's prop *name* | Badge, Counter, Dot, Meter, ProgressCircle (`status` → `tone`); Toast, Button (valence members leave `variant`; reversed for Button by § Amendments, #3275); Banner (`announcement` leaves the union) |
 | Presence / lifecycle — the state of a named subject | `status` | per-subject, scoped-intent token-backed | Avatar, Card, Table, TaskConsole | — |
 | Form — mutually exclusive visual or structural shape, no valence | `variant` | per-component | Card, TabBar, Skeleton, Sheet, ServiceTag, Testimonial, Footer, ToggleSwitch, ProgressStepper | — |
-| Hue source — which palette paints it | `emphasis` | `neutral` · `brand` · `accent` · `inverse` · `on-color` | TextLink, SocialIcon, ContactIcon (`tone` → `emphasis` landed, #1925) | Banner, Badge, Counter (brand member extracted, below); Button (`inverse`, `on-color` left `variant` — #1983) — `inverse` added by § Amendments (#2279), `on-color` by § Amendments (#1983) |
+| Hue source — which palette paints it | `emphasis` | `neutral` · `brand` · `accent` · `inverse` · `on-color` | TextLink, SocialIcon, ContactIcon (`tone` → `emphasis` landed, #1925) | Banner, Badge, Counter (brand member extracted, below); Button (`inverse`, `on-color` left `variant` — #1983; reversed by § Amendments, #3275) — `inverse` added by § Amendments (#2279), `on-color` by § Amendments (#1983) |
 | Fill treatment intensity | `appearance` | `solid` · `subtle` · `outline` (amended by #2943; Tag's `subtle`→`outline`, `muted`→`subtle`) | Badge, Tag, Avatar (`solid` · `subtle` only) | — |
 | Spacing compression | `density` | `comfortable` · `compact` | Tag, Sheet | — |
 | Accent hue — which named hue paints it | `color` | `neutral` · `blue` · `green` · `orange` · `purple` · `yellow` · `red` | Tag (`--color-{hue}`) | Avatar (`--accent-{hue}` → `--color-{hue}`, with #1927) — added by § Amendments (#2943) |
@@ -619,3 +619,23 @@ The value list is the three unions as they ship (Menu's is the `top | bottom` su
 | Viewport edge a docked panel anchors to | `side` | `right` · `left` · `bottom` | Sheet (`bds-sheet--side-right`) |
 
 **Enforcement.** `tokens/naming-grammar.json` gains `axes.side`. `side` joins `PREFIX_JUDGED_AXES`: `left`, `right` and `bottom` are also members of `placement` and of Pagination's union, so judging by value would misread them. **Migrates:** Sheet `--right` · `--left` · `--bottom` → `--side-right` · `--side-left` · `--side-bottom`. Pagination's `--left` · `--center` · `--right` (prop `position`, horizontal alignment) go onto the existing `align` prefix as `--align-*`, with no amendment. No aliases ship. **Baseline:** −4. `--bottom`, `--center`, `--left` and `--right` leave `tokens/naming-canon-baseline.json`.
+
+### Button's `variant` is a curated style list (2026-11-19, [#3275](https://github.com/brikdesigns/brik-bds/issues/3275))
+
+OPERATOR CHOSE 2026-11-19: Button API → one flat `variant` list, and this ADR is amended so Button's variant is a curated list of styles.
+
+**What changes.** § 2 says one union carries one axis. Button no longer follows that. Its `variant` is a closed list of ten complete styles. Each member names one finished look, not a mix of axes:
+
+| Prop | Values | Class |
+|---|---|---|
+| `variant` | `primary` · `secondary` · `outline` · `ghost` · `inverse` · `on-color` · `negative` · `negative-outline` · `negative-ghost` · `positive` | `bds-button--variant-{value}` |
+
+**Why.** Button had three props for one choice: `variant`, `tone` and `emphasis`. Most pairings had no style. `tone="positive"` worked only on `primary`, and `emphasis` worked only on `primary`. The rest fell back silently. A designer picks one button style, so the API is one list. `IconButton` and `LinkButton` share the type.
+
+**This reverses two § 2 migrations for Button only.** Valence members (`negative`, `positive`) and hue members (`inverse`, `on-color`) return to `variant`. The `tone` and `emphasis` axes stay unchanged for every other component.
+
+**Is any other union a curated style list?** No. Rule 3's mixed-axis check was run over every union in `components/ui/**`. It flagged `ButtonVariant` and the three `*Tone#mixed` unions already baselined under #1925 (Badge, Banner, Counter). Those three are valence + emphasis splits that #1925 is migrating, not style lists, so they stay. The exception is `ButtonVariant` alone.
+
+**Retired for one minor.** `tone` and `emphasis` on Button, IconButton and LinkButton, the `ButtonTone` / `ButtonEmphasis` types, and Hero's `ctaEmphasis` stay as `@deprecated` and fold into `variant` with a dev warning. `danger`, `danger-outline`, `danger-ghost` and `destructive` fold the same way.
+
+**Enforcement.** `lint-naming-canon` gains `CURATED_STYLE_UNIONS = {ButtonVariant}`, which skips rule 3's mixed-axis check for that union only. The retired-word checks still run on it. Another union joins the set only by its own amendment. **Baseline:** −2. `--ghost` and `--outline` leave `tokens/naming-canon-baseline.json`. `--primary`, `--secondary` and `--inverse` stay because other components still emit them bare.

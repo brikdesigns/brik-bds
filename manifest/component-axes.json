@@ -92,9 +92,15 @@
   "Button": {
     "variant": [
       "primary",
-      "outline",
       "secondary",
-      "ghost"
+      "outline",
+      "ghost",
+      "inverse",
+      "on-color",
+      "negative",
+      "negative-outline",
+      "negative-ghost",
+      "positive"
     ],
     "size": [
       "xs",
