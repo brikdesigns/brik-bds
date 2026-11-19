@@ -99,7 +99,7 @@ function tabBarVariantClass(variant: TabBarVariant): string {
  * Use `onColor` for placement on dark/brand backgrounds.
  *
  * All variant / active / on-color styling lives in `TabBar.css`, keyed on the
- * variant class, `[aria-selected]`, and the `--on-color` modifier — so external
+ * variant class, `[aria-selected]`, and the `--emphasis-on-color` modifier — so external
  * rules (e.g. PageHeader's tabs slot) can override via normal cascade rather
  * than fighting inline-style specificity.
  *
@@ -136,7 +136,7 @@ export function TabBar({
   ...props
 }: TabBarProps) {
   const variantClass = tabBarVariantClass(variant);
-  const onColorClass = onColor ? 'bds-tab-bar--on-color' : '';
+  const onColorClass = onColor ? 'bds-tab-bar--emphasis-on-color' : '';
   const scrollClass = overflow === 'scroll' && orientation === 'horizontal' ? 'bds-tab-bar--scroll' : '';
 
   // The tabs keyboard contract only engages once panels are wired, so existing

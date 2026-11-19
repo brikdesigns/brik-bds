@@ -143,7 +143,7 @@ export const InteractionTestOnColorForwarding: Story = {
   },
   play: async ({ canvasElement }) => {
     const block = canvasElement.querySelector('.bds-content-block');
-    await expect(block).toHaveClass('bds-content-block--on-color');
+    await expect(block).toHaveClass('bds-content-block--emphasis-on-color');
 
     const wrapper = canvasElement.querySelector('.bds-section-header');
     await expect(wrapper).not.toHaveClass('bds-section-header--on-color');
