@@ -584,13 +584,18 @@
   // ── Scope pins to the current page ──────────────────────────────────────
   // One widget instance can serve many pages under a single variant key (the
   // portal mounts it once in the layout), so a pin belongs to the page it was
-  // left on. Matching is on pathname only (no query/hash, no trailing slash).
+  // left on. Matching is on pathname plus the `tab` query param (no hash, no
+  // trailing slash): a record page whose sections are `?tab=` views is several
+  // pages to the reviewer, so a pin left on one tab must not show on another.
   // A pin with no stored page_url (legacy rows, older API) matches every page,
   // which is the behaviour single-page mockups rely on.
   function pagePathOf(url) {
     if (!url) return null;
     try {
-      return new URL(url, window.location.href).pathname.replace(/\/+$/, '') || '/';
+      const u = new URL(url, window.location.href);
+      const path = u.pathname.replace(/\/+$/, '') || '/';
+      const tab = u.searchParams.get('tab');
+      return tab ? path + '?tab=' + tab : path;
     } catch (e) {
       console.warn('[Brik Feedback] Could not parse page url:', url, e);
       return null;
