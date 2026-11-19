@@ -2,6 +2,16 @@
   "$comment": "The token naming grammar, declared once. Read by lint-naming-canon.mjs, lint-token-purpose-slots.mjs, the grammar vitest and the token-anatomy docs check. Spec: docs/adrs/ADR-043-system-id-token-prefix.md (ID, shape, reserved words) and ADR-033 (vocabularies). Vocabularies moved verbatim from the hardcoded sets those scripts held; changing a word here changes the gate.",
   "version": 1,
   "shape": "--{id}-{body}",
+  "body": {
+    "$comment": "#3278. The {body} of a Figma-born name is the Figma variable path with every / turned into -. The generator never adds the collection name or the mode name, so a variable must carry its full name in its own path (content-width/xl, not xl inside a content-width collection). Read by scripts/lib/tokens-studio-compose.cjs, which throws on a rootless set outside legacyCollectionWrap.",
+    "rule": "figma path, / → -",
+    "collectionSegment": "never",
+    "modeSegment": "never",
+    "legacyCollectionWrap": {
+      "$comment": "Collections whose Figma variables still sit at the root (sm, not border-width/sm). The generator prefixes their collection name until Figma regroups them; that regroup is out of scope for #3278. Remove a collection from this list in the same PR that regroups it in Figma. Never add one.",
+      "collections": ["border-radius", "border-width", "breakpoint", "layout"]
+    }
+  },
   "ids": {
     "$comment": "ADR-043 section 3. An agent may propose token values, never token names and never IDs: a new ID is a brik-bds PR to this registry, reviewed by a human.",
     "rules": [
