@@ -375,6 +375,7 @@
   },
   "homepage": "https://brik-bds.io/",
   "dependencies": {
+    "@floating-ui/react-dom": "^2.1.8",
     "@fullcalendar/core": "^6.1.22",
     "@fullcalendar/daygrid": "^6.1.22",
     "@fullcalendar/interaction": "^6.1.22",

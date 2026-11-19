@@ -11,6 +11,7 @@ import {
 import { Button } from '../Button/Button';
 import { SearchInput } from '../SearchInput/SearchInput';
 import { bdsClass } from '../../utils';
+import { useFloatingPanel } from '../shared/useFloatingPanel';
 import './Menu.css';
 
 const DEFAULT_SEARCH_THRESHOLD = 8;
@@ -117,10 +118,11 @@ export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
    */
   header?: ReactNode;
   /**
-   * Direction the panel opens relative to its trigger. `top` anchors the
-   * panel above the trigger internally (no consumer inline override). Default
-   * `bottom`. The panel is height-capped and scrolls internally when its
-   * content would overflow the viewport.
+   * Preferred side the panel opens on, relative to its trigger. `top` anchors
+   * the panel above the trigger internally (no consumer inline override).
+   * Default `bottom`. The panel flips to the other side when the preferred
+   * one has no room, and is height-capped to the room left (never below three
+   * rows), scrolling internally when its content would overflow the viewport.
    */
   placement?: MenuPlacement;
   /**
@@ -226,6 +228,7 @@ export function Menu({
   ...props
 }: MenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
+  useFloatingPanel(menuRef, isOpen);
   const searchRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
   const [tabStopId, setTabStopId] = useState<string | null>(null);
