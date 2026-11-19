@@ -457,7 +457,7 @@
     margin: 0;
     padding: var(--bds-padding-lg) var(--bds-padding-lg) 0;
     font-family: var(--bds-font-family-heading);
-    font-size: var(--bds-heading-3xl);
+    font-size: var(--bds-heading-huge);
     font-weight: var(--bds-font-weight-extrabold);
     line-height: var(--bds-font-line-height-tight);
     color: var(--bds-text-on-color-dark);
