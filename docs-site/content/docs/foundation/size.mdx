@@ -166,20 +166,16 @@ The scale runs `--size-0` (0) through `--size-2200` (100px).
 
 ## Shell sizes
 
-Fixed dimensions of the product app shell. Use them for the layout the shell owns — the fixed top bar, the sidebar column, and the section rail — so a consumer never repeats the px.
+Fixed dimension of the product app shell. Use it for the layout the shell owns — the fixed top bar — so a consumer never repeats the px.
 
 | Token | Value | Source |
 |---|---|---|
 | `--bds-shell-top-bar-height` | 64px (`--bds-size-1600`) | Portal top bar height |
-| `--bds-shell-sidebar-width` | 260px | `SidebarNavigation` default expanded width |
-| `--bds-shell-sidebar-width-collapsed` | 80px (`--bds-size-1800`) | `SidebarNavigation` default collapsed width |
-| `--bds-shell-rail-width` | 220px | Section rail (`SubNavigation`) column in the portal |
 
 ```css
 .shell__rail {
   position: sticky;
   top: var(--bds-shell-top-bar-height);
-  width: var(--bds-shell-rail-width);
   height: calc(100vh - var(--bds-shell-top-bar-height));
 }
 ```
