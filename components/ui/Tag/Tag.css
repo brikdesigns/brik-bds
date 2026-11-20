@@ -151,7 +151,7 @@
 }
 
 .bds-tag--appearance-subtle.bds-tag--color-red {
-  background-color: var(--bds-background-accent-red-light);
+  background-color: var(--bds-surface-accent-red);
   color: var(--bds-text-on-color-light);
 }
 

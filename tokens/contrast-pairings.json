@@ -898,7 +898,7 @@
       "group": "indicator",
       "label": "Subtle indicator label on the accent-red pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-accent-red-light",
+      "bg": "--bds-surface-accent-red",
       "thresholdType": "AA"
     },
     {

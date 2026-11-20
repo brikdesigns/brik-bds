@@ -123,7 +123,7 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     expect(violations[0].message).toMatch(/swaps families at @media \(max-width: 991px\)/);
   });
 
-  it('fails when the base or override uses a deprecated 2xs/2xl rung', () => {
+  it('fails when the base or override uses a retired 2xs/2xl rung (no longer declared, #3250)', () => {
     const file = join(tmpDir, 'Deprecated.css');
     writeFileSync(file, `
       .tile {
@@ -137,7 +137,7 @@ describe('lint-tokens Rule 13 (responsive-token-swap)', () => {
     `);
     const violations = runLinter([file]);
     expect(violations.map((v) => v.message)).toContainEqual(
-      expect.stringContaining('uses deprecated --bds-padding-2xs'),
+      expect.stringContaining('unrecognized rung'),
     );
   });
 

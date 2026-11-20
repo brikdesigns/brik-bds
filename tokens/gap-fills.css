@@ -120,7 +120,6 @@
 
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --bds-surface-nav: var(--bds-color-grayscale-white);
-  --bds-surface-navigation: var(--bds-color-grayscale-white); /* canonical; --bds-surface-nav kept for backward compat */
   --bds-surface-brand-secondary: var(--bds-color-grayscale-100); /* Foundations default; yellow-500 was a Brand Kit primitive, and Brik pins its own in the Brand Kit (#2927) */
   --bds-background-brand-secondary: var(--bds-color-grayscale-white);
   --bds-background-image: #17171799; /* bds-lint-ignore — semi-transparent dark overlay; no primitive equivalent exists yet. Promote to Figma once an opacity token primitive is available. */
@@ -240,7 +239,6 @@
      saturated brand color, and the brand pastel is already
      --bds-background-brand-secondary. */
   --bds-background-info-light:          var(--bds-surface-info);
-  --bds-background-accent-red-light:    var(--bds-color-system-red-200);
 
   /* ── System color hover/pressed states ──
      Darken system colors for interactive feedback on destructive/positive buttons.
@@ -423,25 +421,6 @@
 
   /* --bds-ease-{out,in,in-out,spring,spring-soft,linear} come from the Figma
      `motion` collection (tokens/figma-tokens.css, #3278). */
-
-  /* ── DEPRECATED numeric-rung aliases (#2594) — DROP NEXT MINOR ──
-     ADR-033 §3 renamed 13 ❖ Brik Foundations step words to numeric t-shirt
-     rungs in the repo only (#2229, `20c5d83f`); the paired Figma write (#2227)
-     never landed, so for 26 days the repo and the design source named the same
-     variables differently. Figma is the source of truth for Foundations
-     (`docs-site/content/docs/foundation/index.mdx:12`), and its ladder is
-     `tiny · xs · sm · md · lg · xl · (xxl) · huge` with no numeric rungs — so
-     the repo reverts to it and ADR-033 §3 is superseded for these 13.
-
-     Each retired numeric name now aliases the Figma rung (not a primitive) so
-     mode-varying families keep tracking their per-mode value. Shipped for one
-     minor so consumer repos migrate. */
-  --bds-gap-2xs:             var(--bds-gap-tiny);           /* bds-lint-ignore — DEPRECATED, use --bds-gap-tiny (#2594); drop next minor */
-  --bds-gap-2xl:             var(--bds-gap-huge);           /* bds-lint-ignore — DEPRECATED, use --bds-gap-huge (#2594); drop next minor */
-  --bds-padding-2xs:         var(--bds-padding-tiny);       /* bds-lint-ignore — DEPRECATED, use --bds-padding-tiny (#2594); drop next minor */
-  --bds-padding-2xl:         var(--bds-padding-huge);       /* bds-lint-ignore — DEPRECATED, use --bds-padding-huge (#2594); drop next minor */
-  --bds-heading-2xl:         var(--bds-heading-xxl);        /* bds-lint-ignore — DEPRECATED, use --bds-heading-xxl (#2594); drop next minor */
-  --bds-heading-3xl:         var(--bds-heading-huge);       /* bds-lint-ignore — DEPRECATED, use --bds-heading-huge (#2594); drop next minor */
 
   /* ── DEPRECATED step-word aliases (ADR-033 §3, #1923) — DROP NEXT MINOR ──
      Positional, value-preserving renames of the retired step words. Each old

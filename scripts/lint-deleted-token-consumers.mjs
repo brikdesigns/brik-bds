@@ -288,10 +288,15 @@ function referencesIn(dir, name, pathspecs) {
   // over-matches. Require a non-name character (or EOL) on both sides. Token
   // names are `--[A-Za-z0-9_-]+`, so no character in one is a regex metacharacter.
   const bounded = new RegExp(`(?<![A-Za-z0-9_-])${name}(?![A-Za-z0-9_-])`);
+  // A line that DECLARES the name (`:root{--x:1;--y:var(--x)}`) resolves it
+  // locally — a self-contained snapshot such as a generated brand-guide, not a
+  // read of BDS's deleted definition.
+  const declares = new RegExp(`(^|[;{\\s])${name}\\s*:`);
   return out
     .split('\n')
     .filter(Boolean)
     .filter((l) => bounded.test(l))
+    .filter((l) => !declares.test(l.replace(/^[^:]*:\d+:/, '')))
     .map((l) => l.replace(/^\.\//, ''));
 }
 
