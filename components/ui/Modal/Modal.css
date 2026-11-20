@@ -21,7 +21,7 @@
   max-height: 90vh;
   background-color: var(--bds-surface-primary);
   border-radius: var(--bds-border-radius-lg);
-  box-shadow: var(--bds-shadow-overlay);
+  box-shadow: var(--bds-shadow-dramatic);
   display: flex;
   flex-direction: column;
   overflow: hidden;

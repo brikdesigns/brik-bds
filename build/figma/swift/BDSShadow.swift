@@ -29,12 +29,4 @@ public enum BDSShadow {
     public static let shadowSpread500: CGFloat = 12
     public static let shadowSpread600: CGFloat = 14
     public static let shadowSpread700: CGFloat = 16
-    public static let blurRadiusSm: CGFloat = 8
-    public static let blurRadiusMd: CGFloat = 12
-    public static let blurRadiusLg: CGFloat = 14
-    public static let blurRadiusXl: CGFloat = 16
-    public static let boxShadowSm: CGFloat = 2
-    public static let boxShadowMd: CGFloat = 8
-    public static let boxShadowLg: CGFloat = 10
-    public static let boxShadowXl: CGFloat = 12
 }

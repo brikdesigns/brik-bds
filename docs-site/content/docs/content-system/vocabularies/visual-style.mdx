@@ -20,7 +20,6 @@ export const PRESET_ROWS = [
   ['spacingMode', 'Spacing'],
   ['typographyMode', 'Typography'],
   ['radiusMode', 'Radius'],
-  ['elevationMode', 'Elevation'],
   ['borderWidthMode', 'Border width'],
   ['animationTier', 'Animation tier'],
 ];
@@ -120,7 +119,7 @@ export const Levels = ({ style }) => {
             {blueprints.length
               ? <>Blueprints carrying a mood that projects here: {blueprints.map((bp, i) => <span key={bp.key}>{i ? ', ' : ''}<code>{bp.key}</code></span>)}.</>
               : 'No blueprint carries a mood that projects to this style.'}
-            {' '}Spacing <code>{preset.spacingMode ?? 'default'}</code>, radius <code>{preset.radiusMode ?? 'default'}</code>, elevation <code>{preset.elevationMode ?? 'default'}</code>.
+            {' '}Spacing <code>{preset.spacingMode ?? 'default'}</code> and radius <code>{preset.radiusMode ?? 'default'}</code>.
           </td>
           <td><code>blueprint-library.json</code> moods through <code>MOOD_TO_VISUAL_STYLE</code>; <code>VISUAL_STYLE_PRESETS</code></td>
         </tr>

@@ -124,7 +124,7 @@ interface ShadowScaleProps {
 /**
  * Grid of squares each rendering a synthetic shadow at the scale step's value.
  * The label prop drives whether the value goes into blur, spread, or offset.
- * For composed semantic tokens (--bds-shadow-sm, --bds-shadow-md, etc.) use a markdown
+ * For composed semantic tokens (--bds-shadow-subtle, --bds-shadow-raised, etc.) use a markdown
  * table — those aren't on a single-axis scale.
  */
 export function ShadowScale({ title, scale, prefix, label }: ShadowScaleProps) {

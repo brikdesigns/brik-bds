@@ -31,7 +31,6 @@ const SKIP_FILES = new Set([
   'tokens/figma-tokens.css',
   'tokens/figma-tokens-dark.css',
   'tokens/modes-borderradius.css',
-  'tokens/modes-elevation.css',
   'tokens/modes-spacing.css',
   'tokens/modes-typography.css',
   'tokens/layout-fluid.css',

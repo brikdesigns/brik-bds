@@ -130,7 +130,7 @@
   display: flex;
   background-color: var(--bds-surface-primary);
   border-radius: var(--bds-border-radius-md);
-  box-shadow: var(--bds-shadow-lg);
+  box-shadow: var(--bds-shadow-lifted);
   border: var(--bds-border-width-md) solid var(--bds-border-muted);
   overflow: hidden;
 }

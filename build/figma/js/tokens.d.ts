@@ -326,14 +326,14 @@ export const breakpointMobile: string;
 export const breakpointDesktop: string;
 export const breakpointWide: string;
 export const breakpointWider: string;
-export const blurRadiusSm: string;
-export const blurRadiusMd: string;
-export const blurRadiusLg: string;
-export const blurRadiusXl: string;
-export const boxShadowSm: string;
-export const boxShadowMd: string;
-export const boxShadowLg: string;
-export const boxShadowXl: string;
+/** Inner shadow (inset) — the one depth below the page. */
+export const shadowSunken: string;
+export const shadowFlat: string;
+export const shadowSubtle: string;
+export const shadowRaised: string;
+export const shadowLifted: string;
+/** RAW — no primitive step carries 32px (shadow-blur scale tops out at 16px). Open call: extend the scale or re-pick. */
+export const shadowDramatic: string;
 export const bodyXs: string;
 export const bodyTiny: string;
 export const bodyMd: string;

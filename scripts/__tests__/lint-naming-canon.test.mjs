@@ -244,6 +244,28 @@ describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
     expect(out).toMatch(/--bds-icon-2nano — step `2nano` is outside --bds-icon-\*'s vocabulary/);
   });
 
+  // § Amendments (#3058): the Figma `elevation` depths are --shadow-* steps.
+  // The fixture already carries the t-shirt `--bds-shadow-md`, the same mixed
+  // family the deprecated aliases leave for one minor, so this is the hard case.
+  it('admits the shadow depths on --shadow-* (ADR-033 § Amendments, #3058)', () => {
+    const { code, out } = run({ tokens: withTokens(
+      '--bds-shadow-sunken: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);',
+      '--bds-shadow-flat: 0 0 0 0 rgba(0, 0, 0, 0);',
+      '--bds-shadow-subtle: 0 2px 4px 0 rgba(0, 0, 0, 0.06);',
+      '--bds-shadow-raised: 0 4px 12px 0 rgba(0, 0, 0, 0.12);',
+      '--bds-shadow-lifted: 0 4px 16px 0 rgba(0, 0, 0, 0.12);',
+      '--bds-shadow-dramatic: 0 4px 32px 0 rgba(0, 0, 0, 0.24);',
+    ) });
+    expect(out).toMatch(/clean — 0 live violation/);
+    expect(code).toBe(0);
+  });
+
+  it('denies the shadow depths outside --shadow-* — the words are shadow-only', () => {
+    const { code, out } = run({ tokens: withTokens('--bds-gap-raised: var(--bds-space-400);') });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--bds-gap-raised — step `raised` is outside --bds-gap-\*'s vocabulary/);
+  });
+
   it('a § Named exception is not a step violation', () => {
     // `--content-width-full` and `--border-radius-pill` are in the clean fixture
     // inside families that DO take steps, so only the exception list keeps them green.

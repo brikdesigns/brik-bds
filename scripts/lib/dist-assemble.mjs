@@ -57,14 +57,6 @@ export function assembleCanonical(read, log = () => {}) {
     }
   }
 
-  // Elevation mode overrides — MUST concat AFTER gap-fills.css (see build-dist-tokens.js).
-  const elevation = read('tokens/modes-elevation.css');
-  let elevationMode = '';
-  if (elevation !== null) {
-    elevationMode = '\n\n' + elevation;
-    log('  ✓ Including modes-elevation.css (post gap-fills)');
-  }
-
   // Width mode overrides — MUST concat AFTER gap-fills.css: it re-points
   // --bds-content-width-xl, declared there on :root at the same specificity.
   const width = read('tokens/modes-width.css');
@@ -80,7 +72,7 @@ export function assembleCanonical(read, log = () => {}) {
   const animations = need('tokens/animations.css');
 
   return (
-    HEADER + figmaTokens + darkTokens + themeBrandBrik + modeOverrides + '\n\n' + gapFills + elevationMode + widthMode +
+    HEADER + figmaTokens + darkTokens + themeBrandBrik + modeOverrides + '\n\n' + gapFills + widthMode +
     '\n\n' + layoutFluid + '\n\n' + ratios + '\n\n' + fluidType + '\n\n' + animations
   );
 }

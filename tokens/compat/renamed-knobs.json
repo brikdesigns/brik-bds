@@ -1,5 +1,6 @@
 {
-  "$comment": "ADR-043 section 5: Component knobs renamed off a reserved stem (text-, page-). Old name -> new name. Read by scripts/lib/bds-prefix.mjs (bridge + codemod) and scripts/lint-tokens.js. ADR-043 section 2 / #2677: the six doubled `--color-annotation-annotation-*` colours are renamed `--bds-color-annotation-{hue}` (same file, same bridge path). #3246: also carries the legacy names whose `--bds-` alias was deleted (value-neutral swaps to the Figma-backed name); the legacy snapshot is frozen, so the replacement lives here. #3244: also carries the legacy names deleted with no consumer; a name with no successor points at the nearest declared sibling, since guard tooling reads the key set, not the target. #3247 / Figma primitive-colour rebuild (2026-11-19): the one-step system colours moved to numeric 3-step ramps in Figma, so the legacy `--color-system-{hue}` names point at `-500` (the old base) and `-{hue}-light` at `-200`. #3250: also carries the legacy names whose `--bds-` alias was deleted where the Figma-backed replacement renders a different value in a theme or mode scope.",  "--bds-text-area-min-width": "--bds-textarea-min-width",
+  "$comment": "ADR-043 section 5: Component knobs renamed off a reserved stem (text-, page-). Old name -> new name. Read by scripts/lib/bds-prefix.mjs (bridge + codemod) and scripts/lint-tokens.js. ADR-043 section 2 / #2677: the six doubled `--color-annotation-annotation-*` colours are renamed `--bds-color-annotation-{hue}` (same file, same bridge path). #3246: also carries the legacy names whose `--bds-` alias was deleted (value-neutral swaps to the Figma-backed name); the legacy snapshot is frozen, so the replacement lives here. #3244: also carries the legacy names deleted with no consumer; a name with no successor points at the nearest declared sibling, since guard tooling reads the key set, not the target. #3247 / Figma primitive-colour rebuild (2026-11-19): the one-step system colours moved to numeric 3-step ramps in Figma, so the legacy `--color-system-{hue}` names point at `-500` (the old base) and `-{hue}-light` at `-200`. #3250: also carries the legacy names whose `--bds-` alias was deleted where the Figma-backed replacement renders a different value in a theme or mode scope. #3058: the hand-written shadow and blur-radius scales were deleted for the Figma `elevation` collection; `--shadow-xl` (no successor) points at `--bds-shadow-dramatic`, and `--blur-radius-*` at the value-matched `--bds-shadow-blur-*` step.",
+  "--bds-text-area-min-width": "--bds-textarea-min-width",
   "--bds-page-padding-inline": "--bds-gutter-padding-inline",
   "--color-annotation-annotation-pink": "--bds-color-annotation-pink",
   "--color-annotation-annotation-purple": "--bds-color-annotation-purple",
@@ -72,4 +73,10 @@
   "--heading-3xl": "--bds-heading-huge",
   "--padding-2xl": "--bds-padding-huge",
   "--padding-2xs": "--bds-padding-tiny",
-  "--surface-navigation": "--bds-surface-nav"}
+  "--surface-navigation": "--bds-surface-nav",
+  "--blur-radius-sm": "--bds-shadow-blur-400",
+  "--blur-radius-md": "--bds-shadow-blur-600",
+  "--blur-radius-lg": "--bds-shadow-blur-700",
+  "--blur-radius-xl": "--bds-shadow-blur-800",
+  "--shadow-xl": "--bds-shadow-dramatic"
+}

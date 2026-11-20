@@ -3,7 +3,6 @@ import { describe, it, expect } from 'vitest';
 
 import { SPACING_MODE_VALUES, isSpacingMode } from './spacing-mode';
 import { RADIUS_MODE_VALUES, isRadiusMode } from './radius-mode';
-import { ELEVATION_MODE_VALUES, isElevationMode } from './elevation-mode';
 import { TYPOGRAPHY_MODE_VALUES, isTypographyMode } from './typography-mode';
 import {
   BORDERWIDTH_MODE_VALUES,
@@ -14,17 +13,17 @@ import { WIDTH_MODE_VALUES, isWidthMode } from './width-mode';
 /**
  * Expression-mode vocabulary contract (ADR-039 amendment, #2774).
  *
- * The six Style-axis vocabularies must equal the `[data-mode-*]` selector
+ * The five Style-axis vocabularies must equal the `[data-mode-*]` selector
  * values the shipped CSS actually switches on. "BDS CSS selector values win"
  * is the rule; this is the instrument that enforces it.
  *
- * WHY THE CSS AND NOT THE REGISTRY. All six mode files are emitted from the
+ * WHY THE CSS AND NOT THE REGISTRY. All five mode files are emitted from the
  * COLLECTIONS registry in `scripts/generate-modes-css.mjs` (border-width since
  * #2601, width since #894). The CSS is the artifact that actually ships in
  * dist/tokens.css — a drift the CSS does not show cannot reach a browser.
  *
  * DEFAULT MODES ARE NOT MEMBERS. Each axis has a default expressed by the
- * ABSENCE of the attribute (`soft` radius, `subtle` elevation, `default`
+ * ABSENCE of the attribute (`soft` radius, `default`
  * border-width/spacing/typography). No selector carries them, so no
  * vocabulary does either — see each module's header.
  *
@@ -84,14 +83,6 @@ const MODE_AXES: readonly ModeAxis[] = [
     values: RADIUS_MODE_VALUES,
     guard: isRadiusMode,
     defaultMode: 'soft',
-  },
-  {
-    axis: 'elevation-mode',
-    attribute: 'elevation',
-    cssFile: 'modes-elevation.css',
-    values: ELEVATION_MODE_VALUES,
-    guard: isElevationMode,
-    defaultMode: 'subtle',
   },
   {
     axis: 'typography-mode',

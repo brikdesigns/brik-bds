@@ -41,14 +41,13 @@ const OUTPUT_PATH = path.join(REPO_ROOT, 'manifest', 'component-axes.json');
 // which is what a consumer actually sets and is NOT always the module stem
 // (border-radius emits `data-mode-radius`).
 //
-// Adding a sixth axis is a deliberate row here, by design — but the VALUES
+// Adding another axis is a deliberate row here, by design — but the VALUES
 // are never written here. They come from the vocabulary module, which
 // `content-system/vocabularies/expression-modes.test.ts` holds equal to the
 // `[data-mode-*]` selectors in tokens/modes-*.css. A Figma mode rename
 // therefore fails that test, not this generator.
 const MODE_AXES = {
   borderwidth: ['borderwidth-mode.ts', 'BORDERWIDTH_MODE_VALUES'],
-  elevation: ['elevation-mode.ts', 'ELEVATION_MODE_VALUES'],
   radius: ['radius-mode.ts', 'RADIUS_MODE_VALUES'],
   spacing: ['spacing-mode.ts', 'SPACING_MODE_VALUES'],
   typography: ['typography-mode.ts', 'TYPOGRAPHY_MODE_VALUES'],

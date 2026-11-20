@@ -3664,619 +3664,237 @@
       "$value": "{border-width.0}"
     }
   },
-  "elevation/flat": {
-    "blur-radius": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
+  "elevation/value": {
+    "shadow": {
+      "sunken": {
+        "offset": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-offset.100}"
         },
-        "$type": "dimension",
-        "$value": 0
+        "blur": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-blur.200}"
+        },
+        "spread": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-spread.0}"
+        },
+        "color": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#0000000f",
+          "$description": "Inner shadow (inset) — the one depth below the page."
+        }
       },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
+      "flat": {
+        "offset": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-offset.0}"
         },
-        "$type": "dimension",
-        "$value": 0
+        "blur": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-blur.0}"
+        },
+        "spread": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-spread.0}"
+        },
+        "color": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#00000000"
+        }
       },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
+      "subtle": {
+        "offset": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-offset.100}"
         },
-        "$type": "dimension",
-        "$value": 0
+        "blur": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-blur.200}"
+        },
+        "spread": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-spread.0}"
+        },
+        "color": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#0000000f"
+        }
       },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
+      "raised": {
+        "offset": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-offset.200}"
         },
-        "$type": "dimension",
-        "$value": 0
-      }
-    },
-    "box-shadow": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
+        "blur": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-blur.600}"
         },
-        "$type": "dimension",
-        "$value": 0
+        "spread": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-spread.0}"
+        },
+        "color": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#0000001f"
+        }
       },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
+      "lifted": {
+        "offset": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-offset.200}"
         },
-        "$type": "dimension",
-        "$value": 0
+        "blur": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-blur.800}"
+        },
+        "spread": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-spread.0}"
+        },
+        "color": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#0000001f"
+        }
       },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
+      "dramatic": {
+        "offset": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-offset.200}"
         },
-        "$type": "dimension",
-        "$value": 0
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
+        "blur": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": 32,
+          "$description": "RAW — no primitive step carries 32px (shadow-blur scale tops out at 16px). Open call: extend the scale or re-pick."
         },
-        "$type": "dimension",
-        "$value": 0
-      }
-    },
-    "spread": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
+        "spread": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "number",
+          "$value": "{shadow-spread.0}"
         },
-        "$type": "number",
-        "$value": 0
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      }
-    },
-    "opacity": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      }
-    }
-  },
-  "elevation/subtle": {
-    "blur-radius": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 8
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 12
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 14
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 16
-      }
-    },
-    "box-shadow": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 2
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 8
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 10
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 12
-      }
-    },
-    "spread": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      }
-    },
-    "opacity": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.08
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.1
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.1
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.12
-      }
-    }
-  },
-  "elevation/lifted": {
-    "blur-radius": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 6
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 16
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 24
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 32
-      }
-    },
-    "box-shadow": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 2
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 6
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 8
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 12
-      }
-    },
-    "spread": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": -1
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 2
-      }
-    },
-    "opacity": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.1
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.16
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.16
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.24
-      }
-    }
-  },
-  "elevation/dramatic": {
-    "blur-radius": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 12
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 28
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 40
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 48
-      }
-    },
-    "box-shadow": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 4
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 10
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 16
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "dimension",
-        "$value": 24
-      }
-    },
-    "spread": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": -2
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": -4
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0
-      }
-    },
-    "opacity": {
-      "sm": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.16
-      },
-      "md": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.22
-      },
-      "lg": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.24
-      },
-      "xl": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "number",
-        "$value": 0.32
+        "color": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "ALL_SCOPES"
+            ]
+          },
+          "$type": "color",
+          "$value": "#0000003d"
+        }
       }
     }
   },
@@ -5623,10 +5241,7 @@
       "border-width/default",
       "border-width/thick",
       "border-width/thin",
-      "elevation/flat",
-      "elevation/subtle",
-      "elevation/lifted",
-      "elevation/dramatic",
+      "elevation/value",
       "typography/default",
       "typography/compact",
       "typography/comfortable",

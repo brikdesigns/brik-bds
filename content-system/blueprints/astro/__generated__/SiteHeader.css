@@ -43,7 +43,7 @@
   }
 
   .bp-site-header--utility-first[data-scrolled] {
-    box-shadow: var(--bds-shadow-sm);
+    box-shadow: var(--bds-shadow-subtle);
   }
 
   /* editorial-transparent — transparent over the hero at the top of the
@@ -58,8 +58,8 @@
 
   .bp-site-header--editorial-transparent[data-scrolled] {
     --bds-site-header-background: var(--bds-surface-nav);
-    backdrop-filter: blur(var(--bds-blur-radius-md));
-    box-shadow: var(--bds-shadow-sm);
+    backdrop-filter: blur(var(--bds-shadow-blur-600));
+    box-shadow: var(--bds-shadow-subtle);
   }
 
   /* service-centric — the mega-menu is the product. Always-solid nav
@@ -70,7 +70,7 @@
   }
 
   .bp-site-header--service-centric[data-scrolled] {
-    box-shadow: var(--bds-shadow-sm);
+    box-shadow: var(--bds-shadow-subtle);
   }
 
   /* portfolio-minimal — text-only, chrome-out-of-the-way. Transparent over
@@ -83,7 +83,7 @@
 
   .bp-site-header--portfolio-minimal[data-scrolled] {
     --bds-site-header-background: var(--bds-surface-nav);
-    box-shadow: var(--bds-shadow-sm);
+    box-shadow: var(--bds-shadow-subtle);
   }
 
   .bp-site-header--portfolio-minimal .bp-site-header__brand,
@@ -99,7 +99,7 @@
   }
 
   .bp-site-header--calm-flat[data-scrolled] {
-    box-shadow: var(--bds-shadow-sm);
+    box-shadow: var(--bds-shadow-subtle);
   }
 
   .bp-site-header__container {
@@ -234,7 +234,7 @@
     background: var(--bds-surface-primary);
     border: 1px solid var(--bds-border-secondary);
     border-radius: var(--bds-border-radius-lg);
-    box-shadow: var(--bds-shadow-lg);
+    box-shadow: var(--bds-shadow-lifted);
     padding: var(--bds-padding-xl);
     min-width: min(90vw, 720px);
   }

@@ -92,7 +92,7 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 ┌─────────────────────────────────────────────────────────┐
 │  Tier 4 — Component    (component-scoped knobs)         │
 │  --bds-{component}[-{part}]-{property}: var(<Semantic>) │
-│  Example: --bds-toast-shadow: var(--bds-shadow-md)      │
+│  Example: --bds-toast-shadow: var(--bds-shadow-raised)  │
 └─────────────────────────────────────────────────────────┘
                           ▲
                           │ var()
@@ -165,7 +165,7 @@ A Tier 4 token serves one of two roles, both under the same name:
 
    ```css
    /* ✅ knob resolves to a Semantic token */
-   box-shadow: var(--bds-toast-shadow, var(--bds-shadow-md));
+   box-shadow: var(--bds-toast-shadow, var(--bds-shadow-raised));
 
    /* ❌ raw literal in the fallback — reintroduces an off-token value
       that ships silently if the token fails to resolve, and lint can't see it */
@@ -293,7 +293,6 @@ The first slot is a **scale** at the Primitive tier (named for the CSS property 
 | `--border-radius-*` | numeric + t-shirt | `border-radius` |
 | `--border-width-*` | numeric + t-shirt | `border-width` |
 | `--shadow-blur-*` · `--shadow-offset-*` · `--shadow-spread-*` | numeric | the parts of a `box-shadow` |
-| `--blur-radius-*` | t-shirt | `filter: blur()` |
 | `--duration-*` · `--delay-*` · `--iteration-*` | numeric | `transition` / `animation` |
 | `--breakpoint-*` | word (`desktop`) | media queries |
 | `--aspect-*` | ratio (`16-9`) | `aspect-ratio` |
@@ -305,7 +304,7 @@ The first slot is a **scale** at the Primitive tier (named for the CSS property 
 | `--gap-*` · `--padding-*` | t-shirt | spacing by intent, not by pixel step |
 | `--heading-*` · `--display-*` · `--body-*` · `--label-*` · `--subtitle-*` | t-shirt | the type ramp per text role |
 | `--icon-*` | t-shirt | icon sizes, aligned to the type ramp |
-| `--shadow-*` | t-shirt | elevation |
+| `--shadow-*` | named depth (`raised`) | elevation |
 | `--ease-*` | word (`spring`) | easing curves |
 | `--content-width-*` | t-shirt | the one horizontal-cap ladder — bands and text columns (ADR-041) |
 | `--measure-*` | t-shirt | **deprecated** — aliases to `--content-width-text-*`; drops next minor (ADR-041) |
@@ -418,7 +417,7 @@ Every legitimate token answers all seven. If a token doesn't fit any one of them
 | Component CSS reading `--color-{family}-{step}` directly | Bypasses the Semantic tier. Locks the component to one brand. | Caught by `scripts/lint-tokens.js` |
 | `--bp-{blueprint}-{slot}-{prop}` (`--bp-hero-img-card-bg`) | Parallel Component-tier namespace that shipped ahead of canon. Invisible to lint because it's an undefined reference, not a real token. | [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) / [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md) → migrate to `--bds-*` |
 | `--{component}-{prop}` (`--toast-shadow`, `--select-chevron-color`) | Component knob without the `--bds-` prefix. Collides with the global namespace and isn't lint-recognized. | [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) / [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md) → migrate to `--bds-*` |
-| Raw literal inside a `var()` fallback on a tokenized property (`var(--bds-shadow-md, 0 4px 12px …)`) | Reintroduces a Tier-1 value that ships silently if the token fails to resolve; lint sees only the canonical name and passes. | Caught by `scripts/lint-tokens.js` (fallback-literal rule, [#1043](https://github.com/brikdesigns/brik-bds/issues/1043)) |
+| Raw literal inside a `var()` fallback on a tokenized property (`var(--bds-shadow-raised, 0 4px 12px …)`) | Reintroduces a Tier-1 value that ships silently if the token fails to resolve; lint sees only the canonical name and passes. | Caught by `scripts/lint-tokens.js` (fallback-literal rule, [#1043](https://github.com/brikdesigns/brik-bds/issues/1043)) |
 
 {/* lint-mdx-tokens-ignore-end */}
 

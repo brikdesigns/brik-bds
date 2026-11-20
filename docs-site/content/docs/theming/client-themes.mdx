@@ -94,7 +94,7 @@ The company's **Branding** tab shows both values (Visual Direction).
 
 The portal's lifecycle test fixtures each carry one complete brand kit, so a website-builder test run exercises a known [Visual Style](/docs/content-system/vocabularies/visual-style) preset instead of a hand-entered partial profile. A kit is a JSON file in the portal at `scripts/fixtures/brand-kits/<slug>.json`, validated against the BDS vocabularies before it is written to `company_profiles` (brik-client-portal#6781).
 
-**The preset owns the axes, not the kit.** A kit names one `visual_style` and restates only `theme_mode` and `atmosphere`, because the generator reads those two columns directly. The loader refuses a kit that contradicts `VISUAL_STYLE_PRESETS` on either. Spacing, typography, radius, elevation, border width and animation come from the preset through the resolver's fallback, so the columns below are read from the preset, never from the kit file.
+**The preset owns the axes, not the kit.** A kit names one `visual_style` and restates only `theme_mode` and `atmosphere`, because the generator reads those two columns directly. The loader refuses a kit that contradicts `VISUAL_STYLE_PRESETS` on either. Spacing, typography, radius, border width and animation come from the preset through the resolver's fallback, so the columns below are read from the preset, never from the kit file.
 
 | Kit | Visual Style | Theme mode | Atmosphere | Spacing / typography / radius | Image approach | Fixture |
 |---|---|---|---|---|---|---|
@@ -322,7 +322,7 @@ Not every token is meant to vary per brand. Use the table to decide what to put 
 | The `info` signal (`--bds-background-info`, `--bds-surface-info`, `--bds-text-info`) | **No** | Blue, universal semantic meaning. Gap-fills over the system blue primitive. |
 | The per-hue accent set (`--text/background/border/surface/page-accent-{hue}`) | **No** | Mirrored 1:1 from the ❖ Brik Brand Kit Figma library and Figma-sourced from the system color primitives, so `accent-purple` is the same purple in every theme. Category color, not a valence. `red` is the one exception — it aliases the brand poppy — see [The per-hue accent set](/docs/foundation/color#the-per-hue-accent-set). |
 | Presence (`--bds-background-presence-online/away/busy/offline`) | **No — intentionally frozen** | Shared chat/status semantics across products. |
-| Shadows + overlay (`--bds-shadow-sm`..`--bds-shadow-xl`, `--bds-background-overlay`) | **No** | Hardcoded `rgba()` values; not expected to vary per brand. |
+| Shadows + overlay (`--bds-shadow-sunken`..`--bds-shadow-dramatic`, `--bds-background-overlay`) | **No** | Shadows compose from the Figma `elevation` collection (#3058); not expected to vary per brand. |
 
 ### Interaction-state override example
 

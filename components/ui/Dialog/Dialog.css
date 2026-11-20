@@ -14,7 +14,7 @@
 .bds-dialog {
   background-color: var(--bds-surface-primary);
   border-radius: var(--bds-border-radius-md);
-  box-shadow: var(--bds-shadow-overlay);
+  box-shadow: var(--bds-shadow-dramatic);
   max-width: 440px; /* bds-lint-ignore — design constraint */
   width: 100%;
   box-sizing: border-box;
