@@ -38,7 +38,7 @@
 .bds-card--raised {
   background-color: var(--bds-surface-primary);
   border: none;
-  box-shadow: var(--bds-shadow-md);
+  box-shadow: var(--bds-shadow-raised);
 }
 
 /* Filled — neutral recessed panel: a grouping container that reads as part of

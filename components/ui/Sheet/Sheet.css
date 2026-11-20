@@ -22,7 +22,7 @@
 .bds-sheet {
   position: fixed;
   background-color: var(--bds-surface-primary);
-  box-shadow: var(--bds-shadow-overlay);
+  box-shadow: var(--bds-shadow-dramatic);
   display: flex;
   flex-direction: column;
   z-index: var(--bds-z-sheet);
@@ -40,7 +40,7 @@
 
 .bds-sheet--floating {
   border-radius: var(--bds-border-radius-md);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — custom multi-layer elevation shadow; single-layer composites exist (--bds-shadow-sm..xl) but none is multi-layer, so this stays raw until a multi-layer composite is proposed */
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — custom multi-layer elevation shadow; single-layer composites exist (--bds-shadow-sunken..dramatic) but none is multi-layer, so this stays raw until a multi-layer composite is proposed */
 }
 
 .bds-sheet--floating.bds-sheet--side-right {

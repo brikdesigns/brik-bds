@@ -86,7 +86,7 @@
   color: var(--bds-text-primary);
   /* WCAG 1.4.11: fill alone is 1.12:1 on the track; the border carries the state at ≥3:1. */
   border-color: var(--bds-border-brand-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — no composite --box-shadow-* matches this value (nearest is --bds-shadow-sm 0px 2px 4px 0.06); a --box-shadow-xs is a separate proposal (#2171 out-of-scope) */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — no composite --box-shadow-* matches this value (nearest is --bds-shadow-subtle 0px 2px 4px 0.06); a --box-shadow-xs is a separate proposal (#2171 out-of-scope) */
 }
 
 /* ── Disabled ── */

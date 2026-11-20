@@ -94,7 +94,7 @@
   padding: var(--bds-padding-sm);
   background-color: var(--bds-background-primary);
   border-radius: var(--bds-border-radius-lg);
-  box-shadow: var(--bds-shadow-lg);
+  box-shadow: var(--bds-shadow-lifted);
   --bds-addable-tag-list-max-height: 240px; /* component-local dimension; no shared registry rung (#2133) */
   max-height: var(--bds-addable-tag-list-max-height);
   overflow-y: auto;

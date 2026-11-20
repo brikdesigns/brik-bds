@@ -157,7 +157,7 @@
      Border Radius
      ═══════════════════════════════════════════════
      Only the two shape aliases below belong here. The word-scale names
-     (--border-width-*, --border-radius-*, --box-shadow-*, --blur-radius-*)
+     (--border-width-*, --border-radius-*; --box-shadow-* / --blur-radius-* since retired)
      are already defined by tokens/figma-tokens.css and tokens/gap-fills.css,
      which land in dist/tokens.css. This file used to re-declare all fifteen
      of them as `--x: var(--x)` — a dependency cycle, so every one computed to

@@ -639,3 +639,16 @@ OPERATOR CHOSE 2026-11-19: Button API → one flat `variant` list, and this ADR 
 **Retired for one minor.** `tone` and `emphasis` on Button, IconButton and LinkButton, the `ButtonTone` / `ButtonEmphasis` types, and Hero's `ctaEmphasis` stay as `@deprecated` and fold into `variant` with a dev warning. `danger`, `danger-outline`, `danger-ghost` and `destructive` fold the same way.
 
 **Enforcement.** `lint-naming-canon` gains `CURATED_STYLE_UNIONS = {ButtonVariant}`, which skips rule 3's mixed-axis check for that union only. The retired-word checks still run on it. Another union joins the set only by its own amendment. **Baseline:** −3. `--ghost`, `--outline` and `--inverse` leave `tokens/naming-canon-baseline.json` (`--inverse` once Footer #3273 also moved to `--variant-inverse`). `--primary` and `--secondary` stay because other components still emit them bare.
+
+### Shadow depths are named steps (2026-11-20, [#3058](https://github.com/brikdesigns/brik-bds/issues/3058))
+
+OPERATOR SAID 2026-11-19: "let's refactor our elevation logic to ensure alignment across figma and code".
+
+**What changes.** Figma's `elevation` collection names six depths: `shadow/{sunken,flat,subtle,raised,lifted,dramatic}`. The build composes each into one `--bds-shadow-{depth}` (#3058). A token name is its Figma path (#3278), so these six words are the `--shadow-*` steps. **Closed steps, low to high:** `sunken` · `flat` · `subtle` · `raised` · `lifted` · `dramatic`.
+
+**Does an existing § 3 word name these depths?** No. The t-shirt rungs `sm` / `md` / `lg` / `xl` were the old hand-written names, and they do not map one to one: `sunken` sits below the page and `flat` is a zero shadow, which no t-shirt rung describes. `subtle` is also an `appearance` value (§ 2). That is a prop axis, not a token step, so the two never meet in one name.
+
+**For one minor, the family mixes vocabularies.** The DEPRECATED `--bds-shadow-{sm,md,lg}` aliases in `tokens/gap-fills.css` share the family. Rule 1 would then flag the depth words. The family-step entry is what keeps them legal, and it stays legal after the aliases drop.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `steps.familySteps["--shadow-"]`. Rule 1 allows the six words in that family only. `scripts/__tests__/lint-naming-canon.test.mjs` plants an admitted `--bds-shadow-raised` and a denied `--bds-gap-raised`. The `blur-radius` scale slot leaves the grammar with its four hand-written tokens, which had no Figma variable behind them. No new rule, script or workflow. **Baseline:** the alias rows are rule 9, not rule 1. `--bds-shadow-{sm,md,lg}` join rule 9 under #3058, the shape #3274 used for its deprecated aliases. `--bds-shadow-overlay` moves from #3239 to #3058. All four leave with the alias block.
+

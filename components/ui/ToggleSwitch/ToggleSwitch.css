@@ -67,7 +67,7 @@
   background-color: var(--bds-surface-primary);
   border-radius: 50%;
   transition: transform var(--bds-duration-200) var(--bds-ease-out);
-  box-shadow: var(--bds-shadow-sm);
+  box-shadow: var(--bds-shadow-subtle);
 }
 
 /* accent-knob variant carries state on the knob: muted off, brand on */

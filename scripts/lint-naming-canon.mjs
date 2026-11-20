@@ -1220,7 +1220,7 @@ const FIGMA_GENERATED = [
   ...[
     'figma-tokens.css', 'figma-tokens-dark.css',
     'modes-borderwidth.css', 'modes-spacing.css', 'modes-typography.css', 'modes-borderradius.css',
-    'modes-elevation.css', 'modes-width.css', 'layout-fluid.css',
+    'modes-width.css', 'layout-fluid.css',
   ].map((f) => path.join('tokens', f)),
   path.join('design-tokens', 'brand-kits', 'brik.json'),
 ];

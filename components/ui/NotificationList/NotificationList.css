@@ -102,7 +102,7 @@
   background-color: var(--bds-surface-primary);
   border: var(--bds-border-width-md) solid var(--bds-border-muted);
   border-radius: var(--bds-border-radius-md);
-  box-shadow: var(--bds-shadow-lg);
+  box-shadow: var(--bds-shadow-lifted);
   display: flex;
   flex-direction: column;
   overflow: hidden;

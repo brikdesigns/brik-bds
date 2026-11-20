@@ -113,12 +113,6 @@ export {
 } from './radius-mode';
 
 export {
-  ELEVATION_MODE_VALUES,
-  isElevationMode,
-  type ElevationMode,
-} from './elevation-mode';
-
-export {
   TYPOGRAPHY_MODE_VALUES,
   isTypographyMode,
   type TypographyMode,

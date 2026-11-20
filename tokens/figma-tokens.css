@@ -277,10 +277,6 @@
   --bds-breakpoint-desktop: 1024px;
   --bds-breakpoint-wide: 1280px;
   --bds-breakpoint-wider: 1440px;
-  --bds-blur-radius-sm: 8px;
-  --bds-blur-radius-md: 12px;
-  --bds-blur-radius-lg: 14px;
-  --bds-blur-radius-xl: 16px;
   --bds-content-width-xl: 1280px; /** Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%). */
   --bds-content-width-lg: 1024px; /** Band — feature grids, CTA bands. CSS --bds-content-width-lg. */
   --bds-content-width-md: 800px; /** Band — standard text-led body section. CSS --bds-content-width-md. */
@@ -322,6 +318,12 @@
   --bds-gap-huge: var(--bds-space-800);
   --bds-gap-xs: var(--bds-space-100);
   --bds-gap-tiny: var(--bds-space-50);
+  --bds-shadow-sunken: inset 0 var(--bds-shadow-offset-100) var(--bds-shadow-blur-200) var(--bds-shadow-spread-0) rgba(0, 0, 0, 0.06); /** Inner shadow (inset) — the one depth below the page. */
+  --bds-shadow-flat: 0 var(--bds-shadow-offset-0) var(--bds-shadow-blur-0) var(--bds-shadow-spread-0) rgba(0, 0, 0, 0);
+  --bds-shadow-subtle: 0 var(--bds-shadow-offset-100) var(--bds-shadow-blur-200) var(--bds-shadow-spread-0) rgba(0, 0, 0, 0.06);
+  --bds-shadow-raised: 0 var(--bds-shadow-offset-200) var(--bds-shadow-blur-600) var(--bds-shadow-spread-0) rgba(0, 0, 0, 0.12);
+  --bds-shadow-lifted: 0 var(--bds-shadow-offset-200) var(--bds-shadow-blur-800) var(--bds-shadow-spread-0) rgba(0, 0, 0, 0.12);
+  --bds-shadow-dramatic: 0 var(--bds-shadow-offset-200) 32px var(--bds-shadow-spread-0) rgba(0, 0, 0, 0.24); /** RAW — no primitive step carries 32px (shadow-blur scale tops out at 16px). Open call: extend the scale or re-pick. */
   --bds-body-xs: var(--bds-font-size-50);
   --bds-body-tiny: var(--bds-font-size-25);
   --bds-body-md: var(--bds-font-size-100);
