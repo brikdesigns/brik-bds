@@ -99,9 +99,9 @@ style={text.body}
 ```
 
 **Font family must match element role:**
-- Heading/title/name → `--font-family-heading`
-- Label/badge/tag/button/caption → `--font-family-label`
-- Body copy/description/paragraph → `--font-family-body`
+- Heading/title/name → `--bds-font-family-heading`
+- Label/badge/tag/button/caption → `--bds-font-family-label`
+- Body copy/description/paragraph → `--bds-font-family-body`
 
 ---
 
