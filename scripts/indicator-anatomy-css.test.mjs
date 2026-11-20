@@ -22,10 +22,10 @@ const css = (name) => readFileSync(join(UI, name, `${name}.css`), 'utf8');
 const HUES = ['blue', 'green', 'orange', 'purple', 'yellow', 'red'];
 const TONES = ['positive', 'warning', 'negative', 'info', 'brand', 'neutral'];
 
-// The subtle-fill token per hue / tone. Red and info are Figma variables of their
-// own (`--bds-background-accent-red-light`, `--bds-background-info-light`); the
-// other hues and tones fill from the Figma-backed `--bds-surface-*` names (#3246).
-const accentFill = (hue) => (hue === 'red' ? '--bds-background-accent-red-light' : `--bds-surface-accent-${hue}`);
+// The subtle-fill token per hue / tone. Info is a Figma variable of its own
+// (`--bds-background-info-light`); the other hues and tones fill from the
+// Figma-backed `--bds-surface-*` names (#3246, #3250).
+const accentFill = (hue) => `--bds-surface-accent-${hue}`;
 const toneFill = (tone) => (tone === 'info' ? '--bds-background-info-light' : `--bds-surface-${tone}`);
 
 describe('Tag CSS — appearance × color', () => {

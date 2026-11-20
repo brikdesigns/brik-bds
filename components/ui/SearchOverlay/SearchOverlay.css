@@ -129,7 +129,7 @@
 }
 
 .bds-search-overlay__key {
-  padding: var(--bds-padding-2xs) var(--bds-padding-sm);
+  padding: var(--bds-padding-tiny) var(--bds-padding-sm);
   border: var(--bds-border-width-sm) solid var(--bds-border-secondary);
   border-radius: var(--bds-border-radius-sm);
   background-color: var(--bds-background-secondary);

@@ -20,7 +20,7 @@
 
 .bds-stat--size-lg  .bds-stat__value { font-size: var(--bds-heading-lg); }
 .bds-stat--size-xl  .bds-stat__value { font-size: var(--bds-heading-xl); }
-.bds-stat--size-2xl .bds-stat__value { font-size: var(--bds-heading-2xl); }
+.bds-stat--size-2xl .bds-stat__value { font-size: var(--bds-heading-xxl); }
 
 .bds-stat__label {
   font-family: var(--bds-font-family-body);

@@ -7,7 +7,7 @@
      * read first at each use (TIER4_ALIASES), so a consumer still setting one
      * keeps working for one minor — this block declares the new names on the
      * element, so the old name must lead the chain to win. */
-    --bds-site-header-background: var(--bds-surface-navigation, transparent);
+    --bds-site-header-background: var(--bds-surface-nav, transparent);
     --bds-site-header-text-color: var(--bds-text-primary);
     --bds-site-header-cta-background: var(--bds-background-brand-primary);
     --bds-site-header-cta-color: var(--bds-text-on-color-dark, var(--bds-text-inverse));
@@ -39,7 +39,7 @@
    * hides. Gains a subtle elevation shadow once the page is scrolled,
    * set by the runtime script via [data-scrolled]. */
   .bp-site-header--utility-first {
-    --bds-site-header-background: var(--bds-surface-navigation);
+    --bds-site-header-background: var(--bds-surface-nav);
   }
 
   .bp-site-header--utility-first[data-scrolled] {
@@ -57,7 +57,7 @@
   }
 
   .bp-site-header--editorial-transparent[data-scrolled] {
-    --bds-site-header-background: var(--bds-surface-navigation);
+    --bds-site-header-background: var(--bds-surface-nav);
     backdrop-filter: blur(var(--bds-shadow-blur-600));
     box-shadow: var(--bds-shadow-subtle);
   }
@@ -66,7 +66,7 @@
    * surface (like utility-first) with an elevation shadow on scroll; the
    * shared mega-menu markup carries the multi-column flyout. */
   .bp-site-header--service-centric {
-    --bds-site-header-background: var(--bds-surface-navigation);
+    --bds-site-header-background: var(--bds-surface-nav);
   }
 
   .bp-site-header--service-centric[data-scrolled] {
@@ -82,7 +82,7 @@
   }
 
   .bp-site-header--portfolio-minimal[data-scrolled] {
-    --bds-site-header-background: var(--bds-surface-navigation);
+    --bds-site-header-background: var(--bds-surface-nav);
     box-shadow: var(--bds-shadow-subtle);
   }
 
