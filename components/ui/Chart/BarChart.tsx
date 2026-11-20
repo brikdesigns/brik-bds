@@ -14,6 +14,7 @@ import {
   estimateLabelWidth,
   formatCategory,
   readValue,
+  stackSegments,
   type ChartBaseProps,
   type ChartDatum,
   type ChartSeries,
@@ -27,7 +28,7 @@ export interface BarChartProps extends ChartBaseProps {
   data: ChartDatum[];
   /** The `data` field naming each category. */
   categoryKey: string;
-  /** Numeric fields to plot. Several series render as grouped bars; keep it to 6 or fewer. */
+  /** Numeric fields to plot. Several series render as grouped bars, or stacked with `stacked`; keep it to 6 or fewer. */
   series: ChartSeries[];
   /** `vertical` (column, the default) or `horizontal` (bar — use it for long category labels). */
   orientation?: BarChartOrientation;
@@ -37,6 +38,8 @@ export interface BarChartProps extends ChartBaseProps {
   categoryAxisLabel?: string;
   /** Caption for the value axis — the unit. */
   valueAxisLabel?: string;
+  /** Stack the series into one bar per category instead of grouping them. Segments sum to the category total. */
+  stacked?: boolean;
 }
 
 const PAD = 8;
@@ -57,6 +60,7 @@ export function BarChart({
   valueFormatter = defaultValueFormatter,
   categoryAxisLabel,
   valueAxisLabel,
+  stacked = false,
   title,
   empty,
   emptyState = DEFAULT_CHART_EMPTY,
@@ -68,7 +72,11 @@ export function BarChart({
   const name = titleText(title);
   const categories = data.map((d) => formatCategory(d[categoryKey]));
 
-  const values = data.flatMap((d) => visible.map((s) => readValue(d, s.key) ?? 0));
+  const visibleKeys = visible.map((s) => s.key);
+  const segmentsFor = (d: ChartDatum) => stackSegments(d, visibleKeys);
+  const values = stacked
+    ? data.flatMap((d) => segmentsFor(d).flatMap((g) => [g.start, g.end]))
+    : data.flatMap((d) => visible.map((s) => readValue(d, s.key) ?? 0));
   const valueScale = scaleLinear()
     .domain([Math.min(0, ...values), Math.max(0, ...values)])
     .nice();
@@ -79,12 +87,16 @@ export function BarChart({
       columns={[
         { key: '__category', label: categoryAxisLabel ?? 'Category' },
         ...resolved.map((s) => ({ key: s.key, label: s.label, numeric: true })),
+        ...(stacked ? [{ key: '__total', label: 'Total', numeric: true }] : []),
       ]}
       rows={data.map((d, i) => {
         const row: Record<string, string> = { __category: categories[i] };
         for (const s of resolved) {
           const v = readValue(d, s.key);
           row[s.key] = v === null ? '—' : valueFormatter(v);
+        }
+        if (stacked) {
+          row.__total = valueFormatter(resolved.reduce((sum, s) => sum + (readValue(d, s.key) ?? 0), 0));
         }
         return row;
       })}
@@ -104,6 +116,10 @@ export function BarChart({
       {...frameProps}
     >
       {({ width, height }) => {
+        const maxFor = (d: ChartDatum) =>
+          stacked
+            ? Math.max(0, ...segmentsFor(d).map((g) => g.end))
+            : Math.max(0, ...visible.map((s) => readValue(d, s.key) ?? 0));
         const tooltipFor = (i: number) => (
           <ChartTooltipContent
             title={categories[i]}
@@ -146,15 +162,18 @@ export function BarChart({
                 {visible.map((s) => (
                   <g key={s.key} data-chart-color={s.color}>
                     {data.map((d, i) => {
+                      const seg = stacked ? segmentsFor(d).find((g) => g.key === s.key) : undefined;
                       const v = readValue(d, s.key) ?? 0;
+                      const a = seg ? seg.start : 0;
+                      const b = seg ? seg.end : v;
                       return (
                         <rect
                           key={i}
                           className="bds-chart__bar"
-                          x={Math.min(x(v), x(0))}
-                          y={(band(String(i)) ?? 0) + (group(s.key) ?? 0)}
-                          width={Math.abs(x(v) - x(0))}
-                          height={group.bandwidth()}
+                          x={Math.min(x(a), x(b))}
+                          y={(band(String(i)) ?? 0) + (stacked ? 0 : group(s.key) ?? 0)}
+                          width={Math.abs(x(b) - x(a))}
+                          height={stacked ? band.bandwidth() : group.bandwidth()}
                         />
                       );
                     })}
@@ -163,7 +182,7 @@ export function BarChart({
                 <line className="bds-chart__axis" x1={x(0)} x2={x(0)} y1={0} y2={innerH} />
                 {categories.map((_, i) => {
                   const top = band(String(i)) ?? 0;
-                  const maxV = Math.max(0, ...visible.map((s) => readValue(data[i], s.key) ?? 0));
+                  const maxV = maxFor(data[i]);
                   return (
                     <rect
                       key={i}
@@ -208,15 +227,18 @@ export function BarChart({
               {visible.map((s) => (
                 <g key={s.key} data-chart-color={s.color}>
                   {data.map((d, i) => {
+                    const seg = stacked ? segmentsFor(d).find((g) => g.key === s.key) : undefined;
                     const v = readValue(d, s.key) ?? 0;
+                    const a = seg ? seg.start : 0;
+                    const b = seg ? seg.end : v;
                     return (
                       <rect
                         key={i}
                         className="bds-chart__bar"
-                        x={(band(String(i)) ?? 0) + (group(s.key) ?? 0)}
-                        y={Math.min(y(v), y(0))}
-                        width={group.bandwidth()}
-                        height={Math.abs(y(v) - y(0))}
+                        x={(band(String(i)) ?? 0) + (stacked ? 0 : group(s.key) ?? 0)}
+                        y={Math.min(y(a), y(b))}
+                        width={stacked ? band.bandwidth() : group.bandwidth()}
+                        height={Math.abs(y(b) - y(a))}
                       />
                     );
                   })}
@@ -232,7 +254,7 @@ export function BarChart({
               )}
               {categories.map((_, i) => {
                 const start = band(String(i)) ?? 0;
-                const maxV = Math.max(0, ...visible.map((s) => readValue(data[i], s.key) ?? 0));
+                const maxV = maxFor(data[i]);
                 return (
                   <rect
                     key={i}

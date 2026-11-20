@@ -74,6 +74,7 @@ const meta: Meta<typeof BarChart> = {
       options: ['vertical', 'horizontal'],
       description: '`vertical` (column, default) or `horizontal` (bar, for long labels)',
     },
+    stacked: { control: 'boolean', description: 'Stack the series into one bar per category instead of grouping them' },
     height: { control: { type: 'number', min: 120, max: 480, step: 20 }, description: 'Plot height in px' },
     loading: { control: 'boolean', description: 'Render the loading skeleton' },
     error: { control: 'text', description: 'Render an error Banner with this message' },
@@ -134,6 +135,33 @@ export const GroupedSeries: Story = {
       { key: 'target', label: 'Target', color: 'neutral' },
     ],
     valueFormatter: dollars,
+  },
+};
+
+const serviceLines = ['Brand', 'Web', 'SEO', 'Content', 'Social', 'Reporting'];
+const engagementsByStatus = serviceLines.map((line, i) => ({
+  line,
+  active: 6 + ((i * 3) % 5),
+  onboarding: 2 + (i % 3),
+  paused: 1 + ((i + 1) % 2),
+  completed: 4 + ((i * 2) % 6),
+}));
+
+/** @summary Stacked columns — 6 categories, 4 series */
+export const Stacked: Story = {
+  args: {
+    title: 'Engagements by service line',
+    description: 'Split by delivery status',
+    data: engagementsByStatus,
+    categoryKey: 'line',
+    stacked: true,
+    series: [
+      { key: 'active', label: 'Active' },
+      { key: 'onboarding', label: 'Onboarding' },
+      { key: 'paused', label: 'Paused' },
+      { key: 'completed', label: 'Completed' },
+    ],
+    valueAxisLabel: 'Engagements',
   },
 };
 

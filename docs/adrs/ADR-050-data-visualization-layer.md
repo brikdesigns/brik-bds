@@ -147,7 +147,7 @@ Its doc page is built under `docs-site/content/docs/build-standards/page-archety
 - **#3181** adds the `chart` purpose to `naming-grammar.json`, the Figma `chart` collection, 12 tokens per theme, and the 3:1 rows.
 - **#3182** builds `ChartFrame` and the four charts, adds `d3-scale` and `d3-shape` as runtime dependencies (7 → 9), and proves the CJS build loads them.
 - Consumers get the chart-type rule in each chart's MDX page and the Dashboard archetype when its doc lands.
-- Area, scatter, heatmap and stacked charts are out of v1. Each needs its own issue naming the consumer and the question it answers.
+- Area, scatter and heatmap charts are out of v1. Stacked bars landed in #3287 (`BarChart` `stacked`). Each other chart needs its own issue naming the consumer and the question it answers.
 
 ## Enforcement
 
