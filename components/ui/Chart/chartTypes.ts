@@ -108,6 +108,33 @@ export function readValue(datum: ChartDatum, key: string): number | null {
   return typeof v === 'number' && Number.isFinite(v) ? v : null;
 }
 
+/** One stacked segment: `start`..`end` on the value axis. */
+export interface StackSegment {
+  key: string;
+  start: number;
+  end: number;
+}
+
+/**
+ * Lay a row's series end to end from zero. Positives stack up, negatives stack
+ * down from zero; a gap reads as zero. Pass only the visible keys to re-stack.
+ */
+export function stackSegments(datum: ChartDatum, keys: readonly string[]): StackSegment[] {
+  let up = 0;
+  let down = 0;
+  return keys.map((key) => {
+    const v = readValue(datum, key) ?? 0;
+    if (v < 0) {
+      const start = down;
+      down += v;
+      return { key, start, end: down };
+    }
+    const start = up;
+    up += v;
+    return { key, start, end: up };
+  });
+}
+
 /**
  * Give every series a colour: its own `color`, else `brand` when it is the
  * only series, else the categorical colour at its position.

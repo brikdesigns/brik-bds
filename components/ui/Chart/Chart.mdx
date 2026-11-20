@@ -17,6 +17,7 @@ Colour comes only from the 12 `--bds-background-chart-*` tokens (fills; a same-v
 | Question | Chart |
 |---|---|
 | How do categories compare? | **Column** (`BarChart`), the default. `orientation="horizontal"` for long labels. |
+| What is each bar made of? | **Stacked column** (`BarChart` with `stacked`), segments sum to the category total. Keep it to 4 or 5 series. |
 | How did it change over continuous time? | **Line** (`LineChart`). |
 | What share of the whole? | **Donut** (`DonutChart`), only at 5 categories or fewer. With 6 or more, use column. |
 | Which way is it trending, next to a number? | **Sparkline** inside `Stat`. |
@@ -39,6 +40,12 @@ A single series needs no legend — the title names it.
 More than one series shows a legend. Each legend item toggles its series; the last visible series cannot be hidden.
 
 <Canvas of={Stories.GroupedSeries} />
+
+### Stacked series
+
+`stacked` draws one bar per category, its segments summing to the total, in both orientations. The legend re-stacks the visible series. The data table adds a Total column.
+
+<Canvas of={Stories.Stacked} />
 
 ### Line
 

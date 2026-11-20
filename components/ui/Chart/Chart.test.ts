@@ -6,6 +6,7 @@ import {
   canHideSeries,
   resolveSeriesColors,
   shouldShowLegend,
+  stackSegments,
   toggleSeries,
 } from './chartTypes';
 import { BarChart } from './BarChart';
@@ -130,5 +131,68 @@ describe('Sparkline data-table alternative', () => {
     expect(html).toContain('aria-label="Revenue, last 3 weeks"');
     expect(html).toContain('<caption>Revenue, last 3 weeks</caption>');
     expect(html.match(/<tr>/g)).toHaveLength(4);
+  });
+});
+
+describe('stacked BarChart', () => {
+  const row = { a: 2, b: 3, c: 5 };
+
+  it('stackSegments lays segments end to end from zero, summing to the total', () => {
+    expect(stackSegments(row, ['a', 'b', 'c'])).toEqual([
+      { key: 'a', start: 0, end: 2 },
+      { key: 'b', start: 2, end: 5 },
+      { key: 'c', start: 5, end: 10 },
+    ]);
+  });
+
+  it('hiding a series re-stacks the remaining segments with no gap', () => {
+    const hidden = toggleSeries([], 'b', keys);
+    const visible = ['a', 'b', 'c'].filter((k) => !hidden.includes(k));
+    expect(stackSegments(row, visible)).toEqual([
+      { key: 'a', start: 0, end: 2 },
+      { key: 'c', start: 2, end: 7 },
+    ]);
+  });
+
+  it('the last visible series cannot be hidden, so a stack never empties', () => {
+    const all = ['a', 'b', 'c'];
+    let hidden: string[] = [];
+    for (const k of all) hidden = toggleSeries(hidden, k, all);
+    expect(stackSegments(row, all.filter((k) => !hidden.includes(k)))).toHaveLength(1);
+  });
+
+  it('gaps read as zero and negatives stack downward from zero', () => {
+    expect(stackSegments({ a: 2, b: null, c: -3 }, ['a', 'b', 'c'])).toEqual([
+      { key: 'a', start: 0, end: 2 },
+      { key: 'b', start: 2, end: 2 },
+      { key: 'c', start: 0, end: -3 },
+    ]);
+  });
+
+  it('the data table gains one row per category with a Total column', () => {
+    const html = renderToStaticMarkup(
+      createElement(BarChart, {
+        title: 'Engagements',
+        stacked: true,
+        data: [{ line: 'Web', a: 2, b: 3 }, { line: 'Brand', a: 1, b: 4 }],
+        categoryKey: 'line',
+        series: [{ key: 'a', label: 'Active' }, { key: 'b', label: 'Done' }],
+      }),
+    );
+    expect(html).toContain('>Total<');
+    expect(html).toContain('>5<');
+    expect(html.match(/<tr[ >]/g)).toHaveLength(3);
+  });
+
+  it('an unstacked BarChart has no Total column', () => {
+    const html = renderToStaticMarkup(
+      createElement(BarChart, {
+        title: 'Engagements',
+        data: [{ line: 'Web', a: 2, b: 3 }],
+        categoryKey: 'line',
+        series: [{ key: 'a', label: 'Active' }, { key: 'b', label: 'Done' }],
+      }),
+    );
+    expect(html).not.toContain('>Total<');
   });
 });

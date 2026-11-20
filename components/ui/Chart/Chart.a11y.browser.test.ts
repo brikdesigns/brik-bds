@@ -108,6 +108,14 @@ const share = [
   { channel: 'Referral', visits: 470 },
 ];
 
+const stackedRows = ['Brand', 'Web', 'SEO', 'Content', 'Social', 'Reporting'].map((line, i) => ({
+  line,
+  active: 6 + i,
+  onboarding: 2 + (i % 3),
+  paused: 1 + (i % 2),
+  completed: 4 + i,
+}));
+
 const framed: Array<[string, () => ReactElement, string]> = [
   [
     'BarChart (column, single series)',
@@ -139,6 +147,39 @@ const framed: Array<[string, () => ReactElement, string]> = [
         ],
       }),
     '.bds-chart__legend',
+  ],
+  [
+    'BarChart (stacked, legend)',
+    () =>
+      h(BarChart, {
+        title: 'Engagements by service line',
+        data: stackedRows,
+        categoryKey: 'line',
+        stacked: true,
+        series: [
+          { key: 'active', label: 'Active' },
+          { key: 'onboarding', label: 'Onboarding' },
+          { key: 'paused', label: 'Paused' },
+          { key: 'completed', label: 'Completed' },
+        ],
+      }),
+    '.bds-chart__legend',
+  ],
+  [
+    'BarChart (stacked, horizontal)',
+    () =>
+      h(BarChart, {
+        title: 'Engagements by service line',
+        data: stackedRows,
+        categoryKey: 'line',
+        stacked: true,
+        orientation: 'horizontal',
+        series: [
+          { key: 'active', label: 'Active' },
+          { key: 'completed', label: 'Completed' },
+        ],
+      }),
+    'svg.bds-chart__svg rect.bds-chart__bar',
   ],
   [
     'LineChart',
