@@ -92,7 +92,7 @@ export function Logo({
 
   return (
     <span
-      className={bdsClass('bds-logo', `bds-logo--${size}`, className)}
+      className={bdsClass('bds-logo', `bds-logo--size-${size}`, className)}
       role={decorative ? undefined : 'img'}
       aria-label={decorative ? undefined : accessibleName}
       aria-hidden={decorative || undefined}

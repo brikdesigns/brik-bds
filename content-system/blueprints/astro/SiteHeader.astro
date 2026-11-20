@@ -44,7 +44,7 @@
  *   Layout at ≥768px: [logo] [primary nav links, centered] [phone + CTA]
  *   Layout at  <768px: [logo] [hamburger button + mobile drawer markup]
  *   Scroll:  transparent over hero at top; past the scroll threshold the
- *            bar gains its `--bds-surface-navigation` background + a
+ *            bar gains its `--bds-surface-nav` background + a
  *            `backdrop-filter` blur (frosted glass) and hides on
  *            scroll-down / reveals on scroll-up (`data-scroll-hidden`,
  *            driven by the runtime for `transparent-top-frosted-past-80`).
@@ -65,7 +65,7 @@
  *
  *   The mega-menu is the product — always-solid header for multi-practice
  *   legal / specialty medical / agency packs where Services / Practice
- *   Areas is the primary journey. Solid `--bds-surface-navigation` background,
+ *   Areas is the primary journey. Solid `--bds-surface-nav` background,
  *   elevation shadow on scroll, never hides. Reuses the shared mega-menu
  *   markup (column count is data-driven from `servicesMegaMenu.columns`).
  *
@@ -377,7 +377,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
      * read first at each use (TIER4_ALIASES), so a consumer still setting one
      * keeps working for one minor — this block declares the new names on the
      * element, so the old name must lead the chain to win. */
-    --bds-site-header-background: var(--bds-surface-navigation, transparent);
+    --bds-site-header-background: var(--bds-surface-nav, transparent);
     --bds-site-header-text-color: var(--bds-text-primary);
     --bds-site-header-cta-background: var(--bds-background-brand-primary);
     --bds-site-header-cta-color: var(--bds-text-on-color-dark, var(--bds-text-inverse));
@@ -387,8 +387,8 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     z-index: 100;
     background: var(--bds-site-header-bg, var(--bds-site-header-background));
     padding-block: var(--bds-padding-md);
-    transition: box-shadow var(--bds-duration-md) var(--bds-ease-out), background var(--bds-duration-md) var(--bds-ease-out),
-      transform var(--bds-duration-md) var(--bds-ease-out);
+    transition: box-shadow var(--bds-duration-200) var(--bds-ease-out), background var(--bds-duration-200) var(--bds-ease-out),
+      transform var(--bds-duration-200) var(--bds-ease-out);
   }
 
   /* Hide-on-scroll — the runtime sets [data-scroll-hidden] on scroll-down
@@ -401,7 +401,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
 
   @media (prefers-reduced-motion: reduce) {
     .bp-site-header {
-      transition: box-shadow var(--bds-duration-md) var(--bds-ease-out), background var(--bds-duration-md) var(--bds-ease-out);
+      transition: box-shadow var(--bds-duration-200) var(--bds-ease-out), background var(--bds-duration-200) var(--bds-ease-out);
     }
   }
 
@@ -409,11 +409,11 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
    * hides. Gains a subtle elevation shadow once the page is scrolled,
    * set by the runtime script via [data-scrolled]. */
   .bp-site-header--utility-first {
-    --bds-site-header-background: var(--bds-surface-navigation);
+    --bds-site-header-background: var(--bds-surface-nav);
   }
 
   .bp-site-header--utility-first[data-scrolled] {
-    box-shadow: var(--bds-shadow-sm);
+    box-shadow: var(--bds-shadow-subtle);
   }
 
   /* editorial-transparent — transparent over the hero at the top of the
@@ -427,20 +427,20 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
   }
 
   .bp-site-header--editorial-transparent[data-scrolled] {
-    --bds-site-header-background: var(--bds-surface-navigation);
-    backdrop-filter: blur(var(--bds-blur-radius-md));
-    box-shadow: var(--bds-shadow-sm);
+    --bds-site-header-background: var(--bds-surface-nav);
+    backdrop-filter: blur(var(--bds-shadow-blur-600));
+    box-shadow: var(--bds-shadow-subtle);
   }
 
   /* service-centric — the mega-menu is the product. Always-solid nav
    * surface (like utility-first) with an elevation shadow on scroll; the
    * shared mega-menu markup carries the multi-column flyout. */
   .bp-site-header--service-centric {
-    --bds-site-header-background: var(--bds-surface-navigation);
+    --bds-site-header-background: var(--bds-surface-nav);
   }
 
   .bp-site-header--service-centric[data-scrolled] {
-    box-shadow: var(--bds-shadow-sm);
+    box-shadow: var(--bds-shadow-subtle);
   }
 
   /* portfolio-minimal — text-only, chrome-out-of-the-way. Transparent over
@@ -452,8 +452,8 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
   }
 
   .bp-site-header--portfolio-minimal[data-scrolled] {
-    --bds-site-header-background: var(--bds-surface-navigation);
-    box-shadow: var(--bds-shadow-sm);
+    --bds-site-header-background: var(--bds-surface-nav);
+    box-shadow: var(--bds-shadow-subtle);
   }
 
   .bp-site-header--portfolio-minimal .bp-site-header__brand,
@@ -469,7 +469,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
   }
 
   .bp-site-header--calm-flat[data-scrolled] {
-    box-shadow: var(--bds-shadow-sm);
+    box-shadow: var(--bds-shadow-subtle);
   }
 
   .bp-site-header__container {
@@ -529,7 +529,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     font-weight: var(--bds-font-weight-medium);
     padding: var(--bds-padding-xs) 0;
     border-bottom: 2px solid transparent;
-    transition: border-color var(--bds-duration-sm) var(--bds-ease-out);
+    transition: border-color var(--bds-duration-100) var(--bds-ease-out);
   }
 
   .bp-site-header__nav-link:hover,
@@ -564,7 +564,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     border-right: 2px solid currentColor;
     border-bottom: 2px solid currentColor;
     transform: translateY(-2px) rotate(45deg);
-    transition: transform var(--bds-duration-sm) var(--bds-ease-out);
+    transition: transform var(--bds-duration-100) var(--bds-ease-out);
   }
 
   .bp-site-header__mega {
@@ -582,7 +582,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transition: opacity var(--bds-duration-sm) var(--bds-ease-out), visibility 0s var(--bds-ease-linear) var(--bds-duration-sm);
+      transition: opacity var(--bds-duration-100) var(--bds-ease-out), visibility 0s var(--bds-ease-linear) var(--bds-duration-100);
       z-index: 200;
     }
 
@@ -604,7 +604,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     background: var(--bds-surface-primary);
     border: 1px solid var(--bds-border-secondary);
     border-radius: var(--bds-border-radius-lg);
-    box-shadow: var(--bds-shadow-lg);
+    box-shadow: var(--bds-shadow-lifted);
     padding: var(--bds-padding-xl);
     min-width: min(90vw, 720px);
   }
@@ -657,7 +657,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     font-family: var(--bds-font-family-label);
     font-size: var(--bds-label-lg);
     font-weight: var(--bds-font-weight-medium);
-    transition: color var(--bds-duration-sm) var(--bds-ease-out);
+    transition: color var(--bds-duration-100) var(--bds-ease-out);
   }
 
   .bp-site-header__mega-item-note {
@@ -752,7 +752,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     font-weight: var(--bds-font-weight-semibold);
     text-decoration: none;
     border-radius: var(--bds-border-radius-md);
-    transition: background var(--bds-duration-sm) var(--bds-ease-out);
+    transition: background var(--bds-duration-100) var(--bds-ease-out);
   }
 
   .bp-site-header__cta:hover {
@@ -906,7 +906,7 @@ const megaMenuTriggerLabel = servicesMegaMenu?.triggerLabel ?? null;
     width: min(88vw, 360px);
     z-index: 160;
     transform: translateX(-100%);
-    transition: transform var(--bds-duration-md) var(--bds-ease-out);
+    transition: transform var(--bds-duration-200) var(--bds-ease-out);
   }
 
   .bp-site-header[data-drawer-pattern='slide-left-panel'] .bp-site-header__drawer:not([inert]) {

@@ -78,7 +78,7 @@ export function Stepper({
 
   return (
     <div
-      className={bdsClass('bds-stepper', `bds-stepper--${size}`, className)}
+      className={bdsClass('bds-stepper', `bds-stepper--size-${size}`, className)}
       style={style}
       role="group"
       aria-label="Stepper"

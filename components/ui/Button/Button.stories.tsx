@@ -23,20 +23,15 @@ const meta: Meta<typeof Button> = {
     variant: {
       control: 'select',
       options: [
-        'primary',
-        'outline',
-        'secondary',
-        'ghost',
-        'inverse',
-        'on-color',
-        'negative',
-        'positive',
+        'primary', 'secondary', 'outline', 'ghost', 'inverse', 'on-color',
+        'negative', 'negative-outline', 'negative-ghost', 'positive',
       ],
       description:
-        'Brand hierarchy: `primary` → `outline` → `secondary` → `ghost`. ' +
-        '`inverse` for inverse surfaces; `on-color` for brand-primary surfaces. ' +
-        'System valence: `negative` / `positive`.',
+        'Style — one value from a curated list (#3275). `inverse` for inverse surfaces; ' +
+        '`on-color` for brand-primary surfaces; `negative*` for destructive actions.',
     },
+    tone: { table: { disable: true } },
+    emphasis: { table: { disable: true } },
     size: {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
@@ -297,5 +292,41 @@ export const InteractionTestDisabled: Story = {
     await expect(
       contrastRatio(filledStyle.color, filledStyle.backgroundColor),
     ).toBeGreaterThanOrEqual(3);
+  },
+};
+
+/**
+ * Tier-4 override hooks (ADR-014, #2181): a service-themed section sets
+ * `--bds-button-primary-background` / `-color` on an ancestor and every primary
+ * Button inside re-paints without a consumer rule. Guards the mechanism — the
+ * ancestor's value must reach the rendered fill — and that an unset Button keeps
+ * the brand default.
+ *
+ * @summary Verifies an ancestor can re-skin the primary fill
+ */
+export const InteractionTestServiceHook: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: () => (
+    <Row>
+      <Button variant="primary">Brand default</Button>
+      <div
+        style={
+          {
+            '--bds-button-primary-background': 'var(--bds-background-info)',
+          } as React.CSSProperties
+        }
+      >
+        <Button variant="primary">Service themed</Button>
+      </div>
+    </Row>
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const brand = getComputedStyle(canvas.getByRole('button', { name: 'Brand default' }));
+    const themed = getComputedStyle(canvas.getByRole('button', { name: 'Service themed' }));
+
+    await expect(themed.backgroundColor).not.toBe(brand.backgroundColor);
+    // The label is not overridden, so it must stay legible (3:1) on the new fill.
+    await expect(contrastRatio(themed.color, themed.backgroundColor)).toBeGreaterThanOrEqual(3);
   },
 };

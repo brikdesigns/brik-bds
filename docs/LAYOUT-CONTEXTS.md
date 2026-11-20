@@ -54,7 +54,7 @@ Full horizontal space, reading and editing both common, may contain multiple she
 
 **Section title and Subsection title share `--heading-sm` by design** — the tier is carried by the heading *element* (`<h2>` vs `<h3>`, via `DataSection`'s `titleAs`), not by a size step. `DataSection.css:46-49` renders both, and the [record-read heading ramp](../docs-site/content/docs/build-standards/page-archetypes/record-read.mdx) states the same. The `--heading-sm` step is also what `FilterBar` renders, which is why "control bar or section header" is decided by [what the title is over](../docs-site/content/docs/build-standards/composition-layers.mdx), never by rendered size.
 
-Every row above matches shipped CSS. `PageHeader.css:69-76` renders the Page title row at its `size="lg"` default; `--md` / `--sm` are reduced scales outside this table.
+Every row above matches shipped CSS. `PageHeader.css:69-76` renders the Page title row at its `size="lg"` default; `--size-md` / `--size-sm` are reduced scales outside this table.
 
 ### Sheet
 

@@ -183,7 +183,7 @@ function renderDefault(
   return (
     <Dialog.Content
       {...dismissProps}
-      className={bdsClass('bds-modal', `bds-modal--${size}`)}
+      className={bdsClass('bds-modal', `bds-modal--size-${size}`)}
       aria-modal="true"
       aria-labelledby={title ? titleId : undefined}
       aria-label={title ? undefined : ariaLabel}

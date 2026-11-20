@@ -50,10 +50,8 @@ const heroInteriorMinimal: Section = {
   items: [],
 };
 
-// `centered` has no dispatcher key (the dispatcher maps a key to one layout, and
-// none maps to this one). The fixture borrows `hero_interior_minimal` only to
-// satisfy the renderer's known-key assertion; the generated `Hero--centered`
-// markup is rendered with an explicit `layout="centered"`, not via the key.
+// `centered` is dispatched by `hero_centered`; the generated `Hero--centered`
+// markup is rendered with an explicit `layout="centered"`.
 const heroCentered: Section = {
   ...heroInteriorMinimal,
   sectionKey: 'hero-centered-default',
@@ -61,6 +59,32 @@ const heroCentered: Section = {
   subtitle: 'Section',
   body: 'A short centred lead — one sentence that frames the page without competing with the headline.',
   cta: { label: 'Learn more', url: '#' },
+  visualNotes: {
+    blueprintKey: 'hero_centered',
+    moodKeywords: ['bold'],
+    layoutBlueprint: 'hero_centered',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+};
+
+// `statement` is dispatched by `hero_statement`; the generated `Hero--statement`
+// markup is rendered with an explicit `layout="statement"`. A 3–5 word headline,
+// no lead, one CTA.
+const heroStatement: Section = {
+  ...heroInteriorMinimal,
+  sectionKey: 'hero-statement-default',
+  title: 'Say it plainly',
+  subtitle: 'Our approach',
+  body: null,
+  cta: { label: 'Get started', url: '#' },
+  visualNotes: {
+    blueprintKey: 'hero_statement',
+    moodKeywords: ['minimal'],
+    layoutBlueprint: 'hero_statement',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
 };
 
 const heroWithPricingCard: Section = {
@@ -250,6 +274,103 @@ const features: Section = {
   ],
 };
 
+// `alternating-split` is dispatched by `features_alternating_split`. The default
+// fixture supplies no images, so every media side renders the missing-media
+// placeholder; the `-images` variant supplies one per item. Two of the three
+// items carry an `href`, so the optional link renders on some rows and not others.
+const featuresAlternatingSplit: Section = {
+  sectionKey: 'features-alternating-split-default',
+  sectionType: 'features',
+  title: 'One story, told in rows',
+  subtitle: 'How it works',
+  body: 'Each feature gets a row of its own, so the page can tell a longer story than a single split.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'features_alternating_split',
+    moodKeywords: ['approachable', 'warm'],
+    layoutBlueprint: 'features_alternating_split',
+    imageOpportunity: 'one image per row',
+    illustrationOpportunity: null,
+  },
+  items: [
+    {
+      title: 'Start with a conversation',
+      description: 'A short call to learn what you need before anything is planned or priced.',
+      href: '#',
+    },
+    {
+      title: 'See the plan in writing',
+      description: 'You get a clear scope, a timeline and a fixed fee before any work begins.',
+    },
+    {
+      title: 'Review as it comes together',
+      description: 'Check in at each step, so what we deliver is what you pictured.',
+      href: '#',
+    },
+  ],
+};
+
+const featuresAlternatingSplitImages: Section = {
+  ...featuresAlternatingSplit,
+  sectionKey: 'features-alternating-split-images',
+  items: featuresAlternatingSplit.items.map((item, i) => ({
+    ...item,
+    imageUrl: placeholderImage(960, 720, '#eaf1fb', '#1f3d70', `Feature ${i + 1}`),
+    imageAlt: `Feature ${i + 1}`,
+  })),
+};
+
+// `bento` is dispatched by `features_bento_asymmetric`. The first item is the
+// featured cell and the third carries a `stat`, so one fixture exercises the
+// featured, media and stat cells. No images are supplied, so every media cell
+// renders the missing-media placeholder; the `-images` variant supplies one each.
+const featuresBento: Section = {
+  sectionKey: 'features-bento-default',
+  sectionType: 'features',
+  title: 'One feature leads, the rest support it',
+  subtitle: 'What we do',
+  body: 'A featured cell beside a few smaller ones, so the section can lead with its strongest point.',
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'features_bento_asymmetric',
+    moodKeywords: ['bold', 'modern'],
+    layoutBlueprint: 'features_bento_asymmetric',
+    imageOpportunity: 'one image per media cell',
+    illustrationOpportunity: null,
+  },
+  items: [
+    {
+      title: 'Start with a conversation',
+      description: 'A short call to learn what you need before anything is planned or priced.',
+      href: '#',
+    },
+    {
+      title: 'See the plan in writing',
+      description: 'A clear scope, timeline and fixed fee before any work begins.',
+    },
+    {
+      title: 'Clients who would recommend us',
+      description: 'Measured after every engagement.',
+      stat: '98%',
+    },
+    {
+      title: 'Review as it comes together',
+      description: 'Check in at each step.',
+      href: '#',
+    },
+  ],
+};
+
+const featuresBentoImages: Section = {
+  ...featuresBento,
+  sectionKey: 'features-bento-images',
+  items: featuresBento.items.map((item, i) => ({
+    ...item,
+    imageUrl: placeholderImage(960, 720, '#eaf1fb', '#1f3d70', `Feature ${i + 1}`),
+    imageAlt: `Feature ${i + 1}`,
+  })),
+};
+
 const calloutPanel: Section = {
   sectionKey: 'support-plan-default',
   sectionType: 'cta',
@@ -304,6 +425,81 @@ const statsBarCountUp: Section = {
   ...statsBar,
   sectionKey: 'stats-bar-count-up',
   contentMotion: 'count-up',
+};
+
+// ── TestimonialsCardGrid (brik-bds#3190) ────────────────────────────────────
+// The first item carries a rating; the second has none (no stars row) and no
+// avatar — both are optional and render only when supplied.
+const testimonialsCardGrid: Section = {
+  sectionKey: 'testimonials-card-grid-default',
+  sectionType: 'testimonials',
+  title: 'What clients say',
+  subtitle: 'Testimonials',
+  body: null,
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'testimonials_card_grid',
+    moodKeywords: ['approachable', 'trustworthy'],
+    layoutBlueprint: 'testimonials_card_grid',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: [
+    {
+      title: 'Sample Name · Role · Company',
+      description: 'A short quote that says what changed for this client and the outcome they can point at.',
+      rating: 5,
+    },
+    {
+      title: 'Second Name · Role · Company',
+      description: 'A second quote, shown without a star rating because none was supplied.',
+    },
+    {
+      title: 'Third Name · Role · Company',
+      description: 'A third quote that fills out the row on a desktop-width grid.',
+      rating: 4,
+    },
+  ],
+};
+
+// ── ProcessStepsNumbered (brik-bds#3191) ────────────────────────────────────
+// Step count is the number of items: the default fixture has four steps, and
+// the `steps-3` / `steps-5` variants render the other desktop row sizes.
+const processStepsNumbered: Section = {
+  sectionKey: 'process-steps-numbered-default',
+  sectionType: 'features',
+  title: 'How it works',
+  subtitle: 'Our process',
+  body: null,
+  cta: null,
+  visualNotes: {
+    blueprintKey: 'process_steps_numbered',
+    moodKeywords: ['professional', 'trustworthy'],
+    layoutBlueprint: 'process_steps_numbered',
+    imageOpportunity: null,
+    illustrationOpportunity: null,
+  },
+  items: [
+    { title: 'Discovery call', description: 'We learn your goals, timeline and constraints before anything is proposed.' },
+    { title: 'Scope and plan', description: 'You get a written scope with milestones, owners and a clear price.' },
+    { title: 'Build and review', description: 'We deliver in stages and check each one with you before moving on.' },
+    { title: 'Launch and support', description: 'We go live together and stay on hand for the first weeks after.' },
+  ],
+};
+
+const processStepsNumbered3: Section = {
+  ...processStepsNumbered,
+  sectionKey: 'process-steps-numbered-3',
+  items: processStepsNumbered.items.slice(0, 3),
+};
+
+const processStepsNumbered5: Section = {
+  ...processStepsNumbered,
+  sectionKey: 'process-steps-numbered-5',
+  items: [
+    ...processStepsNumbered.items,
+    { title: 'Ongoing review', description: 'We meet on a regular schedule to check results and plan what comes next.' },
+  ],
 };
 
 const testimonialsFeaturedLarge: Section = {
@@ -488,12 +684,17 @@ const SECTIONS: Record<string, Section> = {
   'Hero:interior-minimal': heroInteriorMinimal,
   'Hero:with-pricing-card': heroWithPricingCard,
   'Hero:centered': heroCentered,
+  'Hero:statement': heroStatement,
   'Cta:default': ctaDefault,
   'Cta:split': ctaSplit,
   'CardGrid:card-grid': cardGrid,
   'CardGrid:two-column-list': cardGridTwoColumnList,
   Narrative: narrative,
   Features: features,
+  'Features:alternating-split': featuresAlternatingSplit,
+  'Features:alternating-split-images': featuresAlternatingSplitImages,
+  'Features:bento': featuresBento,
+  'Features:bento-images': featuresBentoImages,
   CalloutPanel: calloutPanel,
   StatsBar: statsBar,
   'StatsBar:count-up': statsBarCountUp,
@@ -504,6 +705,10 @@ const SECTIONS: Record<string, Section> = {
   CollectionIndex: collectionIndex,
   CollectionEntry: collectionEntry,
   FaqAccordion: faqAccordion,
+  TestimonialsCardGrid: testimonialsCardGrid,
+  ProcessStepsNumbered: processStepsNumbered,
+  'ProcessStepsNumbered:steps-3': processStepsNumbered3,
+  'ProcessStepsNumbered:steps-5': processStepsNumbered5,
 };
 
 /** Resolves the fixture for a block, optionally narrowed to one layout. */

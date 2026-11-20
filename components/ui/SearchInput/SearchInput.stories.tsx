@@ -355,7 +355,7 @@ export const InteractionTestSizes: Story = {
     // TextInput scale: 32 / 40 / 48px field height, set by the size class on the wrapper.
     for (const [size, height] of [['sm', 32], ['md', 40], ['lg', 48]] as const) {
       const input = canvas.getByLabelText(`Search ${size}`);
-      await expect(input.closest(`.bds-text-input--${size}`)).not.toBeNull();
+      await expect(input.closest(`.bds-text-input--size-${size}`)).not.toBeNull();
       await expect(input.getBoundingClientRect().height).toBe(height);
     }
   },

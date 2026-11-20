@@ -3,6 +3,11 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AstroFrame } from './_AstroFrame';
 import './__generated__/Features.css';
 import html from './__generated__/Features.html?raw';
+import alternatingSplit from './__generated__/Features--alternating-split.html?raw';
+import alternatingSplitImages from './__generated__/Features--alternating-split-images.html?raw';
+import alternatingSplitMediaStart from './__generated__/Features--alternating-split-media-start.html?raw';
+import bento from './__generated__/Features--bento.html?raw';
+import bentoImages from './__generated__/Features--bento-images.html?raw';
 
 /**
  * `Features.astro` on the canonical rail (ADR-037), pre-rendered by
@@ -23,3 +28,18 @@ type Story = StoryObj<typeof AstroFrame>;
 
 /** @summary Default — three capability cards on a branded dark surface. */
 export const Default: Story = { render: () => <AstroFrame html={html} /> };
+
+/** @summary Alternating split — no images, placeholder media */
+export const AlternatingSplit: Story = { render: () => <AstroFrame html={alternatingSplit} /> };
+
+/** @summary Alternating split, with images — sides swapped on even rows */
+export const AlternatingSplitImages: Story = { render: () => <AstroFrame html={alternatingSplitImages} /> };
+
+/** @summary Alternating split — media-start */
+export const AlternatingSplitMediaStart: Story = { render: () => <AstroFrame html={alternatingSplitMediaStart} /> };
+
+/** @summary Bento — featured cell, placeholder media and a stat cell */
+export const Bento: Story = { render: () => <AstroFrame html={bento} /> };
+
+/** @summary Bento, with images */
+export const BentoImages: Story = { render: () => <AstroFrame html={bentoImages} /> };

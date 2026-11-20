@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Icon } from '@iconify/react';
 import { expect, within } from 'storybook/test';
 import { ActivityTimeline } from './ActivityTimeline';
+import { DateTime } from '../DateTime';
 import { Stack } from '../Stack';
 import { Tag } from '../Tag';
 import { TagGroup } from '../TagGroup';
@@ -89,6 +90,25 @@ const withContentEvents = [
  */
 export const WithContent: Story = {
   args: { events: withContentEvents },
+};
+
+/**
+ * `timestamp` also takes a node. `DateTime` renders its own `<time>`, so the
+ * timeline places it as-is instead of wrapping it in a second one.
+ *
+ * @summary `timestamp` as a `DateTime` node
+ */
+export const WithDateTimeTimestamp: Story = {
+  args: {
+    events: [
+      { icon: <Icon icon="ph:plus" />, label: 'Request submitted', detail: 'by Emily Rivera', timestamp: <DateTime value="2026-04-12T13:04:00Z" mode="timestamp" timeZone="UTC" />, isOrigin: true },
+      { icon: <Icon icon="ph:user" />, label: 'Assigned', detail: 'to Nick Stanerson', timestamp: <DateTime value="2026-04-12T15:15:00Z" mode="timestamp" timeZone="UTC" /> },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    await expect(canvasElement.querySelectorAll('time time')).toHaveLength(0);
+    await expect(canvasElement.querySelectorAll('time')).toHaveLength(2);
+  },
 };
 
 /**

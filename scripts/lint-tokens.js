@@ -1459,7 +1459,7 @@ function checkResponsiveTokenSwap(content, file) {
 
     // Not a close-brace, open-brace, or recognized declaration — a fragment
     // of a multi-line comma-separated selector list (e.g. Grid.css's
-    // `.bds-grid--cols-3,\n  .bds-grid--cols-4 {`).
+    // `.bds-grid--columns-3,\n  .bds-grid--columns-4 {`).
     selectorBuffer = `${selectorBuffer} ${trimmed}`.trim();
   }
 

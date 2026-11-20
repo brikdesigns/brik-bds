@@ -80,7 +80,7 @@ Blueprints ship on **two** renderers, and they are not peers. [ADR-037](https://
 | Standard client site | **Astro** (canonical) | in-repo content | `@brikdesigns/bds/blueprints-astro` → `<BlueprintDispatcher>` |
 | Client site with a CMS or database; `brikdesigns.com` | React / Next.js | portal Supabase | `@brikdesigns/bds` (root entry) → `<BlueprintDispatcher>` |
 
-React is a **supported** rail, not a lesser one — and it is the source of the composition *API* both rails now share. React named files by block with the layout as a prop first; ADR-037's 2026-09-08 amendment brought Astro onto that shape, so today a component is a **block** on either rail and `layout` is a prop. The `HeroLayout` / `CtaLayout` / `CardGridLayout` unions live in one framework-agnostic module (`astro/types.ts`) that both rails read, so a layout cannot be added to one rail only.
+React is a **supported** rail, not a lesser one — and it is the source of the composition *API* both rails now share. React named files by block with the layout as a prop first; ADR-037's 2026-09-08 amendment brought Astro onto that shape, so today a component is a **block** on either rail and `layout` is a prop. The `HeroLayout` / `CtaLayout` / `CardGridLayout` / `FeaturesLayout` unions live in one framework-agnostic module (`astro/types.ts`) that both rails read, so a layout cannot be added to one rail only.
 
 <Callout type="info">
   **Names carry layout, never content domain.** ADR-037 §4: a blueprint key describes layout shape only. `card_grid` is a key; a domain prefix naming the content it happens to hold is not, because the same grid renders team, blog and product collections. Industry and mood are metadata on the library entry; brand and atmosphere are tokens. Column counts and ratios are props. `scripts/lint-blueprint-naming.mjs` enforces this as `blueprint-key-context-word`, with no allowlist.
@@ -134,7 +134,7 @@ import type { BlueprintSection, KnownBlueprintKey }
 
 ### Shipped blocks
 
-A component is a **block**; the layout it renders in is a **prop**, never a filename — so the sixteen keys in [`blueprint-library.json`](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/blueprint-library.json) resolve onto twelve files. The table lists the eight core blocks and their twelve keys; the other four keys map one-to-one — `logo_wall` → `<LogoWall>`, `collection_index` → `<CollectionIndex>`, `collection_entry` → `<CollectionEntry>`, `faq_accordion_grouped` → `<FaqAccordion>`. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`), plus `layout` where the block has more than one.
+A component is a **block**; the layout it renders in is a **prop**, never a filename — so the twenty-two keys in [`blueprint-library.json`](https://github.com/brikdesigns/brik-bds/blob/main/blueprints/blueprint-library.json) resolve onto fourteen files. The table lists the eight core blocks and their sixteen keys; the other six keys map one-to-one — `logo_wall` → `<LogoWall>`, `testimonials_card_grid` → `<TestimonialsCardGrid>`, `process_steps_numbered` → `<ProcessStepsNumbered>`, `collection_index` → `<CollectionIndex>`, `collection_entry` → `<CollectionEntry>`, `faq_accordion_grouped` → `<FaqAccordion>`. Each follows the same `BlueprintProps` contract (`section` + `clientFacts` + `theme`), plus `layout` where the block has more than one.
 
 `<BlueprintDispatcher>` owns the key → (block, layout) mapping, so a consumer that dispatches never picks a layout by hand.
 
@@ -143,17 +143,21 @@ A component is a **block**; the layout it renders in is a **prop**, never a file
 | `<Hero>` | `split` | `hero_split` | `hero` | [astro-hero — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-hero--default) |
 | `<Hero>` | `interior-minimal` | `hero_interior_minimal` | `hero` | [astro-hero — Interior Minimal](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-hero--interior-minimal) |
 | `<Hero>` | `with-pricing-card` | `hero_split_image_card_overlay` | `hero` | [astro-hero — With Pricing Card](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-hero--with-pricing-card) |
+| `<Hero>` | `centered` | `hero_centered` | `hero` | [astro-hero — Centered](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-hero--centered) |
+| `<Hero>` | `statement` | `hero_statement` | `hero` | [astro-hero — Statement](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-hero--statement) |
 | `<CardGrid>` | `card-grid` | `card_grid` | `services` | [astro-card-grid — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-card-grid--default) |
 | `<CardGrid>` | `two-column-list` | `two_column_detail` | `services` | [astro-card-grid — Two Column List](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-card-grid--two-column-list) |
 | `<Cta>` | `split` | `cta_split_contact` | `cta` | [astro-cta — Split](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-cta--split) |
 | `<Cta>` | `default` | `cta_centered` | `cta` | [astro-cta — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-cta--default) |
 | `<Narrative>` | — | `story_split` | `about` | [astro-narrative — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-narrative--default) |
-| `<Features>` | — | `feature_grid` | `features` | [astro-features — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-features--default) |
+| `<Features>` | `grid` | `feature_grid` | `features` | [astro-features — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-features--default) |
+| `<Features>` | `alternating-split` | `features_alternating_split` | `features` | [astro-features — Alternating Split](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-features--alternating-split) |
+| `<Features>` | `bento` | `features_bento_asymmetric` | `features` | [astro-features — Bento](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-features--bento) |
 | `<CalloutPanel>` | — | `callout_split` | `support_plan` | [astro-callout-panel — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-callout-panel--default) |
 | `<StatsBar>` | — | `stats_bar` | `stats` | [astro-stats-bar — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-stats-bar--default) |
 | `<TestimonialsFeaturedLarge>` | — | `testimonials_featured_large` | `testimonials` | [astro-testimonials-featured-large — Default](https://storybook.brikdesigns.com/?path=/story/blueprints-astro-testimonials-featured-large--default) |
 
-The `HeroLayout` / `CtaLayout` / `CardGridLayout` unions are exported from the package and shared with the React rail, so a layout cannot be added to one rail only.
+The `HeroLayout` / `CtaLayout` / `CardGridLayout` / `FeaturesLayout` unions are exported from the package and shared with the React rail, so a layout cannot be added to one rail only.
 
 The `Blueprints/astro-*` entries render this rail's own output, pre-rendered by `scripts/render-astro-blueprints.mjs` rather than by the React twin ([ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-astro-blueprints-are-pre-rendered-into-the-react-storybook.md)). Their `Blueprints/*` neighbours without the `astro-` prefix are the React twins — same fixtures, different rail, which is what makes the two comparable side by side.
 

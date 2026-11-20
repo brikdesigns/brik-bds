@@ -119,10 +119,10 @@ The prop layer migrates to the token layer's vocabulary, not the reverse. `error
 
 | Axis | Word | Closed value list | Correct today | Migrates |
 |---|---|---|---|---|
-| Valence — what this communicates about a state | `tone` | § 1's five words | Field (`helperTone`); Banner's prop *name* | Badge, Counter, Dot, Meter, ProgressCircle (`status` → `tone`); Toast, Button (valence members leave `variant`); Banner (`announcement` leaves the union) |
+| Valence — what this communicates about a state | `tone` | § 1's five words | Field (`helperTone`); Banner's prop *name* | Badge, Counter, Dot, Meter, ProgressCircle (`status` → `tone`); Toast, Button (valence members leave `variant`; reversed for Button by § Amendments, #3275); Banner (`announcement` leaves the union) |
 | Presence / lifecycle — the state of a named subject | `status` | per-subject, scoped-intent token-backed | Avatar, Card, Table, TaskConsole | — |
 | Form — mutually exclusive visual or structural shape, no valence | `variant` | per-component | Card, TabBar, Skeleton, Sheet, ServiceTag, Testimonial, Footer, ToggleSwitch, ProgressStepper | — |
-| Hue source — which palette paints it | `emphasis` | `neutral` · `brand` · `accent` · `inverse` | TextLink, SocialIcon, ContactIcon (`tone` → `emphasis` landed, #1925) | Banner, Badge, Counter (brand member extracted, below); Button (`inverse`, `on-color` leave `variant` — #1983) — `inverse` added by § Amendments (#2279) |
+| Hue source — which palette paints it | `emphasis` | `neutral` · `brand` · `accent` · `inverse` · `on-color` | TextLink, SocialIcon, ContactIcon (`tone` → `emphasis` landed, #1925) | Banner, Badge, Counter (brand member extracted, below); Button (`inverse`, `on-color` left `variant` — #1983; reversed by § Amendments, #3275) — `inverse` added by § Amendments (#2279), `on-color` by § Amendments (#1983) |
 | Fill treatment intensity | `appearance` | `solid` · `subtle` · `outline` (amended by #2943; Tag's `subtle`→`outline`, `muted`→`subtle`) | Badge, Tag, Avatar (`solid` · `subtle` only) | — |
 | Spacing compression | `density` | `comfortable` · `compact` | Tag, Sheet | — |
 | Accent hue — which named hue paints it | `color` | `neutral` · `blue` · `green` · `orange` · `purple` · `yellow` · `red` | Tag (`--color-{hue}`) | Avatar (`--accent-{hue}` → `--color-{hue}`, with #1927) — added by § Amendments (#2943) |
@@ -189,7 +189,7 @@ This does not touch ADR-008 §3, which governs **blueprint** modifiers and bans 
 1. **Derivability, the property § 4 exists to protect, already holds.** `category="information"` → `--information` is mechanically derivable in both directions. The prefix buys nothing that is not already there.
 2. **`information` collides with a retired valence word, and the gate's migration target was actively wrong.** § 1 retires `information` as a spelling of `info`, so rule 4 read `.bds-service-tag--information` as valence and printed `--tone-info`. Following it renames the selector while `ServiceTag.tsx` keeps emitting `bds-service-tag--information`, and every Information ServiceTag silently loses its fill — an unmatched selector is not an error. The rename was made and reverted while working [#1957](https://github.com/brikdesigns/brik-bds/issues/1957); the gate's own advice produced it.
 
-The exception is scoped to the **block**, not the value. `.bds-card--brand` is still a § 4 finding: Card imports `ServiceLine` and derives `CardTint` from it, but paints that class from an unrelated `variant`, and emits its actual service tint as the already-compliant `bds-card--tint-${tint}`. An import-level or directory-level carve-out would have exempted it and hidden real drift, so the gate requires the block to interpolate a `ServiceLine`-annotated identifier. Removing this exception means renaming the CSS and the TSX template together, in one commit.
+The exception is scoped to the **block**, not the value. `.bds-card--brand` is still a § 4 finding: Card imports `ServiceLine` and derives `CardServiceLine` from it, but paints that class from an unrelated `variant`, and emits its actual service surface as the prefixed `bds-card--service-line-${serviceLine}` (§ Amendments, `service-line` axis). An import-level or directory-level carve-out would have exempted it and hidden real drift, so the gate requires the block to interpolate a `ServiceLine`-annotated identifier. Removing this exception means renaming the CSS and the TSX template together, in one commit.
 
 ### 5. `info` means the blue signal; the gray one is `neutral`. `--shadow-*` is the elevation family
 
@@ -477,3 +477,178 @@ New words admitted or retired after acceptance, per § 6. Each entry names the w
 **Standing rule (#2594) applies.** These are Foundations variables (`spacing/{compact,default,comfortable,spacious}` → `padding/3nano`, `padding/2nano`, `padding/nano`). This PR lands the repo mirror (`design-tokens/foundations.json`). The rungs are not complete until the same three variables exist in ❖ Brik Foundations, or the next pull deletes them.
 
 **Enforcement.** `tokens/naming-grammar.json` gains `steps.familySteps["--padding-"]`. `lint-naming-canon` reads it into `FAMILY_STEPS`, and rule 1 allows those words only inside that family. It does not add them to `T_SHIRT`, so `--gap-nano` is still denied. `scripts/__tests__/lint-naming-canon.test.mjs` plants the three admitted padding rungs and a denied `--bds-gap-nano` / `--bds-icon-2nano`. No new rule, script or workflow. **Baseline:** none. The amendment lands with the tokens that need it.
+
+### `on-color` admitted to the emphasis axis (2026-11-14, [#1983](https://github.com/brikdesigns/brik-bds/issues/1983))
+
+**Does an existing § 2 word name this axis?** The axis is `emphasis`, and § Amendments (#2279) already left this word to #1983. Searched as string literals in `components/` and `content-system/` (`.ts`/`.tsx`, non-story, non-test) for the concept's synonyms — `on-brand`, `knockout`, `reversed`, `on-dark`, `static-white` — and every one came back empty. The only hit for `on-color` is `ButtonVariant` itself ([Button.tsx](../../components/ui/Button/Button.tsx)).
+
+- **Axis:** emphasis — which palette paints it (unchanged; this admits a fifth value).
+- **Word:** `on-color`. **Closed values now:** `neutral` · `brand` · `accent` · `inverse` · `on-color`.
+- **Correct today:** none — `on-color` sat on `variant` at its one site.
+- **Migrates:** Button (`on-color` leaves `variant`, #1983).
+
+**Why it earns the word.** `on-color` is the token layer's own word for a static white fill on a brand-colored surface (`--bds-background-on-color-dark`, `--bds-text-on-color-*`), and it is a hue source by the same test as `inverse`: it paints the primary form's fill and leaves the shape alone. It is distinct from `inverse`, which flips with the theme, and from `brand`, which is the brand palette itself rather than a fill placed on it. It has callers now — Banner, BannerGroup, ContentBlock and SectionHeader place it on brand surfaces.
+
+**Enforcement.** `tokens/naming-grammar.json` `axes.emphasis.values` gains `on-color` in this PR, per § 6 step 3; the planted-violation test that used `on-color` as its denied neighbour now plants `knockout`.
+
+**Baseline.** `ButtonVariant#mixed` → `1983` leaves `tokens/naming-canon-baseline.json`: `ButtonVariant` is now form-only, so the row is stale and the gate would fail on it.
+
+### `fit` · `anchor` · `resize` · `marker` · `underline` · `measure` axes (2026-11-16, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name these axes?** No. Each is a prop five components already turn into a correctly prefixed modifier. The gate baselined those modifiers as bare because the prefix was on no axis list, not because the class was wrong. None of these concepts fits § 2's words or the amended ones (`orientation`, `layout`, `span`, `ratio`, `color`). Synonyms were searched across `components/ui/**` (`.tsx` + `.css`, stories and tests excluded) as prop keys, union type names and `--{word}-*` modifiers:
+
+- **fit** — `cover`, `crop`: zero hits. The other `fit` props are the same concept: Image reuses `FrameFit` ([Image.tsx:32](../../components/ui/Image/Image.tsx)), and Card's `CardMediaImageFit` ([Card.tsx:153](../../components/ui/Card/Card.tsx)) and Table's `TableImageFit` ([Table.tsx:687](../../components/ui/Table/Table.tsx)) are `'contain' | 'cover'`, a subset of the list below. `objectFit` appears only as an inline style in DevFeedbackWidget. CardList's `fitContent` is a sizing boolean, not this axis.
+- **anchor** — `lock`, `hold`: no proportion prop. Image reuses `FrameAnchor` ([Image.tsx:39](../../components/ui/Image/Image.tsx)). Button's `AnchorLinkProps` is the `<a>` element, a homonym, not a prop axis.
+- **resize** — `resizable`, `grow`: zero. The one other `resize` is an inline style ([DevFeedbackWidget.tsx:510](../../components/ui/DevFeedbackWidget/DevFeedbackWidget.tsx)).
+- **marker** — `listStyle`, `numbered`, `ordered`: no competing prop (the only `ordered` hit is `bordered`). `BulletListDensity` is the density axis.
+- **underline** — `decoration`: zero.
+- **measure** — `readable`, `textWidth`: zero. Footer's `containerMaxWidth` is a container width, not a text measure.
+
+| Axis | Word | Closed values | Correct today |
+|---|---|---|---|
+| Media fit in its box | `fit` | `cover` · `contain` · `fill` · `none` | Frame (`bds-frame--fit-${fit}`, [Frame.tsx:144](../../components/ui/Frame/Frame.tsx)); Image, Card, Table props |
+| Dimension a ratio is held from | `anchor` | `width` · `height` | Frame (`bds-frame--anchor-height`, [Frame.tsx:145](../../components/ui/Frame/Frame.tsx)); Image prop |
+| User resize direction | `resize` | `none` · `both` · `horizontal` · `vertical` | TextArea (`bds-text-area-field--resize-${resize}`, [TextArea.tsx:112](../../components/ui/TextArea/TextArea.tsx)) |
+| List item marker | `marker` | `disc` · `decimal` · `none` | BulletList (`bds-bullet-list--marker-${marker}`, [BulletList.tsx:41](../../components/ui/BulletList/BulletList.tsx)) |
+| Link underline trigger | `underline` | `hover` · `always` · `none` | TextLink (`--underline-always` / `--underline-none`, [TextLink.tsx:104](../../components/ui/TextLink/TextLink.tsx)) |
+| Text column width | `measure` | `sm` · `md` · `lg` | SectionHeader (`bds-section-header--measure-${measure}`, [SectionHeader.tsx:65](../../components/ui/SectionHeader/SectionHeader.tsx)) |
+
+Each value list is the component's union as it ships. The amendment admits what exists and invents no value.
+
+**`tint` is not admitted.** Card's `--tint-*` is prefixed the same way, but the search found a second word for its concept. BlockQuote picks a service line with `serviceLine` ([BlockQuote.tsx:17](../../components/ui/BlockQuote/BlockQuote.tsx), the term #788 chose) and paints the same `--surface-service-*-light` wash ([BlockQuote.css:50](../../components/ui/BlockQuote/BlockQuote.css)) that Card's `tint` paints ([Card.css:391](../../components/ui/Card/Card.css)). Admitting `tint` would put one concept under two words, which § 2 forbids. Its five rows stay baselined under #1927 until that issue picks one word. **Resolved 2026-11-17:** see the `service-line` axis below.
+
+**Enforcement.** `tokens/naming-grammar.json` gains the six axes. `lint-naming-canon` reads them into `AXES` and `MODIFIER_AXES`, so the modifiers carry a blessed prefix and rule 5 default-denies any other value (`--fit-stretch`, a `*Marker` union with `square`). One mechanism change, the same one `span` needed: these values are CSS keywords and t-shirt rungs that other unions share, so rule 3 claiming them by value would read `DividerSpacing = 'none' | 'sm' | 'md' | 'lg'` as `marker + measure`. All six join `span` in `PREFIX_JUDGED_AXES`, which `axesOf()` skips (the gate's old `SPAN_AXIS` constant becomes this set). Planted cases in `scripts/__tests__/lint-naming-canon.test.mjs` admit the six modifiers, deny `--fit-stretch`, and keep a `DividerSpacing`-shaped union clean. **Baseline:** −17. The six families' rule-4 rows keyed to #1927 leave `tokens/naming-canon-baseline.json` because they no longer violate. The two rows keyed to the closed #1926 (`--center`, `--compact`) move to #1927, which now owns them.
+
+### `columns` axis (2026-11-16, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is a grid's column count. None of § 2's words or the amended ones fit: it is not a direction (`orientation`), an arrangement of slots (`layout`), a grid child's extent (`span`), or a proportion (`ratio`). Grid and FieldGrid already name the prop `columns`. What was wrong was the class: Grid emitted `bds-grid--cols-{n}` and a bare `bds-grid--auto-fit` / `--auto-fill`, and FieldGrid emitted `bds-field-grid--cols-{n}`. That is two spellings of one word, and one value with no prefix at all. Synonyms were searched across `components/ui/**` (`.tsx` + `.css`, stories and tests excluded) as prop keys, union type names and `--{word}-*` modifiers, at this PR's base:
+
+- **`cols`, `colCount`, `columnCount`, `column-count`:** no prop, type or key. `cols` appeared only in the two modifiers this amendment renames.
+- **`perRow`, `itemsPerRow`, `per-row`:** no prop. The hits are AddableFieldRowList prose ("the per-row remove button").
+- **`track` / `tracks`:** no prop. The hits are CSS comments and Slider's and Meter's own track elements.
+- **`columns` itself has three homonyms.** None emits a modifier and none is a closed union. Footer's `columns` is a list of column definitions (`FooterColumn[]`, [Footer.tsx:82](../../components/ui/Footer/Footer.tsx)). AddableFieldRowList's is a free-form CSS track template (`string`, [AddableFieldRowList.tsx:45](../../components/ui/AddableFieldRowList/AddableFieldRowList.tsx)). TableSkeletonRow's is a numeric cell count ([Table.tsx:390](../../components/ui/Table/Table.tsx)). ADR-039 § 1 already names the blueprint structure axis `columns`.
+
+- **Axis:** columns: how many columns a grid lays out, as a fixed count or a reflow strategy.
+- **Word:** `columns`. **Closed values:** `1` · `2` · `3` · `4` · `5` · `6` · `auto-fit` · `auto-fill`. These are `GridColumns` as it ships ([Grid.tsx:12](../../components/ui/Grid/Grid.tsx)). `FieldGridColumns` (`2 | 3 | 4`) is a subset.
+- **Migrates:** Grid (`bds-grid--cols-{n}` and `bds-grid--auto-{fit,fill}` become `bds-grid--columns-{value}`) and FieldGrid (`bds-field-grid--cols-{n}` becomes `bds-field-grid--columns-{n}`). The CSS and the TSX template change in one commit. Grid's `auto-*` values now take the same prefix as its counts, so the class is derived from the prop by one template instead of two.
+
+**Blueprints are out of this rule's reach, and they still spell it `cols`.** `bds-card-grid--cols-*` and `bds-features--cols-*` (CardGrid, Features and TestimonialsCardGrid, on both rails, plus `BlueprintColumns` in `content-system/blueprints/astro/types.ts`) use the same word. Rule 4 reads only `components/ui/**/*.css` (§ Enforcement), so the gate cannot see them and the baseline holds no row for them. They render in client sites through the Astro rail, so renaming them is a consumer change across `web/*`, not a library-internal one. It stays a #1927 remainder.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.columns`. `lint-naming-canon` reads it into `AXES` and `MODIFIER_AXES`, so `--columns-*` carries a blessed prefix and rule 5 default-denies any other value (`--columns-7`, a `*Columns` union with `masonry`). No new mechanism. No other union shares these values, so `columns` stays out of `PREFIX_JUDGED_AXES`. Planted cases in `scripts/__tests__/lint-naming-canon.test.mjs` admit the Grid and FieldGrid modifiers and still deny the retired `--cols-3`, a bare `--auto-fit`, `--columns-7` and `TileColumns.masonry`. **Baseline:** −8. The `--cols-{1..6}`, `--auto-fit` and `--auto-fill` rule-4 rows keyed to #1927 leave `tokens/naming-canon-baseline.json`.
+
+### `spacing` axis (2026-11-16, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is how far a block sits from the block before or after it: Divider's margin on both sides, and the extra rhythm DataSection and SheetSection put before the next sibling section. None of § 2's words or the amended ones fit. It is not a spacing compression (`density`, which shrinks a component's own insides), a grid child's extent (`span`), or a text column width (`measure`). The `gap-*` and `padding-*` token families are not prop axes, and they name a different space: `gap` is between a block's children, `padding` is inside its edge. All three components already name the prop `spacing` and already emit `bds-{block}--spacing-{value}`. The gate baselined them as bare because the prefix was on no axis list, not because the class was wrong. Synonyms were searched across `components/ui/**/*.tsx` (stories and tests excluded) as prop keys and union type names, and across `components/ui/**/*.css` as `--{word}-*` modifiers, at this PR's base:
+
+- **`margin`, `rhythm`, `gutter`, `separation`, `offset`, `spaced`, `spacious`:** zero hits as a prop, a union type or a modifier.
+- **`spacing`** returned exactly the three components below, and no homonym.
+
+- **Axis:** spacing: the outer separation between a block and its neighbour.
+- **Word:** `spacing`. **Closed values:** `none` · `sm` · `md` · `lg`. These are `DividerSpacing` as it ships ([Divider.tsx:6](../../components/ui/Divider/Divider.tsx)). `DataSectionSpacing` and `SheetSectionSpacing` (`md | lg`, [DataSection.tsx:7](../../components/ui/DataSection/DataSection.tsx), [SheetSection.tsx:5](../../components/ui/SheetSection/SheetSection.tsx)) are a subset. Divider never emits `--spacing-none` ([Divider.tsx:39](../../components/ui/Divider/Divider.tsx)), but the union carries it, and rule 5 judges unions.
+- **Migrates:** nothing. No class or prop is renamed.
+
+**Not the spacing mode.** `[data-mode-spacing]` is a Theming Dimension set on a page scope, not a BEM modifier or a component prop (the "Style is not a prop axis" callout in [Prop Axes](../../docs-site/content/docs/build-standards/prop-axes.mdx)). The two never meet in one name. The mode changes what the `padding-*` and `gap-*` rungs resolve to ([modes-spacing.css:8](../../tokens/modes-spacing.css)), and this axis picks which `padding-*` rung a block's margin uses.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.spacing`. `lint-naming-canon` reads it into `AXES` and `MODIFIER_AXES`, so `--spacing-*` carries a blessed prefix and rule 5 default-denies any other value (`--spacing-xl`, a `*Spacing` union with `loose`). It joins `PREFIX_JUDGED_AXES`, because its values are the t-shirt rungs `measure` and `resize` share. Planted cases in `scripts/__tests__/lint-naming-canon.test.mjs` admit the three components' modifiers and deny `--spacing-xl` and `PanelSpacing.loose`. The existing `DividerSpacing`-shaped case stays clean. **Baseline:** −3. The `--spacing-{sm,md,lg}` rule-4 rows keyed to #1927 leave `tokens/naming-canon-baseline.json`.
+
+### `corner` axis (2026-11-17, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is which corner of the viewport a fixed element docks to. TaskConsole emitted the value bare (`bds-task-console--bottom-right`). None of § 2's words or the amended ones fit: `align` is how content sits along a row or column (Stack, CardControl), not where a fixed box docks on screen, and `anchor` is the dimension a ratio is held from. Synonyms were searched across `components/ui/**/*.tsx` (stories and tests excluded) as prop keys and union type names, and across `components/ui/**/*.css` as `--{word}-*` modifiers, at this PR's base:
+
+- **`corner`, `dock`, `docked`, `edge`:** zero hits as a prop, a union type or a modifier.
+- **`placement`** ([Tooltip.tsx:32](../../components/ui/Tooltip/Tooltip.tsx), [Popover.tsx:21](../../components/ui/Popover/Popover.tsx), [Menu.tsx:125](../../components/ui/Menu/Menu.tsx)) and **`side`** ([Sheet.tsx:118](../../components/ui/Sheet/Sheet.tsx)) name a different concept: the side of a trigger a popup opens on, and the viewport edge a sheet slides in from. Their values are `top` · `bottom` · `left` · `right`, none of them a corner. `placement` is admitted in its own section and `side` in the `side` section below (#1927).
+
+**Why not `position`, the word TaskConsole's prop uses.** `position` names four concepts across `components/ui`: TaskConsole's screen corner, Pagination's row alignment (`left` · `center` · `right`, [Pagination.tsx:11](../../components/ui/Pagination/Pagination.tsx)), SidebarNavigation's layout mode (`fixed` · `sticky`, [SidebarNavigation.tsx:15](../../components/ui/SidebarNavigation/SidebarNavigation.tsx)), and a media side or label side (`start` · `end` on MediaTabs and SyncedMediaSteps, `above` · `below` on Meter). § 2 gives each word exactly one axis. Admitting `position` was tried first: rule 5 judges a union by its type name, so every `*Position` union became governed and the gate reported 11 live members (`PaginationPosition.left`, `SidebarPosition.sticky`, `MeterLabelPosition.above`, …). A word that would fail 11 members of four other concepts is not one axis.
+
+- **Axis:** corner: the viewport corner a fixed element docks to.
+- **Word:** `corner`. **Closed values:** `bottom-right` · `bottom-left`, which is `TaskConsolePosition` as it ships ([TaskConsole.tsx:16](../../components/ui/TaskConsole/TaskConsole.tsx)). The amendment admits what exists and invents no value.
+- **Migrates:** TaskConsole's `--bottom-right` · `--bottom-left` → `--corner-bottom-right` · `--corner-bottom-left`. The prop stays `position`; the class carries the axis word, as CardControl's `actionAlign` carries `--align-*`. No alias ships.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.corner`. `lint-naming-canon` reads it into `AXES` and `MODIFIER_AXES`, so `--corner-*` carries a blessed prefix and rule 5 default-denies any other value (`--corner-top-left`, a `*Corner` union with `top-left`). It is not prefix-judged: `bottom-right` and `bottom-left` are on no other union. Planted cases in `scripts/__tests__/lint-naming-canon.test.mjs` admit the two modifiers and deny the bare class, `--corner-top-left` and `ConsoleCorner.top-left`. **Baseline:** −2. The `--bottom-left` · `--bottom-right` rule-4 rows keyed to #1927 leave `tokens/naming-canon-baseline.json`; TaskConsole is the only block that emits either.
+
+### `service-line` axis (2026-11-17, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is which service line's surface paints a block. The `tint` paragraph under § Amendments (2026-11-16) refused to admit `tint` because BlockQuote already names the concept `serviceLine`. This amendment picks that one word. `emphasis` is not it: `emphasis` picks a palette (`brand` · `accent` · `inverse`), and a service line is a domain value with its own token family (`--surface-service-{line}-*`). Synonyms were searched across `components/ui/**/*.tsx` (stories and tests excluded) as prop keys, and across `components/ui/**/*.css` as `--{word}-*` modifiers, at this PR's base:
+
+- **`serviceLine`:** BlockQuote ([BlockQuote.tsx:17](../../components/ui/BlockQuote/BlockQuote.tsx)). [#788](https://github.com/brikdesigns/brik-bds/issues/788) renamed `audience` → `serviceLine` across the API, so this is the canonical word.
+- **`tint`:** Card only, the prop this amendment retires. No other prop or modifier.
+- **`audience`, `serviceCategory`, `hue`:** zero hits.
+- **`category`** is a live third spelling. ServiceTag ([ServiceTag.tsx:11](../../components/ui/ServiceTag/ServiceTag.tsx)) and RelationshipField ([RelationshipField.tsx:32](../../components/ui/RelationshipField/RelationshipField.tsx)) type it `ServiceLine`. Neither emits a `--category-*` modifier, so § 4 does not reach it. It is known drift against #788 and is not renamed here.
+
+**Why prefixed, when § 4's service-line exception allows the bare value.** The exception lets BlockQuote emit `bds-block-quote--marketing`. Card cannot: `bds-card--brand` is already its `variant="brand"` fill (see the exception's own scoping paragraph above), so a bare `--brand` service line would collide with it. Card takes the prefix.
+
+- **Axis:** service-line: the service line whose surface paints the block.
+- **Word:** `service-line` in a class, `serviceLine` as the prop. **Closed values:** `brand` · `marketing` · `information` · `product` · `back-office`, which is `CardServiceLine` as it ships ([Card.tsx:56](../../components/ui/Card/Card.tsx)): `ServiceLine` minus the deprecated `service` alias. The amendment admits what exists and invents no value.
+- **Migrates:** Card's `tint` prop → `serviceLine`, `tintInverse` → `serviceLineInverse`, type `CardTint` → `CardServiceLine`, and `--tint-{line}` → `--service-line-{line}`. No alias ships: no consumer passes `tint` (0 of 75 Card-rendering files in brik-client-portal and `web/*`, 2026-11-17).
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes["service-line"]`. `lint-naming-canon` reads it into `AXES` and `MODIFIER_AXES`, so `--service-line-*` carries a blessed prefix and rule 5 default-denies any other value (`--service-line-service`). Two mechanism changes:
+
+1. **Prefix-judged.** `service-line` joins `PREFIX_JUDGED_AXES`. `brand` is also an `emphasis` value, so judging unions by value would report a `'brand' | 'positive'` union as three axes instead of two.
+2. **A value on its own axis's list is not a retired word there.** `information` is retired as a valence (→ `info`). It is also the service line's name. A prefixed modifier is now checked against the retired-valence list only when its own axis's closed list does not hold the value. `--tone-information` still fails. `information` is the only retired valence word on any axis list.
+
+Rule 5's type-name match does not govern a `*ServiceLine` union: the axis key is hyphenated, and a type name never is. Planted cases in `scripts/__tests__/lint-naming-canon.test.mjs` admit the five modifiers and deny `--tint-brand`, `--service-line-service` and `--tone-information`. **Baseline:** −5. The `--tint-{brand,marketing,information,product,back-office}` rule-4 rows keyed to #1927 leave `tokens/naming-canon-baseline.json`.
+
+### `placement` axis (2026-11-18, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is the side of its anchor a floating element opens on. Three components already name it `placement` in their API: Tooltip (`TooltipPlacement`, [Tooltip.tsx:23](../../components/ui/Tooltip/Tooltip.tsx)), Popover (`PopoverPlacement`, [Popover.tsx:12](../../components/ui/Popover/Popover.tsx)) and Menu (`MenuPlacement`, [Menu.tsx:94](../../components/ui/Menu/Menu.tsx)). Tooltip and Menu already turn the prop into a modifier, and the gate baselined those as bare only because the prefix was on no axis list. Synonyms were searched across `components/ui/**` (`.tsx` + `.css`, stories and tests excluded) as prop keys and union type names:
+
+- **`side`:** Sheet only (`SheetSide`, [Sheet.tsx:38](../../components/ui/Sheet/Sheet.tsx)). That is the viewport edge a panel docks to, not a side of an anchor, so it is a different concept. Popover hands its `placement` to Radix as `side={placement}` ([Popover.tsx:98](../../components/ui/Popover/Popover.tsx)), which is Radix's word, not a BDS prop.
+- **`position`:** Pagination (`PaginationPosition`, `left | center | right`) is horizontal alignment. SidebarNavigation (`fixed | sticky`) is CSS `position`. TaskConsole's is the `corner` axis above. MediaTabs and SyncedMediaSteps (`start | end`) place media in a row. None names a side of an anchor.
+- **`anchorSide`, `edge`, `direction`:** zero hits.
+
+| Axis | Word | Closed values | Correct today |
+|---|---|---|---|
+| Side of its anchor a floating element opens on | `placement` | `top` · `bottom` · `left` · `right` | Tooltip, Popover (props); Menu (`bds-menu--placement-top`) |
+
+The value list is the three unions as they ship (Menu's is the `top | bottom` subset). The amendment admits what exists and invents no value.
+
+**Not admitted.** Meter's `labelPosition` (`above | below`) and TextInput's icon `before | after` use different values for a different relation (a label against a bar, an icon against text). They stay baselined under #1927 until their own search.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.placement`. `lint-naming-canon` reads it into `AXES` and `MODIFIER_AXES`, so `--placement-*` carries a blessed prefix and rule 5 default-denies any other value. `placement` joins `PREFIX_JUDGED_AXES`: `top`, `left` and `right` are also members of Pagination's and Sheet's unions, so judging by value would report those as a placement union. **Baseline:** −1. Only `--top` leaves `tokens/naming-canon-baseline.json`. `--bottom`, `--left` and `--right` stay because Sheet (`side`) and Pagination (`position`) still emit them bare, and each needs its own axis decision.
+
+### `side` axis (2026-11-18, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is the viewport edge a docked panel slides in from and anchors to. Sheet is the only component with it (`SheetSide`, [Sheet.tsx:38](../../components/ui/Sheet/Sheet.tsx)), and the prop is already `side` ([Sheet.tsx:118](../../components/ui/Sheet/Sheet.tsx)). Candidates checked:
+
+- **`placement`:** the side of an *anchor element* a floating popup opens on. Sheet docks to the *viewport*, so it is a different relation, and its value set (`right` · `left` · `bottom`, no `top`) is not the placement set.
+- **`corner`:** a viewport corner, not an edge.
+- **`align`:** content alignment along a row, not where a fixed panel docks.
+
+| Axis | Word | Closed values | Correct today |
+|---|---|---|---|
+| Viewport edge a docked panel anchors to | `side` | `right` · `left` · `bottom` | Sheet (`bds-sheet--side-right`) |
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.side`. `side` joins `PREFIX_JUDGED_AXES`: `left`, `right` and `bottom` are also members of `placement` and of Pagination's union, so judging by value would misread them. **Migrates:** Sheet `--right` · `--left` · `--bottom` → `--side-right` · `--side-left` · `--side-bottom`. Pagination's `--left` · `--center` · `--right` (prop `position`, horizontal alignment) go onto the existing `align` prefix as `--align-*`, with no amendment. No aliases ship. **Baseline:** −4. `--bottom`, `--center`, `--left` and `--right` leave `tokens/naming-canon-baseline.json`.
+
+### Button's `variant` is a curated style list (2026-11-19, [#3275](https://github.com/brikdesigns/brik-bds/issues/3275))
+
+OPERATOR CHOSE 2026-11-19: Button API → one flat `variant` list, and this ADR is amended so Button's variant is a curated list of styles.
+
+**What changes.** § 2 says one union carries one axis. Button no longer follows that. Its `variant` is a closed list of ten complete styles. Each member names one finished look, not a mix of axes:
+
+| Prop | Values | Class |
+|---|---|---|
+| `variant` | `primary` · `secondary` · `outline` · `ghost` · `inverse` · `on-color` · `negative` · `negative-outline` · `negative-ghost` · `positive` | `bds-button--variant-{value}` |
+
+**Why.** Button had three props for one choice: `variant`, `tone` and `emphasis`. Most pairings had no style. `tone="positive"` worked only on `primary`, and `emphasis` worked only on `primary`. The rest fell back silently. A designer picks one button style, so the API is one list. `IconButton` and `LinkButton` share the type.
+
+**This reverses two § 2 migrations for Button only.** Valence members (`negative`, `positive`) and hue members (`inverse`, `on-color`) return to `variant`. The `tone` and `emphasis` axes stay unchanged for every other component.
+
+**Is any other union a curated style list?** No. Rule 3's mixed-axis check was run over every union in `components/ui/**`. It flagged `ButtonVariant` and the three `*Tone#mixed` unions already baselined under #1925 (Badge, Banner, Counter). Those three are valence + emphasis splits that #1925 is migrating, not style lists, so they stay. The exception is `ButtonVariant` alone.
+
+**Retired for one minor.** `tone` and `emphasis` on Button, IconButton and LinkButton, the `ButtonTone` / `ButtonEmphasis` types, and Hero's `ctaEmphasis` stay as `@deprecated` and fold into `variant` with a dev warning. `danger`, `danger-outline`, `danger-ghost` and `destructive` fold the same way.
+
+**Enforcement.** `lint-naming-canon` gains `CURATED_STYLE_UNIONS = {ButtonVariant}`, which skips rule 3's mixed-axis check for that union only. The retired-word checks still run on it. Another union joins the set only by its own amendment. **Baseline:** −3. `--ghost`, `--outline` and `--inverse` leave `tokens/naming-canon-baseline.json` (`--inverse` once Footer #3273 also moved to `--variant-inverse`). `--primary` and `--secondary` stay because other components still emit them bare.
+
+### Shadow depths are named steps (2026-11-20, [#3058](https://github.com/brikdesigns/brik-bds/issues/3058))
+
+OPERATOR SAID 2026-11-19: "let's refactor our elevation logic to ensure alignment across figma and code".
+
+**What changes.** Figma's `elevation` collection names six depths: `shadow/{sunken,flat,subtle,raised,lifted,dramatic}`. The build composes each into one `--bds-shadow-{depth}` (#3058). A token name is its Figma path (#3278), so these six words are the `--shadow-*` steps. **Closed steps, low to high:** `sunken` · `flat` · `subtle` · `raised` · `lifted` · `dramatic`.
+
+**Does an existing § 3 word name these depths?** No. The t-shirt rungs `sm` / `md` / `lg` / `xl` were the old hand-written names, and they do not map one to one: `sunken` sits below the page and `flat` is a zero shadow, which no t-shirt rung describes. `subtle` is also an `appearance` value (§ 2). That is a prop axis, not a token step, so the two never meet in one name.
+
+**For one minor, the family mixes vocabularies.** The DEPRECATED `--bds-shadow-{sm,md,lg}` aliases in `tokens/gap-fills.css` share the family. Rule 1 would then flag the depth words. The family-step entry is what keeps them legal, and it stays legal after the aliases drop.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `steps.familySteps["--shadow-"]`. Rule 1 allows the six words in that family only. `scripts/__tests__/lint-naming-canon.test.mjs` plants an admitted `--bds-shadow-raised` and a denied `--bds-gap-raised`. The `blur-radius` scale slot leaves the grammar with its four hand-written tokens, which had no Figma variable behind them. No new rule, script or workflow. **Baseline:** the alias rows are rule 9, not rule 1. `--bds-shadow-{sm,md,lg}` join rule 9 under #3058, the shape #3274 used for its deprecated aliases. `--bds-shadow-overlay` moves from #3239 to #3058. All four leave with the alias block.
+

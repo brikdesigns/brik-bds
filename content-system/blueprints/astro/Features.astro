@@ -15,6 +15,24 @@
  * re-bind `--brand-primary` for that subtree. Drives brikdesigns.com's "Other
  * Service Lines" cross-sell module.
  *
+ * `layout="alternating-split"` (#3189, key `features_alternating_split`) is the
+ * block's second layout: one row per item, a text side (`__content`) and a media
+ * side (`__media`), the sides swapped on every even row from the tablet rung up.
+ * Rows read `item.title`, `item.description`, `item.href` (renders the optional
+ * link) and `item.imageUrl`; an item with no image renders the
+ * `bds-blueprint-section__missing` placeholder. DOM order is always text first,
+ * so rows stack text-then-media below the tablet rung and the swap is `order`
+ * only. `mediaPosition="start"` starts on the media side. The `grid` default
+ * is unchanged. The React twin takes the same `layout` / `mediaPosition` props.
+ *
+ * `layout="bento"` (#3188, key `features_bento_asymmetric`) is the third layout:
+ * an asymmetric card grid. The first item is the featured cell, spanning two rows
+ * from the desktop rung up; the rest are equal cells, each a media box over its
+ * text. An item carrying `item.stat` renders a stat cell (the figure, with
+ * `item.title` as the descriptor) instead of media. A cell with no `imageUrl`
+ * renders the `bds-blueprint-section__missing` placeholder. Below the tablet rung
+ * the cells stack in one column. `columns` and `mediaPosition` are ignored.
+ *
  * Spec: PR #477 (design proposal archived to brik-rag: blueprint-proposal-features-3col-branded-dark).
  *
  * Contract: BlueprintProps.
@@ -75,7 +93,14 @@
  * 3.78:1 at 14px regular per BDS contrast burndown #40 — bold weight + size
  * promotion gets it into compliant range).
  */
-import type { BlueprintAlign, BlueprintColumns, BlueprintProps, KnownBlueprintKey } from './types';
+import type {
+  BlueprintAlign,
+  BlueprintColumns,
+  BlueprintMediaPosition,
+  BlueprintProps,
+  FeaturesLayout,
+  KnownBlueprintKey,
+} from './types';
 import { resolveSectionTitles } from './types';
 
 // Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
@@ -98,22 +123,46 @@ interface Props extends BlueprintProps {
    * `bds-features--cols-*`. Matches the React twin.
    */
   columns?: BlueprintColumns;
+  /**
+   * Layout (structure axis, ADR-039, #3189). `grid` (default) is the card grid;
+   * `alternating-split` renders text + media rows with the sides swapped on even
+   * rows. Emits `bds-features--alternating-split`. Matches the React twin.
+   */
+  layout?: FeaturesLayout;
+  /**
+   * `alternating-split` media-side start (structure axis, ADR-039). `end`
+   * (default) puts the first row's media after its text; `start` puts it first.
+   * Emits `data-media-position="start"`; ignored by `grid`. Matches the React twin.
+   */
+  mediaPosition?: BlueprintMediaPosition;
 }
 
-const { section, blueprintKey, align = 'center', columns } = Astro.props;
+const {
+  section,
+  blueprintKey,
+  align = 'center',
+  columns,
+  layout = 'grid',
+  mediaPosition = 'end',
+} = Astro.props;
+const isSplit = layout === 'alternating-split';
+const isBento = layout === 'bento';
 const titles = resolveSectionTitles(section);
 const titleId = `${section.sectionKey}-title`;
 const sectionClass = [
   'bds-blueprint-section',
   'bds-features',
   align === 'left' ? 'bds-features--align-left' : null,
-  columns ? `bds-features--cols-${columns}` : null,
+  isSplit ? 'bds-features--alternating-split' : null,
+  isBento ? 'bds-features--bento' : null,
+  !isSplit && !isBento && columns ? `bds-features--cols-${columns}` : null,
 ].filter(Boolean).join(' ');
 ---
 
 <section
   class={sectionClass}
   data-blueprint-key={blueprintKey}
+  data-media-position={isSplit && mediaPosition !== 'end' ? mediaPosition : undefined}
   aria-labelledby={titles.title ? titleId : undefined}
 >
   <div class="bds-blueprint-section__container">
@@ -135,6 +184,96 @@ const sectionClass = [
 
     <ul class="bds-features__grid" role="list">
       {section.items.map((item) => {
+        if (isBento) {
+          const isFeatured = section.items.indexOf(item) === 0;
+          const figure = item.stat;
+          const hasFigure = Boolean(figure);
+          const cellClass = [
+            'bds-features__item',
+            isFeatured ? 'bds-features__item--featured' : null,
+            hasFigure ? 'bds-features__item--stat' : null,
+          ].filter(Boolean).join(' ');
+          return (
+            <li class={cellClass}>
+              {figure ? (
+                <p class="bds-features__stat">{figure}</p>
+              ) : (
+                <div class="bds-features__media">
+                  {item.imageUrl ? (
+                    <img
+                      src={item.imageUrl}
+                      alt={item.imageAlt ?? ''}
+                      class="bds-features__image"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <div
+                      class="bds-blueprint-section__missing"
+                      data-content-needed="feature_image_url"
+                      role="presentation"
+                    >
+                      <p class="bds-blueprint-section__missing-label">
+                        Feature image missing for this client.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              )}
+              <div class="bds-features__content">
+                <h3 class="bds-features__title">{item.title}</h3>
+                {item.description && (
+                  <p class="bds-features__description">{item.description}</p>
+                )}
+                {item.href && (
+                  <a class="bds-features__cta" href={item.href}>
+                    Learn more
+                    <span aria-hidden="true" class="bds-features__cta-arrow">→</span>
+                  </a>
+                )}
+              </div>
+            </li>
+          );
+        }
+        if (isSplit) {
+          return (
+            <li class="bds-features__item">
+              <div class="bds-features__content">
+                <h3 class="bds-features__title">{item.title}</h3>
+                {item.description && (
+                  <p class="bds-features__description">{item.description}</p>
+                )}
+                {item.href && (
+                  <a class="bds-features__cta" href={item.href}>
+                    Learn more
+                    <span aria-hidden="true" class="bds-features__cta-arrow">→</span>
+                  </a>
+                )}
+              </div>
+              <div class="bds-features__media">
+                {item.imageUrl ? (
+                  <img
+                    src={item.imageUrl}
+                    alt={item.imageAlt ?? ''}
+                    class="bds-features__image"
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  <div
+                    class="bds-blueprint-section__missing"
+                    data-content-needed="feature_image_url"
+                    role="presentation"
+                  >
+                    <p class="bds-blueprint-section__missing-label">
+                      Feature image missing for this client.
+                    </p>
+                  </div>
+                )}
+              </div>
+            </li>
+          );
+        }
         const serviceLine = item.serviceLine;
         return (
         <li class="bds-features__item">
@@ -297,8 +436,8 @@ const sectionClass = [
     overflow: hidden;
     transform: translateY(0) scale(1);
     transition:
-      transform var(--bds-duration-md) var(--bds-ease-out),
-      box-shadow var(--bds-duration-md) var(--bds-ease-out);
+      transform var(--bds-duration-200) var(--bds-ease-out),
+      box-shadow var(--bds-duration-200) var(--bds-ease-out);
   }
 
   .bds-features__card:hover {
@@ -391,11 +530,259 @@ const sectionClass = [
 
   .bds-features__cta-arrow {
     display: inline-block;
-    transition: transform var(--bds-duration-md) var(--bds-ease-out);
+    transition: transform var(--bds-duration-200) var(--bds-ease-out);
   }
 
   .bds-features__card-link:hover .bds-features__cta-arrow,
   .bds-features__card-link:focus-visible .bds-features__cta-arrow {
     transform: translateX(4px);
+  }
+
+  /* ── --alternating-split: layout (#3189) ─────────────────────────────────────
+     One row per item: a text side (`__content`) and a media side (`__media`), the
+     sides swapped on every even row from the tablet rung up. DOM order is always
+     text first (the reading order), so the swap is `order` only and the rows stack
+     text-then-media below the tablet rung with no alternation. `mediaPosition=
+     "start"` (`data-media-position`) starts on the media side instead. The surface
+     is the page surface, not the dark `grid` default — the `--bds-features-*`
+     hooks still rethemes it. Mirrors ../react/Features.css. */
+
+  .bds-features--alternating-split {
+    background: var(--bds-features-background, var(--bds-features-bg, var(--bds-page-primary)));
+    color: var(--bds-text-primary);
+  }
+
+  .bds-features--alternating-split .bds-features__subtitle {
+    color: var(--bds-text-brand-primary);
+    opacity: 1;
+  }
+
+  .bds-features--alternating-split .bds-features__header .bds-features__title {
+    color: var(--bds-text-primary);
+  }
+
+  .bds-features--alternating-split .bds-features__lead {
+    color: var(--bds-text-secondary);
+    opacity: 1;
+  }
+
+  /* The default 1 → 2 → 3 card ramp is replaced by a single column of rows. */
+  .bds-features--alternating-split .bds-features__grid {
+    grid-template-columns: 1fr;
+    gap: var(--bds-features-gap, var(--bds-gap-huge));
+  }
+
+  .bds-features--alternating-split .bds-features__item {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--bds-gap-xl);
+    align-items: center;
+  }
+
+  @media (min-width: 768px) {
+    .bds-features--alternating-split .bds-features__item {
+      grid-template-columns: repeat(2, 1fr);
+      gap: var(--bds-gap-huge);
+    }
+
+    .bds-features--alternating-split .bds-features__item:nth-child(even) .bds-features__media {
+      order: -1;
+    }
+
+    .bds-features--alternating-split[data-media-position='start'] .bds-features__item:nth-child(odd) .bds-features__media {
+      order: -1;
+    }
+
+    .bds-features--alternating-split[data-media-position='start'] .bds-features__item:nth-child(even) .bds-features__media {
+      order: 0;
+    }
+  }
+
+  .bds-features--alternating-split .bds-features__content {
+    padding: 0;
+    flex: none;
+    align-items: flex-start;
+  }
+
+  .bds-features--alternating-split .bds-features__content .bds-features__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-lg);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bds-features--alternating-split .bds-features__description {
+    color: var(--bds-text-secondary);
+  }
+
+  .bds-features--alternating-split .bds-features__cta {
+    margin-top: 0;
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bds-features--alternating-split .bds-features__cta:hover .bds-features__cta-arrow,
+  .bds-features--alternating-split .bds-features__cta:focus-visible .bds-features__cta-arrow {
+    transform: translateX(4px);
+  }
+
+  .bds-features--alternating-split .bds-features__media {
+    aspect-ratio: var(--bds-aspect-4-3);
+    padding: 0;
+    border-radius: var(--bds-features-card-radius, var(--bds-border-radius-lg));
+  }
+
+  .bds-features--alternating-split .bds-features__image {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: cover;
+  }
+
+  .bds-features--alternating-split .bds-features__media > [data-content-needed] {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: inherit;
+  }
+
+  /* ── --bento: layout (#3188) ─────────────────────────────────────────────────
+     An asymmetric card grid on the page surface. One column below the tablet rung;
+     two from the tablet rung (the featured cell spans the row); from the desktop
+     rung a 2fr 1fr 1fr grid of two rows where the featured cell (the first item)
+     spans both. Each cell is a media box over its text; a `--stat` cell is a
+     brand-filled figure. Mirrors ../react/Features.css. */
+
+  .bds-features--bento {
+    background: var(--bds-features-background, var(--bds-features-bg, var(--bds-page-primary)));
+    color: var(--bds-text-primary);
+  }
+
+  .bds-features--bento .bds-features__subtitle {
+    color: var(--bds-text-brand-primary);
+    opacity: 1;
+  }
+
+  .bds-features--bento .bds-features__header .bds-features__title {
+    color: var(--bds-text-primary);
+  }
+
+  .bds-features--bento .bds-features__lead {
+    color: var(--bds-text-secondary);
+    opacity: 1;
+  }
+
+  .bds-features--bento .bds-features__grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 1fr;
+    gap: var(--bds-features-gap, var(--bds-gap-lg));
+  }
+
+  .bds-features--bento .bds-features__item {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: var(--bds-surface-secondary);
+    border-radius: var(--bds-features-card-radius, var(--bds-border-radius-lg));
+  }
+
+  @media (min-width: 768px) {
+    .bds-features--bento .bds-features__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .bds-features--bento .bds-features__item--featured {
+      grid-column: span 2;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .bds-features--bento .bds-features__grid {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+
+    .bds-features--bento .bds-features__item--featured {
+      grid-column: auto;
+      grid-row: span 2;
+    }
+  }
+
+  .bds-features--bento .bds-features__media {
+    flex: 1 1 auto;
+    aspect-ratio: var(--bds-aspect-4-3);
+    padding: 0;
+  }
+
+  .bds-features--bento .bds-features__item--featured .bds-features__media {
+    aspect-ratio: var(--bds-aspect-16-9);
+  }
+
+  @media (min-width: 992px) {
+    .bds-features--bento .bds-features__item--featured .bds-features__media {
+      aspect-ratio: auto;
+    }
+  }
+
+  .bds-features--bento .bds-features__image {
+    width: 100%;
+    height: 100%;
+    max-height: none;
+    object-fit: cover;
+  }
+
+  .bds-features--bento .bds-features__media > [data-content-needed] {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
+  }
+
+  .bds-features--bento .bds-features__content {
+    flex: none;
+    padding: var(--bds-padding-lg);
+  }
+
+  .bds-features--bento .bds-features__content .bds-features__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-md);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bds-features--bento .bds-features__description {
+    color: var(--bds-text-secondary);
+  }
+
+  .bds-features--bento .bds-features__cta {
+    margin-top: 0;
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bds-features--bento .bds-features__cta:hover .bds-features__cta-arrow,
+  .bds-features--bento .bds-features__cta:focus-visible .bds-features__cta-arrow {
+    transform: translateX(4px);
+  }
+
+  .bds-features--bento .bds-features__item--stat {
+    justify-content: center;
+    background: var(--bds-background-brand-primary);
+  }
+
+  .bds-features--bento .bds-features__stat {
+    margin: 0;
+    padding: var(--bds-padding-lg) var(--bds-padding-lg) 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-huge);
+    font-weight: var(--bds-font-weight-extrabold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-on-color-dark);
+  }
+
+  .bds-features--bento .bds-features__item--stat .bds-features__content .bds-features__title,
+  .bds-features--bento .bds-features__item--stat .bds-features__description {
+    color: var(--bds-text-on-color-dark);
   }
 </style>

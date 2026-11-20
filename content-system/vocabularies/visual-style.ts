@@ -56,6 +56,7 @@ export interface VisualStylePreset {
   spacingMode?: SpacingMode;
   typographyMode?: TypographyMode;
   radiusMode?: RadiusMode;
+  /** @deprecated #3058 — no elevation axis; no preset sets it. Removed next minor. */
   elevationMode?: ElevationMode;
   borderWidthMode?: BorderWidthMode;
   animationTier?: AnimationTier;
@@ -69,19 +70,19 @@ export interface VisualStylePreset {
  * wants no atmosphere layer says `none`.
  */
 export const VISUAL_STYLE_PRESETS: Readonly<Record<VisualStyle, VisualStylePreset>> = {
-  Minimal:    { themeMode: 'light', atmosphere: 'none', spacingMode: 'spacious', typographyMode: 'comfortable', radiusMode: 'sharp', elevationMode: 'flat', borderWidthMode: 'thin', animationTier: 'subtle' },
-  Bold:       { atmosphere: 'cinematic-dramatic', spacingMode: 'comfortable', typographyMode: 'expressive', radiusMode: 'sharp', elevationMode: 'dramatic', borderWidthMode: 'thick', animationTier: 'expressive' },
-  Editorial:  { themeMode: 'light', atmosphere: 'editorial-luxury', spacingMode: 'spacious', typographyMode: 'spacious', radiusMode: 'sharp', elevationMode: 'flat', borderWidthMode: 'thin', animationTier: 'moderate' },
-  Playful:    { themeMode: 'light', atmosphere: 'warm-soft', spacingMode: 'comfortable', typographyMode: 'expressive', radiusMode: 'pill', elevationMode: 'lifted', animationTier: 'expressive' },
-  Luxurious:  { atmosphere: 'editorial-luxury', spacingMode: 'spacious', typographyMode: 'spacious', radiusMode: 'sharp', elevationMode: 'lifted', borderWidthMode: 'thin', animationTier: 'subtle' },
-  Modern:     { themeMode: 'light', atmosphere: 'none', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'round', elevationMode: 'lifted', borderWidthMode: 'thin', animationTier: 'moderate' },
-  Classic:    { themeMode: 'light', atmosphere: 'warm-soft', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'round', elevationMode: 'lifted', borderWidthMode: 'thin', animationTier: 'subtle' },
+  Minimal:    { themeMode: 'light', atmosphere: 'none', spacingMode: 'spacious', typographyMode: 'comfortable', radiusMode: 'sharp', borderWidthMode: 'thin', animationTier: 'subtle' },
+  Bold:       { atmosphere: 'cinematic-dramatic', spacingMode: 'comfortable', typographyMode: 'expressive', radiusMode: 'sharp', borderWidthMode: 'thick', animationTier: 'expressive' },
+  Editorial:  { themeMode: 'light', atmosphere: 'editorial-luxury', spacingMode: 'spacious', typographyMode: 'spacious', radiusMode: 'sharp', borderWidthMode: 'thin', animationTier: 'moderate' },
+  Playful:    { themeMode: 'light', atmosphere: 'warm-soft', spacingMode: 'comfortable', typographyMode: 'expressive', radiusMode: 'pill', animationTier: 'expressive' },
+  Luxurious:  { atmosphere: 'editorial-luxury', spacingMode: 'spacious', typographyMode: 'spacious', radiusMode: 'sharp', borderWidthMode: 'thin', animationTier: 'subtle' },
+  Modern:     { themeMode: 'light', atmosphere: 'none', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'round', borderWidthMode: 'thin', animationTier: 'moderate' },
+  Classic:    { themeMode: 'light', atmosphere: 'warm-soft', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'round', borderWidthMode: 'thin', animationTier: 'subtle' },
   Dark:       { themeMode: 'dark', atmosphere: 'cinematic-dramatic', animationTier: 'moderate' },
   Light:      { themeMode: 'light', atmosphere: 'none' },
-  Colorful:   { themeMode: 'light', atmosphere: 'warm-soft', spacingMode: 'comfortable', typographyMode: 'expressive', radiusMode: 'round', elevationMode: 'lifted', animationTier: 'expressive' },
-  Monochrome: { atmosphere: 'none', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'sharp', elevationMode: 'flat', borderWidthMode: 'thin', animationTier: 'subtle' },
-  Textural:   { themeMode: 'light', atmosphere: 'organic-textured', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'round', elevationMode: 'lifted', borderWidthMode: 'thick', animationTier: 'moderate' },
-  Brutalist:  { themeMode: 'light', atmosphere: 'none', spacingMode: 'compact', typographyMode: 'comfortable', radiusMode: 'sharp', elevationMode: 'flat', borderWidthMode: 'thick', animationTier: 'subtle' },
+  Colorful:   { themeMode: 'light', atmosphere: 'warm-soft', spacingMode: 'comfortable', typographyMode: 'expressive', radiusMode: 'round', animationTier: 'expressive' },
+  Monochrome: { atmosphere: 'none', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'sharp', borderWidthMode: 'thin', animationTier: 'subtle' },
+  Textural:   { themeMode: 'light', atmosphere: 'organic-textured', spacingMode: 'comfortable', typographyMode: 'comfortable', radiusMode: 'round', borderWidthMode: 'thick', animationTier: 'moderate' },
+  Brutalist:  { themeMode: 'light', atmosphere: 'none', spacingMode: 'compact', typographyMode: 'comfortable', radiusMode: 'sharp', borderWidthMode: 'thick', animationTier: 'subtle' },
 };
 
 /**

@@ -18,7 +18,7 @@ export interface PageHeaderActionsProps {
    */
   secondary?: ReactNode;
   /**
-   * Destructive action (`Button variant="negative"` or an equivalent
+   * Destructive action (`Button tone="negative"` or an equivalent
    * wrapper). Rendered far left, visually separated from the affirmative
    * actions so it is never adjacent to the primary.
    */

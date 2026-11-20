@@ -79,6 +79,15 @@ export interface TabBarProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 /**
+ * Class for a variant. `text-underline` is the one member emitted with its axis
+ * prefix (`bds-tab-bar--variant-text-underline`) — ADR-033 § 4 rejects a bare
+ * modifier, and the older bare siblings are baselined, not a licence to add one.
+ */
+function tabBarVariantClass(variant: TabBarVariant): string {
+  return variant === 'text-underline' ? 'bds-tab-bar--variant-text-underline' : `bds-tab-bar--${variant}`;
+}
+
+/**
  * TabBar — BDS horizontal tab navigation
  *
  * Four visual variants:
@@ -90,7 +99,7 @@ export interface TabBarProps extends HTMLAttributes<HTMLDivElement> {
  * Use `onColor` for placement on dark/brand backgrounds.
  *
  * All variant / active / on-color styling lives in `TabBar.css`, keyed on the
- * variant class, `[aria-selected]`, and the `--on-color` modifier — so external
+ * variant class, `[aria-selected]`, and the `--emphasis-on-color` modifier — so external
  * rules (e.g. PageHeader's tabs slot) can override via normal cascade rather
  * than fighting inline-style specificity.
  *
@@ -126,8 +135,8 @@ export function TabBar({
   style,
   ...props
 }: TabBarProps) {
-  const variantClass = `bds-tab-bar--${variant}`;
-  const onColorClass = onColor ? 'bds-tab-bar--on-color' : '';
+  const variantClass = tabBarVariantClass(variant);
+  const onColorClass = onColor ? 'bds-tab-bar--emphasis-on-color' : '';
   const scrollClass = overflow === 'scroll' && orientation === 'horizontal' ? 'bds-tab-bar--scroll' : '';
 
   // The tabs keyboard contract only engages once panels are wired, so existing

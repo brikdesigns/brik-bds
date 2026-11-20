@@ -83,8 +83,8 @@ describe('Card anatomy API (ADR-038)', () => {
   it('layout="metric" renders the metric surface with label + value (no numeric formatting)', async () => {
     const el = await mount(h(Card as never, { layout: 'metric', overline: 'Revenue', title: '$48,250' }));
     expect(el.querySelector('.bds-card--layout-metric')).not.toBeNull();
-    expect(el.querySelector('.bds-card__metric-label')?.textContent).toBe('Revenue');
-    expect(el.querySelector('.bds-card__metric-value')?.textContent).toBe('$48,250');
+    expect(el.querySelector('.bds-stat__label')?.textContent).toBe('Revenue');
+    expect(el.querySelector('.bds-stat__value')?.textContent).toBe('$48,250');
   });
 
   it('layout="control" renders the control block with title', async () => {
@@ -103,11 +103,11 @@ describe('Card anatomy API (ADR-038)', () => {
       detail: '$650 • one time',
     }));
     expect(el.querySelector('.bds-card__metric-media')?.textContent).toBe('★');
-    expect(el.querySelector('.bds-card__metric-detail')?.textContent).toBe('$650 • one time');
+    expect(el.querySelector('.bds-stat__detail')?.textContent).toBe('$650 • one time');
     // media/detail are additive — a plain metric still omits both.
     const plain = await mount(h(Card as never, { layout: 'metric', overline: 'X', title: '1' }));
     expect(plain.querySelector('.bds-card__metric-media')).toBeNull();
-    expect(plain.querySelector('.bds-card__metric-detail')).toBeNull();
+    expect(plain.querySelector('.bds-stat__detail')).toBeNull();
   });
 
   // #2508 — `insetPadding` picks the inset frame's --padding-* step. The
@@ -175,13 +175,13 @@ describe('Card anatomy API (ADR-038)', () => {
     expect(rootEl.textContent).toContain('Only a title');
   });
 
-  it('layout="control" connectionStatus="linked" shows "Linked" with a neutral (non-green) Dot', async () => {
+  it('layout="control" connectionStatus="disabled" shows "Disabled" with a neutral (non-green) Dot', async () => {
     const el = await mount(
-      h(Card as never, { layout: 'control', title: 'Source', connectionStatus: 'linked' }),
+      h(Card as never, { layout: 'control', title: 'Source', connectionStatus: 'disabled' }),
     );
-    const status = el.querySelector('.bds-card__control-status--linked');
+    const status = el.querySelector('.bds-card__control-status--status-disabled');
     expect(status).not.toBeNull();
-    expect(status?.querySelector('.bds-card__control-status-label')?.textContent).toBe('Linked');
+    expect(status?.querySelector('.bds-card__control-status-label')?.textContent).toBe('Disabled');
     expect(status?.querySelector('.bds-dot--tone-neutral')).not.toBeNull();
     expect(status?.querySelector('.bds-dot--tone-positive')).toBeNull();
   });

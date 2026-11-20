@@ -31,13 +31,19 @@ export type KnownBlueprintKey =
   | 'hero_split'
   | 'hero_split_image_card_overlay'
   | 'hero_interior_minimal'
+  | 'hero_centered'
+  | 'hero_statement'
   | 'two_column_detail'
   | 'card_grid'
   | 'callout_split'
   | 'feature_grid'
+  | 'features_alternating_split'
+  | 'features_bento_asymmetric'
   | 'story_split'
   | 'stats_bar'
   | 'testimonials_featured_large'
+  | 'testimonials_card_grid'
+  | 'process_steps_numbered'
   | 'cta_centered'
   | 'cta_split_contact'
   | 'logo_wall'
@@ -68,13 +74,19 @@ export const WIRED_BLUEPRINT_KEYS = [
   'hero_split',
   'hero_split_image_card_overlay',
   'hero_interior_minimal',
+  'hero_centered',
+  'hero_statement',
   'two_column_detail',
   'card_grid',
   'callout_split',
   'feature_grid',
+  'features_alternating_split',
+  'features_bento_asymmetric',
   'story_split',
   'stats_bar',
   'testimonials_featured_large',
+  'testimonials_card_grid',
+  'process_steps_numbered',
   'cta_split_contact',
   'cta_centered',
   'logo_wall',
@@ -112,7 +124,7 @@ export type WiredBlueprintKey = (typeof WIRED_BLUEPRINT_KEYS)[number];
  *   `centered`          — single centred column, no media; measure capped at
  *                         `--bds-content-width-md`.
  */
-export type HeroLayout = 'split' | 'interior-minimal' | 'with-pricing-card' | 'centered';
+export type HeroLayout = 'split' | 'interior-minimal' | 'with-pricing-card' | 'centered' | 'statement';
 
 /**
  * `bds-cta` layouts.
@@ -131,6 +143,24 @@ export type CtaLayout = 'default' | 'split';
  * Adding a third layout still means adding it here first.
  */
 export type CardGridLayout = 'card-grid' | 'two-column-list';
+
+/**
+ * `bds-features` layouts.
+ *   `grid`              — the responsive grid of brand-coloured feature cards on
+ *                         the dark default surface.
+ *   `alternating-split` — one row per item, each a text side and a media side,
+ *                         the sides swapped on every even row (from the tablet
+ *                         rung up; rows stack text-then-media below it). Takes
+ *                         the `mediaPosition` axis to start on the media side.
+ *   `bento`             — an asymmetric card grid: the first item is the featured
+ *                         cell, spanning two rows beside the others from the
+ *                         desktop rung up; an item carrying `stat` renders a stat
+ *                         cell (the figure plus a descriptor) instead of media.
+ *                         Collapses to one column below the tablet rung.
+ *
+ * The React `<Features>` takes the same `layout` prop.
+ */
+export type FeaturesLayout = 'grid' | 'alternating-split' | 'bento';
 
 /**
  * Structure axis — content placement (ADR-039 §Decision 1, #2492).
@@ -425,6 +455,12 @@ export interface BlueprintSectionContent {
      */
     readonly href?: string;
     readonly imageUrl?: string;
+    /**
+     * Headline figure for a `bento` stat cell (`features_bento_asymmetric`),
+     * e.g. `98%`. An item carrying it renders the figure with `title` as its
+     * descriptor and no media. Additive, optional.
+     */
+    readonly stat?: string;
     /** ServiceLine slug — see `ServiceTag` props in `@brikdesigns/bds`.
      * `back-office` is canonical; `service` is a @deprecated alias. */
     readonly category?: 'brand' | 'marketing' | 'information' | 'product' | 'back-office' | 'service';
@@ -448,6 +484,16 @@ export interface BlueprintSectionContent {
      * ungrouped. Additive, optional — blueprints that don't read it are unaffected.
      */
     readonly group?: string;
+    /**
+     * Star rating (1–5) for `testimonials_card_grid`. Stars render only when
+     * supplied; omitted → no rating row. Additive, optional.
+     */
+    readonly rating?: number;
+    /**
+     * Author photo for `testimonials_card_grid`. Renders only when supplied —
+     * there is no generated or third-party fallback avatar. Additive, optional.
+     */
+    readonly avatarUrl?: string;
     /**
      * Per-item video source for the media axis (`media: 'video'`, ADR-039
      * #2493/#2518). Consumed by `testimonials_featured_large`, which renders a
@@ -572,7 +618,7 @@ export interface BlueprintSectionContent {
   /**
    * Structure axis — per-section item-grid column count (ADR-039 §Decision 1).
    * Applied over the registry default by `BlueprintDispatcher`; read by
-   * blocks that declare a `columns` prop (`Features`, `CardGrid`).
+   * blocks that declare a `columns` prop (`Features`, `CardGrid`, `TestimonialsCardGrid`).
    */
   readonly columns?: BlueprintColumns;
   /**

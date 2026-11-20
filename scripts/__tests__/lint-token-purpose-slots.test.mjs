@@ -57,7 +57,6 @@ const CLEAN = `:root {
   --bds-shadow-blur-400: 8px;
   --bds-shadow-offset-300: 8px;
   --bds-shadow-spread-200: 4px;
-  --bds-blur-radius-md: 12px;
   --bds-duration-200: 200ms;
   --bds-delay-100: 100ms;
   --bds-iteration-infinite: infinite;
@@ -71,8 +70,7 @@ const CLEAN = `:root {
   --bds-label-sm: var(--bds-font-size-100);
   --bds-subtitle-md: var(--bds-font-size-100);
   --bds-icon-md: var(--bds-font-size-100);
-  --bds-shadow-md: 0px 4px 12px rgba(0, 0, 0, 0.12);
-  --bds-box-shadow-md: var(--bds-shadow-md);
+  --bds-shadow-raised: 0px 4px 12px rgba(0, 0, 0, 0.12);
   --bds-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --bds-content-width-wide: 1024px;
   --bds-measure-md: 60ch;

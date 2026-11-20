@@ -79,11 +79,11 @@ export function Avatar({
     <div
       className={bdsClass(
         'bds-avatar',
-        `bds-avatar--${size}`,
+        `bds-avatar--size-${size}`,
         // Color only styles the initials fill; when an image loads it covers
         // the background, so applying the class unconditionally is harmless.
-        color && !showImage ? `bds-avatar--accent-${color}` : undefined,
-        appearance === 'subtle' && !showImage ? 'bds-avatar--subtle' : undefined,
+        color && !showImage ? `bds-avatar--color-${color}` : undefined,
+        appearance === 'subtle' && !showImage ? 'bds-avatar--appearance-subtle' : undefined,
         className,
       )}
       style={style}
@@ -101,7 +101,7 @@ export function Avatar({
       )}
       {status && (
         <div
-          className={bdsClass('bds-avatar__status', `bds-avatar__status--${status}`)}
+          className={bdsClass('bds-avatar__status', `bds-avatar__status--status-${status}`)}
           title={status}
         />
       )}

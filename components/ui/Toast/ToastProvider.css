@@ -18,7 +18,7 @@
 
 .bds-toast-provider__item {
   pointer-events: auto;
-  animation: bds-slide-up var(--bds-duration-md) var(--bds-ease-out);
+  animation: bds-slide-up var(--bds-duration-200) var(--bds-ease-out);
 }
 
 @media (prefers-reduced-motion: reduce) {

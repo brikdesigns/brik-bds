@@ -13,6 +13,9 @@
  *   split             — `bds-hero--split`              content column + `media` column
  *   with-pricing-card — `bds-hero--with-pricing-card`  interior split; content trail +
  *                        an `aside` media card (image + optional price overlay)
+ *   centered          — `bds-hero--centered`           single centred column, no media
+ *   statement         — `bds-hero--statement`          left-aligned short headline + one CTA,
+ *                        eyebrow with a rule, optional `decoration` column (no media)
  *
  * `media` is an optional composed slot (the split's / pricing-card's second
  * column). In the dispatched path (below) the `split` layout builds the image
@@ -31,16 +34,20 @@
  *
  * `breadcrumb` and `eyebrow` are optional composed nodes (used by
  * `--with-pricing-card`); they render above the eyebrow text when present and
- * are absent for the simpler layouts. `ctaVariant` lets the pricing-card
- * variant render its `inverse` CTA against the service-line-tinted surface.
+ * are absent for the simpler layouts. `ctaVariant="inverse"` lets the pricing-card
+ * variant render its CTA against the service-line-tinted surface.
  * `data-service-line` (a plain attribute forwarded via `...rest`) drives the
- * service-token cascade in `Hero.css`.
+ * service-token cascade in `Hero.css`. `data-inverse-scope="card"` (opt-in, same
+ * forwarding) is for a hero whose section is a light band and only the media card
+ * paints `-inverse`: in dark mode it skips the `-on-dark` content-text flips (text
+ * stays `-on-light`) and pins the card's primary CTA to the `-on-dark` fill +
+ * grayscale-950 text. Unset, the default hero contract is unchanged (brik-bds#1028).
  *
  * Hero blueprints own the page's singular `h1`.
  *
  * Slots (all pass `scripts/slot-pattern-check.mjs`):
  *   bds-hero, __container, __content, __breadcrumb, __icon, __icon-slot,
- *   __subtitle, __title, __lead, __media, __image, __missing, __missing-label,
+ *   __subtitle, __title, __lead, __decoration, __media, __image, __missing, __missing-label,
  *   __media-card, __image-frame, __price, __price-label, __price-value
  *
  * Composed with the shared shell (ADR-021): `bds-blueprint-section` on the root,
@@ -55,12 +62,12 @@
  * a11y: `<section>` with `aria-labelledby` → the h1. Eyebrow is prose, not a
  * heading. CTA is a `Button` with a :focus-visible ring.
  *
- * @summary Page hero — content column with an `--interior-minimal` (no media), `--split` (media column), `--with-pricing-card` (content trail + image/price card), or `--centered` (single centred column) layout.
+ * @summary Page hero — content column with an `--interior-minimal` (no media), `--split` (media column), `--with-pricing-card` (content trail + image/price card), `--centered` (single centred column), or `--statement` (left-aligned short headline + one CTA) layout.
  */
 import { type HTMLAttributes, type ReactNode } from 'react';
 
 import { Button } from '../../../components';
-import type { ButtonVariant } from '../../../components/ui/Button';
+import type { ButtonVariant, ButtonEmphasis } from '../../../components/ui/Button';
 import { bdsClass } from '../../../components/utils';
 import type {
   BlueprintAlign,
@@ -108,6 +115,9 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
    * `with-pricing-card` = interior split; content trail + an `aside` image/price card.
    * `centered` = single centred column, no media; re-scale its h1 with the
    * `--bds-hero-title-font-family` / `-font-size` hooks.
+   * `statement` = left-aligned short headline (3–5 words) + one CTA under an
+   * eyebrow with a short rule, no media; an optional `decoration` fills a right
+   * column from the tablet rung up.
    */
   layout?: HeroLayout;
   /**
@@ -147,6 +157,14 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
    */
   media?: ReactNode;
   /**
+   * The `--statement` layout's optional right-hand column — a single abstract
+   * shape or minimal illustration. Rendered in an `aria-hidden` wrapper, so it
+   * must be decorative; emits `data-decoration="end"` on the root. Absent, the
+   * column is not rendered and the content keeps the full measure. Ignored by
+   * the other layouts.
+   */
+  decoration?: ReactNode;
+  /**
    * Optional composed breadcrumb trail rendered at the top of the content
    * column (the `--with-pricing-card` interior-page trail). Absent for the
    * simpler layouts. Pass a `<Breadcrumb>` node.
@@ -159,11 +177,13 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
    */
   eyebrow?: ReactNode;
   /**
-   * Button variant for the primary CTA. Defaults to `primary`; the
+   * Button style for the primary CTA. Defaults to `primary`; the
    * `--with-pricing-card` variant passes `inverse` to sit on its
    * service-line-tinted surface.
    */
   ctaVariant?: ButtonVariant;
+  /** @deprecated Use `ctaVariant="inverse"` (#3275). Removed next minor. */
+  ctaEmphasis?: ButtonEmphasis;
 }
 
 /**
@@ -194,15 +214,18 @@ function HeroShell({
   orientation = 'horizontal',
   reveal = 'none',
   media,
+  decoration,
   breadcrumb,
   eyebrow,
   ctaVariant = 'primary',
+  ctaEmphasis,
   className,
   ...rest
 }: HeroProps) {
   const titleId = `${sectionKey}-title`;
-  const hasMedia = layout !== 'interior-minimal' && layout !== 'centered';
+  const hasMedia = layout !== 'interior-minimal' && layout !== 'centered' && layout !== 'statement';
   const isSplit = layout === 'split';
+  const hasDecoration = layout === 'statement' && decoration != null;
 
   return (
     <section
@@ -214,6 +237,7 @@ function HeroShell({
         className,
       )}
       aria-labelledby={titleId}
+      data-decoration={hasDecoration ? 'end' : undefined}
       data-media-position={isSplit && mediaPosition !== 'end' ? mediaPosition : undefined}
       data-orientation={isSplit && orientation !== 'horizontal' ? orientation : undefined}
       {...rest}
@@ -230,13 +254,19 @@ function HeroShell({
           {cta && (
             <Button
               {...(isActionCta(cta) ? { onClick: cta.onClick } : { href: cta.url })}
-              variant={ctaVariant}
+              variant={ctaEmphasis ?? ctaVariant}
               size="md"
             >
               {cta.label}
             </Button>
           )}
         </BlockReveal>
+
+        {hasDecoration && (
+          <div className="bds-hero__decoration" aria-hidden="true">
+            {decoration}
+          </div>
+        )}
 
         {hasMedia && media}
       </div>

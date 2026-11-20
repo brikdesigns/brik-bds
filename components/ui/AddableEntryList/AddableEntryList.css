@@ -201,14 +201,14 @@
   padding: var(--bds-padding-sm);
   background-color: var(--bds-background-primary);
   border-radius: var(--bds-border-radius-lg);
-  box-shadow: var(--bds-shadow-lg);
+  box-shadow: var(--bds-shadow-lifted);
   --bds-addable-entry-list-max-height: 240px; /* component-local dimension; no shared registry rung (#2133) */
   max-height: var(--bds-addable-entry-list-max-height);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: var(--bds-gap-xs);
-  animation: bds-entry-dropdown-enter var(--bds-duration-sm) var(--bds-ease-out);
+  animation: bds-entry-dropdown-enter var(--bds-duration-100) var(--bds-ease-out);
   transform-origin: top center;
 }
 
@@ -228,7 +228,7 @@
   line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-primary);
   cursor: pointer;
-  transition: background-color var(--bds-duration-sm) var(--bds-ease-out);
+  transition: background-color var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-addable-entry-list__option:hover,

@@ -21,6 +21,14 @@ describe('resolveRetiredValue', () => {
     expect(warn.mock.calls[0][0]).toContain('`tone="negative"`');
   });
 
+  it('prints the full replacement when a value moved to a different prop', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+    expect(
+      resolveRetiredValue('Widget', 'variant', 'bad', { bad: 'primary' }, { bad: 'variant="primary" tone="negative"' }),
+    ).toBe('primary');
+    expect(warn.mock.calls[0][0]).toContain('`variant="primary" tone="negative"`');
+  });
+
   it('passes a canonical value through untouched and silent', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
     expect(resolveRetiredValue('Badge', 'tone', 'negative', { error: 'negative' })).toBe('negative');

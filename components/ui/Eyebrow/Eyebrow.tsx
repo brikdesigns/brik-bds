@@ -34,7 +34,7 @@ export function Eyebrow({
     <Tag
       className={bdsClass(
         'bds-eyebrow',
-        onColor ? 'bds-eyebrow--on-color' : '',
+        onColor ? 'bds-eyebrow--emphasis-on-color' : '',
         className,
       )}
       {...props}

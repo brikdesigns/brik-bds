@@ -342,10 +342,16 @@ So, when measuring:
 3. **Order the runs so the ones you care about come first**, and treat the
    count of failing stories as the signal — not which story failed.
 
-**The gate itself is unaffected**, which is why this is documented rather than
-fixed: [`visual.yml`](../../.github/workflows/visual.yml) runs the suite once,
-and invocation 1 is clean. The root cause is unidentified and tracked
-separately — tracked in #1746.
+**The gate itself is rarely affected, not provably never.**
+[`visual.yml`](../../.github/workflows/visual.yml) runs the suite once, and
+invocation 1 is clean in every measured loop. But one single-run job did hit the
+same signature: the `main` push for `bb93aabd` (2026-08-07,
+[run 31213409013](https://github.com/brikdesigns/brik-bds/actions/runs/31213409013))
+failed `DevFeedbackWidget :: Default` by 2644 px on a tree that passed on its PR
+and passed again on re-run (#1746). A scan of the 29 failed runs among the last
+300 (2026-11-08 to 11-13) found no recurrence. If a failing gate run shows
+`DevFeedbackWidget` at 2644 px, capture that run before re-running it. The root
+cause is unidentified and tracked in #1746.
 
 **Not reproduced under Docker on arm64 (#1746, 2026-11-12).** The pinned
 `mcr.microsoft.com/playwright:v1.59.1-noble` image on an arm64 Colima VM

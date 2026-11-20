@@ -3,7 +3,11 @@ import { bdsClass, resolveRetiredValue } from '../../utils';
 import { Avatar, type AvatarStatus } from '../Avatar';
 import { Image } from '../Image';
 import { Logo, type LogoProps } from '../Logo';
+import { Stat } from '../Stat';
 import { Dot, type DotTone } from '../Dot';
+import { Button } from '../Button';
+import { ButtonGroup } from '../ButtonGroup';
+import { DateTime } from '../DateTime';
 import { Icon } from '../Icon';
 import type { ServiceLine } from '../ServiceTag/service-config';
 import './Card.css';
@@ -49,28 +53,54 @@ export type CardHeadingLevel = 'h2' | 'h3' | 'h4';
  * invented name. Excludes the deprecated `service` alias of `ServiceLine`;
  * pass `back-office`.
  */
-export type CardTint = Exclude<ServiceLine, 'service'>;
+export type CardServiceLine = Exclude<ServiceLine, 'service'>;
 export type CardControlActionAlign = 'center' | 'top';
 /**
  * Connection-status state for the `control` layout integration card.
  * Maps to canonical semantic token pairs:
  * - `not-configured` → `--bds-text-muted` / `--background-status-neutral` (neutral/unconfigured)
- * - `linked`         → `--bds-text-muted` / `--background-status-neutral` (linked, nothing read yet — NOT green)
  * - `connected`      → `--bds-text-positive` / `--bds-background-positive`
- * - `syncing`        → `--text-status-info` / `--background-status-info` (blue/in-progress)
  * - `synced`         → `--bds-text-positive` / `--bds-background-positive`
- * - `failed`         → `--bds-text-negative` / `--bds-background-negative`
+ * - `error`          → `--bds-text-negative` / `--bds-background-negative`
+ * - `disabled`       → `--bds-text-muted` / neutral dot (Brik switched the source off)
+ *
+ * Retired spellings (`linked`, `syncing`, `failed`) are still honoured for one
+ * minor via `RETIRED_CONNECTION_STATUS`.
  */
 export type CardControlConnectionStatus =
   | 'not-configured'
-  | 'linked'
   | 'connected'
-  | 'syncing'
   | 'synced'
-  | 'failed';
+  | 'negative'
+  | 'disabled';
 
 const RETIRED_CONNECTION_STATUS: Record<string, CardControlConnectionStatus> = {
-  error: 'failed',
+  linked: 'connected',
+  syncing: 'connected',
+  failed: 'negative',
+};
+
+/** What the control-card stamp records — selects its label. */
+export type CardControlStampKind = 'connected' | 'synced' | 'negative' | 'disabled';
+
+/**
+ * Typed "who did what, when" stamp beneath the control-card status. Replaces
+ * the free-form `lastSynced` string. `at` is an ISO 8601 timestamp, rendered
+ * through `DateTime` (relative, exact time on hover).
+ */
+export interface CardControlStamp {
+  kind: CardControlStampKind;
+  /** ISO 8601 timestamp. */
+  at: string;
+  /** Who performed it — a person or `Brik`. Omit for system events. */
+  actor?: string;
+}
+
+const STAMP_LABELS: Record<CardControlStampKind, string> = {
+  connected: 'Connected',
+  synced:    'Last synced',
+  negative:    'Failed',
+  disabled:  'Disabled',
 };
 /**
  * Image-column width for the `row` layout. Named values resolve to fixed
@@ -189,7 +219,7 @@ interface CardDefaultProps extends CardBaseProps {
    * (default `outlined`). `filled` — neutral recessed panel: `--bds-surface-secondary`
    * fill with a `--bds-border-muted` border, for a grouping container inside a page. Use `borderless` for cards sitting on a colored
    * surface, where the border ring reads as visual noise. `raised` —
-   * surface-primary fill, no border, with a `--bds-box-shadow-md` drop shadow;
+   * surface-primary fill, no border, with a `--bds-shadow-raised` drop shadow;
    * use for a focal/lone card or a grid cell that needs a lifted, contained
    * read (the shadow-casting counterpart to the now-flat `elevated`).
    */
@@ -208,9 +238,9 @@ interface CardDefaultProps extends CardBaseProps {
    */
   media?: CardMedia;
   /** Service-line surface tint — pale wash keyed to a service line. Sets only the surface; the `variant` border stays. */
-  tint?: CardTint;
-  /** Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. */
-  tintInverse?: boolean;
+  serviceLine?: CardServiceLine;
+  /** Resolve `serviceLine` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `serviceLine`. */
+  serviceLineInverse?: boolean;
   /** Card content — composes `<CardTitle>`, `<CardDescription>`, `<CardFooter>`, etc. */
   children: ReactNode;
 }
@@ -250,10 +280,14 @@ interface CardAnatomyProps extends CardBaseProps {
   action?: ReactNode;
   /** Overlay badge anchored to the media corner (`stack`); the leading badge in `control`. */
   badge?: ReactNode;
+  /** Trailing indicator (`stack`/`row`) — a `Badge` / `Tag` / `Dot`. An indicator goes here, never in `action`. Renders nothing when omitted. */
+  status?: ReactNode;
+  /** Short fact line under the body (`stack`/`row`) — a `DateTime` or one fact. Renders nothing when omitted. */
+  meta?: ReactNode;
   /** Service-line surface tint (`stack`/`row`/`pricing`) — pale wash keyed to a service line. Border/size unchanged. */
-  tint?: CardTint;
-  /** Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. */
-  tintInverse?: boolean;
+  serviceLine?: CardServiceLine;
+  /** Resolve `serviceLine` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `serviceLine`. */
+  serviceLineInverse?: boolean;
   /** Surface treatment for a cell on a colored grid — `borderless` / `elevated` / `raised` (`stack`). */
   variant?: 'borderless' | 'elevated' | 'raised';
   /** Image column width for `row` — `narrow` (25%) / `standard` (35%, default) / `wide` (50%) / any CSS length. */
@@ -268,10 +302,20 @@ interface CardAnatomyProps extends CardBaseProps {
   description?: ReactNode;
   /** Trailing-block vertical alignment (`control` only) — `center` (default) / `top`. */
   actionAlign?: CardControlActionAlign;
-  /** Connection-status indicator (`control` only) — `not-configured` / `linked` / `connected` / `syncing` / `synced` / `failed`. */
+  /** Connection-status indicator (`control` only) — `not-configured` / `connected` / `synced` / `negative` / `disabled`. `disabled` mutes the card. */
   connectionStatus?: CardControlConnectionStatus;
-  /** "Last synced" label below the status indicator (`control` only). */
-  lastSynced?: string;
+  /** Typed stamp (kind, ISO timestamp, optional actor) below the status indicator (`control` only). Hidden for `not-configured`. */
+  stamp?: CardControlStamp;
+  /** Read-only source (`control` only) — replaces every action with one "Manage on profile" link to `manageHref`. */
+  readOnly?: boolean;
+  /** Destination of the read-only "Manage on profile" link (`control` only). */
+  manageHref?: string;
+  /** Renders the "Setup" button when `connectionStatus="not-configured"` (`control` only). */
+  onSetup?: () => void;
+  /** Renders "Retry" before `action` when `connectionStatus="negative"` (`control` only). */
+  onRetry?: () => void;
+  /** Renders "Enable" when `connectionStatus="disabled"` (`control` only). */
+  onEnable?: () => void;
   /** Secondary detail line below the value (`metric` only) — e.g. a price • frequency, a delta, a unit. */
   detail?: ReactNode;
   /** Price display (`pricing` only) — e.g. `"$49"`, `"Free"`. Pre-formatted; the card applies no numeric formatting. */
@@ -324,7 +368,7 @@ export type CardProps = CardDefaultProps | CardAnatomyProps;
  *   description="Pull session and conversion data into your dashboard."
  *   media={<Avatar src="/logos/google-analytics.png" alt="Google Analytics" size="sm" />}
  *   connectionStatus="synced"
- *   lastSynced="Last synced 3 min ago"
+ *   stamp={{ kind: 'synced', at: '2026-11-06T20:30:00Z' }}
  *   action={<Button variant="outline" size="sm">Configure</Button>}
  * />
  * ```
@@ -369,14 +413,14 @@ function renderCardMedia(media: CardMedia) {
     // constrains the caller to valid pairs).
     const size = media.logo.size ?? 'md';
     return (
-      <div className={bdsClass('bds-card__media', `bds-card__media--${size}`)}>
+      <div className={bdsClass('bds-card__media', `bds-card__media--size-${size}`)}>
         <Logo {...(media.logo as LogoProps)} size={size} />
       </div>
     );
   }
   const { src, alt, size = 'md', fit = 'contain' } = media.image;
   return (
-    <div className={bdsClass('bds-card__media', `bds-card__media--${size}`)}>
+    <div className={bdsClass('bds-card__media', `bds-card__media--size-${size}`)}>
       <Image src={src} alt={alt} ratio="1-1" fit={fit} />
     </div>
   );
@@ -389,8 +433,8 @@ function renderDefault({
   interactive = false,
   href,
   padding = 'md',
-  tint,
-  tintInverse,
+  serviceLine,
+  serviceLineInverse,
   className,
   style,
   ...rest
@@ -399,8 +443,8 @@ function renderDefault({
     'bds-card',
     cardVariantClass(variant),
     `bds-card--padding-${padding}`,
-    tint && `bds-card--tint-${tint}`,
-    tint && tintInverse && 'bds-card--emphasis-inverse',
+    serviceLine && `bds-card--service-line-${serviceLine}`,
+    serviceLine && serviceLineInverse && 'bds-card--emphasis-inverse',
     media && 'bds-card--media',
     interactive && 'bds-card--interactive',
     href && 'bds-card--link',
@@ -436,11 +480,10 @@ function renderDefault({
 
 const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
   'not-configured': 'Not configured',
-  linked:           'Linked',
   connected:        'Connected',
-  syncing:          'Syncing',
   synced:           'Synced',
-  failed:           'Error',
+  negative:           'Error',
+  disabled:         'Disabled',
 };
 
 /**
@@ -450,12 +493,58 @@ const CONNECTION_STATUS_LABELS: Record<CardControlConnectionStatus, string> = {
  */
 const CONNECTION_STATUS_DOT: Record<CardControlConnectionStatus, DotTone> = {
   'not-configured': 'neutral',
-  linked:           'neutral',
   connected:        'positive',
-  syncing:          'info',
   synced:           'positive',
-  failed:           'negative',
+  negative:           'negative',
+  disabled:         'neutral',
 };
+
+/**
+ * The control card's action row, owned by its status: not-configured → Setup,
+ * negative → Retry then `action`, disabled → Enable, otherwise `action`. A
+ * read-only card shows one "Manage on profile" link and nothing else.
+ */
+function controlActions(
+  status: CardControlConnectionStatus | undefined,
+  { action, readOnly, manageHref, onSetup, onRetry, onEnable }: Pick<
+    CardAnatomyProps,
+    'action' | 'readOnly' | 'manageHref' | 'onSetup' | 'onRetry' | 'onEnable'
+  >,
+): ReactNode {
+  if (readOnly) {
+    return (
+      <Button variant="ghost" size="sm" href={manageHref ?? '#'}>
+        Manage on profile
+      </Button>
+    );
+  }
+  if (status === 'not-configured') {
+    return onSetup ? (
+      <Button variant="primary" size="sm" onClick={onSetup}>
+        Setup
+      </Button>
+    ) : null;
+  }
+  if (status === 'disabled') {
+    return onEnable ? (
+      <Button variant="outline" size="sm" onClick={onEnable}>
+        Enable
+      </Button>
+    ) : null;
+  }
+  const retry =
+    status === 'negative' && onRetry ? (
+      <Button variant="primary" size="sm" onClick={onRetry}>
+        Retry
+      </Button>
+    ) : null;
+  return retry || action ? (
+    <>
+      {retry}
+      {action}
+    </>
+  ) : null;
+}
 
 /**
  * Render the flat anatomy Card (ADR-038). Each `layout` owns a dedicated BEM
@@ -471,8 +560,10 @@ function renderAnatomy({
   children,
   action,
   badge,
-  tint,
-  tintInverse,
+  status,
+  meta,
+  serviceLine,
+  serviceLineInverse,
   variant,
   imageWidth = 'standard',
   mediaTreatment = 'flush',
@@ -481,7 +572,12 @@ function renderAnatomy({
   description,
   actionAlign = 'center',
   connectionStatus,
-  lastSynced,
+  stamp,
+  readOnly,
+  manageHref,
+  onSetup,
+  onRetry,
+  onEnable,
   detail,
   price,
   period,
@@ -497,13 +593,22 @@ function renderAnatomy({
       connectionStatus,
       RETIRED_CONNECTION_STATUS,
     );
-    const hasTrailing = action || resolvedConnectionStatus;
+    const actions = controlActions(resolvedConnectionStatus, {
+      action,
+      readOnly,
+      manageHref,
+      onSetup,
+      onRetry,
+      onEnable,
+    });
+    const hasTrailing = actions || resolvedConnectionStatus;
     return (
       <div
         className={bdsClass(
           'bds-card',
           'bds-card--layout-control',
           `bds-card--layout-control-action-${actionAlign}`,
+          resolvedConnectionStatus === 'disabled' && 'bds-card--layout-control-disabled',
           className,
         )}
         style={style}
@@ -523,7 +628,7 @@ function renderAnatomy({
               <div
                 className={bdsClass(
                   'bds-card__control-status',
-                  `bds-card__control-status--${resolvedConnectionStatus}`,
+                  `bds-card__control-status--status-${resolvedConnectionStatus}`,
                   `bds-card__control-status--tone-${CONNECTION_STATUS_DOT[resolvedConnectionStatus]}`,
                 )}
                 role="status"
@@ -535,12 +640,19 @@ function renderAnatomy({
                 <span className="bds-card__control-status-label">
                   {CONNECTION_STATUS_LABELS[resolvedConnectionStatus]}
                 </span>
-                {lastSynced && resolvedConnectionStatus !== 'not-configured' && (
-                  <span className="bds-card__control-status-synced">{lastSynced}</span>
+                {stamp && resolvedConnectionStatus !== 'not-configured' && (
+                  <span className="bds-card__control-status-stamp">
+                    {STAMP_LABELS[stamp.kind]} <DateTime value={stamp.at} mode="relative" />
+                    {stamp.actor && ` by ${stamp.actor}`}
+                  </span>
                 )}
               </div>
             )}
-            {action && <div className="bds-card__control-action">{action}</div>}
+            {actions && (
+              <div className="bds-card__control-action">
+                <ButtonGroup align="end">{actions}</ButtonGroup>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -552,11 +664,13 @@ function renderAnatomy({
       <div className={bdsClass('bds-card', 'bds-card--layout-metric', className)} style={style} {...rest}>
         <div className="bds-card__metric-inner">
           {media && <div className="bds-card__metric-media">{media}</div>}
-          <div className="bds-card__metric-content">
-            {overline != null && <p className="bds-card__metric-label">{overline}</p>}
-            {title != null && <p className="bds-card__metric-value">{title}</p>}
-            {detail != null && <p className="bds-card__metric-detail">{detail}</p>}
-          </div>
+          <Stat
+            className="bds-card__metric-content"
+            order="label-first"
+            label={overline}
+            value={title}
+            detail={detail}
+          />
           {action && <div className="bds-card__metric-action">{action}</div>}
         </div>
       </div>
@@ -565,7 +679,7 @@ function renderAnatomy({
 
   if (layout === 'pricing') {
     // `highlighted` is not a prop: the recommended tier is a surface choice, so
-    // it composes from the shared surface set (`variant="raised"` / `tint`)
+    // it composes from the shared surface set (`variant="raised"` / `serviceLine`)
     // exactly as every other layout does. That is the one behaviour that did
     // NOT carry over from `PricingCard`, which owned a bespoke
     // `--highlighted` modifier.
@@ -576,8 +690,8 @@ function renderAnatomy({
           'bds-card',
           cardVariantClass(variant ?? 'outlined'),
           'bds-card--layout-pricing',
-          tint && `bds-card--tint-${tint}`,
-          tint && tintInverse && 'bds-card--emphasis-inverse',
+          serviceLine && `bds-card--service-line-${serviceLine}`,
+          serviceLine && serviceLineInverse && 'bds-card--emphasis-inverse',
           className,
         )}
         style={style}
@@ -617,8 +731,9 @@ function renderAnatomy({
       'bds-card',
       'bds-card--layout-row',
       isNamed && `bds-card--layout-row-${imageWidth}`,
-      tint && `bds-card--tint-${tint}`,
-      tint && tintInverse && 'bds-card--emphasis-inverse',
+      status != null && 'bds-card--layout-row-has-status',
+      serviceLine && `bds-card--service-line-${serviceLine}`,
+      serviceLine && serviceLineInverse && 'bds-card--emphasis-inverse',
       href && 'bds-card--link',
       className,
     );
@@ -632,8 +747,10 @@ function renderAnatomy({
           {overline != null && <span className="bds-card__row-overline">{overline}</span>}
           {title != null && <Heading className="bds-card__row-title">{title}</Heading>}
           {children}
+          {meta != null && <div className="bds-card__row-meta">{meta}</div>}
           {action && <div className="bds-card__row-action">{action}</div>}
         </div>
+        {status != null && <div className="bds-card__row-status">{status}</div>}
       </>
     );
     if (href) {
@@ -662,8 +779,8 @@ function renderAnatomy({
     mediaTreatment === 'inset' &&
       insetPadding === 'lg' &&
       'bds-card--layout-stack-inset-lg',
-    tint && `bds-card--tint-${tint}`,
-    tint && tintInverse && 'bds-card--emphasis-inverse',
+    serviceLine && `bds-card--service-line-${serviceLine}`,
+    serviceLine && serviceLineInverse && 'bds-card--emphasis-inverse',
     href && 'bds-card--link',
     className,
   );
@@ -679,6 +796,8 @@ function renderAnatomy({
         {overline != null && <span className="bds-card__stack-overline">{overline}</span>}
         {title != null && <Heading className="bds-card__stack-title">{title}</Heading>}
         {children}
+        {meta != null && <div className="bds-card__stack-meta">{meta}</div>}
+        {status != null && <div className="bds-card__stack-status">{status}</div>}
         {action && <div className="bds-card__stack-action">{action}</div>}
       </div>
     </>

@@ -28,7 +28,7 @@
   /* Transparent ring by default so selecting adds no layout shift. */
   box-shadow: 0 0 0 var(--bds-border-width-lg) transparent;
   cursor: pointer;
-  transition: box-shadow var(--bds-duration-sm) var(--bds-ease-out);
+  transition: box-shadow var(--bds-duration-100) var(--bds-ease-out);
 }
 
 /* ── Selected ── */

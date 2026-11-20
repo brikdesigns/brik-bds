@@ -34,9 +34,9 @@
   text-transform: var(--bds-text-transform-field-label);
 }
 
-.bds-text-area__label--sm { font-size: var(--bds-label-sm); }
-.bds-text-area__label--md { font-size: var(--bds-label-md); }
-.bds-text-area__label--lg { font-size: var(--bds-label-lg); }
+.bds-text-area__label--size-sm { font-size: var(--bds-label-sm); }
+.bds-text-area__label--size-md { font-size: var(--bds-label-md); }
+.bds-text-area__label--size-lg { font-size: var(--bds-label-lg); }
 
 .bds-text-area__label--tone-negative {
   color: var(--bds-text-negative);
@@ -62,9 +62,9 @@
   box-sizing: border-box;
 }
 
-.bds-text-area-field--sm { font-size: var(--bds-body-sm); }
-.bds-text-area-field--md { font-size: var(--bds-body-md); }
-.bds-text-area-field--lg { font-size: var(--bds-body-lg); }
+.bds-text-area-field--size-sm { font-size: var(--bds-body-sm); }
+.bds-text-area-field--size-md { font-size: var(--bds-body-md); }
+.bds-text-area-field--size-lg { font-size: var(--bds-body-lg); }
 
 /* Resize — driven by the `resize` prop; `:disabled` forces none (below) */
 .bds-text-area-field--resize-none { resize: none; }

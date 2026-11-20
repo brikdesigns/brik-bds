@@ -112,6 +112,7 @@ export {
   type RadiusMode,
 } from './radius-mode';
 
+// DEPRECATED one minor (#3058): no elevation axis; kept so consumers compile across the bump.
 export {
   ELEVATION_MODE_VALUES,
   isElevationMode,

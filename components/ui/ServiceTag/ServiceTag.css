@@ -20,19 +20,19 @@
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
 
-.bds-service-tag--sm {
+.bds-service-tag--size-sm {
   height: var(--bds-size-700);
   padding-inline: var(--bds-padding-sm);
   font-size: var(--bds-label-tiny);
 }
 
-.bds-service-tag--md {
+.bds-service-tag--size-md {
   height: var(--bds-size-800);
   padding-inline: var(--bds-padding-sm);
   font-size: var(--bds-label-sm);
 }
 
-.bds-service-tag--lg {
+.bds-service-tag--size-lg {
   height: var(--bds-size-1000);
   padding-inline: var(--bds-padding-md);
   font-size: var(--bds-label-md);
@@ -41,8 +41,8 @@
 /* lg is the only size with extra inline padding (--bds-padding-md vs --bds-padding-sm).
    With an icon present that reads as too much lead-in space before the glyph,
    so icon-text lg drops back to the sm/md inline padding. Two-class selector
-   outranks the single-class --lg rule, so order is irrelevant. */
-.bds-service-tag--lg.bds-service-tag--has-icon {
+   outranks the single-class --size-lg rule, so order is irrelevant. */
+.bds-service-tag--size-lg.bds-service-tag--has-icon {
   padding-inline: var(--bds-padding-sm);
 }
 
@@ -99,38 +99,51 @@
 
 /* Consumer glyph size. font-size, never width/height, so an <Icon> (1em) fills
    it; the bundled <svg> is sized by its width/height attributes and ignores
-   this. The icon-only steps sit at ~half the box — the 16px-in-32 ratio
-   Figma's `brik-tag-subscription` uses — and the pill steps match Tag's. */
-.bds-service-tag--icon-sm .bds-service-tag__icon {
-  font-size: var(--bds-icon-xs);
-}
-
-.bds-service-tag--sm .bds-service-tag__icon,
-.bds-service-tag--md .bds-service-tag__icon,
-.bds-service-tag--icon-md .bds-service-tag__icon {
+   this. The icon-variant steps sit at ~half the box — the 16px-in-32 ratio
+   Figma's `brik-tag-subscription` uses — and the pill steps match Tag's.
+   The icon variant now carries `--size-*` too, so its steps are compounded
+   with `--variant-icon` (0,3,0) to out-specify the pill steps (0,2,0). */
+.bds-service-tag--size-sm .bds-service-tag__icon,
+.bds-service-tag--size-md .bds-service-tag__icon {
   font-size: var(--bds-icon-sm);
 }
 
-.bds-service-tag--lg .bds-service-tag__icon,
-.bds-service-tag--icon-lg .bds-service-tag__icon {
+.bds-service-tag--size-lg .bds-service-tag__icon {
+  font-size: var(--bds-icon-lg);
+}
+
+.bds-service-tag--variant-icon.bds-service-tag--size-sm .bds-service-tag__icon {
+  font-size: var(--bds-icon-xs);
+}
+
+.bds-service-tag--variant-icon.bds-service-tag--size-md .bds-service-tag__icon {
+  font-size: var(--bds-icon-sm);
+}
+
+.bds-service-tag--variant-icon.bds-service-tag--size-lg .bds-service-tag__icon {
   font-size: var(--bds-icon-lg);
 }
 
 /* ─── Icon-only variant (square badge) ───────────────────────── */
 
-.bds-service-tag--icon {
+/* Compounded (0,2,0) so the box beats the text pill's single-class
+   `--size-*` height / padding-inline / font-size, which the icon variant now
+   also carries. `font-size: inherit` keeps the pre-rename computed value (the
+   box never set one). */
+.bds-service-tag.bds-service-tag--variant-icon {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   overflow: hidden;
   padding: 0;
+  font-size: inherit;
 }
 
 /* bds-lint-ignore — Figma-driven badge dimensions */
-.bds-service-tag--icon-sm { width: 20px; height: 20px; border-radius: var(--bds-border-radius-sm); } /* bds-lint-ignore — Figma-driven 20px icon dimensions, not spacing-grid tokens */
-.bds-service-tag--icon-md { width: 28px; height: 28px; border-radius: var(--bds-border-radius-md); } /* bds-lint-ignore — Figma-driven 28px icon dimensions, not spacing-grid tokens */
-.bds-service-tag--icon-lg { width: 40px; height: 40px; border-radius: var(--bds-border-radius-md); } /* bds-lint-ignore — Figma-driven 40px icon dimensions, not spacing-grid tokens */
+.bds-service-tag--variant-icon.bds-service-tag--size-sm { width: 20px; height: 20px; border-radius: var(--bds-border-radius-sm); } /* bds-lint-ignore — Figma-driven 20px icon dimensions, not spacing-grid tokens */
+.bds-service-tag--variant-icon.bds-service-tag--size-md { width: 28px; height: 28px; border-radius: var(--bds-border-radius-md); } /* bds-lint-ignore — Figma-driven 28px icon dimensions, not spacing-grid tokens */
+.bds-service-tag--variant-icon.bds-service-tag--size-lg { width: 40px; height: 40px; border-radius: var(--bds-border-radius-md); } /* bds-lint-ignore — Figma-driven 40px icon dimensions, not spacing-grid tokens */
 
 /* ─── Dot variant (color-dot marker + neutral pill) ─────────────── */
 
@@ -139,7 +152,7 @@
    use (`--bds-background-secondary` + `--bds-text-on-color-light`; see Tag.css) —
    holds AA in both light and dark. Only the dot marker below carries the
    service color, so the pill itself reads neutral. */
-.bds-service-tag--dot {
+.bds-service-tag--variant-dot {
   gap: var(--bds-gap-xs);
   background-color: var(--bds-background-secondary);
   color: var(--bds-text-on-color-light);
@@ -159,7 +172,7 @@
 /* bds-lint-ignore — dot marker dimensions match the shared Dot component's
    sm/md/lg scale (Dot.css), not the pill's own sm/md/lg (28/32/40 height)
    scale, so both "dot" concepts in BDS stay visually consistent. */
-.bds-service-tag__dot--sm { width: 6px; height: 6px; }
-.bds-service-tag__dot--md { width: 8px; height: 8px; }
-.bds-service-tag__dot--lg { width: 10px; height: 10px; }
+.bds-service-tag__dot--size-sm { width: 6px; height: 6px; }
+.bds-service-tag__dot--size-md { width: 8px; height: 8px; }
+.bds-service-tag__dot--size-lg { width: 10px; height: 10px; }
 }

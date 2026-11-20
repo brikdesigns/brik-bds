@@ -29,7 +29,7 @@ describe('wiredAttrFor', () => {
   it('maps registry collections to their data-mode attr (attr override honored)', () => {
     expect(wiredAttrFor('spacing')).toBe('spacing');
     expect(wiredAttrFor('border-radius')).toBe('radius'); // cfg.attr override
-    expect(wiredAttrFor('elevation')).toBe('elevation');
+    expect(wiredAttrFor('elevation')).toBeNull(); // #3058: depths compose into --bds-shadow-*, no mode axis
   });
   it('maps border-width through the registry to borderwidth (#2601)', () => {
     expect(wiredAttrFor('border-width')).toBe('borderwidth'); // cfg.attr override

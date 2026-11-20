@@ -187,7 +187,7 @@ function StepsRender({
             <div
               className={bdsClass(
                 'bds-progress-stepper__step-row',
-                `bds-progress-stepper__step-row--${size}`,
+                `bds-progress-stepper__step-row--size-${size}`,
                 isClickable && 'bds-progress-stepper__step-row--clickable',
               )}
               onClick={handleClick}
@@ -200,8 +200,8 @@ function StepsRender({
               <div
                 className={bdsClass(
                   'bds-progress-stepper__circle',
-                  `bds-progress-stepper__circle--${size}`,
-                  `bds-progress-stepper__circle--${status}`,
+                  `bds-progress-stepper__circle--size-${size}`,
+                  `bds-progress-stepper__circle--status-${status}`,
                 )}
               >
                 {status === 'complete' ? (
@@ -217,8 +217,8 @@ function StepsRender({
                 <div
                   className={bdsClass(
                     'bds-progress-stepper__label',
-                    `bds-progress-stepper__label--${size}`,
-                    `bds-progress-stepper__label--${status}`,
+                    `bds-progress-stepper__label--size-${size}`,
+                    `bds-progress-stepper__label--status-${status}`,
                   )}
                 >
                   {step.label}
@@ -227,7 +227,7 @@ function StepsRender({
                   <div
                     className={bdsClass(
                       'bds-progress-stepper__desc',
-                      `bds-progress-stepper__desc--${size}`,
+                      `bds-progress-stepper__desc--size-${size}`,
                     )}
                   >
                     {step.description}
@@ -239,10 +239,10 @@ function StepsRender({
               <div
                 className={bdsClass(
                   'bds-progress-stepper__connector',
-                  `bds-progress-stepper__connector--${size}`,
+                  `bds-progress-stepper__connector--size-${size}`,
                   status === 'complete'
-                    ? 'bds-progress-stepper__connector--complete'
-                    : 'bds-progress-stepper__connector--incomplete',
+                    ? 'bds-progress-stepper__connector--status-complete'
+                    : 'bds-progress-stepper__connector--status-incomplete',
                 )}
                 aria-hidden="true"
               />
@@ -272,7 +272,7 @@ function DotsRender({
       className={bdsClass(
         'bds-progress-stepper',
         'bds-progress-stepper--variant-dots',
-        `bds-progress-stepper--${size}`,
+        `bds-progress-stepper--size-${size}`,
         className,
       )}
       style={style}
@@ -298,9 +298,9 @@ function DotsRender({
             role="tab"
             className={bdsClass(
               'bds-progress-stepper__dot',
-              isActive && 'bds-progress-stepper__dot--active',
-              isComplete && 'bds-progress-stepper__dot--complete',
-              !isActive && !isComplete && 'bds-progress-stepper__dot--inactive',
+              isActive && 'bds-progress-stepper__dot--status-active',
+              isComplete && 'bds-progress-stepper__dot--status-complete',
+              !isActive && !isComplete && 'bds-progress-stepper__dot--status-inactive',
               isClickable
                 ? 'bds-progress-stepper__dot--clickable'
                 : 'bds-progress-stepper__dot--non-clickable',

@@ -18,6 +18,151 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Button's style is now one flat `variant` list, and every style class carries the `variant` axis ([#3275](https://github.com/brikdesigns/brik-bds/issues/3275), ADR-033 § Amendments). The separate `tone` and `emphasis` classes are gone: a Button now emits exactly one `bds-button--variant-*` class. No aliases ship. The same classes apply to `IconButton` and `LinkButton`.
+
+| Old (0.247.0) | New | Prop |
+|---|---|---|
+| `bds-button--primary` | `bds-button--variant-primary` | `variant="primary"` |
+| `bds-button--secondary` | `bds-button--variant-secondary` | `variant="secondary"` |
+| `bds-button--outline` | `bds-button--variant-outline` | `variant="outline"` |
+| `bds-button--ghost` | `bds-button--variant-ghost` | `variant="ghost"` |
+| `bds-button--inverse` | `bds-button--variant-inverse` | `variant="inverse"` |
+| `bds-button--emphasis-on-color` | `bds-button--variant-on-color` | `variant="on-color"` |
+| `bds-button--primary.bds-button--tone-negative` | `bds-button--variant-negative` | `variant="negative"` |
+| `bds-button--outline.bds-button--tone-negative` | `bds-button--variant-negative-outline` | `variant="negative-outline"` |
+| `bds-button--ghost.bds-button--tone-negative` | `bds-button--variant-negative-ghost` | `variant="negative-ghost"` |
+| `bds-button--primary.bds-button--tone-positive` | `bds-button--variant-positive` | `variant="positive"` |
+
+**Deprecated (props):** `tone` and `emphasis` on Button, IconButton and LinkButton, the `ButtonTone` and `ButtonEmphasis` types, and Hero's `ctaEmphasis` still work for one minor. Each folds into `variant` and warns once in the console. Use `variant` instead.
+
+**Breaking (consumer CSS):** Footer's variant modifiers now carry the `variant` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No aliases ship.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-footer--{default,brand,inverse}` | `bds-footer--variant-{default,brand,inverse}` | `variant` |
+
+**Breaking (consumer CSS):** The `on-color` modifiers now carry the `emphasis` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). `on-color` was already admitted to `emphasis` by #1983. No aliases ship. Button's `--inverse` is a separate Rule 4 row and is untouched.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-button--on-color` | `bds-button--emphasis-on-color` | `emphasis="on-color"` |
+| `bds-{tab-bar,content-block,eyebrow,stat}--on-color` | `bds-{tab-bar,content-block,eyebrow,stat}--emphasis-on-color` | `onColor` |
+
+**Fix (consumer CSS):** Modal's `full` size rule is renamed `bds-modal--full` → `bds-modal--size-full`, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). `Modal.tsx` already emitted `bds-modal--size-full`, so the old selector never matched and `size="full"` got no `max-width: 95vw`; it does now. No alias ships.
+
+**Breaking (consumer CSS):** Sheet and Pagination side modifiers now carry an axis, per ADR-033 § 6 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). A new `side` axis (`right · left · bottom`) is admitted for Sheet. Pagination uses the existing `align` prefix. No aliases ship.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-sheet--{right,left,bottom}` | `bds-sheet--side-{right,left,bottom}` | `side` |
+| `bds-pagination--{left,center,right}` | `bds-pagination--align-{left,center,right}` | `position` |
+
+**Breaking (consumer CSS):** Tooltip and Menu side modifiers now carry the `placement` axis they derive from, per ADR-033 § 6 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). A new `placement` axis (`top · bottom · left · right`) is admitted. No aliases ship. Tooltip's `__bubble--*` placement rules were never emitted by the component; they are renamed with the arrow's, not removed.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-tooltip__{arrow,bubble}--{top,bottom,left,right}` | `bds-tooltip__{arrow,bubble}--placement-{top,bottom,left,right}` | `placement` |
+| `bds-menu--top` | `bds-menu--placement-top` | `placement` |
+
+**Breaking (consumer CSS):** Badge, Tag and Avatar fill modifiers now carry the `appearance` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector. Button's `--outline` is a different axis and is untouched.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-{badge,tag}--{solid,subtle,outline}` | `bds-{badge,tag}--appearance-{solid,subtle,outline}` | `appearance` |
+| `bds-avatar--subtle` | `bds-avatar--appearance-subtle` | `appearance` |
+
+**Breaking (consumer CSS):** ProgressStepper's step-state modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-progress-stepper__{circle,label}--{active,complete,upcoming}` | `bds-progress-stepper__{circle,label}--status-{active,complete,upcoming}` | `currentStep` |
+| `bds-progress-stepper__connector--{complete,incomplete}` | `bds-progress-stepper__connector--status-{complete,incomplete}` | `currentStep` |
+| `bds-progress-stepper__dot--{active,complete,inactive}` | `bds-progress-stepper__dot--status-{active,complete,inactive}` | `currentStep` |
+
+**Breaking (consumer CSS):** TaskConsole's item and icon state modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-task-console__{item,icon}--{completed,failed,in-progress,pending}` | `bds-task-console__{item,icon}--status-{completed,failed,in-progress,pending}` | `items[].status` |
+
+**Breaking (consumer CSS):** Card's control-status modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-card__control-status--{not-configured,connected,synced,negative,disabled}` | `bds-card__control-status--status-{not-configured,connected,synced,negative,disabled}` | `connectionStatus` |
+
+**Breaking (consumer CSS):** Avatar's presence dot modifiers now carry the `status` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-avatar__status--{online,offline,busy,away}` | `bds-avatar__status--status-{online,offline,busy,away}` | `status` |
+
+**Breaking (consumer CSS):** eight bare BEM modifiers that twinned an axis-prefixed value now carry their axis prefix, per ADR-033 § 4 ([#1926](https://github.com/brikdesigns/brik-bds/issues/1926)). No alias ships: the old class is no longer emitted, so an override that targets it stops matching with no build error. Rename the selector. The class is now `bds-{block}--{axis}-{value}`, derived from the prop.
+
+| Old (every block) | New | Prop |
+|---|---|---|
+| `--xs` `--sm` `--md` `--lg` `--xl` | `--size-xs` `--size-sm` `--size-md` `--size-lg` `--size-xl` | `size` |
+| `--compact` on Badge, Tag, Sheet, BoardCard | `--density-compact` | `density="compact"` |
+| `--center` `--start` on SectionHeader | `--align-center` `--align-start` | `align` |
+| `--left` `--center` `--right` on TableActionsCell | `--align-left` `--align-center` `--align-right` | `align` |
+
+Blocks carrying a size modifier: AddressInput, Avatar, Badge, Button (`bds-button`, `bds-icon-button`), Card (`__media`), Chip, Counter, DatePicker, Dot, FilterButton (`__trigger`), FilterToggle, InteractiveListItem, Logo, Meter (`__track`, `__fill`), Modal, PageHeader, ProgressCircle (`__center`), ProgressStepper (and its parts), SegmentedControl, Select (`bds-select`, `bds-select-label`), ServiceTag (and `__dot`), Spinner, Stepper, Tag, TextArea, TextInput, TimePicker, ToggleSwitch (`__label`), TableImageCell. Astro blueprint markup (`Cta`, `Hero`, `CalloutPanel`) now emits `bds-button--size-md` / `--size-lg`.
+
+Not renamed, still bare (their prop axis has no legal prefix, so they ride with #1927): `bds-pagination--center` (`position`) and `bds-field--compact` (`tier`).
+
+**Breaking (consumer CSS):** Avatar's initials fill now carries the `color` axis it derives from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-avatar--accent-{blue,green,orange,purple,red,yellow}` | `bds-avatar--color-{blue,green,orange,purple,red,yellow}` | `color` |
+
+**Breaking (consumer CSS):** Grid and FieldGrid's column-count modifiers now carry the `columns` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-grid--cols-{1..6}` | `bds-grid--columns-{1..6}` | `columns` |
+| `bds-grid--auto-fit` · `bds-grid--auto-fill` | `bds-grid--columns-auto-fit` · `bds-grid--columns-auto-fill` | `columns` |
+| `bds-field-grid--cols-{2,3,4}` | `bds-field-grid--columns-{2,3,4}` | `columns` |
+
+**Breaking (consumer CSS):** ServiceTag's bare `icon` and `dot` variant modifiers now carry the `variant` axis they derive from, and the icon variant's size class joins the `size` axis, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. A consumer selecting the old classes must switch, or the selector silently stops matching. The icon badge now also carries `--size-{sm,md,lg}`; its box rules are compounded with `--variant-icon` so the text pill's `--size-*` rules do not leak onto it (zero visual change).
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-service-tag--icon` | `bds-service-tag--variant-icon` | `variant="icon"` |
+| `bds-service-tag--dot` | `bds-service-tag--variant-dot` | `variant="dot"` |
+| `bds-service-tag--icon-{sm,md,lg}` | `bds-service-tag--size-{sm,md,lg}` (alongside `--variant-icon`) | `size` |
+
+**Breaking (consumer CSS):** CardControl's action-alignment modifiers now carry the `align` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-card-control--action-center` · `bds-card-control--action-top` | `bds-card-control--align-center` · `bds-card-control--align-top` | `actionAlign` |
+
+**Breaking (consumer CSS):** TaskConsole's corner modifiers now carry a `corner` axis, per ADR-033 § 4, and the amendment admits `corner` ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-task-console--bottom-right` · `bds-task-console--bottom-left` | `bds-task-console--corner-bottom-right` · `bds-task-console--corner-bottom-left` | `position` |
+
+**Breaking (consumer CSS):** TabBar's `text-underline` variant modifier now carries the `variant` axis it derives from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No alias ships. Rename the selector. The `variant` prop value is unchanged.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-tab-bar--text-underline` | `bds-tab-bar--variant-text-underline` | `variant="text-underline"` |
+
+**Breaking (consumer CSS):** CompletionToggle's brand hover modifier and ToggleSwitch's `accent-knob` modifier now carry the axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). CompletionToggle's brand is a hue source, so it takes `emphasis`; ToggleSwitch's is a form, so it takes `variant`. No alias ships. Rename the selector. Both prop values are unchanged.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-completion-toggle--accent-brand` | `bds-completion-toggle--emphasis-brand` | `accent="brand"` |
+| `bds-toggle-switch--accent-knob` | `bds-toggle-switch--variant-accent-knob` | `variant="accent-knob"` |
+
+**Breaking (consumer CSS + props):** Card's service-line surface takes the canonical `serviceLine` word, and its modifier carries a new `service-line` axis, per ADR-033 § 4 and the amendment that admits it ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). The props and the exported type are renamed too: `tint` → `serviceLine`, `tintInverse` → `serviceLineInverse`, `CardTint` → `CardServiceLine`. No alias ships. Rename the prop and the selector.
+
+| Old | New | Prop |
+|---|---|---|
+| `bds-card--tint-{brand,marketing,information,product,back-office}` | `bds-card--service-line-{brand,marketing,information,product,back-office}` | `tint` → `serviceLine` |
+
 Six Tier 4 hooks are renamed to the ADR-014 shape `--bds-{component}[-{part}]-{property}` ([#2651](https://github.com/brikdesigns/brik-bds/issues/2651)). Each old name still works: the component reads it first and falls back to the new one. The old names are **deprecated** and drop in the next major. Every hook is now listed in `manifest/tier4-hooks.json`, with whether a consumer may set it (`knob`) or the component sets it at render (`runtime`).
 
 **Deprecated (consumer CSS):** rename these in your override CSS before the next major.

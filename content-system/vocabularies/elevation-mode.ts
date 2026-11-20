@@ -1,23 +1,20 @@
 /**
- * Elevation Mode — the expression-mode axis that sets shadow depth.
+ * Elevation Mode — DEPRECATED, removed in the next minor (#3058).
  *
- * Members are exactly the selector values `tokens/modes-elevation.css`
- * switches on. That file is the authority (ADR-039 amendment 2026-10-12:
- * "BDS CSS selector values win") and `expression-modes.test.ts` parses it to
- * hold this list to it.
+ * The elevation expression-mode axis is gone: `tokens/modes-elevation.css`
+ * and `[data-mode-elevation]` were deleted, and the six shadow depths compose
+ * straight into `--bds-shadow-{sunken,flat,subtle,raised,lifted,dramatic}`.
+ * Nothing in BDS reads this list. It stays one minor so a consumer that
+ * imports it (the portal's decision set) keeps compiling across the bump,
+ * the same one-minor rule as the deprecated `--bds-shadow-*` aliases.
  *
- * Mode semantics (from the generated file's own header):
- *   - flat                — composes a zeroed shorthand; no visible shadow.
- *   - lifted / dramatic   — compose the full `0px y blur spread rgba(0,0,0,α)`.
- *
- * The DEFAULT elevation mode is `subtle`, the attribute-ABSENT state, which
- * uses the hand-authored --bds-shadow-* composition in `tokens/gap-fills.css`.
- * It is deliberately not a member: no `[data-mode-elevation="subtle"]`
- * selector exists. Omit the attribute to mean subtle.
+ * @deprecated #3058 — no elevation axis; pick a `--bds-shadow-*` depth instead.
  */
 export const ELEVATION_MODE_VALUES = ['flat', 'lifted', 'dramatic'] as const;
 
+/** @deprecated #3058 — see ELEVATION_MODE_VALUES. */
 export type ElevationMode = (typeof ELEVATION_MODE_VALUES)[number];
 
+/** @deprecated #3058 — see ELEVATION_MODE_VALUES. */
 export const isElevationMode = (value: string): value is ElevationMode =>
   (ELEVATION_MODE_VALUES as readonly string[]).includes(value);

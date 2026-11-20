@@ -12,7 +12,7 @@ const meta: Meta<typeof Hero> = {
   tags: ['surface-web'],
   argTypes: {
     sectionKey: { control: 'text', description: 'Unique section key — drives element ids.' },
-    layout: { control: 'inline-radio', options: ['split', 'interior-minimal', 'with-pricing-card', 'centered'], description: 'Structural layout modifier per ADR-008 §3.' },
+    layout: { control: 'inline-radio', options: ['split', 'interior-minimal', 'with-pricing-card', 'centered', 'statement'], description: 'Structural layout modifier per ADR-008 §3.' },
     align: { control: 'inline-radio', options: ['left', 'center'], description: 'Content-column placement (structure axis, ADR-039). `left` default; `center` emits `bds-hero--align-center`.' },
     mediaPosition: { control: 'inline-radio', options: ['end', 'start'], description: '`split` media-column side (structure axis, ADR-039, #3051). `end` default; `start` emits `data-media-position="start"` and places the media first.' },
     orientation: { control: 'inline-radio', options: ['horizontal', 'vertical'], description: '`split` column stacking (structure axis, ADR-039, #3051). `horizontal` default; `vertical` emits `data-orientation="vertical"` and stacks content and media at every width.' },
@@ -144,6 +144,30 @@ export const Centered: Story = {
       </div>
     ),
   ],
+};
+
+/**
+ * `layout="statement"`: left-aligned short headline and one CTA under an eyebrow
+ * with a short rule, no media. The optional `decoration` fills a right column
+ * from the tablet rung up; without it the content keeps the full measure.
+ *
+ * @summary Statement — short headline + one CTA, optional decoration
+ */
+export const Statement: Story = {
+  args: {
+    sectionKey: 'hero-statement',
+    layout: 'statement',
+    subtitle: 'Our approach',
+    title: 'Say it plainly',
+    cta: { label: 'Get started', url: '#start' },
+    decoration: (
+      <svg viewBox="0 0 120 120" fill="none" stroke="currentColor" aria-hidden="true" focusable="false">
+        <circle cx="60" cy="60" r="56" />
+        <circle cx="60" cy="60" r="38" />
+        <circle cx="60" cy="60" r="20" />
+      </svg>
+    ),
+  },
 };
 
 /**
@@ -405,5 +429,101 @@ export const InteractionTestSplitServiceLine: Story = {
     await expect(hero.getAttribute('data-service-line')).toBe('marketing');
     await expect(getComputedStyle(title).color).toBe(expected);
     await expect(expected).not.toBe(neutral);
+  },
+};
+
+/**
+ * Opt-in `data-inverse-scope="card"` (brik-bds#1028). A hero whose section is a
+ * light band and whose media card alone paints `-inverse` must NOT take the dark
+ * `-on-dark` content-text flip: in dark mode its headline stays on the line's
+ * `-on-light` step. An unflagged hero in dark mode still flips (default contract
+ * unchanged, asserted via the sibling probe below).
+ *
+ * @summary Dark mode — flagged hero keeps `-on-light` content text
+ */
+export const InteractionTestInverseScopeCard: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    sectionKey: 'hero-inverse-scope-card',
+    layout: 'split',
+    subtitle: 'Marketing',
+    title: 'Websites that turn visitors into customers',
+    media: demoImage,
+    'data-service-line': 'marketing',
+    'data-inverse-scope': 'card',
+  } as Story['args'],
+  play: async ({ canvasElement }) => {
+    const root = document.documentElement;
+    const prev = root.getAttribute('data-theme');
+    root.setAttribute('data-theme', 'dark');
+    try {
+      const title = canvasElement.querySelector<HTMLElement>('.bds-hero__title')!;
+      const resolve = (token: string) => {
+        const p = document.createElement('span');
+        p.style.color = `var(${token})`;
+        canvasElement.appendChild(p);
+        const c = getComputedStyle(p).color;
+        p.remove();
+        return c;
+      };
+      const onLight = resolve('--bds-text-service-marketing-on-light');
+      const onDark = resolve('--bds-text-service-marketing-on-dark');
+      await expect(onLight).not.toBe(onDark);
+      await expect(getComputedStyle(title).color).toBe(onLight);
+    } finally {
+      if (prev === null) root.removeAttribute('data-theme');
+      else root.setAttribute('data-theme', prev);
+    }
+  },
+};
+
+/**
+ * The pricing-card band flips the breadcrumb's `--bds-text-secondary` to the
+ * line's `-on-dark` step in dark mode (Breadcrumb.css). A hero flagged
+ * `data-inverse-scope="card"` is a light band, so it is exempt and keeps
+ * `-on-light` (brik-bds#1028) — the current crumb would otherwise be dark-hue
+ * on light.
+ *
+ * @summary Dark mode — flagged hero keeps `-on-light` breadcrumb
+ */
+export const InteractionTestInverseScopeCardBreadcrumb: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    sectionKey: 'hero-inverse-scope-card-breadcrumb',
+    layout: 'interior-minimal',
+    title: 'Websites that turn visitors into customers',
+    breadcrumb: <Breadcrumb items={crumbs} />,
+    className: 'bds-hero--with-pricing-card',
+    'data-service-line': 'marketing',
+    'data-inverse-scope': 'card',
+  } as Story['args'],
+  play: async ({ canvasElement }) => {
+    const root = document.documentElement;
+    const prev = root.getAttribute('data-theme');
+    root.setAttribute('data-theme', 'dark');
+    try {
+      const resolve = (token: string) => {
+        const p = document.createElement('span');
+        p.style.color = `var(${token})`;
+        canvasElement.appendChild(p);
+        const c = getComputedStyle(p).color;
+        p.remove();
+        return c;
+      };
+      const onLight = resolve('--bds-text-service-marketing-on-light');
+      const onDark = resolve('--bds-text-service-marketing-on-dark');
+      await expect(onLight).not.toBe(onDark);
+
+      const hero = canvasElement.querySelector<HTMLElement>('.bds-hero')!;
+      const crumb = canvasElement.querySelector<HTMLElement>('.bds-breadcrumb__current')!;
+      await expect(getComputedStyle(crumb).color).toBe(onLight);
+
+      // Positive control: drop the flag and the SAME hero must take the flip.
+      hero.removeAttribute('data-inverse-scope');
+      await expect(getComputedStyle(crumb).color).toBe(onDark);
+    } finally {
+      if (prev === null) root.removeAttribute('data-theme');
+      else root.setAttribute('data-theme', prev);
+    }
   },
 };

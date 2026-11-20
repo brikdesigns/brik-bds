@@ -15,6 +15,8 @@
  *   interior-minimal  — `bds-hero--interior-minimal`   narrow content column, no media
  *   with-pricing-card — `bds-hero--with-pricing-card`  content trail + image/price card
  *   centered          — `bds-hero--centered`           single centred column, no media
+ *   statement         — `bds-hero--statement`          left-aligned short headline + one CTA,
+ *                                                      eyebrow with a rule, optional decoration
  *
  * `HeroLayout` is imported from `./types`, the contract module both rails
  * share, so a layout cannot be added to one rail only.
@@ -27,6 +29,9 @@
  *   - section.subtitle             — eyebrow above h1 (optional)
  *   - section.body                 — lead paragraph (optional)
  *   - section.cta                  — primary CTA (optional)
+ *   - <slot name="decoration">     — `--statement` right column (optional, direct
+ *     composition only: the dispatcher passes no slots). Absent, the column is
+ *     not rendered and the content column keeps the full measure.
  *   - clientFacts.heroImageUrl     — `--split` media column; emits a
  *     `data-content-needed="hero_image_url"` stub when missing (CI greppable)
  *   - section.breadcrumb           — `--with-pricing-card` trail (optional)
@@ -155,6 +160,12 @@ interface Props extends BlueprintProps {
    * hero's `data-service-line` theming. Default true. (brik-bds#871)
    */
   showServiceTag?: boolean;
+  /**
+   * `card` opts a dark-mode hero out of the `-on-dark` content-text flips for
+   * consumers whose section is a light band and only the media card paints
+   * `-inverse`. Emits `data-inverse-scope`. Default: unset. (brik-bds#1028)
+   */
+  inverseScope?: 'card';
 }
 
 const {
@@ -168,6 +179,7 @@ const {
   blueprintKey,
   imageRatio,
   showServiceTag = true,
+  inverseScope,
 } = Astro.props;
 const titles = resolveSectionTitles(section);
 
@@ -191,6 +203,8 @@ const contentClass = ['bds-hero__content', reveal !== 'none' && `bds-block-revea
 
 const isSplit = layout === 'split';
 const isPricingCard = layout === 'with-pricing-card';
+const isStatement = layout === 'statement';
+const hasDecoration = isStatement && Astro.slots.has('decoration');
 const heroImage = clientFacts.heroImageUrl;
 
 // Split media column (media axis, ADR-039). `image` reads the hero image;
@@ -207,8 +221,8 @@ const priceCardRatio = imageRatio ?? 'square';
 // The pricing-card layout sits on an audience-tinted surface, so its single
 // action is the inverse button; the other layouts use the primary fill.
 const ctaClass = isPricingCard
-  ? 'bds-button bds-button--inverse bds-button--md'
-  : 'bds-button bds-button--primary bds-button--md';
+  ? 'bds-button bds-button--variant-inverse bds-button--size-md'
+  : 'bds-button bds-button--variant-primary bds-button--size-md';
 
 ---
 
@@ -217,6 +231,8 @@ const ctaClass = isPricingCard
   aria-labelledby={titleId}
   data-blueprint-key={blueprintKey}
   data-service-line={serviceLine}
+  data-inverse-scope={inverseScope}
+  data-decoration={hasDecoration ? 'end' : undefined}
   data-media-position={isSplit && mediaPosition !== 'end' ? mediaPosition : undefined}
   data-orientation={isSplit && orientation !== 'horizontal' ? orientation : undefined}
 >
@@ -267,7 +283,7 @@ const ctaClass = isPricingCard
         />
       ) : serviceLine ? (
         <span
-          class={`bds-service-tag bds-service-tag--icon bds-service-tag--icon-lg bds-service-tag--${serviceLine} bds-hero__icon`}
+          class={`bds-service-tag bds-service-tag--variant-icon bds-service-tag--size-lg bds-service-tag--${serviceLine} bds-hero__icon`}
           role="img"
           aria-label={`${serviceLine} category`}
         />
@@ -285,6 +301,12 @@ const ctaClass = isPricingCard
         </a>
       )}
     </div>
+
+    {hasDecoration && (
+      <div class="bds-hero__decoration" aria-hidden="true">
+        <slot name="decoration" />
+      </div>
+    )}
 
     {isSplit && media !== 'none' && (splitMediaSrc ? (
       <div class="bds-hero__media">
@@ -319,7 +341,7 @@ const ctaClass = isPricingCard
         {(priceCard.priceLabel || priceCard.price || priceCard.cta) && (
           <HeroMediaCardPrice label={priceCard.priceLabel} value={priceCard.price}>
             {priceCard.cta && 'url' in priceCard.cta && (
-              <a href={priceCard.cta.url} class={`bds-button bds-button--primary bds-button--${priceCard.cta.size ?? 'sm'}`}>
+              <a href={priceCard.cta.url} class={`bds-button bds-button--variant-primary bds-button--size-${priceCard.cta.size ?? 'sm'}`}>
                 <span class="bds-button__content">{priceCard.cta.label}</span>
               </a>
             )}
@@ -431,6 +453,55 @@ const ctaClass = isPricingCard
   .bds-hero--centered .bds-hero__content {
     align-items: center;
     text-align: center;
+  }
+
+  /* ── --statement: left-aligned short headline + one CTA ─────────── */
+  /* The shared container, left-aligned, at the wide reading width — where
+     --interior-minimal is a narrow banner and --centered is centred. The
+     headline steps up to the display ramp and the eyebrow carries a short rule.
+     Surface and text colours come from the shared spine's hooks, so the layout
+     follows the theme mode; nothing here pins a dark surface. */
+  .bds-hero--statement .bds-hero__container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--bds-gap-xl);
+    align-items: center;
+  }
+
+  .bds-hero--statement .bds-hero__subtitle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--bds-gap-md);
+  }
+
+  .bds-hero--statement .bds-hero__subtitle::before {
+    content: '';
+    width: var(--bds-size-1200);
+    border-top: var(--bds-border-width-sm) solid currentColor;
+  }
+
+  .bds-hero--statement .bds-hero__title {
+    max-width: var(--bds-content-width-md);
+    font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xxl), 7vw, var(--bds-display-lg)));
+    font-weight: var(--bds-font-weight-bold);
+  }
+
+  .bds-hero--statement .bds-hero__lead {
+    font-size: var(--bds-body-xl);
+  }
+
+  .bds-hero--statement .bds-hero__decoration {
+    color: var(--bds-text-brand-primary);
+    justify-self: center;
+    width: 100%;
+    max-width: var(--bds-content-width-text-xs);
+  }
+
+  @media (min-width: 768px) {
+    .bds-hero--statement[data-decoration] .bds-hero__container {
+      grid-template-columns: 3fr 2fr;
+      gap: var(--bds-gap-huge);
+    }
   }
 
   /* ── --interior-minimal: single narrow content column, no media ── */
@@ -653,36 +724,57 @@ const ctaClass = isPricingCard
    * (6.89–9.06:1) via contrast-gate (brik-bds#1017). The inner inverse <Button>
    * is unaffected: its label/fill ride --bds-text-inverse / --bds-background-inverse
    * (surface-service-{line}-dark), handled above. */
-  :root[data-theme="dark"] .bds-hero[data-service-line='brand'] {
+  :root[data-theme="dark"] .bds-hero[data-service-line='brand']:not([data-inverse-scope="card"]) {
     --bds-hero-headline-color: var(--bds-text-service-brand-on-dark);
     --bds-hero-eyebrow-color: var(--bds-text-service-brand-on-dark);
     --bds-hero-lead-color: var(--bds-text-service-brand-on-dark);
     --bds-text-brand-primary: var(--bds-text-service-brand-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-service-line='marketing'] {
+  :root[data-theme="dark"] .bds-hero[data-service-line='marketing']:not([data-inverse-scope="card"]) {
     --bds-hero-headline-color: var(--bds-text-service-marketing-on-dark);
     --bds-hero-eyebrow-color: var(--bds-text-service-marketing-on-dark);
     --bds-hero-lead-color: var(--bds-text-service-marketing-on-dark);
     --bds-text-brand-primary: var(--bds-text-service-marketing-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-service-line='information'] {
+  :root[data-theme="dark"] .bds-hero[data-service-line='information']:not([data-inverse-scope="card"]) {
     --bds-hero-headline-color: var(--bds-text-service-information-on-dark);
     --bds-hero-eyebrow-color: var(--bds-text-service-information-on-dark);
     --bds-hero-lead-color: var(--bds-text-service-information-on-dark);
     --bds-text-brand-primary: var(--bds-text-service-information-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-service-line='product'] {
+  :root[data-theme="dark"] .bds-hero[data-service-line='product']:not([data-inverse-scope="card"]) {
     --bds-hero-headline-color: var(--bds-text-service-product-on-dark);
     --bds-hero-eyebrow-color: var(--bds-text-service-product-on-dark);
     --bds-hero-lead-color: var(--bds-text-service-product-on-dark);
     --bds-text-brand-primary: var(--bds-text-service-product-on-dark);
   }
-  :root[data-theme="dark"] .bds-hero[data-service-line='back-office'],
-  :root[data-theme="dark"] .bds-hero[data-service-line='service'] {
+  :root[data-theme="dark"] .bds-hero[data-service-line='back-office']:not([data-inverse-scope="card"]),
+  :root[data-theme="dark"] .bds-hero[data-service-line='service']:not([data-inverse-scope="card"]) {
     --bds-hero-headline-color: var(--bds-text-service-back-office-on-dark);
     --bds-hero-eyebrow-color: var(--bds-text-service-back-office-on-dark);
     --bds-hero-lead-color: var(--bds-text-service-back-office-on-dark);
     --bds-text-brand-primary: var(--bds-text-service-back-office-on-dark);
+  }
+
+  /* ── Dark-mode, opt-in `data-inverse-scope="card"` (brik-bds#1028): the section is a light band and only the media card paints `-inverse`. The content-text flips above skip a flagged hero (stay `-on-light`); the card's primary CTA is repainted with the `-on-dark` tint + grayscale-950 text (the `-on-light` fill is `{hue}-darkest`, invisible on the card). Rest-state only so BDS hover/press feedback still wins. Text is the grayscale-950 primitive: the hero rebinds --bds-text-on-color-light to white. */
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"] .bds-hero__media-card .bds-button--variant-primary {
+    color: var(--bds-color-grayscale-950);
+  }
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='brand'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active) {
+    background-color: var(--bds-background-service-brand-on-dark);
+  }
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='marketing'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active) {
+    background-color: var(--bds-background-service-marketing-on-dark);
+  }
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='information'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active) {
+    background-color: var(--bds-background-service-information-on-dark);
+  }
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='product'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active) {
+    background-color: var(--bds-background-service-product-on-dark);
+  }
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='back-office'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active),
+  :root[data-theme="dark"] .bds-hero[data-inverse-scope="card"][data-service-line='service'] .bds-hero__media-card .bds-button--variant-primary:not(:hover):not(:active) {
+    background-color: var(--bds-background-service-back-office-on-dark);
   }
 
   .bds-hero--with-pricing-card .bds-hero__container {
@@ -704,8 +796,8 @@ const ctaClass = isPricingCard
   }
 
   /* Scoped to `img` only: this slot also carries the ServiceTag icon variant
-     (a `<span class="bds-service-tag--icon …">`), whose inline-flex centering
-     must survive. The span self-sizes via `bds-service-tag--icon-lg` (40px =
+     (a `<span class="bds-service-tag--variant-icon …">`), whose inline-flex centering
+     must survive. The span self-sizes via `bds-service-tag--size-lg` (40px =
      2.5rem). See brik-bds#873. */
   img.bds-hero__icon {
     display: block;
@@ -736,7 +828,7 @@ const ctaClass = isPricingCard
     background: var(--bds-hero-media-background, var(--bds-hero-media-bg, var(--bds-surface-primary)));
     border-radius: var(--bds-hero-radius, var(--bds-border-radius-lg));
     padding: var(--bds-padding-md);
-    box-shadow: var(--bds-shadow-md);
+    box-shadow: var(--bds-shadow-raised);
     display: flex;
     flex-direction: column;
     gap: var(--bds-gap-md);
@@ -785,6 +877,15 @@ const ctaClass = isPricingCard
     width: 100%;
     height: 100%;
     object-fit: cover;
+  }
+
+  /* `--statement` decoration — the slotted node comes from the caller, so it
+     carries no scope id and a scoped rule would not reach it. */
+  .bds-hero__decoration svg,
+  .bds-hero__decoration img {
+    display: block;
+    width: 100%;
+    height: auto;
   }
 
   .bds-hero__price-label {

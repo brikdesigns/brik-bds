@@ -57,7 +57,7 @@
   line-height: var(--bds-font-line-height-snug);
   color: var(--bds-text-secondary);
   text-decoration: none;
-  transition: color var(--bds-duration-sm) var(--bds-ease-out);
+  transition: color var(--bds-duration-100) var(--bds-ease-out);
   cursor: pointer;
 }
 

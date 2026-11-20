@@ -13,7 +13,7 @@
  *   - border-width → border-width-{sm,md,lg,xl,huge}
  *
  * Easy to extend to:
- *   - border-radius / elevation / breakpoint / icon
+ *   - breakpoint / icon
  *
  * Run:
  *   node scripts/generate-modes-css.mjs              # all wired collections
@@ -168,47 +168,28 @@ export const COLLECTIONS = {
       'via one piecewise calc(clamp(…) + clamp(…)) per token (ADR-042), ' +
       'rather than a [data-mode-*] override block.',
   },
-  elevation: {
-    // Elevation is the first COMPOSITE collection: each token is a multi-part
-    // box-shadow, not a single value, so it uses the dedicated emitElevation
-    // branch (see generate()) rather than the generic emitCollection loop.
-    composite: true,
-    sizes: ['sm', 'md', 'lg', 'xl'],
-    defaultMode: 'subtle',
-    nonDefaultModes: ['flat', 'lifted', 'dramatic'],
-    // Override the canonical --shadow-* tokens (BDS #2233 / PR #2237), NOT the
-    // deprecated --box-shadow-* aliases — gap-fills.css derives those from
-    // --shadow-*, so a --shadow-* override cascades to both.
-    tokenName: (size) => `${PREFIX}shadow-${size}`,
-    description:
-      'Elevation depth mode — overrides the composed --bds-shadow-* box-shadow ' +
-      'tokens. Figma source (elevation/* in tokens-studio.json) carries a ' +
-      'y-offset (box-shadow group), blur-radius, spread, and opacity per size ' +
-      '(#2243); x-offset is invariantly 0 and the color is always black, so only ' +
-      'the alpha varies (rides the opacity sub-token). `flat` composes to a ' +
-      'zeroed shorthand (no visible shadow); `lifted`/`dramatic` compose the ' +
-      'full `0px y blur spread rgba(0,0,0,α)`. `subtle` is the default (no ' +
-      'attribute) and uses the hand-authored --bds-shadow-* in tokens/gap-fills.css, ' +
-      'which this overrides.',
-  },
-  width: {
-    // Page-band cap (brik-bds#959 AC3 / #894). One STRING variable, not a FLOAT:
+  'content-width': {
+    // Page-band cap (brik-bds#959 AC3 / #894). STRING variables, not FLOATs:
     // `full-bleed` is the content-width-full rung (100%), which no px number can
     // carry. The Figma value `full` re-points to that rung by var() instead of
     // minting a second container token (ADR-041: one ladder for every cap).
+    // Keyed on the Figma collection name (`content-width`, #3278); the attribute
+    // and output file keep the shorter `width` axis name, like border-radius.
     groups: ['content-width'],
     defaultMode: 'contained',
     nonDefaultModes: ['wide', 'full-bleed'],
+    attr: 'width',
+    fileName: 'width',
     unitSuffix: '',
     tokenName: (group, name) => `${PREFIX}${group}-${name}`,
     resolve: (value) => (value === 'full' ? `var(${PREFIX}content-width-full)` : value),
     description:
       'Width — the page-band cap an expression mode picks per brand. Re-points ' +
-      'ONE rung of the ADR-041 ladder, --bds-content-width-xl (the page band: ' +
-      'hero, header, footer, section shell). The text rungs (-text-*) and the ' +
-      'narrower bands (-sm/-md/-lg) are untouched. `contained` is the default ' +
-      '(no attribute): the 1280px band in tokens/gap-fills.css stands. Must trail ' +
-      'gap-fills.css in dist/tokens.css (equal specificity, later source order wins).',
+      'the band rungs of the ADR-041 ladder (--bds-content-width-sm/-md/-lg/-xl) ' +
+      'to the values the Figma `content-width` collection gives each mode. ' +
+      '--bds-content-width-text-md keeps one value in every mode: a text measure ' +
+      'does not widen with the page band. `contained` is the default (no ' +
+      'attribute) and is emitted to :root by tokens/figma-tokens.css.',
   },
 };
 
@@ -351,94 +332,11 @@ function emitCollection(data, collectionKey) {
   return lines.join('\n');
 }
 
-// ─── Composite emit (elevation) ─────────────────────────────────────
-//
-// Elevation tokens are multi-part box-shadows, so the single-value
-// emitCollection loop can't express them. This branch composes the Figma
-// sub-tokens into a CSS box-shadow shorthand per size.
-
-function composeShadow(slice, size) {
-  // Figma elevation carries a y-offset (`box-shadow` group), a `blur-radius`, a
-  // `spread`, and an `opacity` per size (#2243). The x-offset is invariantly 0
-  // and the shadow color is always black — matching the hand-authored --shadow-*
-  // in gap-fills.css, every one of which is `0px … rgba(0,0,0,α)` — so only the
-  // alpha varies and it rides the `opacity` sub-token.
-  const y = slice['box-shadow']?.[size]?.$value ?? 0;
-  const blur = slice['blur-radius']?.[size]?.$value ?? 0;
-  const spread = slice['spread']?.[size]?.$value ?? 0;
-  const opacity = slice['opacity']?.[size]?.$value ?? 0;
-
-  // A shadow with no length AND full transparency is absent → emit a
-  // fully-zeroed box-shadow SHORTHAND (`0px 0px 0px 0px transparent`), NOT the
-  // `none` keyword. The base --shadow-* in gap-fills.css is a box-shadow
-  // shorthand; overriding it with `none` gives one token name two value types,
-  // which ADR-033 § 5 rejects (naming-canon Rule 2 — a `bds-lint-ignore` does
-  // not rescue it). The all-zero shorthand renders identically (no visible
-  // shadow) while keeping one value type. This is the `flat` mode.
-  if (y === 0 && blur === 0 && spread === 0 && opacity === 0) {
-    return '0px 0px 0px 0px transparent';
-  }
-
-  // Round the alpha to kill Figma's float32 drift (0.08 → 0.0799999…).
-  const alpha = Math.round(opacity * 1000) / 1000;
-  return `0px ${y}px ${blur}px ${spread}px rgba(0, 0, 0, ${alpha})`;
-}
-
-function emitElevation(data, collectionKey) {
-  const cfg = COLLECTIONS[collectionKey];
-
-  const lines = [];
-  lines.push('/**');
-  lines.push(` * BDS ${collectionKey} Mode Overrides (composite box-shadow)`);
-  lines.push(' *');
-  lines.push(' * Auto-generated by scripts/generate-modes-css.mjs from');
-  lines.push(' * design-tokens/tokens-studio.json. Do not hand-edit — re-run');
-  lines.push(' * the generator after any Figma mode update.');
-  lines.push(' *');
-  lines.push(` * ${cfg.description}`);
-  lines.push(' *');
-  lines.push(` * Selector contract: \`[data-mode-${collectionKey}="${cfg.nonDefaultModes.join('|')}"]\``);
-  lines.push(' * on :root (html). Default mode (subtle) requires no attribute (uses the');
-  lines.push(' * hand-authored --bds-shadow-* composition in gap-fills.css).');
-  lines.push(' */');
-  lines.push('');
-
-  const skipped = [];
-  for (const modeName of cfg.nonDefaultModes) {
-    const slice = readModeTokens(data, collectionKey, modeName);
-
-    const body = [];
-    for (const size of cfg.sizes) {
-      const composed = composeShadow(slice, size);
-      if (composed === null) continue; // source can't faithfully compose this
-      body.push(`  ${cfg.tokenName(size)}: ${composed};`);
-    }
-
-    if (body.length === 0) { skipped.push(modeName); continue; }
-
-    lines.push(`/* ─── ${modeName.charAt(0).toUpperCase() + modeName.slice(1)} ────────────────────────────────────────── */`);
-    lines.push(`[data-mode-${collectionKey}="${modeName}"] {`);
-    lines.push(...body);
-    lines.push('}');
-    lines.push('');
-  }
-
-  if (skipped.length) {
-    console.log(
-      `  ⚠ elevation: ${skipped.join(', ')} carry no distinct source values ` +
-      `(identical to subtle, no spread/color) — not emitted. Needs Figma authoring.`
-    );
-  }
-
-  return lines.join('\n');
-}
-
 // ─── Fluid emit (layout tier, ADR-042) ──────────────────────────────
 //
 // The layout tier has no default/override shape — it has three device
 // endpoints that all feed ONE calc() expression per token, so it gets its own
-// branch rather than a mode-by-mode selector loop like emitCollection, and
-// rather than a shadow box per size like emitElevation.
+// branch rather than a mode-by-mode selector loop like emitCollection.
 
 function emitFluid(data, collectionKey) {
   const cfg = COLLECTIONS[collectionKey];
@@ -498,13 +396,11 @@ function generate(collectionKey) {
 
   // One generic emitter drives single-value collections; per-collection
   // behaviour (which groups, how a token ref resolves, unit suffix) lives in
-  // the COLLECTIONS registry above. Composite collections (elevation) and the
-  // fluid layout tier each route to their own emitter: elevation because one
-  // CSS token composes multiple source sub-tokens, layout because it has no
-  // default/override shape at all — three endpoints feed one calc().
-  const css = cfg.composite
-    ? emitElevation(data, collectionKey)
-    : cfg.fluid
+  // the COLLECTIONS registry above. The fluid layout tier routes to its own
+  // emitter because it has no default/override shape at all — three endpoints
+  // feed one calc(). (Elevation has no mode axis since #3058: tokens/figma-tokens.css
+  // emits the composed --bds-shadow-* directly.)
+  const css = cfg.fluid
     ? emitFluid(data, collectionKey)
     : emitCollection(data, collectionKey);
 

@@ -16,7 +16,7 @@ For BDS development itself, edit in `~/Documents/GitHub/brik/brik-bds/`, run `np
 
 ## Token Discipline (Non-Negotiable)
 
-1. **All colors must be token references.** No hex values, no `filter` hacks, no `opacity` workarounds. If a semantic token doesn't exist, add it in Figma first (or `gap-fills.css` as a temporary bridge).
+1. **All colors must be token references.** No hex values, no `filter` hacks, no `opacity` workarounds. A token name is born in Figma only: if the token you need is not in a Figma-generated file, STOP and ask the operator to add the variable in Figma. NEVER add a name to `gap-fills.css`, and NEVER read `dist/tokens.css` as proof a name is canon (it bundles hand-written names frozen for removal, brik-bds#3239).
 2. **Never use a token outside its semantic category.** `--text-*` for text, `--background-*` for backgrounds, `--border-*` for borders.
 3. **Never mix font family with the wrong size scale.** Use composed style presets from `@/lib/styles` instead.
 4. **Before rewriting `:root` or any token file**, grep for all `var(--...)` usages first. A removed token silently breaks every reference.
@@ -34,7 +34,7 @@ For BDS development itself, edit in `~/Documents/GitHub/brik/brik-bds/`, run `np
 | --- | --- | --- |
 | `tokens/figma-tokens.css` | **Active** (auto-generated) | Light mode tokens — import in all consuming projects |
 | `tokens/figma-tokens-dark.css` | **Active** (auto-generated) | Dark mode — import after light in globals.css |
-| `tokens/gap-fills.css` | **Active** (manual) | Gap-fill tokens not yet in Figma |
+| `tokens/gap-fills.css` | **Frozen** (manual) | Hand-written names with no Figma variable. Takes NO new names (brik-bds#3239) |
 | `tokens/animations.css` | **Active** (manual) | Shared keyframe library |
 | `tokens/motion-classes.css` | **Active** (manual) | Composable CSS utility classes for animation |
 
@@ -99,9 +99,9 @@ style={text.body}
 ```
 
 **Font family must match element role:**
-- Heading/title/name → `--font-family-heading`
-- Label/badge/tag/button/caption → `--font-family-label`
-- Body copy/description/paragraph → `--font-family-body`
+- Heading/title/name → `--bds-font-family-heading`
+- Label/badge/tag/button/caption → `--bds-font-family-label`
+- Body copy/description/paragraph → `--bds-font-family-body`
 
 ---
 

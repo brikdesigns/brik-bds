@@ -4,11 +4,6 @@
       "thin",
       "thick"
     ],
-    "elevation": [
-      "flat",
-      "lifted",
-      "dramatic"
-    ],
     "radius": [
       "sharp",
       "round",
@@ -92,12 +87,14 @@
   "Button": {
     "variant": [
       "primary",
-      "outline",
       "secondary",
+      "outline",
       "ghost",
       "inverse",
       "on-color",
       "negative",
+      "negative-outline",
+      "negative-ghost",
       "positive"
     ],
     "size": [
@@ -106,6 +103,13 @@
       "md",
       "lg",
       "xl"
+    ]
+  },
+  "CalendarToolbar": {
+    "size": [
+      "sm",
+      "md",
+      "lg"
     ]
   },
   "Card": {
@@ -119,11 +123,10 @@
     ],
     "status": [
       "not-configured",
-      "linked",
       "connected",
-      "syncing",
       "synced",
-      "failed"
+      "negative",
+      "disabled"
     ],
     "size": [
       "sm",

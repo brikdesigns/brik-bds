@@ -69,6 +69,23 @@
   min-width: var(--bds-filter-bar-panel-min-width);
 }
 
+/* ─── Search (right side, after the controls, before actions) ───── */
+/*
+ * Takes the auto margin only when no controls row precedes it, so the field
+ * sits flush-right with the controls hugging its left edge.
+ */
+.bds-filter-bar__search {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+  min-width: 0;
+}
+
+.bds-filter-bar__controls ~ .bds-filter-bar__search,
+.bds-filter-bar__collapse ~ .bds-filter-bar__search {
+  margin-left: 0;
+}
+
 /* ─── Actions (always-visible, e.g. a primary/secondary ButtonGroup) ──── */
 /*
  * Exactly one element on the flex line carries `margin-left: auto`, because
@@ -89,7 +106,8 @@
 }
 
 .bds-filter-bar__controls ~ .bds-filter-bar__actions,
-.bds-filter-bar__collapse ~ .bds-filter-bar__actions {
+.bds-filter-bar__collapse ~ .bds-filter-bar__actions,
+.bds-filter-bar__search ~ .bds-filter-bar__actions {
   margin-left: 0;
 }
 }

@@ -99,7 +99,7 @@ export const LinkBreak = 'ph:link-break';
 //   import { ACTION_ICONS, Icon, Button, ButtonGroup } from '@brikdesigns/bds';
 //   <ButtonGroup>
 //     <Button icon={<Icon icon={ACTION_ICONS.sync} />} label="Sync" />
-//     <Button icon={<Icon icon={ACTION_ICONS.disconnect} />} label="Disconnect" variant="negative" />
+//     <Button icon={<Icon icon={ACTION_ICONS.disconnect} />} label="Disconnect" tone="negative" />
 //   </ButtonGroup>
 export const ACTION_ICONS = {
   /** Read / inspect a record. */

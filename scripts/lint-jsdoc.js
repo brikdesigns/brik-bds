@@ -76,7 +76,6 @@ const componentDirs = fs
 
 // Storybook reference pages — no exported React component, nothing to check.
 const EXEMPT_COMPONENTS = new Set([
-  'Calendar', // index.ts: "Calendar — placeholder, component not yet implemented"
   'Icons', // index.ts: "Icons — reference page only, no exported component"
   'ReadModePage', // page-archetype pattern doc — composes DataSection/FieldGrid/Field, no component of its own
 ]);
@@ -88,6 +87,7 @@ const MULTI_EXPORT = {
   SheetTypography: ['SheetSectionTitle', 'SheetFieldLabel', 'SheetFieldValue', 'SheetHelperText'],
   DataView: ['TableView', 'ListView', 'ProfileView'],
   Page: ['Page', 'PageContent'],
+  Chart: ['ChartFrame', 'BarChart', 'LineChart', 'DonutChart', 'Sparkline'],
 };
 
 // Build the (file, exportName) scan tasks.

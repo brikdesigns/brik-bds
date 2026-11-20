@@ -134,7 +134,7 @@ export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
  *   <Button icon={<Edit />} label="Edit" variant="ghost" />
  *   <Button icon={<Copy />} label="Copy" variant="ghost" />
  *   <Button icon={<Share />} label="Share" variant="ghost" />
- *   <Button icon={<Trash />} label="Delete" variant="negative" />
+ *   <Button icon={<Trash />} label="Delete" tone="negative" />
  * </ButtonGroup>
  * ```
  *

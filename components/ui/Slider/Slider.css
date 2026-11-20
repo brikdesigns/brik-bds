@@ -7,7 +7,7 @@
  * prefix marks them as non-global.
  *
  * @token-exempt — the thumb shadow (line 8) uses a custom rgba(0,0,0,0.1)
- * deliberately lighter than --bds-shadow-sm; already annotated
+ * deliberately lighter than --bds-shadow-subtle; already annotated
  * `bds-lint-ignore — promote to Figma`. Remove this exemption once the
  * value ships as a Figma token.
  */
@@ -18,7 +18,7 @@
   flex-direction: column;
   gap: var(--bds-gap-md);
   width: 100%;
-  --bds-slider-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* bds-lint-ignore — lighter than --bds-shadow-sm; promote to Figma */
+  --bds-slider-thumb-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* bds-lint-ignore — lighter than --bds-shadow-subtle; promote to Figma */
 }
 
 /* ─── Label row ── */
@@ -92,7 +92,7 @@
   box-shadow: var(--bds-slider-thumb-shadow);
   cursor: pointer;
   margin-top: calc((var(--bds-slider-track-height, var(--bds-size-150)) - var(--bds-slider-thumb-size, var(--bds-size-500))) / 2);
-  transition: box-shadow var(--bds-duration-sm) var(--bds-ease-out);
+  transition: box-shadow var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-slider-input::-moz-range-thumb {
@@ -103,7 +103,7 @@
   border: var(--bds-border-width-300) solid var(--bds-background-brand-primary);
   box-shadow: var(--bds-slider-thumb-shadow);
   cursor: pointer;
-  transition: box-shadow var(--bds-duration-sm) var(--bds-ease-out);
+  transition: box-shadow var(--bds-duration-100) var(--bds-ease-out);
 }
 
 /* Focus */

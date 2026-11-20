@@ -83,7 +83,7 @@ describe('inspect widget — token allowlist coverage', () => {
     '--layout-md',
     '--stagger-3',
     '--bds-page-primary',
-    '--bds-duration-md',
+    '--bds-duration-200',
   ])('classifies %s as a known token', (token) => {
     expect(isKnown(token)).toBe(true);
   });

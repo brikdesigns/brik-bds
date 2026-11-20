@@ -137,11 +137,14 @@ const CLEAN_SERVICE_CSS = `.bds-service-tag--information { background: var(--bds
  * judged on its own, not against the repo's live baseline. `--refs` is always
  * pointed at the fixture too: left to its default it would scan the real
  * `components/`, `docs-site/`, … and every case would then depend on repo state.
+ * `--figma` likewise: it defaults to the fixture's own tokens file, so every
+ * name counts as Figma-born and only a rule-9 case (which passes `figma`) can
+ * trip rule 9.
  */
 function run({
   tokens = CLEAN_TOKENS, tsx = CLEAN_TSX, css = CLEAN_CSS, refs = CLEAN_REFS, refsDir,
   serviceConfig = CLEAN_SERVICE_CONFIG, serviceTsx = CLEAN_SERVICE_TSX, serviceCss = CLEAN_SERVICE_CSS,
-  baseline, args = [],
+  baseline, figma, args = [],
 } = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'naming-canon-'));
   const tokensPath = path.join(dir, 'tokens.css');
@@ -163,10 +166,14 @@ function run({
   fs.mkdirSync(refsPath, { recursive: true });
   fs.writeFileSync(path.join(refsPath, 'consumer.css'), refs);
 
+  const figmaPath = path.join(dir, 'figma-tokens.css');
+  if (figma !== undefined && figma !== null) fs.writeFileSync(figmaPath, figma);
+
   const argv = [
     GATE, '--tokens', tokensPath, '--components', path.join(dir, 'ui'),
     '--refs', refsDir === undefined ? refsPath : refsDir, ...args,
   ];
+  if (!args.includes('--figma')) argv.push('--figma', figma === undefined ? tokensPath : figmaPath);
   if (baseline === undefined) {
     argv.push('--no-baseline');
   } else {
@@ -235,6 +242,28 @@ describe('rule 1 — step vocabulary (ADR-033 § 3)', () => {
     expect(code).toBe(1);
     expect(out).toMatch(/--bds-gap-nano — step `nano` is outside --bds-gap-\*'s vocabulary/);
     expect(out).toMatch(/--bds-icon-2nano — step `2nano` is outside --bds-icon-\*'s vocabulary/);
+  });
+
+  // § Amendments (#3058): the Figma `elevation` depths are --shadow-* steps.
+  // The fixture already carries the t-shirt `--bds-shadow-md`, the same mixed
+  // family the deprecated aliases leave for one minor, so this is the hard case.
+  it('admits the shadow depths on --shadow-* (ADR-033 § Amendments, #3058)', () => {
+    const { code, out } = run({ tokens: withTokens(
+      '--bds-shadow-sunken: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);',
+      '--bds-shadow-flat: 0 0 0 0 rgba(0, 0, 0, 0);',
+      '--bds-shadow-subtle: 0 2px 4px 0 rgba(0, 0, 0, 0.06);',
+      '--bds-shadow-raised: 0 4px 12px 0 rgba(0, 0, 0, 0.12);',
+      '--bds-shadow-lifted: 0 4px 16px 0 rgba(0, 0, 0, 0.12);',
+      '--bds-shadow-dramatic: 0 4px 32px 0 rgba(0, 0, 0, 0.24);',
+    ) });
+    expect(out).toMatch(/clean — 0 live violation/);
+    expect(code).toBe(0);
+  });
+
+  it('denies the shadow depths outside --shadow-* — the words are shadow-only', () => {
+    const { code, out } = run({ tokens: withTokens('--bds-gap-raised: var(--bds-space-400);') });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--bds-gap-raised — step `raised` is outside --bds-gap-\*'s vocabulary/);
   });
 
   it('a § Named exception is not a step violation', () => {
@@ -453,6 +482,39 @@ describe('rule 4 — a BEM modifier carries its axis prefix (ADR-033 § 4)', () 
     expect(out).not.toMatch(/--disabled|--loading/);
     expect(code).toBe(0);
   });
+
+  it('admits the boolean-sourced modifiers #1927 kind A classified', () => {
+    // Each is emitted from a boolean prop or predicate on every block that uses
+    // it: `highlighted && …` (PricingCard.tsx:73), `isClickable ? … : …--non-clickable`
+    // (ProgressStepper.tsx:305), `wrap ? …--wrap : …--nowrap` (TagGroup.tsx:38),
+    // `Boolean(iconBefore) && …` (TextInput.tsx:118). All 27 were rule-4 findings
+    // before the set grew, so this fails against the old list.
+    const admitted = [
+      'clickable', 'non-clickable', 'exiting', 'flash', 'highlighted',
+      'indeterminate', 'interactive', 'sortable', 'today', 'placeholder', 'last',
+      'origin', 'full-width', 'auto-width', 'icon-only', 'no-border', 'wrap',
+      'nowrap', 'has-dot', 'has-errors', 'has-icon', 'has-icon-after',
+      'has-icon-before', 'has-tabs', 'has-trailing', 'with-control', 'with-description',
+    ];
+    const css = CLEAN_CSS + admitted.map((m) => `.bds-badge--${m} { opacity: 1; }\n`).join('');
+    const { code, out } = run({ css });
+    for (const m of admitted) expect(out).not.toMatch(new RegExp(`--${m} — `));
+    expect(code).toBe(0);
+  });
+
+  it('does NOT admit a word one block emits from an axis value', () => {
+    // The set is keyed by word, so it holds only words that are boolean
+    // everywhere. `with-pricing-card` is a Hero `layout` value, `scroll` is a
+    // TabBar `overflow` value, and `pulse` is one of Badge's three CSS-only
+    // animations. A `has-` / `with-` prefix rule would have hidden the first.
+    const css = `${CLEAN_CSS}.bds-badge--with-pricing-card { color: red; }\n`
+      + '.bds-badge--scroll { color: red; }\n.bds-badge--pulse { color: red; }\n';
+    const { code, out } = run({ css });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--with-pricing-card — bare modifier/);
+    expect(out).toMatch(/--scroll — bare modifier/);
+    expect(out).toMatch(/--pulse — bare modifier/);
+  });
 });
 
 describe('rule 4 — the service-line carve-out (§ Named exceptions, #1982)', () => {
@@ -488,9 +550,9 @@ describe('rule 4 — the service-line carve-out (§ Named exceptions, #1982)', (
     // import-level test would exempt that and hide a real § 4 finding.
     const { code, out } = run({
       tsx: `import type { ServiceLine } from '../ServiceTag/service-config';
-export type CardTint = Exclude<ServiceLine, 'service'>;
+export type CardServiceLine = Exclude<ServiceLine, 'service'>;
 export type CardVariant = 'brand' | 'plain';
-export interface CardProps { variant: CardVariant; tint?: CardTint }
+export interface CardProps { variant: CardVariant; serviceLine?: CardServiceLine }
 export function Card({ variant }: CardProps) {
   return <div className={\`bds-card--\${variant}\`} />;
 }`,
@@ -571,27 +633,45 @@ describe('rule 5 — `inverse` on the emphasis axis (§ Amendments, #2279)', () 
   });
 
   it('still denies a neighbouring word the amendment did NOT admit', () => {
-    // `on-color` is the same axis by the same evidence (§ Amendments) and is
-    // deliberately left out until #1983 gives it a caller. Default-deny has to
-    // keep holding for it, or the amendment read as "open the axis".
+    // `on-color` was the neighbour here until #1983 gave it a caller and a § 6
+    // amendment. Default-deny has to keep holding for any other word, or the
+    // amendments read as "open the axis".
     const { code, out } = run({
-      tsx: `${CLEAN_TSX}export type ChipEmphasis = 'neutral' | 'on-color';\n`,
+      tsx: `${CLEAN_TSX}export type ChipEmphasis = 'neutral' | 'knockout';\n`,
     });
     expect(code).toBe(1);
-    expect(out).toMatch(/ChipEmphasis\.on-color — `on-color` is on no closed list for the emphasis axis/);
+    expect(out).toMatch(/ChipEmphasis\.knockout — `knockout` is on no closed list for the emphasis axis/);
     expect(out).toMatch(/needs a § 6 amendment/);
   });
 
-  it('makes ButtonVariant\'s three-axis mixing visible to rule 3', () => {
-    // The one live violation the amendment surfaces on untouched code, and the
-    // reason a baseline row keyed to #1983 exists. Before `inverse` was on a
-    // closed list, only `negative`/`positive` were claimed — one axis, so
-    // mixedAxes() returned null and the union read as clean.
+  it('makes a variant union\'s emphasis + tone mixing visible to rule 3', () => {
+    // The shape #2279 surfaced on Button — planted on a non-exempt name so the
+    // gate keeps catching it. Before `inverse` was on a closed list, only
+    // `negative`/`positive` were claimed — one axis, so mixedAxes() returned
+    // null and the union read as clean.
     const { code, out } = run({
-      tsx: `${CLEAN_TSX}export type ButtonVariant = 'primary' | 'ghost' | 'inverse' | 'negative';\n`,
+      tsx: `${CLEAN_TSX}export type ChipVariant = 'primary' | 'ghost' | 'inverse' | 'negative';\n`,
     });
     expect(code).toBe(1);
-    expect(out).toMatch(/ButtonVariant#mixed — mixes 2 axes \(emphasis \+ tone\)/);
+    expect(out).toMatch(/ChipVariant#mixed — mixes 2 axes \(emphasis \+ tone\)/);
+  });
+});
+
+describe('rule 3 — Button\'s curated style list (§ Amendments, #3275)', () => {
+  it('skips the mixed-axis check for ButtonVariant only', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ButtonVariant = 'primary' | 'outline' | 'inverse' | 'on-color' | 'negative' | 'negative-outline' | 'positive';\n`,
+    });
+    expect(out).not.toMatch(/ButtonVariant#mixed/);
+    expect(code).toBe(0);
+  });
+
+  it('still runs the retired-word check on ButtonVariant', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ButtonVariant = 'primary' | 'error';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/ButtonVariant — retired valence word/);
   });
 });
 
@@ -659,6 +739,177 @@ describe('rule 4 — the `ratio` axis (§ Amendments, #2037)', () => {
     });
     expect(code).toBe(1);
     expect(out).toMatch(/--60-40 — bare modifier/);
+  });
+});
+
+describe('rule 4 + 5 — the fit · anchor · resize · marker · underline · measure axes (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers components already emit', () => {
+    // Every one was a baselined `bare modifier` until the axes were admitted:
+    // the prefix was right, the gate just had no axis list to read it against.
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-frame--fit-cover { object-fit: cover; }
+.bds-frame--anchor-height { height: 100%; }
+.bds-text-area--resize-vertical { resize: vertical; }
+.bds-bullet-list--marker-decimal { list-style: decimal; }
+.bds-text-link--underline-hover { text-decoration: none; }
+.bds-section-header--measure-md { max-width: 60ch; }
+`,
+    });
+    expect(out).not.toMatch(/--(fit|anchor|resize|marker|underline|measure)-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies a value the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-frame--fit-stretch { object-fit: fill; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--fit-stretch — `stretch` is on no closed list for the fit axis/);
+  });
+
+  it('still denies a novel member in a governed union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ListMarker = 'disc' | 'square';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/ListMarker\.square — `square` is on no closed list for the marker axis/);
+  });
+
+  it('does not read shared values on an unrelated union as these axes', () => {
+    // DividerSpacing's real shape. `none` and `sm/md/lg` are on the resize,
+    // measure and marker lists too; claiming them by value would make rule 3
+    // read this as mixed.
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type DividerSpacing = 'none' | 'sm' | 'md' | 'lg';\n`,
+    });
+    expect(out).not.toMatch(/DividerSpacing/);
+    expect(code).toBe(0);
+  });
+});
+
+describe('rule 4 + 5 — the `columns` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers Grid and FieldGrid emit from `columns`', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-grid--columns-3 { grid-template-columns: repeat(3, 1fr); }
+.bds-grid--columns-auto-fit { grid-template-columns: repeat(auto-fit, 1fr); }
+.bds-field-grid--columns-2 { container-type: inline-size; }
+`,
+    });
+    expect(out).not.toMatch(/columns-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the retired `cols` spelling and a bare auto-sizing keyword', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-grid--cols-3 { grid-template-columns: repeat(3, 1fr); }\n.bds-grid--auto-fit { grid-template-columns: repeat(auto-fit, 1fr); }\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--cols-3 — bare modifier/);
+    expect(out).toMatch(/--auto-fit — bare modifier/);
+  });
+
+  it('still denies a count the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-grid--columns-7 { grid-template-columns: repeat(7, 1fr); }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--columns-7 — `7` is on no closed list for the columns axis/);
+  });
+
+  it('still denies a novel member in a governed union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type TileColumns = 'auto-fit' | 'masonry';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/TileColumns\.masonry — `masonry` is on no closed list for the columns axis/);
+  });
+});
+
+describe('rule 4 + 5 — the `spacing` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers Divider, DataSection and SheetSection emit from `spacing`', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-divider--spacing-sm { margin-top: 8px; }
+.bds-data-section--spacing-lg + .bds-data-section { margin-top: 24px; }
+.bds-sheet-section--spacing-md + .bds-sheet-section { margin-top: 16px; }
+`,
+    });
+    expect(out).not.toMatch(/spacing-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies a rung the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-divider--spacing-xl { margin-top: 32px; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--spacing-xl — `xl` is on no closed list for the spacing axis/);
+  });
+
+  it('still denies a novel member in a governed union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type PanelSpacing = 'md' | 'loose';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/PanelSpacing\.loose — `loose` is on no closed list for the spacing axis/);
+  });
+});
+
+describe('rule 4 + 5 — the `corner` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers TaskConsole emits from `position` as `corner`', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-task-console--corner-bottom-right { bottom: 16px; right: 16px; }
+.bds-task-console--corner-bottom-left { bottom: 16px; left: 16px; }
+`,
+    });
+    expect(out).not.toMatch(/corner-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the bare corner modifier', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-task-console--bottom-right { bottom: 16px; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--bottom-right/);
+  });
+
+  it('still denies a corner the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-task-console--corner-top-left { top: 16px; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--corner-top-left — `top-left` is on no closed list for the corner axis/);
+  });
+
+  it('still denies a novel member in a governed union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ConsoleCorner = 'bottom-right' | 'top-left';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/ConsoleCorner\.top-left — `top-left` is on no closed list for the corner axis/);
+  });
+});
+
+describe('rule 4 + 5 — the `service-line` axis (§ Amendments, #1927)', () => {
+  it('admits the five service-line modifiers Card emits from `serviceLine`, `information` included', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-card--service-line-brand { color: red; }
+.bds-card--service-line-marketing { color: red; }
+.bds-card--service-line-information { color: red; }
+.bds-card--service-line-product { color: red; }
+.bds-card--service-line-back-office { color: red; }
+`,
+    });
+    expect(out).not.toMatch(/service-line-/);
+    expect(code).toBe(0);
+  });
+
+  it('still flags `information` as retired valence on an axis whose list does not hold it', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-alert--tone-information { color: red; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--tone-information — retired valence word `information` → `info`/);
+  });
+
+  it('denies the retired `--tint-*` spelling', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-card--tint-brand { color: red; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--tint-brand/);
+  });
+
+  it('denies a service line the amendment did NOT admit (the deprecated `service` alias)', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-card--service-line-service { color: red; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--service-line-service — `service` is on no closed list for the service-line axis/);
   });
 });
 
@@ -745,7 +996,7 @@ describe('rule 7 — a colour Primitive is color-{family}-{step} (ADR-043 § 2, 
 
   it('passes the registered named families and endpoints (#2677)', () => {
     const { code, out } = run({
-      tokens: withTokens('--color-system-red: #f00; --color-annotation-light-pink: #fde; --color-grayscale-black: #000;'),
+      tokens: withTokens('--color-system-red-500: #f00; --color-accent-teal-200: #0ff; --color-annotation-light-pink: #fde; --color-grayscale-black: #000;'),
     });
     expect(out).not.toMatch(/Rule 7/);
     expect(code).toBe(0);
@@ -795,6 +1046,52 @@ describe('rule 8 — no banned segment in a --bds-* name (#3088)', () => {
     });
     expect(out).not.toMatch(/Rule 8/);
     expect(code).toBe(0);
+  });
+});
+
+describe('rule 9 — every name is born in Figma (#3240)', () => {
+  // The Figma sync wrote CLEAN_TOKENS; the bundle then gains one hand-written name.
+  const planted = { tokens: withTokens('--bds-background-info-light: var(--bds-color-blue-300);'), figma: CLEAN_TOKENS };
+
+  it('fails on a name no Figma-generated file declares', () => {
+    const { code, out } = run(planted);
+    expect(code).toBe(1);
+    expect(out).toMatch(/Rule 9 — name with no Figma variable behind it \(#3240\): 1 live/);
+    expect(out).toMatch(/--bds-background-info-light — declared in no Figma-generated file/);
+  });
+
+  it('passes once the Figma sync declares the name', () => {
+    const { code, out } = run({ tokens: planted.tokens, figma: planted.tokens });
+    expect(out).not.toMatch(/Rule 9/);
+    expect(code).toBe(0);
+  });
+
+  it('a frozen name is green, and its entry goes stale when the name is promoted or deleted', () => {
+    const baseline = { rules: { 9: { '--bds-background-info-light': 3239 } } };
+    expect(run({ ...planted, baseline }).code).toBe(0);
+    const { code, out } = run({ figma: CLEAN_TOKENS, baseline });
+    expect(code).toBe(1);
+    expect(out).toMatch(/rule 9: --bds-background-info-light/);
+  });
+
+  it('reads a pulled Brand Kit as its variables, not as compiled CSS', () => {
+    const kit = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'naming-canon-kit-')), 'kit.json');
+    fs.writeFileSync(kit, JSON.stringify({
+      $metadata: {}, 'color/light': { background: { 'info-light': { $value: '{color.blue.300}' } } },
+    }));
+    const tokensFile = path.join(path.dirname(kit), 'figma.css');
+    fs.writeFileSync(tokensFile, CLEAN_TOKENS);
+    const withKit = run({ tokens: planted.tokens, args: ['--figma', `${tokensFile},${kit}`] });
+    expect(withKit.out).not.toMatch(/Rule 9/);
+    expect(withKit.code).toBe(0);
+    expect(run({ tokens: planted.tokens, args: ['--figma', tokensFile] }).code).toBe(1);
+  });
+
+  it('exit 2 when a Figma-generated file is missing or declares nothing', () => {
+    expect(run({ figma: null }).code).toBe(2);
+    const { code, out } = run({ figma: ':root {\n}\n' });
+    expect(code).toBe(2);
+    expect(out).toMatch(/parsed 0 Figma-generated names/);
   });
 });
 
@@ -870,8 +1167,68 @@ describe('a broken scan never reads as clean', () => {
   });
 
   it('exit 2 on a bad --rule', () => {
-    const { code, out } = run({ args: ['--rule', '9'] });
+    const { code, out } = run({ args: ['--rule', '10'] });
     expect(code).toBe(2);
-    expect(out).toMatch(/--rule must be 1-8/);
+    expect(out).toMatch(/--rule must be 1-9/);
+  });
+});
+
+describe('rule 4 + 5 — the `placement` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers Tooltip and Menu emit from `placement`', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-menu--placement-top { bottom: 100%; }
+.bds-tooltip__arrow--placement-bottom { top: -4px; }
+.bds-tooltip__arrow--placement-left { right: -4px; }
+.bds-tooltip__arrow--placement-right { left: -4px; }
+`,
+    });
+    expect(out).not.toMatch(/placement-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the bare placement modifier', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-menu--top { bottom: 100%; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--top/);
+  });
+
+  it('still denies a placement the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-menu--placement-center { top: 0; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--placement-center — `center` is on no closed list for the placement axis/);
+  });
+
+  it('still denies a novel member in a governed union', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type MenuPlacement = 'top' | 'bottom' | 'center';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/MenuPlacement\.center — `center` is on no closed list for the placement axis/);
+  });
+});
+
+describe('rule 4 + 5 — the `side` axis and Pagination on `align` (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed modifiers Sheet and Pagination emit', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-sheet--side-right { right: 0; }
+.bds-sheet--side-left { left: 0; }
+.bds-sheet--side-bottom { bottom: 0; }
+.bds-pagination--align-center { justify-content: center; }
+`,
+    });
+    expect(out).not.toMatch(/--side-|--align-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the bare side modifier', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-sheet--left { left: 0; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--left/);
+  });
+
+  it('still denies a side the amendment did NOT admit', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-sheet--side-top { top: 0; }\n` });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--side-top — `top` is on no closed list for the side axis/);
   });
 });

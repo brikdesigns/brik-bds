@@ -37,7 +37,7 @@ const meta: Meta<typeof Banner> = {
     action: {
       control: false,
       description:
-        'Optional ReactNode aligned right (typically a Button). Use `variant="on-color"` for announcement tone; default variants for status tones.',
+        'Optional ReactNode aligned right (typically a Button). Use `emphasis="on-color"` for announcement tone; default variants for status tones.',
     },
     onDismiss: {
       action: 'dismissed',

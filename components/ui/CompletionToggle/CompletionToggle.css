@@ -22,8 +22,8 @@
     cursor: pointer;
     padding: 0;
     transition:
-      background-color var(--bds-duration-md) var(--bds-ease-out),
-      border-color var(--bds-duration-md) var(--bds-ease-out);
+      background-color var(--bds-duration-200) var(--bds-ease-out),
+      border-color var(--bds-duration-200) var(--bds-ease-out);
   }
 
   .bds-completion-toggle:hover:not(.bds-completion-toggle--disabled) {
@@ -32,7 +32,7 @@
 
   /* Brand-accent hover — tints only the incomplete (unchecked) state so a
      checked toggle keeps its stable brand-primary fill on hover. */
-  .bds-completion-toggle--accent-brand:not(.bds-completion-toggle--checked):not(.bds-completion-toggle--disabled):hover {
+  .bds-completion-toggle--emphasis-brand:not(.bds-completion-toggle--checked):not(.bds-completion-toggle--disabled):hover {
     border-color: var(--bds-border-brand-primary);
     background-color: var(--bds-background-brand-secondary);
   }

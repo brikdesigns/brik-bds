@@ -2,7 +2,7 @@
   "version": "3.0.0",
   "last_reviewed": "2026-09-09",
   "review_cadence": "quarterly",
-  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry and faq_accordion_grouped declare `[\"astro\"]` (#872). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
+  "_comment": "Shipped blueprint inventory — every entry dispatches on both rails unless it declares `rails` (#2308, #2304); collection_index, collection_entry, faq_accordion_grouped, hero_centered, hero_statement, features_alternating_split and features_bento_asymmetric, testimonials_card_grid and process_steps_numbered declare `[\"astro\"]` (#872, #3186, #3187, #3189, #3188, #3190, #3191). `is_active: true` means renderable, not catalogued: the designed-but-unbuilt layouts live in blueprint-roadmap.json, which is schema-distinct and carries no is_active flag. Consumers read this file only.",
   "blueprints": [
     {
       "key": "hero_split",
@@ -55,7 +55,7 @@
         "trustworthy"
       ],
       "layout_spec": "Two-column 58/42 split on a soft audience-tinted background. Left column (vertical flex stack, gap-md): optional breadcrumb trail (3-5 items, brand-primary text color, '/' separators, last item aria-current=page); optional eyebrow label (uppercase, label-sm, primary text); h1 headline (display, weight bold); optional 1-3 line body paragraph (body-md, secondary text, max-width 55ch); optional single dark CTA button (small padding, dark background, white label — NOT a paired CTA group). Right column: white surface-primary card (radius-lg, soft shadow, padding-md) containing a 4:3 media slot (a real client photo, an accepted Recraft asset, or the `bds-blueprint-section__missing` labelled placeholder — never drawn or generated art) and an optional price overlay block underneath (label 'Starting at' / display price / brand-primary CTA button). Render the price overlay only when the client's own content states that price; otherwise omit the whole block — never invent, estimate or range a price. Background tinting comes from `[data-audience='X'] { --background-brand-primary-soft: ... }` cascade declared by the consumer site — BDS ships the slot, not the values. Drives interior service-detail and similar 'page lives under a category' templates.",
-      "css_hints": "grid-template-columns: 58fr 42fr; gap: var(--bds-gap-huge); .media-card { background: var(--bds-surface-primary); border-radius: var(--bds-border-radius-lg); padding: var(--bds-padding-md); box-shadow: var(--bds-shadow-md); } .image-frame { aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--bds-border-radius-md); } [data-audience] { /* consumer-defined cascade */ }",
+      "css_hints": "grid-template-columns: 58fr 42fr; gap: var(--bds-gap-huge); .media-card { background: var(--bds-surface-primary); border-radius: var(--bds-border-radius-lg); padding: var(--bds-padding-md); box-shadow: var(--bds-shadow-raised); } .image-frame { aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--bds-border-radius-md); } [data-audience] { /* consumer-defined cascade */ }",
       "source": "brikdesigns.com /service/{slug} pages — verified 2026-05-09 audit",
       "tier": "internal",
       "is_active": true,
@@ -98,6 +98,72 @@
       "spacing_modes": [
         "spacious",
         "comfortable"
+      ]
+    },
+    {
+      "key": "features_alternating_split",
+      "name": "Alternating Content Splits",
+      "section_type": "features",
+      "industries": [
+        "universal",
+        "healthcare",
+        "real_estate",
+        "legal",
+        "beauty",
+        "salon"
+      ],
+      "moods": [
+        "approachable",
+        "warm",
+        "professional",
+        "trustworthy"
+      ],
+      "layout_spec": "Page-surface features section: an optional section header (eyebrow, heading, lead) above a single column of rows, one row per item. Each row is two equal columns, a text side and a media side, with a wide gap between them and a wider gap between rows. The text side holds the item heading, a short description and an optional link with an arrow, shown only when the item has a link target. The media side is a 4:3 box with rounded corners holding the item's image cropped to fill, or the `bds-blueprint-section__missing` labelled placeholder when no image is supplied — never drawn or generated art. From the tablet width up, the media side sits after the text on odd rows and before it on even rows; `mediaPosition=\"start\"` starts on the media side instead. Below the tablet width every row stacks text first, then media, with no alternation. DOM order is always text first. Differs from feature_grid (a dark grid of brand-coloured cards, no alternation) and story_split (one narrative with a pull-quote, not repeated rows).",
+      "css_hints": ".bds-features--alternating-split .bds-features__grid { gap: var(--bds-gap-huge); } .bds-features--alternating-split .bds-features__item { display: grid; gap: var(--bds-gap-xl); align-items: center; } .bds-features--alternating-split .bds-features__media { aspect-ratio: var(--bds-aspect-4-3); border-radius: var(--bds-border-radius-lg); } .bds-features--alternating-split .bds-features__image { object-fit: cover; }",
+      "source": "brik-bds#3189 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-15",
+      "required_facts": [],
+      "atmospheres": [
+        "warm-soft",
+        "none"
+      ],
+      "rails": [
+        "astro"
+      ]
+    },
+    {
+      "key": "features_bento_asymmetric",
+      "name": "Asymmetric Bento Grid",
+      "section_type": "features",
+      "industries": [
+        "universal",
+        "saas",
+        "ecommerce",
+        "real_estate",
+        "hospitality"
+      ],
+      "moods": [
+        "bold",
+        "modern",
+        "energetic",
+        "luxury"
+      ],
+      "layout_spec": "Page-surface features section: an optional section header (eyebrow, heading, lead) above an asymmetric card grid. From the desktop width up the grid is three columns sized 2fr 1fr 1fr over two rows; the first item is the featured cell and spans both rows. Every other cell is an equal-size card: a media box (4:3, the item's image cropped to fill, or the `bds-blueprint-section__missing` labelled placeholder when no image is supplied — never drawn or generated art) above the item heading, a short description and an optional link with an arrow. An item that carries a headline figure renders as a stat cell instead: the figure large on the brand fill, with the item heading and description beneath, and no media. Cells have rounded corners. At the tablet width the grid is two columns and the featured cell spans the full row; below it every cell stacks in one column. Differs from feature_grid (a dark grid of equal brand-coloured cards) and features_alternating_split (one text-and-media row per item, no featured cell).",
+      "css_hints": ".bds-features--bento .bds-features__grid { grid-template-columns: 2fr 1fr 1fr; gap: var(--bds-gap-lg); } .bds-features--bento .bds-features__item { border-radius: var(--bds-border-radius-lg); overflow: hidden; background: var(--bds-surface-secondary); } .bds-features--bento .bds-features__item--featured { grid-row: span 2; } .bds-features--bento .bds-features__media { aspect-ratio: var(--bds-aspect-4-3); } .bds-features--bento .bds-features__item--stat { background: var(--bds-background-brand-primary); }",
+      "source": "brik-bds#3188 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-16",
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ],
+      "rails": [
+        "astro"
       ]
     },
     {
@@ -159,6 +225,66 @@
       "required_facts": [],
       "atmospheres": [
         "editorial-luxury"
+      ]
+    },
+    {
+      "key": "testimonials_card_grid",
+      "name": "Testimonial Card Grid",
+      "section_type": "testimonials",
+      "industries": [
+        "universal"
+      ],
+      "moods": [
+        "approachable",
+        "warm",
+        "trustworthy",
+        "professional"
+      ],
+      "layout_spec": "Page-surface testimonials section: a centred section header (eyebrow, heading, lead) above a grid of quote cards. The grid is one column on mobile, two at the tablet width and three from the desktop width up; the column count is a prop, not part of the key. Each card has a subtle border and rounded corners and holds, top to bottom: an optional star rating (only when the item supplies one), the quote in italic, then an author row with an optional avatar (only when the item supplies an image; never generated, never from a third-party service), the author name and a muted role line. Cards lift slightly on hover, and only for visitors who have not asked for reduced motion. Differs from testimonials_featured_large, which gives one quote the whole section.",
+      "css_hints": ".bp-testimonials-grid__list { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--bds-gap-lg); } .bp-testimonials-grid__card { padding: var(--bds-padding-xl); border: var(--bds-border-width-sm) solid var(--bds-border-secondary); border-radius: var(--bds-border-radius-lg); background: var(--bds-surface-primary); transition: transform var(--bds-duration-200) var(--bds-ease-out); } .bp-testimonials-grid__card:hover { transform: translateY(calc(var(--bds-gap-xs) * -1)); box-shadow: var(--bds-shadow-raised); }",
+      "source": "brik-bds#3190 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-16",
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ],
+      "rails": [
+        "astro"
+      ]
+    },
+    {
+      "key": "process_steps_numbered",
+      "name": "Process Steps — Numbered",
+      "section_type": "features",
+      "industries": [
+        "universal",
+        "real_estate",
+        "legal",
+        "corporate",
+        "finance"
+      ],
+      "moods": [
+        "professional",
+        "trustworthy",
+        "corporate",
+        "modern"
+      ],
+      "layout_spec": "Page-surface process section: a centred section header (eyebrow, heading, lead) above an ordered row of steps. The step count is the number of items, not part of the key: three, four or five steps fill one row from the desktop width up, two steps fill two columns, and any other count uses three columns and wraps; the tablet width is two columns and mobile is one. Each step has a brand-coloured rule on top, a large step number, a short step title and a short muted description. No images; the numbers carry the visual weight. Used for transactions, onboarding and any trust-building sequence.",
+      "css_hints": ".bp-process-steps__list { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--bds-gap-xl); } .bp-process-steps__step { padding-top: var(--bds-padding-md); border-top: var(--bds-border-width-lg) solid var(--bds-border-brand-primary); } .bp-process-steps__number { font-family: var(--bds-font-family-heading); font-size: var(--bds-display-md); font-weight: var(--bds-font-weight-bold); color: var(--bds-text-brand-primary); }",
+      "source": "brik-bds#3191 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-17",
+      "required_facts": [],
+      "atmospheres": [
+        "none"
+      ],
+      "rails": [
+        "astro"
       ]
     },
     {
@@ -252,6 +378,71 @@
       "atmospheres": [
         "warm-soft",
         "none"
+      ]
+    },
+    {
+      "key": "hero_centered",
+      "name": "Centered Hero",
+      "section_type": "hero",
+      "industries": [
+        "universal",
+        "saas",
+        "ecommerce",
+        "beauty",
+        "salon"
+      ],
+      "moods": [
+        "bold",
+        "modern",
+        "energetic",
+        "playful"
+      ],
+      "layout_spec": "Single centred column with no media, opening a page. Optional eyebrow, then an h1 headline, an optional body paragraph and an optional single call to action, all centred in a narrow column. Any background glow comes from the resolved atmosphere (cinematic-dramatic paints a centred radial glow behind the hero) or from the consumer's hero background hook, never from the layout. Pairs with a following stats_bar or logo_wall for proof. Drives home and campaign landing pages that lead with one message.",
+      "css_hints": ".bds-hero--centered .bds-hero__container { display: flex; flex-direction: column; gap: var(--bds-gap-md); max-width: var(--bds-content-width-md); } .bds-hero--centered .bds-hero__content { align-items: center; text-align: center; }",
+      "source": "brik-bds#3186 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-15",
+      "required_facts": [],
+      "atmospheres": [
+        "cinematic-dramatic",
+        "none"
+      ],
+      "rails": [
+        "astro"
+      ]
+    },
+    {
+      "key": "hero_statement",
+      "name": "Statement Hero",
+      "section_type": "hero",
+      "industries": [
+        "universal",
+        "legal",
+        "finance",
+        "corporate"
+      ],
+      "moods": [
+        "corporate",
+        "minimal",
+        "trustworthy",
+        "professional"
+      ],
+      "layout_spec": "Left-aligned opening section on the page surface. A short eyebrow label is preceded by a short horizontal rule. Below it a headline of three to five words at display size, then one primary call to action. An optional lead paragraph renders if supplied but the layout is built to stand without one. When a decoration is slotted, a right column holds a single abstract shape or minimal illustration (hidden from assistive tech); without one the content column keeps the full width and the right side stays empty. Stacks to one column on narrow screens. The surface and all text colours come from the active theme mode, so the same markup renders light or dark; atmosphere is layered on top, never part of the layout. Differs from hero_interior_minimal (a compact banner with no call to action) and hero_split (which requires an image).",
+      "css_hints": ".bds-hero--statement .bds-hero__subtitle::before { width: var(--bds-size-1200); border-top: var(--bds-border-width-sm) solid currentColor; } .bds-hero--statement .bds-hero__title { font-size: clamp(var(--bds-heading-xxl), 7vw, var(--bds-display-lg)); font-weight: var(--bds-font-weight-bold); }",
+      "source": "brik-bds#3187 — graduated from blueprint-roadmap.json onto the canonical rail (ADR-037)",
+      "tier": "internal",
+      "is_active": true,
+      "version": "1.0.0",
+      "last_reviewed": "2026-11-15",
+      "required_facts": [],
+      "atmospheres": [
+        "cinematic-dramatic",
+        "none"
+      ],
+      "rails": [
+        "astro"
       ]
     },
     {

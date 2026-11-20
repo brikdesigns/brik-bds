@@ -21,13 +21,13 @@ const avatar = (props: Record<string, unknown>) =>
 describe('Tag appearance + color markup', () => {
   it('defaults to a solid neutral Tag', () => {
     const html = tag({});
-    expect(html).toContain('bds-tag--solid');
+    expect(html).toContain('bds-tag--appearance-solid');
     expect(html).toContain('bds-tag--color-neutral');
   });
 
   it('puts the appearance and the color on the element', () => {
     const html = tag({ appearance: 'outline', color: 'purple' });
-    expect(html).toContain('bds-tag--outline');
+    expect(html).toContain('bds-tag--appearance-outline');
     expect(html).toContain('bds-tag--color-purple');
   });
 });
@@ -35,13 +35,13 @@ describe('Tag appearance + color markup', () => {
 describe('Avatar appearance markup', () => {
   it('stays solid by default — no subtle modifier', () => {
     const html = avatar({ color: 'blue' });
-    expect(html).toContain('bds-avatar--accent-blue');
-    expect(html).not.toContain('bds-avatar--subtle');
+    expect(html).toContain('bds-avatar--color-blue');
+    expect(html).not.toContain('bds-avatar--appearance-subtle');
   });
 
   it('adds the subtle modifier alongside the accent color', () => {
     const html = avatar({ appearance: 'subtle', color: 'blue' });
-    expect(html).toContain('bds-avatar--subtle');
-    expect(html).toContain('bds-avatar--accent-blue');
+    expect(html).toContain('bds-avatar--appearance-subtle');
+    expect(html).toContain('bds-avatar--color-blue');
   });
 });

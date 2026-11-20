@@ -34,8 +34,8 @@
   align-items: center;
 }
 
-.bds-progress-stepper--variant-dots.bds-progress-stepper--sm { gap: var(--bds-gap-sm); }
-.bds-progress-stepper--variant-dots.bds-progress-stepper--md { gap: var(--bds-gap-md); }
+.bds-progress-stepper--variant-dots.bds-progress-stepper--size-sm { gap: var(--bds-gap-sm); }
+.bds-progress-stepper--variant-dots.bds-progress-stepper--size-md { gap: var(--bds-gap-md); }
 
 /* ─── Step row ───────────────────────────────────────────────── */
 
@@ -48,11 +48,11 @@
   cursor: pointer;
 }
 
-.bds-progress-stepper__step-row--sm {
+.bds-progress-stepper__step-row--size-sm {
   gap: var(--bds-gap-xs);
 }
 
-.bds-progress-stepper__step-row--md {
+.bds-progress-stepper__step-row--size-md {
   gap: var(--bds-gap-sm);
 }
 
@@ -69,26 +69,26 @@
   transition: all 0.15s ease;
 }
 
-.bds-progress-stepper__circle--sm {
+.bds-progress-stepper__circle--size-sm {
   width: 24px; /* bds-lint-ignore — Figma-driven step circle size */
   height: 24px; /* bds-lint-ignore — Figma-driven step circle size */
   font-size: var(--bds-body-tiny);
 }
 
-.bds-progress-stepper__circle--md {
+.bds-progress-stepper__circle--size-md {
   width: 32px; /* bds-lint-ignore — Figma-driven step circle size */
   height: 32px; /* bds-lint-ignore — Figma-driven step circle size */
   font-size: var(--bds-body-sm);
 }
 
 /* Circle states */
-.bds-progress-stepper__circle--active,
-.bds-progress-stepper__circle--complete {
+.bds-progress-stepper__circle--status-active,
+.bds-progress-stepper__circle--status-complete {
   background-color: var(--bds-background-brand-primary);
   color: var(--bds-text-on-color-dark);
 }
 
-.bds-progress-stepper__circle--upcoming {
+.bds-progress-stepper__circle--status-upcoming {
   background-color: var(--bds-surface-secondary);
   color: var(--bds-text-muted);
   border: var(--bds-border-width-md) solid var(--bds-border-secondary);
@@ -103,25 +103,25 @@
   transition: color 0.15s ease;
 }
 
-.bds-progress-stepper__label--sm {
+.bds-progress-stepper__label--size-sm {
   font-size: var(--bds-body-sm);
 }
 
-.bds-progress-stepper__label--md {
+.bds-progress-stepper__label--size-md {
   font-size: var(--bds-body-md);
 }
 
-.bds-progress-stepper__label--active {
+.bds-progress-stepper__label--status-active {
   font-weight: var(--bds-font-weight-semibold);
   color: var(--bds-text-primary);
 }
 
-.bds-progress-stepper__label--complete {
+.bds-progress-stepper__label--status-complete {
   font-weight: var(--bds-font-weight-regular);
   color: var(--bds-text-primary);
 }
 
-.bds-progress-stepper__label--upcoming {
+.bds-progress-stepper__label--status-upcoming {
   font-weight: var(--bds-font-weight-regular);
   color: var(--bds-text-muted);
 }
@@ -136,11 +136,11 @@
   margin-top: var(--bds-space-50);
 }
 
-.bds-progress-stepper__desc--sm {
+.bds-progress-stepper__desc--size-sm {
   font-size: var(--bds-body-tiny);
 }
 
-.bds-progress-stepper__desc--md {
+.bds-progress-stepper__desc--size-md {
   font-size: var(--bds-body-sm);
 }
 
@@ -153,19 +153,19 @@
   transition: background-color 0.15s ease;
 }
 
-.bds-progress-stepper__connector--sm {
+.bds-progress-stepper__connector--size-sm {
   margin-left: 11px; /* bds-lint-ignore — (24 - 2) / 2 to center under circle */
 }
 
-.bds-progress-stepper__connector--md {
+.bds-progress-stepper__connector--size-md {
   margin-left: 15px; /* bds-lint-ignore — (32 - 2) / 2 to center under circle */
 }
 
-.bds-progress-stepper__connector--complete {
+.bds-progress-stepper__connector--status-complete {
   background-color: var(--bds-background-brand-primary);
 }
 
-.bds-progress-stepper__connector--incomplete {
+.bds-progress-stepper__connector--status-incomplete {
   background-color: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: 2px connector line (border semantics, fill mechanics); see docs/TOKEN-PR-CHECKLIST.md, #777 */
 }
 
@@ -194,11 +194,11 @@
 }
 
 /* Center the line on the circle: (circle - 2) / 2 */
-.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector--sm {
+.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector--size-sm {
   margin-top: 11px; /* bds-lint-ignore — (24 - 2) / 2 to center beside circle */
 }
 
-.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector--md {
+.bds-progress-stepper--orientation-horizontal .bds-progress-stepper__connector--size-md {
   margin-top: 15px; /* bds-lint-ignore — (32 - 2) / 2 to center beside circle */
 }
 
@@ -207,22 +207,22 @@
 .bds-progress-stepper__dot {
   border-radius: var(--bds-border-radius-sm);
   border: none;
-  transition: all var(--bds-duration-md) var(--bds-ease-out);
+  transition: all var(--bds-duration-200) var(--bds-ease-out);
   padding: 0;
   flex-shrink: 0;
 }
 
-.bds-progress-stepper__dot--active {
+.bds-progress-stepper__dot--status-active {
   background-color: var(--bds-background-brand-primary);
   opacity: 1;
 }
 
-.bds-progress-stepper__dot--complete {
+.bds-progress-stepper__dot--status-complete {
   background-color: var(--bds-background-brand-primary);
   opacity: 0.5;
 }
 
-.bds-progress-stepper__dot--inactive {
+.bds-progress-stepper__dot--status-inactive {
   background-color: var(--bds-border-secondary); /* bds-lint-ignore token-family — intentional alias: inactive dot (thin UI, border hue by intent); see docs/TOKEN-PR-CHECKLIST.md, #777 */
   opacity: 1;
 }

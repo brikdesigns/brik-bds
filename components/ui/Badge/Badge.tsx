@@ -106,9 +106,9 @@ export function Badge({
   const classes = bdsClass(
     'bds-badge',
     `bds-badge--tone-${resolvedTone}`,
-    `bds-badge--${size}`,
-    `bds-badge--${appearance}`,
-    density === 'compact' && 'bds-badge--compact',
+    `bds-badge--size-${size}`,
+    `bds-badge--appearance-${appearance}`,
+    density === 'compact' && 'bds-badge--density-compact',
     className
   );
 

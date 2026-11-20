@@ -7,9 +7,13 @@
  *
  * See tokens/CASCADE.md for the full load-order + decision tree.
  *
- * Supplements figma-tokens.css with tokens that are NOT yet in Figma/Style Dictionary.
+ * FROZEN — THIS FILE TAKES NO NEW NAMES (#3239). A token name is born in Figma
+ * only: add the variable in Figma and re-pull, so Style Dictionary writes it to
+ * figma-tokens.css. Every name declared here has no Figma variable behind it;
+ * the set is listed in tokens/naming-canon-baseline.json (rule 9) and sorted in
+ * #3241 — promote in Figma, or delete. `lint-naming-canon` fails a new one.
  *
- * What lives here:
+ * What still lives here:
  *   - Semantic tokens not yet promoted to Figma variables
  *   - Status/service/presence semantic tokens
  *   - Shadow, overlay, and interaction state tokens
@@ -24,20 +28,16 @@
 :root {
   /* ── Typography Text-Transform ──
      Semantic casing rules per font role.
-     heading/label = none (copy renders as authored; Title Case is a content standard, #2831)
+     label = none (copy renders as authored; Title Case is a content standard, #2831)
      field-label = capitalize (form-control labels render Title Case via CSS even when the
        author writes sentence case; Button/Tag/nav stay on label = none; #2831)
      subtitle = uppercase (all-caps labels)
-     body/display = none (no forced casing)
      These are visual transforms; copy casing is a content standard.
      Components reference these via var(), Webflow classes inherit directly.
      Override per-theme by redefining in .body.theme-N blocks. */
-  --bds-text-transform-heading: none;
   --bds-text-transform-label: none;
   --bds-text-transform-field-label: capitalize;
   --bds-text-transform-subtitle: uppercase;
-  --bds-text-transform-body: none;
-  --bds-text-transform-display: none;
 
   /* ── Letter-spacing (gap-fill — not yet in Figma/SD; #1845) ──
      One semantic tracking token for the wide, uppercase-label style shared by
@@ -49,32 +49,10 @@
   --bds-letter-spacing-wide: 0.05em;
 
   /* ── System Color Extras ── */
-  --bds-color-system-transparent: #0000;
-  --bds-color-system-lightbox: #000000a3;
 
   /* ── Focus ring (gap-fill — not yet in Figma/SD) ──
      References the border brand-primary token. Override per-theme for branded focus rings. */
   --bds-border-focus: var(--bds-border-brand-primary);
-
-  /* ── Font Weight Aliases (Webflow double-dash → SD single-dash) ──
-     Old components reference --bds-font-weight--bold; SD uses --bds-font-weight-bold. */
-  --bds-font-weight--bold:       var(--bds-font-weight-bold);
-  --bds-font-weight--semi-bold:  var(--bds-font-weight-semibold);
-  --bds-font-weight--medium:     var(--bds-font-weight-medium);
-  --bds-font-weight--regular:    var(--bds-font-weight-regular);
-  --bds-font-weight--light:      var(--bds-font-weight-light);
-  --bds-font-weight--thin:       var(--bds-font-weight-light);  /* bds-lint-ignore — DEPRECATED, use --bds-font-weight--light (#2222); drop next minor */
-
-  /* ── Easing curves (repo-owned) ──
-     Motion curves are declared here, not generated from Figma. The foundations
-     `easing/ease-in` and `easing/ease-out` leaves hold Figma's "String value"
-     placeholder and are filtered out of figma-tokens.css (isCanonicalCssToken in
-     scripts/lib/sd-bds.mjs), so these three declarations are the only source.
-     Promoting them to Figma means an EASING-typed variable (Plugin API only; the REST
-     variables endpoint does not list EASING) plus a pull-path change — see #2602. */
-  --bds-easing-ease-in:     cubic-bezier(0.4, 0, 1, 1); /* bds-lint-ignore — repo-owned curve, no Figma source (#2602) */
-  --bds-easing-ease-out:    cubic-bezier(0, 0, 0.2, 1); /* bds-lint-ignore — repo-owned curve, no Figma source (#2602) */
-  --bds-easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ── Missing Semantic Tokens ── */
   /* Light value here; dark value in the :root[data-theme="dark"] block below.
@@ -107,11 +85,6 @@
      (#2927), because :root is Foundations-only since #2910. */
   --bds-text-brand-primary-strong: var(--bds-color-grayscale-950);
 
-  /* System color surface variants (used by TaskConsole status rows) */
-  --bds-color-system-red-surface:   var(--bds-color-system-red-light);
-  --bds-color-system-green-surface: var(--bds-color-system-green-light);
-  --bds-color-system-blue-surface:  var(--bds-color-system-blue-light);
-
   /* ── Slider Component Variables ──
      CSS custom properties set dynamically by the Slider component via JS.
      Defined here so the linter knows they are intentional component vars. */
@@ -136,18 +109,10 @@
 
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --bds-surface-nav: var(--bds-color-grayscale-white);
-  --bds-surface-navigation: var(--bds-color-grayscale-white); /* canonical; --bds-surface-nav kept for backward compat */
   --bds-surface-brand-secondary: var(--bds-color-grayscale-100); /* Foundations default; yellow-500 was a Brand Kit primitive, and Brik pins its own in the Brand Kit (#2927) */
   --bds-background-brand-secondary: var(--bds-color-grayscale-white);
   --bds-background-image: #17171799; /* bds-lint-ignore — semi-transparent dark overlay; no primitive equivalent exists yet. Promote to Figma once an opacity token primitive is available. */
   --bds-background-image-brand: var(--bds-color-grayscale-950); /* Foundations default, = --bds-background-brand-primary; Brik's brand fill is in the Brand Kit (#2927) */
-  /* `none`, not `0px`: box-shadow needs at least two lengths, so
-     `box-shadow: 0px` is invalid and the declaration is dropped. Card's seven
-     `box-shadow: var(--bds-box-shadow-none)` sites therefore rendered no shadow by
-     accident rather than because the token said so — same pixels, wrong
-     mechanism (#1919). Verified in Chromium: `box-shadow: 0px` computes to
-     `none`, and so does this. */
-  --bds-box-shadow-none: none;
 
   /* ── Status Semantic Tokens ── (now in figma-tokens.css via Style Dictionary) */
   /* (12 status gap-fills removed 2026-04-12 — now generated by Style Dictionary
@@ -221,10 +186,8 @@
      --bds-background-accent-purple / -orange resolve to the same
      --bds-color-system-purple / -orange these aliases did. So the two names
      retired into an existing family rather than minting a word. */
-  --bds-background-info:                 var(--bds-color-system-blue);
-  --bds-text-info:                       var(--bds-color-system-blue);
-  --bds-surface-info:                    var(--bds-color-system-blue-light);
-  --bds-border-info:                     var(--bds-color-system-blue);
+  --bds-text-info:                       var(--bds-color-system-blue-500);
+  --bds-border-info:                     var(--bds-color-system-blue-500);
 
   /* Six more `status-` aliases (info + neutral) stood here as the one-minor
      compatibility shim #1955 and #1959 shipped alongside the intent-form
@@ -241,76 +204,22 @@
      full spelling would keep matching the greps that assert the family is
      gone. */
 
-  /* ── Pale indicator fills — --background-{role}-light (brik-bds#2943) ──
-     The `subtle` appearance of Badge, Tag and Avatar. An indicator is a small
-     element placed ON a surface, so its fill is a --background-* token
-     (token-anatomy § surface vs background); before these existed, the pale
-     tints were only spelled --surface-*, so the components read the surface
-     purpose. `-light` is the pastel tone modifier (color.mdx § -light and
-     -dark), the same one --surface-service-{line}-light carries.
-
-     Each one is a color role-alias of its matching --surface-* tint
-     (ADR-035, sanctioned by lint-token-tiers), so the Brik Brand Kit's
-     per-theme accent tints carry over in both themes without a second
-     declaration. accent-red is the exception: the Brand Kit binds
-     --bds-surface-accent-red to the saturated poppy-500, so its pale fill
-     takes the system red tint directly.
-
-     The label on every one of these is --bds-text-on-color-light: the fills
-     hold a pale value in both themes, so a theme-flipping --bds-text-{role}
-     would fall below AA in dark (OPERATOR CHOSE 2026-11-03: dark ink on every
-     pale fill). contrast-pairings.json gates each pair.
-
-     brand-primary has no pale fill here: --bds-surface-brand-primary is the
-     saturated brand color, and the brand pastel is already
-     --bds-background-brand-secondary. */
-  --bds-background-neutral-light:       var(--bds-surface-neutral);
-  --bds-background-positive-light:      var(--bds-surface-positive);
-  --bds-background-warning-light:       var(--bds-surface-warning);
-  --bds-background-negative-light:      var(--bds-surface-negative);
-  --bds-background-info-light:          var(--bds-surface-info);
-  --bds-background-accent-blue-light:   var(--bds-surface-accent-blue);
-  --bds-background-accent-green-light:  var(--bds-surface-accent-green);
-  --bds-background-accent-orange-light: var(--bds-surface-accent-orange);
-  --bds-background-accent-purple-light: var(--bds-surface-accent-purple);
-  --bds-background-accent-yellow-light: var(--bds-surface-accent-yellow);
-  --bds-background-accent-red-light:    var(--bds-color-system-red-light);
-
   /* ── System color hover/pressed states ──
      Darken system colors for interactive feedback on destructive/positive buttons.
      Stays a gap-fill by design (#894): a Figma COLOR variable cannot hold a color-mix() derivation. */
-  --bds-background-negative-hover:   color-mix(in srgb, var(--bds-color-system-red) 85%, black);
-  --bds-background-negative-pressed: color-mix(in srgb, var(--bds-color-system-red) 70%, black);
-  --bds-background-positive-hover:   color-mix(in srgb, var(--bds-color-system-green) 85%, black);
-  --bds-background-positive-pressed: color-mix(in srgb, var(--bds-color-system-green) 70%, black);
+  --bds-background-negative-hover:   color-mix(in srgb, var(--bds-color-system-red-500) 85%, black);
+  --bds-background-negative-pressed: color-mix(in srgb, var(--bds-color-system-red-500) 70%, black);
+  --bds-background-positive-hover:   color-mix(in srgb, var(--bds-color-system-green-500) 85%, black);
+  --bds-background-positive-pressed: color-mix(in srgb, var(--bds-color-system-green-500) 70%, black);
 
   /* Presence (for Avatar online/away/busy/offline indicators) */
-  --bds-background-presence-online:  var(--bds-color-system-green);
-  --bds-background-presence-away:    var(--bds-color-system-yellow);
-  --bds-background-presence-busy:    var(--bds-color-system-red);
+  --bds-background-presence-online:  var(--bds-color-system-green-500);
+  --bds-background-presence-away:    var(--bds-color-system-yellow-500);
+  --bds-background-presence-busy:    var(--bds-color-system-red-500);
   --bds-background-presence-offline: var(--bds-color-grayscale-500);
 
-  /* ── Shadow Semantic Tokens ──
-     Composed box-shadow values for consistent elevation.
-     Components should use these instead of raw rgba() values.
-     TODO(#3058): promote to Figma variables → Style Dictionary (composite shadows; see issue). */
-  --bds-shadow-sm:      0px 2px 4px 0px rgba(0, 0, 0, 0.06);
-  --bds-shadow-md:      0px 4px 12px 0px rgba(0, 0, 0, 0.12);
-  --bds-shadow-lg:      0px 4px 16px 0px rgba(0, 0, 0, 0.12);
-  --bds-shadow-xl:      0px 8px 24px 4px rgba(0, 0, 0, 0.20);
-  --bds-shadow-overlay: 0px 4px 32px 0px rgba(0, 0, 0, 0.24); /* elevated panel shadow — Modal, Dialog, Sheet */
-
-  /* Bridge aliases — consuming projects (tokens.ts) reference --box-shadow-*;
-     these ensure the default values resolve even without a client theme file.
-     Per-theme blocks may override --box-shadow-* to suppress or restyle elevation.
-     ⚠️  LOAD-BEARING OVERRIDE: figma-tokens.css (SD output) exports --bds-box-shadow-sm/md/lg/xl
-     as single blur values (e.g. "2px") — a Figma variable limitation. These declarations
-     intentionally overwrite those with the correct full box-shadow shorthand.
-     Do NOT remove these or reorder the import cascade (figma-tokens.css → gap-fills.css). */
-  --bds-box-shadow-sm:  var(--bds-shadow-sm); /* bds-lint-ignore — load-bearing override of SD single-blur values */
-  --bds-box-shadow-md:  var(--bds-shadow-md); /* bds-lint-ignore — load-bearing override */
-  --bds-box-shadow-lg:  var(--bds-shadow-lg); /* bds-lint-ignore — load-bearing override */
-  --bds-box-shadow-xl:  var(--bds-shadow-xl); /* bds-lint-ignore — load-bearing override */
+  /* --bds-shadow-{sunken,flat,subtle,raised,lifted,dramatic} come from the Figma
+     `elevation` collection (tokens/figma-tokens.css, #3058). */
 
   /* Overlay (for Modal, Sheet, Dialog backdrops) */
   --bds-background-overlay: rgba(0, 0, 0, 0.4);
@@ -329,7 +238,6 @@
 
   /* ── Tooltip component tokens ── */
   --bds-tooltip-background: var(--bds-color-grayscale-950);
-  --bds-tooltip-text: var(--bds-text-inverse);
 
   /* ── Layout width tokens ──
      ONE ladder for every horizontal cap on a page — text column and band alike
@@ -353,14 +261,13 @@
 
      THE COLUMN RULE: a column has one content width and one left edge. The
      element that OWNS the column sets the width; blocks nested inside it never
-     re-cap themselves. Two caps in one column is the defect, not the fix. */
+     re-cap themselves. Two caps in one column is the defect, not the fix.
+
+     --bds-content-width-{sm,md,lg,xl,text-md} come from the Figma
+     `content-width` collection (tokens/figma-tokens.css, #3278). The three
+     below have no Figma variable yet. */
   --bds-content-width-text-xs:   448px;  /* text — short intro: eyebrow + one-line title */
   --bds-content-width-text-sm:   600px;  /* text — section intro: title + description (the default) */
-  --bds-content-width-text-md:   720px;  /* text — long-form prose, rich-text body */
-  --bds-content-width-sm:        640px;  /* band — narrow band, focused forms */
-  --bds-content-width-md:        800px;  /* band — standard text-led body section */
-  --bds-content-width-lg:       1024px;  /* band — feature grids, CTA bands */
-  --bds-content-width-xl:       1280px;  /* band — the page band: hero, header, footer */
   --bds-content-width-full:      100%;   /* band — full-bleed (use sparingly — prefer explicit widths) */
 
   /* ── Page inset (ADR-025 recipe; ADR-042 value) ──
@@ -458,89 +365,34 @@
   --bds-state-disabled-opacity: 0.5;
 
   /* ── Motion semantic aliases ──
-     Semantic duration + easing tokens consumed by all BDS component CSS.
-     Durations alias Figma primitive duration tokens; the sm/md/lg/xl rungs and the
-     deprecated fast/normal/slow aliases are repo-owned (no Figma semantic motion layer).
-     Easing curves are repo-owned too — see "Easing curves" above. */
-  --bds-duration-sm:   var(--bds-duration-100);   /* 100ms — micro-interactions: hover, focus */
-  --bds-duration-md:   var(--bds-duration-200);   /* 200ms — standard transitions: buttons, cards */
-  --bds-duration-lg:   var(--bds-duration-300);   /* 300ms — emphasis: modals, sheets, reveals */
-  --bds-duration-xl:   var(--bds-duration-400);   /* 500ms — cross-fades, long reveals (one rung past --bds-duration-lg) */
+     The periodic durations below are repo-owned (no Figma variable). Transition durations are the Figma `--bds-duration-{100,200,300,400}`
+     primitives; components read them directly. */
 
   /* Periodic / loop durations — role tokens, NOT steps on the transition ramp
-     above (ADR-033 § Named exceptions, same basis as --bds-shadow-overlay). These
+     above (ADR-033 § Named exceptions). These
      feed animation-duration on infinite loops and JS auto-advance intervals, so
-     they live in seconds. Reach for sm/md/lg for any tween; only
+     they live in seconds. Reach for --bds-duration-100/200/300 for any tween; only
      continuous or timed-advance motion uses these. */
   --bds-duration-marquee:  55s;  /* full marquee loop period — logo tickers, continuous scroll */
   --bds-duration-autoplay: 10s;  /* dwell before auto-advance — carousels, media tabs */
 
-  --bds-ease-out:         cubic-bezier(0.16, 1, 0.3, 1);     /* decelerate — most UI transitions */
-  --bds-ease-in:          cubic-bezier(0.7, 0, 0.84, 0);     /* accelerate — exits, collapses */
-  --bds-ease-in-out:      cubic-bezier(0.65, 0, 0.35, 1);    /* symmetric — looping, continuous */
-  --bds-ease-spring:      cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — pop-in, badge appear */
-  --bds-ease-spring-soft: cubic-bezier(0, 1.08, 0.77, 1.01); /* gentle overshoot settle — media/panel entrance */
-  --bds-ease-linear:      linear;                            /* constant velocity — marquees, continuous loops */
+  /* --bds-ease-{out,in,in-out,spring,spring-soft,linear} come from the Figma
+     `motion` collection (tokens/figma-tokens.css, #3278). */
 
-  /* ── DEPRECATED font-weight `thin` (#2222) — DROP NEXT MINOR ──
-     Figma's `font-weight/thin` was value 300, which is CSS *Light*; it is renamed
-     `light` at the source (value unchanged), so `thin` stays one minor as an alias. */
-  --bds-font-weight-thin:    var(--bds-font-weight-light);  /* bds-lint-ignore — DEPRECATED, use --bds-font-weight-light (#2222); drop next minor */
-
-  /* ── DEPRECATED numeric-rung aliases (#2594) — DROP NEXT MINOR ──
-     ADR-033 §3 renamed 13 ❖ Brik Foundations step words to numeric t-shirt
-     rungs in the repo only (#2229, `20c5d83f`); the paired Figma write (#2227)
-     never landed, so for 26 days the repo and the design source named the same
-     variables differently. Figma is the source of truth for Foundations
-     (`docs-site/content/docs/foundation/index.mdx:12`), and its ladder is
-     `tiny · xs · sm · md · lg · xl · (xxl) · huge` with no numeric rungs — so
-     the repo reverts to it and ADR-033 §3 is superseded for these 13.
-
-     Each retired numeric name now aliases the Figma rung (not a primitive) so
-     mode-varying families keep tracking their per-mode value. Shipped for one
-     minor so consumer repos migrate. */
-  --bds-gap-2xs:             var(--bds-gap-tiny);           /* bds-lint-ignore — DEPRECATED, use --bds-gap-tiny (#2594); drop next minor */
-  --bds-gap-2xl:             var(--bds-gap-huge);           /* bds-lint-ignore — DEPRECATED, use --bds-gap-huge (#2594); drop next minor */
-  --bds-padding-2xs:         var(--bds-padding-tiny);       /* bds-lint-ignore — DEPRECATED, use --bds-padding-tiny (#2594); drop next minor */
-  --bds-padding-2xl:         var(--bds-padding-huge);       /* bds-lint-ignore — DEPRECATED, use --bds-padding-huge (#2594); drop next minor */
-  --bds-icon-3xs:            var(--bds-icon-tiny);          /* bds-lint-ignore — DEPRECATED, use --bds-icon-tiny (#2594); drop next minor */
-  --bds-icon-3xl:            var(--bds-icon-huge);          /* bds-lint-ignore — DEPRECATED, use --bds-icon-huge (#2594); drop next minor */
-  --bds-body-2xs:            var(--bds-body-tiny);          /* bds-lint-ignore — DEPRECATED, use --bds-body-tiny (#2594); drop next minor */
-  --bds-body-2xl:            var(--bds-body-huge);          /* bds-lint-ignore — DEPRECATED, use --bds-body-huge (#2594); drop next minor */
-  --bds-heading-xs:          var(--bds-heading-tiny);       /* bds-lint-ignore — DEPRECATED, use --bds-heading-tiny (#2594); drop next minor */
-  --bds-heading-2xl:         var(--bds-heading-xxl);        /* bds-lint-ignore — DEPRECATED, use --bds-heading-xxl (#2594); drop next minor */
-  --bds-heading-3xl:         var(--bds-heading-huge);       /* bds-lint-ignore — DEPRECATED, use --bds-heading-huge (#2594); drop next minor */
-  --bds-label-2xs:           var(--bds-label-tiny);         /* bds-lint-ignore — DEPRECATED, use --bds-label-tiny (#2594); drop next minor */
-  --bds-border-width-2xl:    var(--bds-border-width-huge);  /* bds-lint-ignore — DEPRECATED, use --bds-border-width-huge (#2594); drop next minor */
-
-  /* ── DEPRECATED step-word aliases (ADR-033 §3, #1923) — DROP NEXT MINOR ──
-     Positional, value-preserving renames of the retired step words. Each old
-     name aliases its NEW t-shirt rung (not a primitive) so mode-varying families
-     keep tracking their per-mode value. Shipped for one minor so the six BDS
-     consumer repos migrate; the follow-up drops this block and clears the
-     remaining #1923 rows from naming-canon-baseline.json.
-
-     `duration` and `content-width` are NOT backed by a ❖ Brik Foundations
-     variable, so #2594's revert does not reach them — they stay retired. */
-  --bds-duration-fast:       var(--bds-duration-sm);        /* bds-lint-ignore — DEPRECATED, use --bds-duration-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --bds-duration-normal:     var(--bds-duration-md);        /* bds-lint-ignore — DEPRECATED, use --bds-duration-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --bds-duration-slow:       var(--bds-duration-lg);        /* bds-lint-ignore — DEPRECATED, use --bds-duration-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --bds-content-width-narrow:  var(--bds-content-width-sm); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --bds-content-width-default: var(--bds-content-width-md); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --bds-content-width-wide:    var(--bds-content-width-lg); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-
-  /* ── DEPRECATED measure aliases (ADR-041, #2615) — DROP NEXT MINOR ──
-     The `--measure-*` family folded into the one ladder's `-text-` rungs. The
-     aliases ship for one minor because `lint-deleted-token-consumers` blocks a
-     bare deletion: brikdesigns still has five live `var(--measure-*)` call
-     sites, and a var() at a deleted name invalidates the whole declaration —
-     the max-width would silently become `none`, not fall back. Each alias
-     resolves to the px width its `ch` value already rendered at the fixed 16px
-     body size (44ch→448, 60ch→600, 72ch→720), so this is a ≤3px move, not a
-     retune. The follow-up drops this block once brikdesigns#1856 has migrated. */
-  --bds-measure-sm: var(--bds-content-width-text-xs); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-xs (ADR-041, #2615); drop next minor */
-  --bds-measure-md: var(--bds-content-width-text-sm); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-sm (ADR-041, #2615); drop next minor */
-  --bds-measure-lg: var(--bds-content-width-text-md); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-md (ADR-041, #2615); drop next minor */
+  /* ── DEPRECATED shadow aliases (#3058) — DROP NEXT MINOR ──
+     The hand-written --bds-shadow-{sm,md,lg,xl,overlay} were replaced by the
+     shadows Figma's `elevation` collection now declares
+     (shadow/{depth}/{offset,blur,spread,color}, composed by the build).
+     `lint-deleted-token-consumers` blocks a bare deletion: brik-client-portal
+     still reads sm/md/lg. Each old name aliases the depth with the same value
+     (sm → subtle, md → raised, lg → lifted, overlay → dramatic), so nothing
+     moves. `xl` had no consumer outside BDS and is gone. A consumer that
+     OVERRIDES an old name must rename the override too: BDS components read
+     the new names, so an old-name override no longer reaches them. */
+  --bds-shadow-sm:      var(--bds-shadow-subtle);   /* bds-lint-ignore — DEPRECATED, use --bds-shadow-subtle (#3058); drop next minor */
+  --bds-shadow-md:      var(--bds-shadow-raised);   /* bds-lint-ignore — DEPRECATED, use --bds-shadow-raised (#3058); drop next minor */
+  --bds-shadow-lg:      var(--bds-shadow-lifted);   /* bds-lint-ignore — DEPRECATED, use --bds-shadow-lifted (#3058); drop next minor */
+  --bds-shadow-overlay: var(--bds-shadow-dramatic); /* bds-lint-ignore — DEPRECATED, use --bds-shadow-dramatic (#3058); drop next minor */
 
   /* ── Stacking order (brik-bds#2840, components moved on in #2845) ──
      One ladder for every layer that has to outrank another. Component CSS
@@ -570,15 +422,8 @@
      Fixed dimensions of the product app shell. Sources:
        top bar 64px  — brik-client-portal src/components/portal-top-bar.tsx:57
                        (height: '64px') and src/app/globals.css:970-971; aliases
-                       --bds-size-1600 (tokens/figma-tokens.css:284)
-       sidebar 260px / 80px collapsed — SidebarNavigation.tsx:75 defaults
-                       (the portal passes no width); 80px aliases --bds-size-1800
-       section rail 220px — brik-client-portal src/app/globals.css:932
-                       (.portal-page__rail width) */
+                       --bds-size-1600 (tokens/figma-tokens.css:284) */
   --bds-shell-top-bar-height:       var(--bds-size-1600);
-  --bds-shell-sidebar-width:        260px;
-  --bds-shell-sidebar-width-collapsed: var(--bds-size-1800);
-  --bds-shell-rail-width:           220px;
 
   /* SubNavigation sticky offset (brik-bds#2841). 0px, not the top-bar height:
      the canonical app shell has no top bar. A shell with one sets it to

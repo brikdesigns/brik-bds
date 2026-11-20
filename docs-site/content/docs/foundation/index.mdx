@@ -51,7 +51,7 @@ Primitives define the palette. Semantics define the intent. Components only know
 | Typography | `--{style}-{size}` | `--bds-heading-lg`, `--bds-body-md`, `--bds-label-sm` |
 | Spacing | `--padding-{size}`, `--gap-{size}` | `--bds-padding-lg`, `--bds-gap-md` |
 | Border radius | `--border-radius-{size}` | `--bds-border-radius-sm`, `--bds-border-radius-md` |
-| Elevation | `--shadow-{size}` | `--bds-shadow-sm`, `--bds-shadow-lg` |
+| Elevation | `--shadow-{depth}` | `--bds-shadow-subtle`, `--bds-shadow-lifted` |
 | Scale step | `--{category}-{index}` | `--bds-space-400`, `--bds-font-size-700`, `--bds-color-grayscale-700` |
 
 Full vocabulary rules — title vs heading, label family, axes, no-unclassed-wrappers — in [Build Standards](/docs/build-standards).
@@ -68,8 +68,9 @@ Figma organises variables into named collections. Each collection has modes. Sty
 | `spacing` | `default` | `--bds-padding-*`, `--bds-gap-*` |
 | `border-radius` | `soft` | `--bds-border-radius-sm/md/lg` |
 | `border-width` | `default` | `--bds-border-width-sm/md/lg` |
-| `elevation` | `subtle` | `--bds-box-shadow-sm/md/lg/xl` (single-blur; bridged to composed `--bds-shadow-*` in `gap-fills.css`), `--bds-blur-radius-*` |
-| `width` | `contained` | `--bds-content-width-xl` — the page band; `wide` / `full-bleed` re-point it via `[data-mode-width]` in `modes-width.css` |
+| `elevation` | `value` | `--bds-shadow-sunken/flat/subtle/raised/lifted/dramatic`, each composed from its offset, blur, spread and colour parts |
+| `content-width` | `contained` | `--bds-content-width-sm/md/lg/xl` (the band rungs) and `--bds-content-width-text-md`; `wide` / `full-bleed` re-point the band rungs via `[data-mode-width]` in `modes-width.css` |
+| `motion` | `default` | `--bds-ease-out/in/in-out/spring/spring-soft/linear` |
 | `breakpoint` | `default` | `--bds-breakpoint-mobile/tablet/desktop/wide/wider` |
 | `layout` | `mobile` + `tablet` + `desktop` | `--bds-page-inset`, `--bds-section-padding-block` — **not** flattened by Style Dictionary; the build turns all three modes into one fluid `clamp()` in `layout-fluid.css` ([layout tier](/docs/foundation/spacing#layout-tier)) |
 
@@ -85,7 +86,7 @@ Each page below explains one primitive group: what tokens exist, what they mean 
   <Card title="Spacing" href="/docs/foundation/spacing" description="The 4-point grid, semantic padding and gap tokens, the device-fluid layout tier, the primitive space scale." />
   <Card title="Size" href="/docs/foundation/size" description="Container sizes, breakpoints, hero constraints, and the element-size scale." />
   <Card title="Border" href="/docs/foundation/border" description="Corner rounding and line thickness — the tokens that frame a component's edge." />
-  <Card title="Elevation" href="/docs/foundation/elevation" description="The Figma Elevation collection — composed semantic shadows + primitive blur/spread scales." />
+  <Card title="Elevation" href="/docs/foundation/elevation" description="The Figma Elevation collection — six shadow depths composed from offset, blur, spread and colour." />
   <Card title="Build Standards" href="/docs/build-standards" description="Naming, slot vocabulary, composition layers, HTML semantics, and prop axes." />
 </Cards>
 

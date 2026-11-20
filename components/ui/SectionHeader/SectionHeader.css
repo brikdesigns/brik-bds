@@ -12,13 +12,13 @@
 
 /* Centered: cap + auto margins center the column in the band; text-align
    centers the lines; actions row centers too. */
-.bds-section-header--center {
+.bds-section-header--align-center {
   margin-inline: auto;
   text-align: center;
 }
 
-.bds-section-header--center .bds-content-block__actions { justify-content: center; }
+.bds-section-header--align-center .bds-content-block__actions { justify-content: center; }
 
 /* Start: left-anchored column (no auto margins), inherits text-align: start. */
-.bds-section-header--start { text-align: start; }
+.bds-section-header--align-start { text-align: start; }
 }

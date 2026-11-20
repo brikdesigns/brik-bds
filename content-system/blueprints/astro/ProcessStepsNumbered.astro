@@ -1,0 +1,211 @@
+---
+/**
+ * ProcessStepsNumbered — an ordered, numbered process section. Astro-only block
+ * on the canonical rail (ADR-037, brik-bds#3191): `rails: ["astro"]` in
+ * blueprint-library.json, so there is no React twin. Section header, then one
+ * cell per step.
+ *
+ * Why a new block, not a `layout` on an existing one (ADR-037 one-file-per-block
+ * amendment): `Features` and `CardGrid` render unordered capability / service
+ * cards. A process is an ordered list whose item shape is (ordinal, title,
+ * description) with no media or CTA, so it gets its own file.
+ *
+ * `blueprintKey` is supplied by `BlueprintDispatcher.astro` and rendered as
+ * `data-blueprint-key`; composing this block directly emits no key marker.
+ *
+ * Contract: BlueprintProps.
+ *   - section.title / subtitle / body — header (h2 / eyebrow / lead)
+ *   - section.items[]                 — one step per item, in order:
+ *       item.title        = step title
+ *       item.description  = step description
+ *
+ * Step count is the length of `section.items`, not part of the key (ADR-037 §4
+ * keys carry layout only). 3, 4 and 5 steps each fill one desktop row; 2 steps
+ * fill two columns; 1 or 6+ steps use three columns and wrap. Tablet is always
+ * two columns and mobile one.
+ *
+ * Classes are `bp-process-steps__*`, not `bds-*`: the canonical-class gate
+ * checks `bds-*` names against `dist/styles.css`, which is built from the React
+ * rail, and this block has no React twin (same reason as `FaqAccordion.astro`).
+ *
+ * required_facts: []. Section-driven.
+ *
+ * Token pairs — paired family ↔ size only:
+ *   subtitle    : --bds-font-family-subtitle + --bds-subtitle-lg + --bds-text-transform-subtitle
+ *   title (h2)  : --bds-font-family-heading  + clamp(--bds-heading-lg, ..., --bds-heading-xl)
+ *   lead        : --bds-font-family-body     + --bds-body-md
+ *   step number : --bds-font-family-heading  + --bds-display-md
+ *   step title  : --bds-font-family-heading  + --bds-heading-sm
+ *   step body   : --bds-font-family-body     + --bds-body-md
+ *
+ * a11y: h2 + aria-labelledby; the steps are an ordered list, which already
+ * announces position, so the visible numeral is aria-hidden.
+ */
+import type { BlueprintProps, KnownBlueprintKey } from './types';
+import { resolveSectionTitles } from './types';
+
+// Shared section shell (ADR-021) — global, unscoped; Astro dedupes it.
+import '../section-shell.css';
+
+interface Props extends BlueprintProps {
+  /** Supplied by `BlueprintDispatcher.astro`; rendered as `data-blueprint-key`. */
+  blueprintKey?: KnownBlueprintKey;
+}
+
+const { section, blueprintKey } = Astro.props;
+const titles = resolveSectionTitles(section);
+const titleId = `${section.sectionKey}-title`;
+
+// Desktop column count follows the step count: 3–5 fill one row, 2 fills two
+// columns, anything else (1, 6+) falls back to three and wraps.
+const count = section.items.length;
+const cols = count >= 3 && count <= 5 ? count : count === 2 ? 2 : 3;
+
+const sectionClass = ['bds-blueprint-section', 'bp-process-steps', `bp-process-steps--cols-${cols}`].join(' ');
+---
+
+<section
+  class={sectionClass}
+  aria-labelledby={titleId}
+  data-blueprint-key={blueprintKey}
+>
+  <div class="bds-blueprint-section__container">
+    <header class="bp-process-steps__header">
+      {titles.subtitle && (
+        <p class="bp-process-steps__subtitle">{titles.subtitle}</p>
+      )}
+      <h2 id={titleId} class="bp-process-steps__title">{titles.title ?? 'How it works'}</h2>
+      {section.body && (
+        <p class="bp-process-steps__description">{section.body}</p>
+      )}
+    </header>
+
+    <ol class="bp-process-steps__list">
+      {section.items.map((item, index) => (
+        <li class="bp-process-steps__step">
+          <span class="bp-process-steps__number" aria-hidden="true">{index + 1}</span>
+          <h3 class="bp-process-steps__step-title">{item.title}</h3>
+          {item.description && (
+            <p class="bp-process-steps__step-body">{item.description}</p>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  /* Section rhythm + centred container: ../section-shell.css (ADR-021). */
+
+  .bp-process-steps__header {
+    max-width: var(--bds-content-width-text-md);
+    margin-inline: auto;
+    margin-bottom: var(--bds-padding-xl);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Content rhythm (ADR-023 §3): subtitle→title tight, title→description medium. */
+  .bp-process-steps__header > * + * {
+    margin-top: var(--bds-gap-md);
+  }
+
+  .bp-process-steps__subtitle + .bp-process-steps__title {
+    margin-top: var(--bds-gap-sm);
+  }
+
+  .bp-process-steps__subtitle {
+    margin: 0;
+    font-family: var(--bds-font-family-subtitle);
+    font-size: var(--bds-subtitle-lg);
+    font-weight: var(--bds-font-weight-medium);
+    letter-spacing: 0.08em;
+    text-transform: var(--bds-text-transform-subtitle, uppercase);
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-process-steps__title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: clamp(var(--bds-heading-lg), 3.5vw, var(--bds-heading-xl));
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+  }
+
+  .bp-process-steps__description {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-secondary);
+  }
+
+  /* ── Grid: 1 → 2 → N (N = step count, set by `--cols-*`) ── */
+  .bp-process-steps__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--bds-gap-xl);
+  }
+
+  @media (min-width: 768px) {
+    .bp-process-steps__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 992px) {
+    .bp-process-steps--cols-3 .bp-process-steps__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    .bp-process-steps--cols-4 .bp-process-steps__list {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .bp-process-steps--cols-5 .bp-process-steps__list {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+
+  /* ── Step ─────────────────────────────────────────────────────── */
+  .bp-process-steps__step {
+    display: flex;
+    flex-direction: column;
+    gap: var(--bds-gap-sm);
+    min-width: 0;
+    padding-top: var(--bds-padding-md);
+    border-top: var(--bds-border-width-lg) solid var(--bds-border-brand-primary);
+  }
+
+  .bp-process-steps__number {
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-display-md);
+    font-weight: var(--bds-font-weight-bold);
+    line-height: 1;
+    color: var(--bds-text-brand-primary);
+  }
+
+  .bp-process-steps__step-title {
+    margin: 0;
+    font-family: var(--bds-font-family-heading);
+    font-size: var(--bds-heading-sm);
+    font-weight: var(--bds-font-weight-semibold);
+    line-height: var(--bds-font-line-height-tight);
+    color: var(--bds-text-primary);
+    overflow-wrap: anywhere;
+  }
+
+  .bp-process-steps__step-body {
+    margin: 0;
+    font-family: var(--bds-font-family-body);
+    font-size: var(--bds-body-md);
+    line-height: var(--bds-font-line-height-normal);
+    color: var(--bds-text-secondary);
+  }
+</style>

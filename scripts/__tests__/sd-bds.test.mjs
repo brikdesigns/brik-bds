@@ -29,6 +29,14 @@ describe('isRetiredWordStep', () => {
     expect(isCanonicalCssToken({ path: ['easing', 'ease-in'], $value: 'String value' })).toBe(false);
     expect(isCanonicalCssToken({ path: ['easing', 'ease-in'], $value: 'cubic-bezier(0.4, 0, 1, 1)' })).toBe(true);
   });
+
+  it('retires the Figma box-shadow blur-length group, keeps its neighbours (#1924, ADR-033 section 5)', () => {
+    for (const step of ['sm', 'md', 'lg', 'xl']) {
+      expect(isCanonicalCssToken({ path: ['box-shadow', step], $value: 2 })).toBe(false);
+    }
+    expect(isCanonicalCssToken({ path: ['blur-radius', 'sm'], $value: 2 })).toBe(true);
+    expect(isCanonicalCssToken({ path: ['shadow-blur', 'sm'], $value: 2 })).toBe(true);
+  });
 });
 
 describe('prefix helpers', () => {

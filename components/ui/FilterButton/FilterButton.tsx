@@ -9,6 +9,7 @@ import {
 import { Icon } from '../Icon';
 import { CaretDownBold } from '../../icons';
 import { bdsClass } from '../../utils';
+import { useFloatingPanel } from '../shared/useFloatingPanel';
 import './FilterButton.css';
 
 /**
@@ -93,6 +94,7 @@ export function FilterButton({
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  useFloatingPanel(dropdownRef, isOpen);
 
   const selectedOption = options.find((o) => o.id === value);
   const isActive = Boolean(value);
@@ -126,20 +128,6 @@ export function FilterButton({
     };
   }, [isOpen, handleClickOutside, handleEscape]);
 
-  // Reposition dropdown if it overflows the viewport horizontally (runtime-calculated)
-  // Vertical flip is intentionally omitted — dropdowns open below by default.
-  useEffect(() => {
-    if (!isOpen || !dropdownRef.current) return;
-    const dropdown = dropdownRef.current;
-    const rect = dropdown.getBoundingClientRect();
-    const viewportWidth = window.innerWidth;
-
-    if (rect.right > viewportWidth) {
-      dropdown.style.left = 'auto';
-      dropdown.style.right = '0';
-    }
-  }, [isOpen]);
-
   const handleSelect = (optionId: string) => {
     onChange?.(optionId === value ? undefined : optionId);
     setIsOpen(false);
@@ -161,7 +149,7 @@ export function FilterButton({
         type="button"
         className={bdsClass(
           'bds-filter-button__trigger',
-          `bds-filter-button__trigger--${size}`,
+          `bds-filter-button__trigger--size-${size}`,
           isActive && 'bds-filter-button__trigger--active',
           disabled && 'bds-filter-button__trigger--disabled',
         )}

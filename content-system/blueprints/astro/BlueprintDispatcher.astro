@@ -38,18 +38,24 @@
  * Since #2302 the Astro rail is one component per BLOCK, with the layout
  * carried as a prop, matching the React API. The registry is therefore what
  * turns a blueprint key into a (block, layout) pair — the key is no longer a
- * filename. Twelve blocks cover the sixteen wired keys:
+ * filename. Thirteen blocks cover the twenty-one wired keys:
  *
  *   hero_split                    → Hero            layout="split"
  *   hero_split_image_card_overlay → Hero            layout="with-pricing-card"
+ *   hero_centered                 → Hero            layout="centered"
  *   hero_interior_minimal         → Hero            layout="interior-minimal"
+ *   hero_statement                → Hero            layout="statement"
  *   two_column_detail             → CardGrid        layout="two-column-list"
  *   card_grid                     → CardGrid        layout="card-grid"
  *   callout_split                 → CalloutPanel
  *   feature_grid                  → Features
+ *   features_alternating_split    → Features        layout="alternating-split"
+ *   features_bento_asymmetric     → Features        layout="bento"
  *   story_split                   → Narrative
  *   stats_bar                     → StatsBar
  *   testimonials_featured_large   → TestimonialsFeaturedLarge
+ *   testimonials_card_grid        → TestimonialsCardGrid
+ *   process_steps_numbered        → ProcessStepsNumbered
  *   cta_split_contact             → Cta             layout="split"
  *   cta_centered                  → Cta             layout="default"
  *   logo_wall                     → LogoWall
@@ -89,6 +95,8 @@ import CardGrid from './CardGrid.astro';
 import CalloutPanel from './CalloutPanel.astro';
 import StatsBar from './StatsBar.astro';
 import TestimonialsFeaturedLarge from './TestimonialsFeaturedLarge.astro';
+import TestimonialsCardGrid from './TestimonialsCardGrid.astro';
+import ProcessStepsNumbered from './ProcessStepsNumbered.astro';
 import LogoWall from './LogoWall.astro';
 import CollectionIndex from './CollectionIndex.astro';
 import CollectionEntry from './CollectionEntry.astro';
@@ -102,14 +110,20 @@ import { resolveSectionProps } from './section-axes';
 const BLUEPRINT_REGISTRY = {
   hero_split: { component: Hero, props: { layout: 'split', blueprintKey: 'hero_split' } },
   hero_split_image_card_overlay: { component: Hero, props: { layout: 'with-pricing-card', blueprintKey: 'hero_split_image_card_overlay' } },
+  hero_centered: { component: Hero, props: { layout: 'centered', blueprintKey: 'hero_centered' } },
   hero_interior_minimal: { component: Hero, props: { layout: 'interior-minimal', blueprintKey: 'hero_interior_minimal' } },
+  hero_statement: { component: Hero, props: { layout: 'statement', blueprintKey: 'hero_statement' } },
   two_column_detail: { component: CardGrid, props: { layout: 'two-column-list' } },
   card_grid: { component: CardGrid, props: { layout: 'card-grid' } },
   callout_split: { component: CalloutPanel, props: {} },
   feature_grid: { component: Features, props: { blueprintKey: 'feature_grid' } },
+  features_alternating_split: { component: Features, props: { layout: 'alternating-split', blueprintKey: 'features_alternating_split' } },
+  features_bento_asymmetric: { component: Features, props: { layout: 'bento', blueprintKey: 'features_bento_asymmetric' } },
   story_split: { component: Narrative, props: { blueprintKey: 'story_split' } },
   stats_bar: { component: StatsBar, props: {} },
   testimonials_featured_large: { component: TestimonialsFeaturedLarge, props: {} },
+  testimonials_card_grid: { component: TestimonialsCardGrid, props: { blueprintKey: 'testimonials_card_grid' } },
+  process_steps_numbered: { component: ProcessStepsNumbered, props: { blueprintKey: 'process_steps_numbered' } },
   cta_split_contact: { component: Cta, props: { layout: 'split', blueprintKey: 'cta_split_contact' } },
   cta_centered: { component: Cta, props: { layout: 'default', blueprintKey: 'cta_centered' } },
   logo_wall: { component: LogoWall, props: {} },

@@ -157,8 +157,8 @@ export const InteractionTestActionsComposeButton: Story = {
     const replace = canvas.getByRole('button', { name: 'Replace' });
     const del = canvas.getByRole('button', { name: 'Delete' });
 
-    await expect(replace).toHaveClass('bds-button', 'bds-button--secondary');
-    await expect(del).toHaveClass('bds-button', 'bds-button--tone-negative');
+    await expect(replace).toHaveClass('bds-button', 'bds-button--variant-secondary');
+    await expect(del).toHaveClass('bds-button', 'bds-button--variant-negative');
     await expect(replace.closest('.bds-button-group')).not.toBeNull();
 
     await userEvent.click(replace);

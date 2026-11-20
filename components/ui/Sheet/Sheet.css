@@ -22,7 +22,7 @@
 .bds-sheet {
   position: fixed;
   background-color: var(--bds-surface-primary);
-  box-shadow: var(--bds-shadow-overlay);
+  box-shadow: var(--bds-shadow-dramatic);
   display: flex;
   flex-direction: column;
   z-index: var(--bds-z-sheet);
@@ -32,24 +32,24 @@
 
 /* ─── Side positions ─────────────────────────────────────────── */
 
-.bds-sheet--right  { top: 0; right: 0; bottom: 0; max-width: 90vw; }
-.bds-sheet--left   { top: 0; left: 0; bottom: 0; max-width: 90vw; }
-.bds-sheet--bottom { left: 0; right: 0; bottom: 0; max-height: 80vh; }
+.bds-sheet--side-right  { top: 0; right: 0; bottom: 0; max-width: 90vw; }
+.bds-sheet--side-left   { top: 0; left: 0; bottom: 0; max-width: 90vw; }
+.bds-sheet--side-bottom { left: 0; right: 0; bottom: 0; max-height: 80vh; }
 
 /* ─── Floating variant — no backdrop, rounded, elevated ─────── */
 
 .bds-sheet--floating {
   border-radius: var(--bds-border-radius-md);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — custom multi-layer elevation shadow; single-layer composites exist (--bds-box-shadow-sm..xl) but none is multi-layer, so this stays raw until a multi-layer composite is proposed */
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12), 0 2px 12px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — custom multi-layer elevation shadow; single-layer composites exist (--bds-shadow-sunken..dramatic) but none is multi-layer, so this stays raw until a multi-layer composite is proposed */
 }
 
-.bds-sheet--floating.bds-sheet--right {
+.bds-sheet--floating.bds-sheet--side-right {
   top: var(--bds-padding-lg);
   right: var(--bds-padding-lg);
   bottom: var(--bds-padding-lg);
 }
 
-.bds-sheet--floating.bds-sheet--left {
+.bds-sheet--floating.bds-sheet--side-left {
   top: var(--bds-padding-lg);
   left: var(--bds-padding-lg);
   bottom: var(--bds-padding-lg);
@@ -230,11 +230,11 @@
    data-dense surfaces that need more content per viewport. Horizontal
    padding is unchanged, so the body/footer stay aligned with the header. */
 
-.bds-sheet--compact .bds-sheet__body {
+.bds-sheet--density-compact .bds-sheet__body {
   padding-block: var(--bds-padding-lg);
 }
 
-.bds-sheet--compact .bds-sheet__footer {
+.bds-sheet--density-compact .bds-sheet__footer {
   padding-block: var(--bds-padding-md);
 }
 

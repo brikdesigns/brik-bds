@@ -36,19 +36,15 @@ Every token name has one shape, declared once in [`tokens/naming-grammar.json`](
 The **ID** is always the first segment. It names the *system* that owns the decision. The **body** is what the Tier defines (below). **ID** is the term, not "Layer": **Layer** already names the CSS `@layer` that carries a value, and one word for two meanings is the drift this page exists to stop.
 
 <Callout type="warn">
-  **Today, only the Component tier carries an ID.** Three Component names are declared in `dist/tokens.css` (`--bds-slider-*`); the rest are declared in each component's CSS (`--bds-toast-shadow` in `Toast.css`). The ID rename for Primitive and Semantic names ships in [#2670](https://github.com/brikdesigns/brik-bds/issues/2670). Until it does, those names are the ID-less body: `--background-brand-primary`, `--color-poppy-500`. Reference only names that exist in `dist/tokens.css`. A name with the ID in front of a Primitive or Semantic body is the target, not a usable name yet.
+  **Every tier carries the ID.** A token name is born in Figma only, and its name is its Figma path with `/` written as `-`, behind the ID: `--bds-{figma path}`. The authority is the Figma-generated files (`tokens/figma-tokens*.css`, `modes-*.css`, `layout-fluid.css`). `dist/tokens.css` is build output that also bundles hand-written names; never read it as proof a name is canon.
 </Callout>
 
-{/* lint-mdx-tokens-ignore-start — the "After #2670" column is the target naming, not yet in dist/tokens.css */}
-
-| Tier | Body | In `dist/tokens.css` today | After #2670 |
-|---|---|---|---|
-| Primitive (colour) | `color-{family}-{step}` | `--color-poppy-500` | `--bds-color-poppy-500` |
-| Primitive (scale) | `{scale}-{step}` | `--space-400` | `--bds-space-400` |
-| Semantic | `{purpose}-{role}[-{state}]` | `--background-brand-primary` | `--bds-background-brand-primary` |
-| Component | `{component}[-{part}]-{property}` | `--bds-slider-thumb-size` | `--bds-slider-thumb-size` |
-
-{/* lint-mdx-tokens-ignore-end */}
+| Tier | Body | Name |
+|---|---|---|
+| Primitive (colour) | `color-{family}-{step}` | `--bds-color-poppy-500` |
+| Primitive (scale) | `{scale}-{step}` | `--bds-space-400` |
+| Semantic | `{purpose}-{role}[-{state}]` | `--bds-background-brand-primary` |
+| Component | `{component}[-{part}]-{property}` | `--bds-slider-thumb-size` |
 
 ### The ID registry
 
@@ -56,7 +52,7 @@ An ID is a **registered handle** for the system (repo) that owns the decision. I
 
 | ID | System (repo) | Library |
 |---|---|---|
-| `bds` | `brik-bds` | Foundations + the default (Brik) Brand Kit that ships in `dist/tokens.css` |
+| `bds` | `brik-bds` | Foundations + the default (Brik) Brand Kit, authored in Figma; `dist/tokens.css` is the build output |
 | `vale-partners` | `web/vale-partners` | Vale Partners Brand Kit |
 | `tncld` | `web/tncld` | TNCLD Brand Kit |
 | `birdwell` | `web/birdwell-mutlak` | Birdwell Brand Kit |
@@ -92,7 +88,7 @@ Every token sits at exactly one Tier. Higher tiers reference lower tiers via `va
 ┌─────────────────────────────────────────────────────────┐
 │  Tier 4 — Component    (component-scoped knobs)         │
 │  --bds-{component}[-{part}]-{property}: var(<Semantic>) │
-│  Example: --bds-toast-shadow: var(--bds-shadow-md)      │
+│  Example: --bds-toast-shadow: var(--bds-shadow-raised)  │
 └─────────────────────────────────────────────────────────┘
                           ▲
                           │ var()
@@ -130,7 +126,7 @@ Tiers 2 and 3 show their **body**; the target name is `--{id}-{body}`. The examp
 | **Component** | `{component}[-{part}]-{property}`, ID always `bds` | Authored in component / blueprint CSS; runtime values set by the component's JS/TSX | **Yes** — but only as a *knob*: it must resolve to a Semantic token (see below) |
 
 <Callout type="warn">
-  **Components consume Semantic tokens, never Primitives directly.** A button's CSS references `--background-brand-primary`, not `--color-poppy-500`. Why: Semantic is the layer that varies per brand. Bypassing it locks the component to one brand.
+  **Components consume Semantic tokens, never Primitives directly.** A button's CSS references `--bds-background-brand-primary`, not `--bds-color-poppy-500`. Why: Semantic is the layer that varies per brand. Bypassing it locks the component to one brand.
 </Callout>
 
 ### How a tenant binds BDS names
@@ -165,7 +161,7 @@ A Tier 4 token serves one of two roles, both under the same name:
 
    ```css
    /* ✅ knob resolves to a Semantic token */
-   box-shadow: var(--bds-toast-shadow, var(--bds-shadow-md));
+   box-shadow: var(--bds-toast-shadow, var(--bds-shadow-raised));
 
    /* ❌ raw literal in the fallback — reintroduces an off-token value
       that ships silently if the token fails to resolve, and lint can't see it */
@@ -293,7 +289,6 @@ The first slot is a **scale** at the Primitive tier (named for the CSS property 
 | `--border-radius-*` | numeric + t-shirt | `border-radius` |
 | `--border-width-*` | numeric + t-shirt | `border-width` |
 | `--shadow-blur-*` · `--shadow-offset-*` · `--shadow-spread-*` | numeric | the parts of a `box-shadow` |
-| `--blur-radius-*` | t-shirt | `filter: blur()` |
 | `--duration-*` · `--delay-*` · `--iteration-*` | numeric | `transition` / `animation` |
 | `--breakpoint-*` | word (`desktop`) | media queries |
 | `--aspect-*` | ratio (`16-9`) | `aspect-ratio` |
@@ -305,7 +300,7 @@ The first slot is a **scale** at the Primitive tier (named for the CSS property 
 | `--gap-*` · `--padding-*` | t-shirt | spacing by intent, not by pixel step |
 | `--heading-*` · `--display-*` · `--body-*` · `--label-*` · `--subtitle-*` | t-shirt | the type ramp per text role |
 | `--icon-*` | t-shirt | icon sizes, aligned to the type ramp |
-| `--shadow-*` · `--box-shadow-*` | t-shirt | elevation |
+| `--shadow-*` | named depth (`raised`) | elevation |
 | `--ease-*` | word (`spring`) | easing curves |
 | `--content-width-*` | t-shirt | the one horizontal-cap ladder — bands and text columns (ADR-041) |
 | `--measure-*` | t-shirt | **deprecated** — aliases to `--content-width-text-*`; drops next minor (ADR-041) |
@@ -388,14 +383,14 @@ A token names a **role**, and two roles can resolve to the same value today with
 
 ## How the seven concepts map to a real token
 
-Take `--background-brand-primary` (the hot path):
+Take `--bds-background-brand-primary` (the hot path):
 
 {/* lint-mdx-tokens-ignore-start — the ID row names the post-#2670 target */}
 
 | Concept | Answer |
 |---|---|
 | Anatomy | `--{id}-{body}`, where the body is `{purpose: background}-{role: brand-primary}` |
-| ID | `bds` (the default Brik Brand Kit). The name carries no ID segment today; after #2670 it is `--bds-background-brand-primary` |
+| ID | `bds` (the default Brik Brand Kit), so the name is `--bds-background-brand-primary` |
 | Tier | Semantic |
 | Library | **Foundations Library** defines the `bds` name and its default value; each **Brand Kit Library** declares the tenant's own values under the tenant's ID |
 | Layer | `bds-tokens` carries the `bds` default; `client-theme` carries the tenant's binding of the `bds` name to its own ([how a tenant binds](#how-a-tenant-binds-bds-names)) |
@@ -418,7 +413,7 @@ Every legitimate token answers all seven. If a token doesn't fit any one of them
 | Component CSS reading `--color-{family}-{step}` directly | Bypasses the Semantic tier. Locks the component to one brand. | Caught by `scripts/lint-tokens.js` |
 | `--bp-{blueprint}-{slot}-{prop}` (`--bp-hero-img-card-bg`) | Parallel Component-tier namespace that shipped ahead of canon. Invisible to lint because it's an undefined reference, not a real token. | [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) / [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md) → migrate to `--bds-*` |
 | `--{component}-{prop}` (`--toast-shadow`, `--select-chevron-color`) | Component knob without the `--bds-` prefix. Collides with the global namespace and isn't lint-recognized. | [#1043](https://github.com/brikdesigns/brik-bds/issues/1043) / [ADR-014](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-014-component-token-hook-namespace.md) → migrate to `--bds-*` |
-| Raw literal inside a `var()` fallback on a tokenized property (`var(--bds-shadow-md, 0 4px 12px …)`) | Reintroduces a Tier-1 value that ships silently if the token fails to resolve; lint sees only the canonical name and passes. | Caught by `scripts/lint-tokens.js` (fallback-literal rule, [#1043](https://github.com/brikdesigns/brik-bds/issues/1043)) |
+| Raw literal inside a `var()` fallback on a tokenized property (`var(--bds-shadow-raised, 0 4px 12px …)`) | Reintroduces a Tier-1 value that ships silently if the token fails to resolve; lint sees only the canonical name and passes. | Caught by `scripts/lint-tokens.js` (fallback-literal rule, [#1043](https://github.com/brikdesigns/brik-bds/issues/1043)) |
 
 {/* lint-mdx-tokens-ignore-end */}
 
@@ -429,14 +424,14 @@ Every legitimate token answers all seven. If a token doesn't fit any one of them
 ## Verifying a token before referencing it
 
 ```bash
-# Is this name in the canonical registry?
-rg '\-\-{token-name}' node_modules/@brikdesigns/bds/dist/tokens.css
+# Is this name declared in a Figma-generated file?
+rg -- '--{token-name}:' tokens/figma-tokens.css tokens/figma-tokens-dark.css tokens/modes-*.css tokens/layout-fluid.css
 
 # Or run the consumer-side gate
 ./scripts/token-audit.sh --canonical-only
 ```
 
-If the gate is missing or the name isn't found, **stop**. Don't ship a `var()` call against a name that doesn't exist — if it isn't in `dist/tokens.css`, it isn't real.
+If the gate is missing or the name isn't found, **stop**. Don't ship a `var()` call against a name that doesn't exist — if it isn't in the Figma-generated files (`tokens/figma-tokens*.css`, `modes-*.css`, `layout-fluid.css`), it isn't canon. Ask the operator to add the variable in Figma.
 
 ## Related
 

@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { expect } from 'storybook/test';
+import { Badge } from '../Badge';
+import { ProgressBar } from '../ProgressBar';
 import { Stat } from './Stat';
 
 /**
@@ -60,6 +62,44 @@ export const LabelFirst: Story = {
     detail: '3 invoices overdue',
     order: 'label-first',
     size: 'lg',
+  },
+};
+
+/**
+ * The full single-stat anatomy: label, value, meta badge, trend, a
+ * supplementary ProgressBar and a description clamped to two lines.
+ * @summary Single stat — meta, trend, supplementary, description
+ */
+export const SingleStat: Story = {
+  args: {
+    value: '82%',
+    label: 'Goal progress',
+    order: 'label-first',
+    meta: <Badge status="positive">On track</Badge>,
+    trend: { delta: '+6% vs last month', direction: 'up' },
+    supplementary: <ProgressBar value={82} label="Goal progress" />,
+    description:
+      'Share of the quarterly target reached so far. This description runs long on purpose so that it exceeds two lines and the clamp has something to cut off at the end of the second line of text.',
+  },
+  render: (args) => (
+    <div style={{ maxWidth: 280 }}>
+      <Stat {...args} />
+    </div>
+  ),
+};
+
+/**
+ * Asserts the description clamps to two lines in CSS.
+ * @summary Interaction test — description clamps to two lines
+ */
+export const InteractionTestDescriptionClamp: Story = {
+  ...SingleStat,
+  tags: ['!manifest', 'interaction-test'],
+  play: async ({ canvasElement }) => {
+    const el = canvasElement.querySelector('.bds-stat__description') as HTMLElement;
+    const style = getComputedStyle(el);
+    await expect(style.getPropertyValue('-webkit-line-clamp') || style.getPropertyValue('line-clamp')).toBe('2');
+    await expect(el.scrollHeight).toBeGreaterThan(el.clientHeight);
   },
 };
 

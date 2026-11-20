@@ -1,6 +1,6 @@
 ---
 title: Prop Axes
-description: The ten shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span — that any BDS component with overlapping concerns must use.
+description: The twenty-three shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span, ratio, fit, anchor, resize, marker, underline, measure, columns, spacing, corner, placement, side, service-line — that any BDS component with overlapping concerns must use.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -16,13 +16,26 @@ Source of truth: [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/mai
 | `tone` | `negative` · `positive` · `warning` · `info` · `neutral` | Valence — what this communicates about a state | Badge, Dot, Banner, Field (`helperTone`) |
 | `status` | per-subject | Presence or lifecycle — the state of a named subject | Avatar, Card, Table, TaskConsole |
 | `variant` | per-component (see matrix) | Form — mutually exclusive visual or structural shape, no valence | Card, TabBar, Skeleton, Sheet, ServiceTag, Testimonial, Footer, ToggleSwitch, ProgressStepper |
-| `emphasis` | `neutral` · `brand` · `accent` · `inverse` | Hue source — which palette paints it | TextLink, SocialIcon, ContactIcon |
+| `emphasis` | `neutral` · `brand` · `accent` · `inverse` · `on-color` | Hue source — which palette paints it | TextLink, SocialIcon, ContactIcon |
 | `appearance` | `solid` · `subtle` · `outline` | Fill treatment — how the shape is filled vs bordered | Badge, Tag, Avatar (`solid` · `subtle` only) |
 | `density` | `comfortable` · `compact` | Spacing compression | Tag, Sheet |
 | `color` | `neutral` · `blue` · `green` · `orange` · `purple` · `yellow` · `red` | Accent hue — which named hue paints it | Tag, Avatar |
 | `orientation` | `horizontal` · `vertical` | Layout direction, no valence | ButtonGroup, Divider, CardList |
 | `layout` | per-component | Arrangement — which arrangement of one shared slot set a Container renders | Card |
 | `span` | `full` | Grid extent — how many of its parent grid's tracks a grid child occupies | Field |
+| `ratio` | per-component | A fixed proportion the component holds — an aspect slug or a column split | Frame, Split |
+| `fit` | `cover` · `contain` · `fill` · `none` | Media fit — how media fills its box | Frame, Image, Card, Table |
+| `anchor` | `width` · `height` | Which dimension a ratio is held from | Frame, Image |
+| `resize` | `none` · `both` · `horizontal` · `vertical` | Which directions the user may resize | TextArea |
+| `marker` | `disc` · `decimal` · `none` | List item marker | BulletList |
+| `underline` | `hover` · `always` · `none` | When a link shows its underline | TextLink |
+| `measure` | `sm` · `md` · `lg` | Text column width | SectionHeader |
+| `columns` | `1`–`6` · `auto-fit` · `auto-fill` | Grid column count — a fixed count, or a reflow strategy | Grid, FieldGrid |
+| `spacing` | `none` · `sm` · `md` · `lg` | Outer separation from the block before or after it — not `gap` (between children) or `padding` (inside) | Divider, DataSection, SheetSection |
+| `corner` | `bottom-right` · `bottom-left` | Which viewport corner a fixed element docks to (TaskConsole's `position` prop) | TaskConsole |
+| `service-line` | `brand` · `marketing` · `information` · `product` · `back-office` | Which service line's surface paints the block (the `serviceLine` prop) | Card, BlockQuote (bare, under ADR-033 § 4's service-line exception) |
+| `placement` | `top` · `bottom` · `left` · `right` | Which side of its anchor a floating element opens on (the `placement` prop) | Tooltip, Popover, Menu |
+| `side` | `right` · `left` · `bottom` | Which viewport edge a docked panel anchors to (the `side` prop) | Sheet |
 
 `error` and `progress` are retired valence words: use `negative` and `info` ([ADR-033 § Retired vocabulary](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#retired-vocabulary)). `brand` is not a valence either: ADR-033 moves it to `emphasis="brand"`. Badge's `tone` still accepts `brand` until that migration lands (see the matrix below), so do not copy it into a new union.
 
@@ -51,7 +64,7 @@ Source of truth: [`manifest/component-axes.json`](https://github.com/brikdesigns
 
 | Component | `variant` | `appearance` | `size` | `tone` |
 |---|---|---|---|---|
-| Button | `primary` · `outline` · `secondary` · `ghost` · `inverse` · `on-color` · `destructive` · `positive` · `danger` · `danger-outline` · `danger-ghost` | — | `tiny` · `sm` · `md` · `lg` · `xl` | — |
+| Button | `primary` · `secondary` · `outline` · `ghost` · `inverse` · `on-color` · `negative` · `negative-outline` · `negative-ghost` · `positive` (a curated style list, #3275) | — | `tiny` · `sm` · `md` · `lg` · `xl` | — |
 | LinkButton | shares `ButtonVariant` | — | shares `ButtonSize` | — |
 | IconButton | shares `ButtonVariant` | — | shares `ButtonSize` | — |
 | Chip | `primary` · `secondary` | — | `sm` · `md` · `lg` | — |
@@ -80,7 +93,7 @@ Source of truth: [`content-system/blueprints/astro/types.ts`](https://github.com
 
 | Axis | ADR-039 axis | Values | Omitted → | Decides |
 |---|---|---|---|---|
-| `layout` | Structure | per block — `HeroLayout`: `split` · `interior-minimal` · `with-pricing-card` · `centered`; `CtaLayout`: `default` · `split`; `CardGridLayout`: `card-grid` · `two-column-list` | `split` · `default` · `card-grid` | The shape the block renders in. A layout is a prop, never a filename. |
+| `layout` | Structure | per block — `HeroLayout`: `split` · `interior-minimal` · `with-pricing-card` · `centered` · `statement`; `CtaLayout`: `default` · `split`; `CardGridLayout`: `card-grid` · `two-column-list`; `FeaturesLayout`: `grid` · `alternating-split` · `bento` | `split` · `default` · `card-grid` · `grid` | The shape the block renders in. A layout is a prop, never a filename. |
 | `align` | Structure | `center` · `left` | the block's own default (matrix below) | Content placement. The `--align-*` modifier is written only for the non-default value. |
 | `columns` | Structure | `2` · `3` · `4` | the responsive ramp 1 → 2 → 3 | Column count of the block's own item grid. |
 | `mediaPosition` | Structure | `start` · `end` | `end` | Which side of a two-column block its media (or aside) column sits on. `start` puts it first from the tablet rung up; DOM order never changes. Written as `data-media-position`, only for `start` — the same attribute `MediaTabs` and `SyncedMediaSteps` use. |
@@ -103,7 +116,9 @@ A cell names the block's default when the axis is omitted; ✓ means the block t
 | Hero | `split` | `left` | — | `end` (split only) | `horizontal` (split only) | `4-5` (split) · `16-9` (split, `vertical`) · `square` (price card) | Astro: `image` (prop) · React: a `media` slot | all four — Astro: section · React: prop | — |
 | Cta | `default` | `center` (ignored on `split`) | — | — | — | — | — | — | — |
 | CardGrid | `card-grid` | — | Astro only | — | — | — | — | — | — |
-| Features | — | `center` | ✓ | — | — | — | — | — | `animated-svg` (React prop) |
+| Features | `grid` | `center` | ✓ (`grid` only) | `end` (`alternating-split` only) | — | — | — | — | `animated-svg` (React prop) |
+| TestimonialsCardGrid | — | — | Astro only | — | — | — | — | — | — |
+| ProcessStepsNumbered | — | — | — (step count = `items.length`) | — | — | — | — | — | — |
 | Narrative | — | `left` | — | `end` (moves the pull-quote) | `horizontal` | — | — | — | — |
 | HeroMediaCard | — | — | — | — | — | `square` | — | — | — |
 | HeroMediaCardImage | — | — | — | — | — | `square` | — | — | — |
@@ -119,6 +134,7 @@ No axis yet: CalloutPanel, HeroMediaCardPrice, TestimonialsFeaturedLarge (both r
 - **Hero `media`** — Astro takes the enum. React takes a composed `media` node, normally a `<BlockMedia media=…>`; its dispatched path renders `image` only.
 - **Hero `reveal`** — Astro reads `section.reveal`. React takes the `reveal` prop on a composed `<Hero>`; its dispatched path does not read `section.reveal`.
 - **CardGrid `columns`** — Astro only. The React `CardGrid` composes children, so column count belongs to the consumer's `<Grid columns>`.
+- **Features `layout`** — `alternating-split` and `bento` are dispatched by the Astro-only keys `features_alternating_split` and `features_bento_asymmetric`; the React `<Features>` takes the same `layout` / `mediaPosition` props when composed, and its dispatched path does not read them.
 - **Features `contentMotion: animated-svg`** — animates on React. Astro shows each card's static `imageUrl` poster, which is also the reduced-motion and no-JS state.
 
 <Callout type="info">
@@ -127,14 +143,13 @@ No axis yet: CalloutPanel, HeroMediaCardPrice, TestimonialsFeaturedLarge (both r
 
 ## Expression modes
 
-The six **expression-mode axes** are the Style half of [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md). They are not component props — no component declares them. They are attributes set once on `:root` (the `<html>` element), and every component inherits the retuned tokens.
+The five **expression-mode axes** are the Style half of [ADR-039](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-039-blueprint-parameterization-axes.md). They are not component props — no component declares them. They are attributes set once on `:root` (the `<html>` element), and every component inherits the retuned tokens.
 
 | Axis | Attribute on `:root` | Values | Default (no attribute) |
 |---|---|---|---|
 | Spacing | `data-mode-spacing` | `compact` · `comfortable` · `spacious` | `default` |
 | Typography | `data-mode-typography` | `compact` · `comfortable` · `spacious` · `expressive` | `default` |
 | Radius | `data-mode-radius` | `sharp` · `round` · `pill` | `soft` |
-| Elevation | `data-mode-elevation` | `flat` · `lifted` · `dramatic` | `subtle` |
 | Border width | `data-mode-borderwidth` | `thin` · `thick` | `default` |
 | Width | `data-mode-width` | `wide` · `full-bleed` | `contained` |
 
@@ -142,7 +157,7 @@ The six **expression-mode axes** are the Style half of [ADR-039](https://github.
   **Each default is the attribute-ABSENT state** — there is no `[data-mode-radius="soft"]` selector, and setting one does nothing. Omit the attribute to get the default. For the same reason the defaults are not members of the closed vocabularies below.
 </Callout>
 
-Closed value lists live in `content-system/vocabularies/{spacing,typography,radius,elevation,borderwidth,width}-mode.ts`, published as `@brikdesigns/bds/content-system`. They are surfaced to the portal's enum gate under the reserved `@modes` key in [`manifest/component-axes.json`](https://github.com/brikdesigns/brik-bds/blob/main/manifest/component-axes.json), alongside the component axes.
+Closed value lists live in `content-system/vocabularies/{spacing,typography,radius,borderwidth,width}-mode.ts`, published as `@brikdesigns/bds/content-system`. They are surfaced to the portal's enum gate under the reserved `@modes` key in [`manifest/component-axes.json`](https://github.com/brikdesigns/brik-bds/blob/main/manifest/component-axes.json), alongside the component axes.
 
 The authority is the CSS, not the TypeScript: `tokens/modes-*.css` is what ships, and `content-system/vocabularies/expression-modes.test.ts` parses it to hold each list equal to the selectors it declares. A Figma mode rename fails that test rather than drifting into a portal pick-list.
 

@@ -829,12 +829,12 @@ _ic_find_claim() {
   if ! _ic_fetch_comments "$owner" "$repo" "$num"; then
     if [ "$strict" = "strict" ]; then
       gh api "repos/$owner/$repo/issues/$num/comments" --paginate \
-        --jq "[.[] | select(.body | contains(\"$CLAIM_MARKER\"))] | last | select(.) | \"\(.id)\t\(.body)\"" \
+        --jq "[.[] | select(.body | startswith(\"$CLAIM_MARKER\"))] | last | select(.) | \"\(.id)\t\(.body)\"" \
         2>/dev/null || return 2
       return 0
     fi
     gh api "repos/$owner/$repo/issues/$num/comments" --paginate \
-      --jq "[.[] | select(.body | contains(\"$CLAIM_MARKER\"))] | last | select(.) | \"\(.id)\t\(.body)\"" \
+      --jq "[.[] | select(.body | startswith(\"$CLAIM_MARKER\"))] | last | select(.) | \"\(.id)\t\(.body)\"" \
       2>/dev/null || true
     return 0
   fi
@@ -844,7 +844,7 @@ _ic_find_claim() {
   [ -n "$_IC_COMMENTS_NDJSON" ] || return 0
   printf '%s\n' "$_IC_COMMENTS_NDJSON" \
     | jq -rs --arg m "$CLAIM_MARKER" \
-        '[ .[] | select((.body // "") | contains($m)) ] | last | select(.) | "\(.id)\t\(.body)"' \
+        '[ .[] | select((.body // "") | startswith($m)) ] | last | select(.) | "\(.id)\t\(.body)"' \
         2>/dev/null || true
 }
 
@@ -1015,7 +1015,7 @@ _ic_claim_readback() {
   local rival_ids rid rbody parsed their_session
   rival_ids="$(printf '%s\n' "$_IC_COMMENTS_NDJSON" \
     | jq -r --arg m "$CLAIM_MARKER" --argjson lo "$read_id" --argjson me "$my_id" \
-        'select((.body // "") | contains($m)) | select(.id > $lo and .id < $me) | .id' \
+        'select((.body // "") | startswith($m)) | select(.id > $lo and .id < $me) | .id' \
         2>/dev/null)" || return 0
 
   # A here-string, not `for rid in $rival_ids`: zsh does not word-split an

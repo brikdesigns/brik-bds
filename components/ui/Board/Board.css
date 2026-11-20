@@ -193,13 +193,13 @@
   flex-direction: column;
   gap: var(--bds-gap-md);
   flex-shrink: 0;
-  transition: box-shadow var(--bds-duration-md) var(--bds-ease-out),
-    transform var(--bds-duration-md) var(--bds-ease-out);
+  transition: box-shadow var(--bds-duration-200) var(--bds-ease-out),
+    transform var(--bds-duration-200) var(--bds-ease-out);
 }
 
 .bds-board-card:hover {
   box-shadow: inset 0 0 0 999px var(--bds-state-hover-overlay),
-    var(--bds-box-shadow-md);
+    var(--bds-shadow-raised);
   transform: translateY(var(--board-card-hover-translate-y)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
@@ -254,10 +254,10 @@
 
 /* Compact density — tighter card for multi-card-per-column boards.
    Title drops one step; subtitle reads as label-family metadata. */
-.bds-board-card--compact .bds-board-card__title {
+.bds-board-card--density-compact .bds-board-card__title {
   font-size: var(--bds-label-md);
 }
-.bds-board-card--compact .bds-board-card__subtitle {
+.bds-board-card--density-compact .bds-board-card__subtitle {
   font-family: var(--bds-font-family-label);
   text-transform: var(--bds-text-transform-label);
 }

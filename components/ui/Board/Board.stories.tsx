@@ -232,13 +232,13 @@ export const Density: Story = {
   // #412. Chromatic snapshot deferred (quota #771).
   play: async ({ canvasElement }) => {
     const defaultTitle = canvasElement.querySelector(
-      '.bds-board-card:not(.bds-board-card--compact) .bds-board-card__title',
+      '.bds-board-card:not(.bds-board-card--density-compact) .bds-board-card__title',
     ) as HTMLElement;
     const compactTitle = canvasElement.querySelector(
-      '.bds-board-card--compact .bds-board-card__title',
+      '.bds-board-card--density-compact .bds-board-card__title',
     ) as HTMLElement;
     const compactSubtitle = canvasElement.querySelector(
-      '.bds-board-card--compact .bds-board-card__subtitle',
+      '.bds-board-card--density-compact .bds-board-card__subtitle',
     ) as HTMLElement;
 
     await expect(getComputedStyle(defaultTitle).fontSize).toBe('18px'); // --bds-label-lg

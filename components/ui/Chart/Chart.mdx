@@ -1,0 +1,96 @@
+import { Meta, Canvas, ArgTypes } from '@storybook/addon-docs/blocks';
+import { ComponentLinks } from '../../../.storybook/blocks/ComponentLinks';
+import * as Stories from './Chart.stories';
+
+<Meta of={Stories} />
+
+# Chart
+
+<ComponentLinks slug="chart" name="Chart" />
+
+The data-visualization family (ADR-050). `BarChart`, `LineChart` and `DonutChart` render inside one `ChartFrame` — title, legend, axis labels, tooltip and a "Show data table" toggle. Loading, empty and error states come from the DataView shell. `Sparkline` is the frameless trend for a `Stat`'s `supplementary` slot.
+
+Colour comes only from the 12 `--bds-background-chart-*` tokens (fills; a same-valued `--bds-border-chart-*` stroke set exists for line and axis marks). Pick one per series with `ChartSeries.color` (type `ChartColor`). Peer series default to `CHART_CATEGORICAL_COLORS` in order; a single series is `brand`.
+
+**The chart-type rule.** Pick by the question asked:
+
+| Question | Chart |
+|---|---|
+| How do categories compare? | **Column** (`BarChart`), the default. `orientation="horizontal"` for long labels. |
+| What is each bar made of? | **Stacked column** (`BarChart` with `stacked`), segments sum to the category total. Keep it to 4 or 5 series. |
+| How did it change over continuous time? | **Line** (`LineChart`). |
+| What share of the whole? | **Donut** (`DonutChart`), only at 5 categories or fewer. With 6 or more, use column. |
+| Which way is it trending, next to a number? | **Sparkline** inside `Stat`. |
+| Running total over time? | Area is not in v1. Render it as a line. |
+
+## Default
+
+A single series needs no legend — the title names it.
+
+<Canvas of={Stories.Default} />
+
+## Variants
+
+### Horizontal bar
+
+<Canvas of={Stories.Horizontal} />
+
+### Grouped series
+
+More than one series shows a legend. Each legend item toggles its series; the last visible series cannot be hidden.
+
+<Canvas of={Stories.GroupedSeries} />
+
+### Stacked series
+
+`stacked` draws one bar per category, its segments summing to the total, in both orientations. The legend re-stacks the visible series. The data table adds a Total column.
+
+<Canvas of={Stories.Stacked} />
+
+### Line
+
+With more than one series, each line is labelled at its end.
+
+<Canvas of={Stories.Line} />
+
+### Donut
+
+<Canvas of={Stories.Donut} />
+
+### Status donut
+
+When a slice *is* a status, colour it with `positive`, `warning` or `negative` via `colors`.
+
+<Canvas of={Stories.StatusDonut} />
+
+## Patterns
+
+### Sparkline in a Stat
+
+The Stat's value and trend are the text; the sparkline adds the shape. Its `label` names the image and captions a visually hidden table of every value.
+
+<Canvas of={Stories.SparklineInStat} />
+
+### Loading, empty and error
+
+<Canvas of={Stories.Loading} />
+
+<Canvas of={Stories.Empty} />
+
+<Canvas of={Stories.ErrorState} />
+
+### Dark theme
+
+<Canvas of={Stories.BarDark} />
+
+<Canvas of={Stories.LineDark} />
+
+<Canvas of={Stories.DonutDark} />
+
+<Canvas of={Stories.SparklineDark} />
+
+## Props
+
+`BarChart` props below. `LineChart`, `DonutChart` and `ChartFrame` share `ChartBaseProps` (title, description, height, loading, error, empty, emptyState). Data rows are `ChartDatum`; value text goes through a `ChartValueFormatter`.
+
+<ArgTypes of={Stories} />

@@ -68,7 +68,7 @@ export function Chip({
   const classes = bdsClass(
     'bds-chip',
     `bds-chip--${variant}`,
-    `bds-chip--${size}`,
+    `bds-chip--size-${size}`,
     disabled && 'bds-chip--disabled',
     className
   );

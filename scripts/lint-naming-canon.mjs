@@ -16,7 +16,7 @@
  * ADR-033 closes those lists. This gate is what stops them re-opening — it is
  * #1910 AC #5, and ADR-033 § Enforcement is its spec.
  *
- * ── The seven rules (rules 1-6: ADR-033 § Enforcement; rule 7: ADR-043) ────
+ * ── The nine rules (rules 1-6: ADR-033 § Enforcement; rule 7: ADR-043) ─────
  *
  *   1  step        A token's step falls outside its family's vocabulary (§ 3)
  *                  and is not a § Named exception. Reads dist/tokens.css.
@@ -44,6 +44,13 @@
  *                  dist/tokens.css and the Primitive/Semantic names components/ui
  *                  CSS declares. A Tier 4 hook is judged by lint-tokens.js
  *                  (`tier4-shape`); a name kept as a TIER4_ALIASES alias is exempt.
+ *   9  provenance  A name in dist/tokens.css that no Figma-generated file
+ *                  declares (#3240). Figma is the only place a token name is
+ *                  born: Style Dictionary and generate-modes-css write it into
+ *                  FIGMA_GENERATED, and dist/tokens.css also bundles the
+ *                  hand-written files, so a name invented there reads as canon
+ *                  to every consumer. The hand-written set is frozen at the
+ *                  baseline and sorted in #3241 — promote in Figma, or delete.
  *
  * ── Why rule 6 reads references, when 1-5 read names ───────────────────────
  *
@@ -109,12 +116,13 @@
  * `main` unnoticed, which is the whole failure the gate exists to prevent.
  *
  * ── CLI ────────────────────────────────────────────────────────────────────
- *   node scripts/lint-naming-canon.mjs              all seven rules
+ *   node scripts/lint-naming-canon.mjs              all nine rules
  *   node scripts/lint-naming-canon.mjs --rule 3     one rule
  *   node scripts/lint-naming-canon.mjs --json       machine-readable
  *   node scripts/lint-naming-canon.mjs --census     every finding, baselined too
  *   node scripts/lint-naming-canon.mjs --no-baseline  ignore the baseline
  *   node scripts/lint-naming-canon.mjs --tokens <f> --components <dir>
+ *   node scripts/lint-naming-canon.mjs --figma <f,f>  rule 9's generated files
  *
  * Exit 0 = clean, 1 = a violation or a stale baseline entry, 2 = the check
  * broke. Exit 2 matters: a parse that finds nothing must never read as clean
@@ -294,12 +302,27 @@ const MODIFIER_AXES = new Set([
  *
  * Kept deliberately short. A value that names a *choice along an axis* belongs
  * behind a prefix; only a boolean belongs here.
+ *
+ * The set is keyed by word, not by block, so a word joins only when EVERY block
+ * that emits it does so from a boolean prop or predicate (#1927 kind A). That is
+ * why `pulse` (Dot's boolean, but one of Badge's three CSS-only animations) and
+ * `scroll` (PageContent's boolean, but a `TabBar` `overflow` value) are absent.
+ * `has-*` / `with-*` are listed word by word rather than admitted as a prefix:
+ * `--with-pricing-card` is a Hero `layout` value, and a prefix rule would hide it.
  */
 const BOOLEAN_MODIFIERS = new Set([
   'disabled', 'active', 'selected', 'open', 'closed', 'loading', 'readonly',
   'required', 'checked', 'expanded', 'collapsed', 'collapsible', 'sticky',
   'unread', 'empty', 'hidden', 'visible', 'focused', 'hovered', 'pressed',
   'dragging', 'invalid',
+  // States and predicates (#1927 kind A).
+  'clickable', 'non-clickable', 'exiting', 'flash', 'highlighted',
+  'indeterminate', 'interactive', 'sortable', 'today', 'placeholder', 'last',
+  'origin',
+  // Structural booleans (#1927 kind A).
+  'full-width', 'auto-width', 'icon-only', 'no-border', 'wrap', 'nowrap',
+  'has-dot', 'has-errors', 'has-icon', 'has-icon-after', 'has-icon-before',
+  'has-tabs', 'has-trailing', 'with-control', 'with-description',
 ]);
 
 /**
@@ -574,8 +597,19 @@ function collectUnions(componentsDir) {
  * `ModalSize`, so claiming it in `axesOf` would read `'full' | 'compact'` as
  * span + density and fail a union that is not about grid extent. Rule 5 still
  * default-denies any other `--span-*` / `*Span` member through `spec.values`.
+ *
+ * The #1927 axes join it for the same reason. Their values are CSS keywords
+ * and t-shirt rungs (`none`, `md`, `horizontal`) that other unions share, so
+ * `DividerSpacing = 'none' | 'sm' | 'md' | 'lg'` would read as marker +
+ * measure and fail rule 3. `spacing` (#1927) is that union's own axis, and its
+ * values are the same shared rungs, so it is prefix-judged too. `service-line`
+ * (#1927) shares `brand` with emphasis, so a `'brand' | 'positive'` union would
+ * read as three axes instead of emphasis + tone. `placement` (#1927) shares
+ * `top`, `left` and `right` with Sheet's `side` and Pagination's `position`
+ * unions, which are other concepts, so a value match would misread those. `side`
+ * (#1927) is Sheet's own axis and shares `left`, `right` and `bottom` with `placement`.
  */
-const SPAN_AXIS = 'span';
+const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing', 'service-line', 'placement', 'side']);
 
 /**
  * Every axis whose closed list claims this member. A SET, not one axis: ADR-033
@@ -601,7 +635,7 @@ function axesOf(member) {
     axes.add(RETIRED_AXIS_VALUES[member].axis);
   }
   for (const [axis, spec] of Object.entries(AXES)) {
-    if (axis === SPAN_AXIS) continue;
+    if (PREFIX_JUDGED_AXES.has(axis)) continue;
     if (spec.values && spec.values.has(member)) axes.add(axis);
   }
   return axes;
@@ -628,12 +662,22 @@ function mixedAxes(members) {
 
 // ── Rule 3 — a union carries one axis ──────────────────────────────────────
 
+/**
+ * Unions that are a curated list of complete styles, not one axis — ADR-033
+ * § Amendments, "Button's `variant` is a curated style list" (#3275). Each
+ * member names one finished look (`negative-outline` is one style, not
+ * `outline` + `negative`), so the rule 3 axis-mixing check is skipped for
+ * them. The retired-word checks still run. A name joins this set only by
+ * its own amendment.
+ */
+const CURATED_STYLE_UNIONS = new Set(['ButtonVariant']);
+
 function unionFindings(unions) {
   const findings = [];
   for (const u of unions) {
     const retired = u.members.filter((v) => Object.prototype.hasOwnProperty.call(RETIRED_VALENCE, v));
     const retiredAxis = u.members.filter((v) => Object.prototype.hasOwnProperty.call(RETIRED_AXIS_VALUES, v));
-    const mixed = mixedAxes(u.members);
+    const mixed = CURATED_STYLE_UNIONS.has(u.name) ? null : mixedAxes(u.members);
     const id = `${u.name}`;
 
     if (retired.length > 0) {
@@ -764,8 +808,9 @@ function serviceLines(componentsDir) {
  * The BEM blocks that emit a modifier from a `ServiceLine`-typed value. Both
  * halves are required: the identifier has to be annotated `ServiceLine`, AND
  * the block has to interpolate that identifier. Card is why — it imports
- * `ServiceLine` and derives `CardTint` from it, but emits its service tint as
- * the already-compliant `bds-card--tint-${tint}` while `.bds-card--brand` is an
+ * `ServiceLine` and derives `CardServiceLine` from it, but emits its service
+ * surface as the prefixed `bds-card--service-line-${serviceLine}` while
+ * `.bds-card--brand` is an
  * unrelated variant. A directory-level "imports ServiceLine" test would exempt
  * that variant and hide a real § 4 finding.
  */
@@ -816,7 +861,11 @@ function modifierFindings(mods, exempt = () => false) {
     if (prefix) {
       // Prefixed — the axis is explicit, so the VALUE is judgeable.
       const value = mod.slice(prefix.length + 1);
-      if (Object.prototype.hasOwnProperty.call(RETIRED_VALENCE, value)) {
+      // A word on this axis's own closed list is canonical here, whatever it
+      // means on another axis: `information` is retired as a valence (→ `info`)
+      // but is the service line's name on `service-line` (#1927).
+      const onOwnList = Boolean(AXES[prefix]?.values?.has(value));
+      if (!onOwnList && Object.prototype.hasOwnProperty.call(RETIRED_VALENCE, value)) {
         findings.push({
           rule: 4, id: `--${mod}`, where,
           detail: `retired valence word \`${value}\` → \`${RETIRED_VALENCE[value]}\``,
@@ -1153,6 +1202,69 @@ function segmentFindings(names, aliases) {
   return findings;
 }
 
+// ── Rule 9 — every name is born in Figma (#3240) ───────────────────────────
+
+/**
+ * The files the Figma sync writes: Style Dictionary (figma-tokens*) and
+ * generate-modes-css (modes-*, layout-fluid), all from design-tokens/.
+ * dist-assemble.mjs bundles these WITH the hand-written files (gap-fills,
+ * ratios, fluid-type, animations) — a name only those declare has no Figma
+ * variable behind it.
+ *
+ * The Brik Brand Kit is read as its pulled variables (brik.json), NOT as the
+ * compiled theme-brand-brik.generated.css: compileClientTheme re-emits
+ * hand-written names beside the kit's own (a name with no matching Figma
+ * variable), so the compiled file would launder them into canon.
+ */
+const FIGMA_GENERATED = [
+  ...[
+    'figma-tokens.css', 'figma-tokens-dark.css',
+    'modes-borderwidth.css', 'modes-spacing.css', 'modes-typography.css', 'modes-borderradius.css',
+    'modes-width.css', 'layout-fluid.css',
+  ].map((f) => path.join('tokens', f)),
+  path.join('design-tokens', 'brand-kits', 'brik.json'),
+];
+
+/** A pulled Figma variable set: `{ "<collection/mode>": { group: { name: { $value } } } }` → `--bds-group-name`. */
+function variableNames(node, segments, names) {
+  if (node === null || typeof node !== 'object') return;
+  if ('$value' in node || 'value' in node) {
+    names.add(`--${ID}-${segments.join('-').replace(/[/\s]+/g, '-').toLowerCase()}`);
+    return;
+  }
+  for (const [key, child] of Object.entries(node)) variableNames(child, [...segments, key], names);
+}
+
+function collectFigmaNames(files) {
+  const names = new Set();
+  for (const file of files) {
+    if (!fs.existsSync(file)) throw new Error(`${file} does not exist (rule 9 reads the Figma-generated files)`);
+    if (file.endsWith('.json')) {
+      for (const [key, collection] of Object.entries(JSON.parse(fs.readFileSync(file, 'utf8')))) {
+        if (!key.startsWith('$')) variableNames(collection, [], names);
+      }
+      continue;
+    }
+    for (const m of blankComments(fs.readFileSync(file, 'utf8')).matchAll(/(--[A-Za-z0-9_-]+)\s*:/g)) names.add(m[1]);
+  }
+  return names;
+}
+
+function provenanceFindings(tokenNames, figmaNames) {
+  const findings = [];
+  for (const name of tokenNames) {
+    if (figmaNames.has(name)) continue;
+    findings.push({
+      rule: 9,
+      id: name,
+      where: 'dist/tokens.css',
+      detail: 'declared in no Figma-generated file — add the variable in Figma and re-run the sync; '
+        + 'a hand-written token file takes no new names',
+    });
+  }
+  return findings;
+}
+
 // ── Baseline ────────────────────────────────────────────────────────────────
 
 /**
@@ -1182,6 +1294,7 @@ const RULE_NAMES = {
   6: 'reference to a deleted --*-status-* token (§ Token families)',
   7: 'colour Primitive is not color-{family}-{step} (ADR-043 § 2, § 4)',
   8: 'banned abbreviation or run-on stem in a --bds-* name (#3088)',
+  9: 'name with no Figma variable behind it (#3240)',
 };
 
 function main() {
@@ -1197,10 +1310,11 @@ function main() {
   const componentsDir = flag('--components', DEFAULT_COMPONENTS);
   const baselinePath = flag('--baseline', BASELINE_PATH);
   const referenceDirs = flag('--refs', REFERENCE_DIRS.join(',')).split(',').filter(Boolean);
+  const figmaFiles = flag('--figma', FIGMA_GENERATED.join(',')).split(',').filter(Boolean);
   const onlyRule = args.includes('--rule') ? Number(flag('--rule', '0')) : null;
 
   if (onlyRule !== null && !RULE_NAMES[onlyRule]) {
-    console.error(`lint-naming-canon: --rule must be 1-8, got ${onlyRule}`);
+    console.error(`lint-naming-canon: --rule must be 1-9, got ${onlyRule}`);
     process.exit(2);
   }
 
@@ -1213,7 +1327,7 @@ function main() {
     process.exit(2);
   }
 
-  let tokens; let unions; let modifiers; let refs; let lines; let slBlocks;
+  let tokens; let unions; let modifiers; let refs; let lines; let slBlocks; let figmaNames;
   try {
     tokens = collectDeclarations(tokensPath);
     unions = collectUnions(componentsDir);
@@ -1221,6 +1335,7 @@ function main() {
     refs = collectReferences(referenceDirs);
     lines = serviceLines(componentsDir);
     slBlocks = serviceLineBlocks(componentsDir);
+    figmaNames = collectFigmaNames(figmaFiles);
   } catch (err) {
     console.error(`SCAN FAILED — ${err.message}`);
     process.exit(2);
@@ -1240,6 +1355,7 @@ function main() {
     // what the ADR says it does, so neither may read as a clean scan.
     ['service lines', lines.size],
     ['service-line blocks', slBlocks.size],
+    ['Figma-generated names', figmaNames.size],
   ];
   const empty = denominators.filter(([, n]) => n === 0);
   if (empty.length > 0) {
@@ -1267,6 +1383,7 @@ function main() {
     ...referenceFindings(refs),
     ...colorBodyFindings(tokens.byName),
     ...segmentFindings(collectSegmentNames(tokens.byName.keys(), componentsDir), tier4AliasNames()),
+    ...provenanceFindings(tokens.byName.keys(), figmaNames),
   ];
   if (onlyRule !== null) all = all.filter((f) => f.rule === onlyRule);
 
@@ -1315,7 +1432,7 @@ function main() {
     + `${lines.size} service line(s) exempt on ${slBlocks.size} block(s)`
   );
 
-  for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5, 6, 7, 8]) {
+  for (const rule of onlyRule !== null ? [onlyRule] : [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
     const l = live.filter((f) => f.rule === rule);
     const b = baselined.filter((f) => f.rule === rule);
     if (l.length === 0 && b.length === 0) continue;

@@ -157,7 +157,7 @@
      Border Radius
      ═══════════════════════════════════════════════
      Only the two shape aliases below belong here. The word-scale names
-     (--border-width-*, --border-radius-*, --box-shadow-*, --blur-radius-*)
+     (--border-width-*, --border-radius-*; --box-shadow-* / --blur-radius-* since retired)
      are already defined by tokens/figma-tokens.css and tokens/gap-fills.css,
      which land in dist/tokens.css. This file used to re-declare all fifteen
      of them as `--x: var(--x)` — a dependency cycle, so every one computed to
@@ -185,9 +185,9 @@
        --duration-normal: 150ms;
        --duration-slow: 250ms;
      ═══════════════════════════════════════════════ */
-  --ease-in: var(--bds-easing-ease-in);
-  --ease-out: var(--bds-easing-ease-out);
-  --ease-in-out: var(--bds-easing-ease-in-out);
+  --ease-in: var(--bds-ease-in);
+  --ease-out: var(--bds-ease-out);
+  --ease-in-out: var(--bds-ease-in-out);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1); /* overshoot bounce — use for pop-in, badge appear */
 
   --duration-fast: var(--bds-duration-100);

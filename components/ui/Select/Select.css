@@ -21,9 +21,9 @@
   text-transform: var(--bds-text-transform-field-label);
 }
 
-.bds-select-label--sm { font-size: var(--bds-label-sm); }
-.bds-select-label--md { font-size: var(--bds-label-md); }
-.bds-select-label--lg { font-size: var(--bds-label-lg); }
+.bds-select-label--size-sm { font-size: var(--bds-label-sm); }
+.bds-select-label--size-md { font-size: var(--bds-label-md); }
+.bds-select-label--size-lg { font-size: var(--bds-label-lg); }
 
 .bds-select-label--tone-negative {
   color: var(--bds-text-negative);
@@ -32,6 +32,12 @@
 /* ─── Field wrapper ──────────────────────────────────────────── */
 
 .bds-select-field {
+  /* ─── Component-scoped override surface ──
+     Declared here, not on .bds-select: the chevron and leading icon are
+     siblings of the <select>, so only this shared parent reaches them. */
+  --bds-select-chevron-color: var(--bds-text-muted);
+  --bds-select-icon-color: var(--bds-text-muted);
+
   position: relative;
   display: flex;
   align-items: center;
@@ -40,10 +46,6 @@
 /* ─── Select element ─────────────────────────────────────────── */
 
 .bds-select {
-  /* ─── Component-scoped override surface ── */
-  --bds-select-chevron-color: var(--bds-text-muted);
-  --bds-select-icon-color: var(--bds-text-muted);
-
   display: inline-block;
   width: 100%;
   font-family: var(--bds-font-family-body);
@@ -54,8 +56,8 @@
   border: var(--bds-border-width-md) solid var(--bds-border-input);
   border-radius: var(--bds-border-radius-md);
   outline: none;
-  transition: border-color var(--bds-duration-md) var(--bds-ease-out),
-    box-shadow var(--bds-duration-md) var(--bds-ease-out);
+  transition: border-color var(--bds-duration-200) var(--bds-ease-out),
+    box-shadow var(--bds-duration-200) var(--bds-ease-out);
   cursor: pointer;
   appearance: none;
   box-sizing: border-box;
@@ -68,17 +70,17 @@
  * Horizontal padding lives on the base .bds-select rule.
  * Browser auto-centers text within the explicit height.
  */
-.bds-select--sm {
+.bds-select--size-sm {
   font-size: var(--bds-body-sm);
   height: var(--bds-size-800);
 }
 
-.bds-select--md {
+.bds-select--size-md {
   font-size: var(--bds-body-md);
   height: var(--bds-size-1000);
 }
 
-.bds-select--lg {
+.bds-select--size-lg {
   font-size: var(--bds-body-lg);
   height: var(--bds-size-1200);
 }

@@ -98,7 +98,7 @@ export function ProgressCircle({
       aria-busy={indeterminate || undefined}
       className={bdsClass(
         'bds-progress-circle',
-        `bds-progress-circle--${size}`,
+        `bds-progress-circle--size-${size}`,
         `bds-progress-circle--${status}`,
         indeterminate && 'bds-progress-circle--indeterminate',
         className,
@@ -133,7 +133,7 @@ export function ProgressCircle({
         />
       </svg>
       {centerContent != null && centerContent !== false && (
-        <div className={bdsClass('bds-progress-circle__center', `bds-progress-circle__center--${size}`)}>
+        <div className={bdsClass('bds-progress-circle__center', `bds-progress-circle__center--size-${size}`)}>
           {centerContent}
         </div>
       )}

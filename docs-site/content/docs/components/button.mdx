@@ -65,7 +65,7 @@ import { Button, LinkButton, IconButton } from '@brikdesigns/bds';
 
 ## Variants
 
-Twelve variants. Pick by **action emphasis** and **destructive intent**, not by aesthetics.
+One prop picks the style: `variant`, from a curated list of ten (#3275). Every value is a complete style. Pick by **action emphasis** and **destructive intent**, not by aesthetics.
 
 ### Standard ladder
 
@@ -97,24 +97,23 @@ Twelve variants. Pick by **action emphasis** and **destructive intent**, not by 
 
 ### Destructive
 
-`negative` is the destructive action — confirm dialogs, delete-and-go flows.
+The `negative` styles are the destructive action — confirm dialogs, delete-and-go flows. There are three, one per emphasis rung: `negative`, `negative-outline` and `negative-ghost`.
 
-<ComponentPreview code={`<Button variant="negative">Delete project</Button>`}>
+<ComponentPreview code={`<Button variant="negative">Delete project</Button>
+<Button variant="negative-outline">Delete</Button>
+<Button variant="negative-ghost">Remove</Button>`}>
   <BDS.Button variant="negative">Delete project</BDS.Button>
+  <BDS.Button variant="negative-outline">Delete</BDS.Button>
+  <BDS.Button variant="negative-ghost">Remove</BDS.Button>
 </ComponentPreview>
 
-The `danger` / `danger-outline` / `danger-ghost` trio that used to sit below it was
-retired in #1957: it carried the brand accent-red rather than the system negative, and
-had zero call sites across every consumer repo. The retired spellings still resolve to
-`negative` for one minor and warn once in the console.
+`secondary` has no negative style, and `positive` is solid only — the reasons are in Storybook → Components/button → *Variants*.
 
-Lower-emphasis destructive (an outline or ghost button that is *also* negative) is not
-expressible today, because `variant` carries form and valence on one axis. Tracked in
-#1983.
+The `danger` / `danger-outline` / `danger-ghost` trio was retired in #1957: it carried the brand accent-red rather than the system negative. Those spellings, `destructive`, and the `tone` / `emphasis` props still resolve to a `variant` for one minor and warn once in the console.
 
 ### State variants
 
-`positive` confirms a completed action. `inverse` and `on-color` are for placement on dark or branded surfaces. To mark the active option in a group, pass the boolean `selected` prop on top of any variant — it is a state modifier, not a variant value.
+`variant="positive"` confirms a completed action. `variant="inverse"` and `variant="on-color"` are for placement on dark or branded surfaces. To mark the active option in a group, pass the boolean `selected` prop on top of any variant — it is a state modifier, not a variant value.
 
 <ComponentPreview code={`<BDS.Button variant="positive">Saved</BDS.Button>
 <BDS.Button variant="outline" selected>Selected</BDS.Button>`}>
@@ -231,6 +230,8 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 | Prop | Type | Default |
 |---|---|---|
 | `variant` | `ButtonVariant` | `'primary'` |
+| `tone` | `ButtonTone` *(deprecated — use `variant`)* | — |
+| `emphasis` | `ButtonEmphasis` *(deprecated — use `variant`)* | — |
 | `size` | `ButtonSize` | `'md'` |
 | `iconBefore` | `ReactNode` | — |
 | `iconAfter` | `ReactNode` | — |
@@ -246,6 +247,8 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 |---|---|---|
 | `href` | `string` *(required)* | — |
 | `variant` | `ButtonVariant` | `'primary'` |
+| `tone` | `ButtonTone` *(deprecated — use `variant`)* | — |
+| `emphasis` | `ButtonEmphasis` *(deprecated — use `variant`)* | — |
 | `size` | `ButtonSize` | `'md'` |
 | `iconBefore` | `ReactNode` | — |
 | `iconAfter` | `ReactNode` | — |
@@ -261,6 +264,8 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 | `icon` | `ReactNode` *(required)* | — |
 | `label` | `string` *(required)* | — |
 | `variant` | `ButtonVariant` | `'ghost'` |
+| `tone` | `ButtonTone` *(deprecated — use `variant`)* | — |
+| `emphasis` | `ButtonEmphasis` *(deprecated — use `variant`)* | — |
 | `size` | `ButtonSize` | `'md'` |
 | `loading` | `boolean` | `false` |
 | `selected` | `boolean` | `false` |
@@ -269,10 +274,14 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 
 ```ts
 type ButtonVariant =
-  | 'primary' | 'outline' | 'secondary' | 'ghost'
+  | 'primary' | 'secondary' | 'outline' | 'ghost'
   | 'inverse' | 'on-color'
-  | 'danger' | 'danger-outline' | 'danger-ghost' | 'destructive'
-  | 'positive';
+  | 'negative' | 'negative-outline' | 'negative-ghost' | 'positive';
+
+/** @deprecated — fold into `variant` (#3275). */
+type ButtonTone     = 'negative' | 'positive';
+/** @deprecated — fold into `variant` (#3275). */
+type ButtonEmphasis = 'inverse' | 'on-color';
 
 type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
 ```
@@ -286,12 +295,24 @@ Component-scoped CSS variables exposed on `.bds-button`. Set these on a wrapping
 | `--button-active-translate-y` | `1px` | Downward shift on `:active` press |
 | `--button-focus-outline-width` | `2px` | Focus ring stroke width |
 | `--button-focus-outline-offset` | `2px` | Gap between button edge and focus ring |
+| `--bds-button-primary-background` | `var(--bds-background-brand-primary)` | Primary fill. Set the `-hover` and `-pressed` variants with it |
+| `--bds-button-primary-background-hover` | `var(--bds-background-brand-primary-hover)` | Primary fill on hover |
+| `--bds-button-primary-background-pressed` | `var(--bds-background-brand-primary-pressed)` | Primary fill while pressed |
+| `--bds-button-primary-color` | `var(--bds-text-on-color-dark)` | Primary label and icon ink |
 
 ```css
 /* Example: flatten press effect in a toolbar context */
 .my-toolbar {
   --button-active-translate-y: 0;
   --button-focus-outline-width: 3px;
+}
+```
+
+```css
+/* Example: a service-themed section re-skins every primary Button inside it.
+   Values must be Semantic tokens, never raw literals (ADR-014). Hover and pressed keep the brand shades unless you set their hooks too. */
+.service-section {
+  --bds-button-primary-background: var(--bds-background-info);
 }
 ```
 

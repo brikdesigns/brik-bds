@@ -106,7 +106,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
 
     const selectClassName = bdsClass(
       'bds-select',
-      `bds-select--${size}`,
+      `bds-select--size-${size}`,
       hasError && 'bds-select--tone-negative',
       isPlaceholder && 'bds-select--placeholder',
       icon ? 'bds-select--has-icon' : undefined,
@@ -122,7 +122,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectProps>(
             htmlFor={inputId}
             className={bdsClass(
               'bds-select-label',
-              `bds-select-label--${size}`,
+              `bds-select-label--size-${size}`,
               hasError && 'bds-select-label--tone-negative',
             )}
           >

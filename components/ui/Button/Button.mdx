@@ -24,14 +24,24 @@ Triggers an event or action. A single unified component covering four render sha
 
 ## Variants
 
-`ButtonVariant` ships **8 values**. Per ADR-010 §components-without-a-variant-axis, Button variants are pure hierarchy/color (no `role` / icon / context semantic differences) — they collapse to a single `variant` Control on the Playground rather than per-variant stories. Mirrors Carbon's Button (single `Default` with `kind` Control).
+One prop picks the style: `variant`, from a curated list of ten ([ADR-033 § Amendments](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#amendments), #3275). Every value is a complete style. The class is `bds-button--variant-{value}`. Switch it from the Playground's Controls rather than per-value stories (ADR-010 §components-without-a-variant-axis).
 
 <Canvas of={Stories.Default} />
 
-- **6 brand variants** — `primary` / `outline` / `secondary` / `ghost` / `inverse` / `on-color`. General action hierarchy.
-- **2 system valence variants** — `negative` / `positive`. Semantic action meaning.
+| `variant` | Use for |
+|---|---|
+| `primary` (default) | The main action on a surface |
+| `secondary` | A supporting action — neutral fill |
+| `outline` | A lower-emphasis action — border, no fill |
+| `ghost` | The lowest emphasis — text only |
+| `inverse` | A primary action on an inverse (dark) surface |
+| `on-color` | A primary action on a brand-primary surface |
+| `negative` | A destructive action — solid system red |
+| `negative-outline` | A destructive action at outline emphasis — red text and border |
+| `negative-ghost` | A destructive action at ghost emphasis — red text |
+| `positive` | A confirming action — solid system green |
 
-Four earlier spellings (`destructive` / `danger` / `danger-outline` / `danger-ghost`) still resolve to `negative` — see [Retired spellings](#retired-spellings) below.
+No other style ships. `secondary` has no negative or positive version because the token set has no tinted surface/text pair for it. `positive` has no outline or ghost version because a confirmation is never a low-emphasis action (default-deny, ADR-033 § 6).
 
 State props (`disabled`, `loading`, `fullWidth`, `selected`) and composition slots (`iconBefore`, `iconAfter`) are also Controls in the Playground, not standalone stories — per ADR-010 Q2.
 
@@ -39,14 +49,18 @@ State props (`disabled`, `loading`, `fullWidth`, `selected`) and composition slo
 
 ### Retired spellings
 
-Four spellings resolve to `negative` at runtime (`resolveRetiredValue`) for back-compat. Per ADR-033 §1 they're honoured for one minor then removed, and they are **not** members of the `ButtonVariant` type:
+These spellings still resolve at runtime and warn once. They are honoured for one minor, then removed:
 
-- `destructive` → `negative`
-- `danger` → `negative`
-- `danger-outline` → `negative`
-- `danger-ghost` → `negative`
+| Retired | Use instead |
+|---|---|
+| `variant="destructive"` · `variant="danger"` · `tone="negative"` | `variant="negative"` |
+| `variant="danger-outline"` · `variant="outline" tone="negative"` | `variant="negative-outline"` |
+| `variant="danger-ghost"` · `variant="ghost" tone="negative"` | `variant="negative-ghost"` |
+| `tone="positive"` | `variant="positive"` |
+| `emphasis="inverse"` | `variant="inverse"` |
+| `emphasis="on-color"` | `variant="on-color"` |
 
-New code picks from the 8 above.
+A retired `tone` or `emphasis` on a variant with no matching style (for example `variant="secondary" tone="negative"`) keeps the variant.
 
 ## Modes
 
@@ -75,11 +89,23 @@ Component-scoped CSS variables exposed on `.bds-button`. Set on a wrapping eleme
 | `--button-active-translate-y` | `1px` | Downward shift on `:active` press |
 | `--button-focus-outline-width` | `2px` | Focus ring stroke width |
 | `--button-focus-outline-offset` | `2px` | Gap between button edge and focus ring |
+| `--bds-button-primary-background` | `var(--bds-background-brand-primary)` | Primary fill. Set the `-hover` and `-pressed` variants with it |
+| `--bds-button-primary-background-hover` | `var(--bds-background-brand-primary-hover)` | Primary fill on hover |
+| `--bds-button-primary-background-pressed` | `var(--bds-background-brand-primary-pressed)` | Primary fill while pressed |
+| `--bds-button-primary-color` | `var(--bds-text-on-color-dark)` | Primary label and icon ink |
 
 ```css
 /* Example: flatten press effect in a toolbar context */
 .my-toolbar {
   --button-active-translate-y: 0;
   --button-focus-outline-width: 3px;
+}
+```
+
+```css
+/* Example: a service-themed section re-skins every primary Button inside it.
+   Values must be Semantic tokens, never raw literals (ADR-014). Hover and pressed keep the brand shades unless you set their hooks too. */
+.service-section {
+  --bds-button-primary-background: var(--bds-background-info);
 }
 ```

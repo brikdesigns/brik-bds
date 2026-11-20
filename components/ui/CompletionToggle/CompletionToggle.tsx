@@ -65,7 +65,7 @@ export const CompletionToggle = forwardRef<HTMLButtonElement, CompletionTogglePr
           'bds-completion-toggle',
           checked && 'bds-completion-toggle--checked',
           disabled && 'bds-completion-toggle--disabled',
-          accent === 'brand' && 'bds-completion-toggle--accent-brand',
+          accent === 'brand' && 'bds-completion-toggle--emphasis-brand',
           className,
         )}
         disabled={disabled}

@@ -38,12 +38,12 @@
 
 /* ─── Variants ────────────────────────────────────────────────── */
 
-.bds-footer--default {
+.bds-footer--variant-default {
   background-color: var(--bds-surface-primary);
   border-top: var(--bds-border-width-lg) solid var(--bds-border-secondary);
 }
 
-.bds-footer--brand {
+.bds-footer--variant-brand {
   background-color: var(--bds-surface-brand-primary);
 }
 
@@ -54,7 +54,7 @@
    inherited value). Using the fallback syntax means a consumer override
    set on `:root` (or any parent) cascades into the footer cleanly, and
    absent any override the existing inverse behavior is preserved. */
-.bds-footer--inverse {
+.bds-footer--variant-inverse {
   background-color: var(--bds-footer-surface, var(--bds-surface-inverse));
 }
 
@@ -146,7 +146,7 @@
   font-weight: var(--bds-font-weight-regular);
   line-height: var(--bds-font-line-height-normal);
   text-decoration: none;
-  transition: opacity var(--bds-duration-sm) var(--bds-ease-out);
+  transition: opacity var(--bds-duration-100) var(--bds-ease-out);
   display: inline-flex;
   align-items: center;
   gap: var(--bds-gap-sm);
@@ -213,7 +213,7 @@
   font-weight: var(--bds-font-weight-regular);
   line-height: var(--bds-font-line-height-tight);
   text-decoration: none;
-  transition: opacity var(--bds-duration-sm) var(--bds-ease-out);
+  transition: opacity var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-footer__bottom-link:hover {
@@ -237,34 +237,34 @@
 
 /* ─── Variant color overrides ─────────────────────────────────── */
 
-.bds-footer--default .bds-footer__heading { color: var(--bds-text-primary); }
-.bds-footer--default .bds-footer__link { color: var(--bds-text-secondary); }
-.bds-footer--default .bds-footer__tagline { color: var(--bds-text-secondary); }
-.bds-footer--default .bds-footer__brand-extra { color: var(--bds-text-secondary); }
-.bds-footer--default .bds-footer__copyright { color: var(--bds-text-muted); }
-.bds-footer--default .bds-footer__bottom-link { color: var(--bds-text-muted); }
-.bds-footer--default .bds-footer__bottom-sep { color: var(--bds-text-muted); }
-.bds-footer--default .bds-footer__social { color: var(--bds-text-muted); }
+.bds-footer--variant-default .bds-footer__heading { color: var(--bds-text-primary); }
+.bds-footer--variant-default .bds-footer__link { color: var(--bds-text-secondary); }
+.bds-footer--variant-default .bds-footer__tagline { color: var(--bds-text-secondary); }
+.bds-footer--variant-default .bds-footer__brand-extra { color: var(--bds-text-secondary); }
+.bds-footer--variant-default .bds-footer__copyright { color: var(--bds-text-muted); }
+.bds-footer--variant-default .bds-footer__bottom-link { color: var(--bds-text-muted); }
+.bds-footer--variant-default .bds-footer__bottom-sep { color: var(--bds-text-muted); }
+.bds-footer--variant-default .bds-footer__social { color: var(--bds-text-muted); }
 
 /* On-color text on the mode-invariant Poppy fill must be white at all times.
    --bds-text-inverse flips BLACK in dark (Brik Brand Kit text/inverse), so it painted
    black-on-Poppy in dark; --bds-text-on-color-dark is mode-invariant white
    (ADR-015 § Amendment 2026-09-12, #2488). */
-.bds-footer--brand .bds-footer__heading { color: var(--bds-text-on-color-dark); }
-.bds-footer--brand .bds-footer__link { color: var(--bds-text-on-color-dark); }
-.bds-footer--brand .bds-footer__tagline { color: var(--bds-text-on-color-dark); }
-.bds-footer--brand .bds-footer__brand-extra { color: var(--bds-text-on-color-dark); }
-.bds-footer--brand .bds-footer__copyright { color: var(--bds-text-on-color-dark); }
-.bds-footer--brand .bds-footer__bottom-link { color: var(--bds-text-on-color-dark); }
-.bds-footer--brand .bds-footer__bottom-sep { color: var(--bds-text-on-color-dark); }
-.bds-footer--brand .bds-footer__social { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-brand .bds-footer__heading { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-brand .bds-footer__link { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-brand .bds-footer__tagline { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-brand .bds-footer__brand-extra { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-brand .bds-footer__copyright { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-brand .bds-footer__bottom-link { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-brand .bds-footer__bottom-sep { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-brand .bds-footer__social { color: var(--bds-text-on-color-dark); }
 
-.bds-footer--inverse .bds-footer__heading { color: var(--bds-text-on-color-dark); }
-.bds-footer--inverse .bds-footer__link { color: var(--bds-text-on-color-dark); }
-.bds-footer--inverse .bds-footer__tagline { color: var(--bds-text-on-color-dark); }
-.bds-footer--inverse .bds-footer__brand-extra { color: var(--bds-text-on-color-dark); }
-.bds-footer--inverse .bds-footer__copyright { color: var(--bds-text-on-color-dark); }
-.bds-footer--inverse .bds-footer__bottom-link { color: var(--bds-text-on-color-dark); }
-.bds-footer--inverse .bds-footer__bottom-sep { color: var(--bds-text-on-color-dark); }
-.bds-footer--inverse .bds-footer__social { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-inverse .bds-footer__heading { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-inverse .bds-footer__link { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-inverse .bds-footer__tagline { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-inverse .bds-footer__brand-extra { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-inverse .bds-footer__copyright { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-inverse .bds-footer__bottom-link { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-inverse .bds-footer__bottom-sep { color: var(--bds-text-on-color-dark); }
+.bds-footer--variant-inverse .bds-footer__social { color: var(--bds-text-on-color-dark); }
 }

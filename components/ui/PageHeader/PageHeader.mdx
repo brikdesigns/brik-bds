@@ -80,7 +80,7 @@ Set `condenseOnScroll` (with `sticky`) for a minimized header once the page has 
 - **When** — the header condenses once the page has scrolled a header height past the point where it pins, and expands again when scrolled back to the pin. Between the two it keeps its current state. The gap is deliberate: condensing shrinks the header and moves the content below it up, and a browser with scroll anchoring scrolls back by the same amount. Condensing exactly at the pin would let that correction carry the page back across the line, so the header would expand and the scroll position would be yanked.
 - **Offset** — measured from `--bds-pageheader-top`, so a header pinned below a shell top bar condenses relative to the bar.
 - **State** — `data-condensed="true"` or `"false"` on the header; absent when the prop is off. Style or assert against it.
-- **Motion** — the title's `font-size` animates (`--bds-duration-md`, `--bds-ease-out`); the hidden slots snap. Under `prefers-reduced-motion: reduce` nothing animates.
+- **Motion** — the title's `font-size` animates (`--bds-duration-200`, `--bds-ease-out`); the hidden slots snap. Under `prefers-reduced-motion: reduce` nothing animates.
 - **Server components** — the prop is a boolean, so a React Server Component can pass it.
 - **Sentinel** — the header renders a zero-height `<span aria-hidden>` immediately before itself to detect scroll position. In a flex or grid parent that sets `gap`, it counts as one more item.
 - **`--page-header-section-gap`** — the condensed state sets it on the header, so a consumer override of that variable does not apply while condensed.

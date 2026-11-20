@@ -96,6 +96,14 @@ A disabled control that paints a graphic against the page (a Slider's progress f
 | `Slider.css` | `--bds-text-disabled` | disabled progress fill + thumb (`background`, `border-color`) |
 | `CompletionToggle.css` | `--bds-text-disabled` | disabled check mark (`border-color`) |
 
+**`--border-muted` / `--text-secondary` rendered as `background` — `ToggleSwitch` track and off-state knob ([#2985](https://github.com/brikdesigns/brik-bds/issues/2985)).**
+The track is a switch rail, the same shape as the Slider track rail and the ProgressStepper inactive dot above: a neutral border-family hue expressed as a fill. The off-state knob (`accent-knob` variant) is a graphic foreground that must stay legible on that rail: `--text-secondary` measures 6.16:1 light / 11.29:1 dark on the `--border-muted` track. No `--background-*` or `--surface-*` token does: `--background-tertiary` measures 1.18:1 / 1.36:1 and `--background-neutral` 1.05:1 on the dark track, all below the 3:1 floor (WCAG 1.4.11). Contrast values are computed from the `dist/tokens.css` hex of each token.
+
+| Site | Token | Element |
+|---|---|---|
+| `ToggleSwitch.css` | `--bds-border-muted` | track rail (default + `accent-knob` checked) |
+| `ToggleSwitch.css` | `--bds-text-secondary` | `accent-knob` off-state knob fill |
+
 ---
 
 ## Author checklist

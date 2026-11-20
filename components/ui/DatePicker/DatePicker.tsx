@@ -413,7 +413,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
       <div
         className={bdsClass(
           'bds-date-picker',
-          `bds-date-picker--${size}`,
+          `bds-date-picker--size-${size}`,
           fullWidth && 'bds-date-picker--full-width',
           className,
         )}
@@ -462,32 +462,30 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(
             </button>
           </Popover.Trigger>
 
-          <Popover.Portal>
-            <Popover.Content
-              sideOffset={4}
-              align="start"
-              style={{ outline: 'none' }}
-              aria-label={precision === 'month' ? 'Choose month' : 'Choose date'}
-            >
-              {precision === 'month' ? (
-                <MonthGrid
-                  value={value}
-                  onChange={handleSelect}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  onClose={() => setOpen(false)}
-                />
-              ) : (
-                <Calendar
-                  value={value}
-                  onChange={handleSelect}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  onClose={() => setOpen(false)}
-                />
-              )}
-            </Popover.Content>
-          </Popover.Portal>
+          <Popover.Content
+            sideOffset={4}
+            align="start"
+            style={{ outline: 'none' }}
+            aria-label={precision === 'month' ? 'Choose month' : 'Choose date'}
+          >
+            {precision === 'month' ? (
+              <MonthGrid
+                value={value}
+                onChange={handleSelect}
+                minDate={minDate}
+                maxDate={maxDate}
+                onClose={() => setOpen(false)}
+              />
+            ) : (
+              <Calendar
+                value={value}
+                onChange={handleSelect}
+                minDate={minDate}
+                maxDate={maxDate}
+                onClose={() => setOpen(false)}
+              />
+            )}
+          </Popover.Content>
         </Popover.Root>
 
         {error && (

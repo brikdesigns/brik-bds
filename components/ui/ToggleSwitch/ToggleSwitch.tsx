@@ -85,7 +85,7 @@ export function ToggleSwitch({
 
   // Size-dependent, Figma-driven dimensions stay inline (runtime-calculated).
   // State colors (track brand/neutral, accent-knob fill) live in ToggleSwitch.css,
-  // driven by :checked + the .bds-toggle-switch--accent-knob modifier.
+  // driven by :checked + the .bds-toggle-switch--variant-accent-knob modifier.
   const trackStyle: CSSProperties = {
     width: `${s.trackW}px`,
     height: `${s.trackH}px`,
@@ -103,7 +103,7 @@ export function ToggleSwitch({
     <label
       className={bdsClass(
         'bds-toggle-switch',
-        isAccentKnob && 'bds-toggle-switch--accent-knob',
+        isAccentKnob && 'bds-toggle-switch--variant-accent-knob',
         disabled && 'bds-toggle-switch--disabled',
         className,
       )}
@@ -123,7 +123,7 @@ export function ToggleSwitch({
         <span className="bds-toggle-switch__knob" style={knobStyle} />
       </span>
       {label && (
-        <span className={bdsClass('bds-toggle-switch__label', `bds-toggle-switch__label--${size}`)}>
+        <span className={bdsClass('bds-toggle-switch__label', `bds-toggle-switch__label--size-${size}`)}>
           {label}
         </span>
       )}

@@ -120,14 +120,14 @@ When this standard and the canon disagree, the canon wins. Open a PR to align th
 
 ## Tokens only — no hardcoded values, no primitives
 
-All values come from **semantic** tokens. The canonical registry is `dist/tokens.css`.
+All values come from **semantic** tokens. A token name is born in Figma only; the authority is the Figma-generated files (`tokens/figma-tokens*.css`, `modes-*.css`, `layout-fluid.css`). `dist/tokens.css` is build output that also bundles hand-written names.
 
 ```css
 /* Right — semantic tokens */
 .bds-card {
-  padding: var(--padding-lg);
-  border: var(--border-width-md) solid var(--border-secondary);
-  font-size: var(--body-md);
+  padding: var(--bds-padding-lg);
+  border: var(--bds-border-width-md) solid var(--bds-border-secondary);
+  font-size: var(--bds-body-md);
 }
 
 /* Wrong — hardcoded */
@@ -151,7 +151,7 @@ style={{ '--bds-slider-percent': `${pct}%` }}  // CSS reads var(--bds-slider-per
 
 > **Not `@/lib/tokens`.** Consumer apps (portal / renew / freedom) have a typed token layer imported from `@/lib/tokens` + `@/lib/styles` for their *app* code — that alias does **not** exist in brik-bds itself. Here, a component's tokens live in its CSS file.
 
-Validate every token reference against `dist/tokens.css` before using it — the [`validate-token-names`](../../) skill auto-invokes on relevant edits.
+Validate every token reference against the Figma-generated files before using it — the [`validate-token-names`](../../) skill auto-invokes on relevant edits.
 
 ## Compose primitives — never reimplement them
 
@@ -172,7 +172,7 @@ import { Breadcrumb } from '../../components/ui/Breadcrumb/Breadcrumb';
 
 ```astro
 {/* Astro composes BDS classes via the canonical button pattern */}
-<a href={cta.url} class="bds-button bds-button--primary bds-button--md">
+<a href={cta.url} class="bds-button bds-button--primary bds-button--size-md">
   <span class="bds-button__content">{cta.label}</span>
 </a>
 ```

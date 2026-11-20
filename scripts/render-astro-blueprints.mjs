@@ -50,11 +50,11 @@ const CHECK = process.argv.includes('--check');
 
 /** The eight blocks of #2339 AC3, with the layout axis each one takes. */
 const BLOCKS = [
-  { name: 'Hero', layouts: ['split', 'interior-minimal', 'with-pricing-card', 'centered'] },
+  { name: 'Hero', layouts: ['split', 'interior-minimal', 'with-pricing-card', 'centered', 'statement'] },
   { name: 'Cta', layouts: ['default', 'split'] },
   { name: 'CardGrid', layouts: ['card-grid', 'two-column-list'] },
   { name: 'Narrative', layouts: [null] },
-  { name: 'Features', layouts: [null] },
+  { name: 'Features', layouts: [null, 'alternating-split', 'bento'] },
   { name: 'CalloutPanel', layouts: [null] },
   // StatsBar's second slug is the content-motion axis (count-up), not a
   // layout — it renders the static bar and the count-up treatment (#2529).
@@ -70,6 +70,8 @@ const BLOCKS = [
   { name: 'CollectionIndex', layouts: [null] },
   { name: 'CollectionEntry', layouts: [null] },
   { name: 'FaqAccordion', layouts: [null] },
+  { name: 'TestimonialsCardGrid', layouts: [null] },
+  { name: 'ProcessStepsNumbered', layouts: [null] },
 ];
 
 /**
@@ -77,11 +79,22 @@ const BLOCKS = [
  * prop, so each axis value is browsable on the canonical rail. The default
  * values (`end`, `horizontal`) are the block's plain `BLOCKS` render above.
  */
+const STATEMENT_DECORATION_SVG =
+  '<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" aria-hidden="true" focusable="false">' +
+  '<circle cx="60" cy="60" r="56" /><circle cx="60" cy="60" r="38" /><circle cx="60" cy="60" r="20" /></svg>';
+
 const AXIS_VARIANTS = [
   { name: 'Hero', layout: 'split', slug: 'Hero--split-media-start', props: { mediaPosition: 'start' } },
   { name: 'Hero', layout: 'split', slug: 'Hero--split-vertical', props: { orientation: 'vertical' } },
+  { name: 'Hero', layout: 'statement', slug: 'Hero--statement-decoration', slots: { decoration: STATEMENT_DECORATION_SVG } },
+  { name: 'Features', layout: 'alternating-split', slug: 'Features--alternating-split-images', fixture: 'alternating-split-images' },
+  { name: 'Features', layout: 'bento', slug: 'Features--bento-images', fixture: 'bento-images' },
+  { name: 'Features', layout: 'alternating-split', slug: 'Features--alternating-split-media-start', props: { mediaPosition: 'start' } },
   { name: 'Narrative', layout: null, slug: 'Narrative--media-start', props: { mediaPosition: 'start' } },
   { name: 'Narrative', layout: null, slug: 'Narrative--vertical', props: { orientation: 'vertical' } },
+  // Step count is the item count, so the 3- and 5-step runs are fixture variants (#3191).
+  { name: 'ProcessStepsNumbered', layout: null, slug: 'ProcessStepsNumbered--steps-3', fixture: 'steps-3' },
+  { name: 'ProcessStepsNumbered', layout: null, slug: 'ProcessStepsNumbered--steps-5', fixture: 'steps-5' },
 ];
 
 /**
@@ -123,16 +136,17 @@ async function main() {
 
   const emitted = [];
 
-  const renderBlock = async (mod, name, layout, slug, axisProps = {}) => {
+  const renderBlock = async (mod, name, layout, slug, axisProps = {}, slots = undefined, fixture = layout) => {
     const container = await experimental_AstroContainer.create();
     const html = await container.renderToString(mod.default, {
       props: {
         theme: baseTheme,
         clientFacts: { ...baseClientFacts, heroImageUrl: placeholderImage(960, 1200, '#eaf1fb', '#1f3d70', name) },
-        section: sectionFor(name, layout),
+        section: sectionFor(name, fixture),
         ...(layout ? { layout } : {}),
         ...axisProps,
       },
+      ...(slots ? { slots } : {}),
     });
 
     // `data-astro-source-*` are dev annotations carrying absolute paths — they
@@ -164,9 +178,9 @@ async function main() {
     }
   }
 
-  for (const { name, layout, slug, props } of AXIS_VARIANTS) {
+  for (const { name, layout, slug, props, slots, fixture } of AXIS_VARIANTS) {
     const mod = await server.ssrLoadModule(join(astroDir, `${name}.astro`));
-    await renderBlock(mod, name, layout, slug, props);
+    await renderBlock(mod, name, layout, slug, props, slots, fixture);
   }
 
   // SiteHeader — the site-shell nav component. Not a blueprint (it takes direct
@@ -343,7 +357,7 @@ function assertStylesheetCoverage() {
   const ghlFormHtml = [readFileSync(join(outDir, 'GhlForm.html'), 'utf8')];
   const html = [...blockHtml, ...shellHtml, ...heroMediaCardHtml, ...ghlFormHtml].join('\n');
 
-  // Root class only — `bds-hero__title` and `bds-button--primary` are covered by
+  // Root class only — `bds-hero__title` and `bds-button--variant-primary` are covered by
   // whatever stylesheet owns `bds-hero` / `bds-button`.
   const roots = new Set([...html.matchAll(/class="([^"]*)"/g)].flatMap((m) => m[1].split(/\s+/))
     .filter((c) => c.startsWith('bds-'))

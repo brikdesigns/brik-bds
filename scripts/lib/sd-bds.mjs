@@ -119,9 +119,19 @@ export function registerBdsHooks(StyleDictionary) {
  */
 const FIGMA_PLACEHOLDER_VALUE = 'String value';
 
-/** CSS file filter: everything except the retired word steps and Figma placeholders. */
+/**
+ * Figma's Elevation `box-shadow` group holds one blur length per step, which a
+ * `box-shadow` cannot take. `--shadow-*` keeps the concept; the group retires
+ * from CSS (ADR-033 section 5, #1924). The leaves stay in the Figma source and
+ * in the JS/Swift outputs, so the retirement survives the next Figma pull.
+ */
+const RETIRED_CSS_GROUPS = new Set(['box-shadow']);
+
+/** CSS file filter: everything except the retired word steps, retired groups and Figma placeholders. */
 export function isCanonicalCssToken(token) {
-  return !isRetiredWordStep(token.path) && token.$value !== FIGMA_PLACEHOLDER_VALUE;
+  return !isRetiredWordStep(token.path)
+    && !RETIRED_CSS_GROUPS.has(token.path[0])
+    && token.$value !== FIGMA_PLACEHOLDER_VALUE;
 }
 
 /**

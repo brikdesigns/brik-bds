@@ -212,14 +212,14 @@ Rejected (never auto-generated):
 
 ## 10. Page compositions
 
-Each page archetype maps to a specific blueprint sequence. The audience-pathway pages (Healthcare, Land, Commercial) carry the most weight — they're where the broker proves segment-specific competence. Several blueprints (`services_numbered_accordion`, `process_grid_4step_numbered`) currently fall back to `<BlueprintFallback>` until their Astro components ship post-v0.1.
+Each page archetype maps to a specific blueprint sequence. The audience-pathway pages (Healthcare, Land, Commercial) carry the most weight — they're where the broker proves segment-specific competence. Several blueprints (`services_numbered_accordion`, `process_steps_numbered`) currently fall back to `<BlueprintFallback>` until their Astro components ship post-v0.1.
 
 | Page | Blueprint sequence |
 |---|---|
 | **Home** | `hero_split` → `services_numbered_accordion` → `testimonials_featured_large` → `cta_centered` |
-| **Healthcare** | `hero_interior_minimal` → `two_column_detail` → `process_grid_4step_numbered` → `testimonials_featured_large` → `cta_split_contact` |
+| **Healthcare** | `hero_interior_minimal` → `two_column_detail` → `process_steps_numbered` → `testimonials_featured_large` → `cta_split_contact` |
 | **Land** | `hero_fullbleed_photo` → `story_split` → `two_column_detail` → `cta_split_contact` |
-| **Commercial** | `hero_interior_minimal` → `two_column_detail` → `process_grid_4step_numbered` → `cta_centered` |
+| **Commercial** | `hero_interior_minimal` → `two_column_detail` → `process_steps_numbered` → `cta_centered` |
 | **About** | `hero_interior_minimal` → `story_split` → `testimonials_featured_large` → `cta_split_contact` |
 | **Listings** | `hero_interior_minimal` → `two_column_detail` → `cta_split_contact` |
 | **Contact** | `cta_split_contact` |

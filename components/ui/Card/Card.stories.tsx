@@ -1,10 +1,12 @@
-import type { Meta, StoryObj } from '@storybook/react-vite';
+import type { Decorator, Meta, StoryObj } from '@storybook/react-vite';
 import { expect, within } from 'storybook/test';
 import { Card, CardTitle, CardDescription, CardFooter } from './Card';
 import { Image } from '../Image';
 import { Logo } from '../Logo';
 import { Button } from '../Button';
 import { Badge } from '../Badge';
+import { Tag } from '../Tag';
+import { DateTime } from '../DateTime';
 import '../../../tokens/modes-borderradius.css';
 
 /* Story-only 3:2 landscape thumbnail (data URI, no network) — a schematic
@@ -30,7 +32,7 @@ const meta: Meta<typeof Card> = {
       control: 'select',
       options: ['outlined', 'brand', 'elevated', 'raised', 'borderless', 'filled'],
       description:
-        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = surface fill, no border, no shadow; `raised` = surface fill, no border, `--bds-box-shadow-md` drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface); `filled` = neutral recessed panel, surface-secondary fill + muted border.',
+        'Visual variant (Default shape only). `outlined` = secondary border; `brand` = primary-color border; `elevated` = surface fill, no border, no shadow; `raised` = surface fill, no border, `--bds-shadow-raised` drop shadow; `borderless` = transparent, no border, no shadow (for cards on a colored surface); `filled` = neutral recessed panel, surface-secondary fill + muted border.',
     },
     padding: {
       control: 'select',
@@ -52,17 +54,17 @@ const meta: Meta<typeof Card> = {
       description:
         'Leading 1:1 media (Default shape only) — `{ avatar: {…} }`, `{ image: {…} }`, or `{ logo: { set, name } }`. Renders an `Avatar`, a square `Image`, or a bundled `Logo` on the left, with `children` stacked to the right. Which of the three is content, not a semantic axis — set it here rather than in a per-media story (ADR-010 Q2).',
     },
-    tint: {
+    serviceLine: {
       control: 'select',
       options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
       mapping: { none: undefined },
       description:
         'Service-line surface tint (Default shape, `stack`, `row`, `pricing`) — a pale wash keyed to a service line. Sets only the surface; the variant border stays. Default = no tint.',
     },
-    tintInverse: {
+    serviceLineInverse: {
       control: 'boolean',
       description:
-        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
+        'Resolve `serviceLine` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `serviceLine`. Default = false.',
     },
   },
 };
@@ -133,7 +135,7 @@ export const PillRadiusMode: Story = {
  *
  * The recommended tier is **not** a `highlighted` prop — it composes from the
  * shared surface set like every other layout, so set `variant="raised"` (or a
- * `tint`) in Controls to mark it.
+ * `serviceLine`) in Controls to mark it.
  *
  * @summary layout="pricing" — tier with price + feature list
  */
@@ -188,16 +190,30 @@ export const Pricing: Story = {
   ],
 };
 
+const controlDecorator: Decorator = (Story) => (
+  <div style={{ width: 560 }}>
+    <Story />
+  </div>
+);
+
+const controlArgTypes: Story['argTypes'] = {
+  variant: { table: { disable: true } },
+  padding: { table: { disable: true } },
+  interactive: { table: { disable: true } },
+  href: { table: { disable: true } },
+};
+
 /**
  * `layout="control"` — settings / integration-row layout (ADR-038; replaces
  * `preset="control"`). Leading `media` (logo) + `title` / `description` on the
  * left; a trailing `connectionStatus` indicator + `action` on the right.
  *
- * `connectionStatus`, `lastSynced`, and `actionAlign` are **Controls** — the
- * status is a *state of one card*, not a set of variants, so cycle it in the
- * panel rather than adding stories.
+ * This story is the **Synced** row of the source-card lifecycle; the other
+ * rows follow as `ControlNotConfigured`, `ControlConnected`, `ControlError`,
+ * `ControlDisabled` and `ControlReadOnly` (brik-bds#3159). `connectionStatus`,
+ * `stamp`, and `actionAlign` are also **Controls**.
  *
- * @summary layout="control" — settings / integration row
+ * @summary layout="control" — settings / integration row (Synced)
  */
 export const Control: Story = {
   args: {
@@ -206,7 +222,7 @@ export const Control: Story = {
     title: 'Notion Meetings Database',
     description: 'Discovery-call meeting notes for proposal generation.',
     connectionStatus: 'synced',
-    lastSynced: 'Last synced 3 min ago',
+    stamp: { kind: 'synced', at: '2026-11-06T20:30:00.000Z' },
     action: (
       <Button variant="outline" size="sm">
         Configure
@@ -232,23 +248,140 @@ export const Control: Story = {
     },
     connectionStatus: {
       control: 'select',
-      options: ['not-configured', 'linked', 'connected', 'syncing', 'synced', 'failed'],
+      options: ['not-configured', 'connected', 'synced', 'error', 'disabled'],
       description:
-        'Connection-status state (a state of this one card, not a variant). Renders a status indicator in the trailing block alongside the `action`.',
+        'Connection-status state. Renders a status indicator in the trailing block; `disabled` mutes the card. Retired `linked` / `syncing` / `failed` still map onto `connected` / `connected` / `error`.',
     },
-    lastSynced: {
-      control: 'text',
+    stamp: {
+      control: 'object',
       description:
-        'Human-readable "last synced" label below the status indicator. Shown only when `connectionStatus` is set and is not `not-configured`.',
+        'Typed stamp `{ kind, at (ISO 8601), actor? }` below the status indicator, rendered through `DateTime`. Hidden for `not-configured`.',
     },
+    readOnly: {
+      control: 'boolean',
+      description: 'Replaces every action with one "Manage on profile" link to `manageHref`.',
+    },
+    manageHref: { control: 'text', description: 'Destination of the read-only "Manage on profile" link.' },
+    onSetup: { control: false, description: 'Renders the "Setup" button for `not-configured`.' },
+    onRetry: { control: false, description: 'Renders "Retry" before `action` for `negative`.' },
+    onEnable: { control: false, description: 'Renders "Enable" for `disabled`.' },
   },
-  decorators: [
-    (Story) => (
-      <div style={{ width: 560 }}>
-        <Story />
-      </div>
-    ),
-  ],
+  decorators: [controlDecorator],
+};
+
+const controlBase = {
+  layout: 'control',
+  media: <Logo set="integration" name="notion" size="sm" />,
+  title: 'Notion Meetings Database',
+  description: 'Discovery-call meeting notes for proposal generation.',
+  actionAlign: 'top',
+} as const;
+
+const configureAction = (
+  <Button variant="outline" size="sm">
+    Configure
+  </Button>
+);
+
+/**
+ * Source card, **Not configured** — one "Setup" button, no stamp.
+ *
+ * @summary layout="control" — Not configured
+ */
+export const ControlNotConfigured: Story = {
+  args: { ...controlBase, connectionStatus: 'not-configured', onSetup: () => {} },
+  argTypes: controlArgTypes,
+  decorators: [controlDecorator],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getAllByRole('button')).toHaveLength(1);
+    await expect(canvas.getByRole('button', { name: 'Setup' })).toBeVisible();
+  },
+};
+
+/**
+ * Source card, **Connected** — linked, no data read yet. Stamp records who connected it.
+ *
+ * @summary layout="control" — Connected
+ */
+export const ControlConnected: Story = {
+  args: {
+    ...controlBase,
+    connectionStatus: 'connected',
+    stamp: { kind: 'connected', at: '2026-11-06T20:30:00.000Z', actor: 'Nick' },
+    action: configureAction,
+  },
+  argTypes: controlArgTypes,
+  decorators: [controlDecorator],
+};
+
+/**
+ * Source card, **Error** — Retry first, then the card's own action.
+ *
+ * @summary layout="control" — Error
+ */
+export const ControlError: Story = {
+  args: {
+    ...controlBase,
+    connectionStatus: 'negative',
+    stamp: { kind: 'negative', at: '2026-11-06T20:30:00.000Z' },
+    onRetry: () => {},
+    action: configureAction,
+  },
+  argTypes: controlArgTypes,
+  decorators: [controlDecorator],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const buttons = canvas.getAllByRole('button');
+    await expect(buttons[0]).toHaveTextContent('Retry');
+    await expect(buttons[1]).toHaveTextContent('Configure');
+  },
+};
+
+/**
+ * Source card, **Disabled** — Brik switched this source off. Muted, with one "Enable" action.
+ *
+ * @summary layout="control" — Disabled
+ */
+export const ControlDisabled: Story = {
+  args: {
+    ...controlBase,
+    connectionStatus: 'disabled',
+    stamp: { kind: 'disabled', at: '2026-11-06T20:30:00.000Z', actor: 'Brik' },
+    onEnable: () => {},
+    action: configureAction,
+  },
+  argTypes: controlArgTypes,
+  decorators: [controlDecorator],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getAllByRole('button')).toHaveLength(1);
+    await expect(canvas.getByRole('button', { name: 'Enable' })).toBeVisible();
+  },
+};
+
+/**
+ * Source card, **engagement read-only** — one "Manage on profile" link, no status actions.
+ *
+ * @summary layout="control" — read-only
+ */
+export const ControlReadOnly: Story = {
+  args: {
+    ...controlBase,
+    connectionStatus: 'synced',
+    stamp: { kind: 'synced', at: '2026-11-06T20:30:00.000Z' },
+    readOnly: true,
+    manageHref: '/admin/companies/acme',
+  },
+  argTypes: controlArgTypes,
+  decorators: [controlDecorator],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await expect(canvas.getByRole('link', { name: 'Manage on profile' })).toHaveAttribute(
+      'href',
+      '/admin/companies/acme',
+    );
+  },
 };
 
 /**
@@ -289,7 +422,7 @@ export const Metric: Story = {
  * `layout="stack"` — vertical content card: optional top `media`, `overline`,
  * `title`, `children` (body), bottom-anchored `action` (ADR-038; replaces
  * `preset="display"`). The malleable `CardGrid` cell — compose inside
- * `<CardGrid>`. `variant` / `tint` set the surface for a cell on a colored grid;
+ * `<CardGrid>`. `variant` / `serviceLine` set the surface for a cell on a colored grid;
  * `mediaTreatment="inset"` frames media + body together (the former
  * `DisplayInset` story, now a Control).
  *
@@ -299,7 +432,7 @@ export const Stack: Story = {
   args: {
     layout: 'stack',
     media: <Image src={landscapeThumb} alt="Marketing service" ratio="3-2" />,
-    overline: <Badge>Marketing</Badge>,
+    overline: <Tag>Marketing</Tag>,
     title: 'Service one',
     children: (
       <CardDescription>
@@ -324,19 +457,19 @@ export const Stack: Story = {
         raised: 'raised',
       },
       description:
-        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill, no border; `raised` = fill, no border, `--bds-box-shadow-md` shadow. Default = outlined white fill.',
+        'Surface treatment for a cell on a colored (service-tinted) grid. `borderless` = transparent, no border/shadow; `elevated` = fill, no border; `raised` = fill, no border, `--bds-shadow-raised` shadow. Default = outlined white fill.',
     },
-    tint: {
+    serviceLine: {
       control: 'select',
       options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
       mapping: { none: undefined },
       description:
         'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface; border/size unchanged. Default = no tint.',
     },
-    tintInverse: {
+    serviceLineInverse: {
       control: 'boolean',
       description:
-        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
+        'Resolve `serviceLine` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `serviceLine`. Default = false.',
     },
     titleAs: {
       control: 'inline-radio',
@@ -380,7 +513,7 @@ export const Row: Story = {
   args: {
     layout: 'row',
     media: <Image src={landscapeThumb} alt="Web design retainer" ratio="3-2" />,
-    overline: <Badge>Marketing</Badge>,
+    overline: <Tag>Marketing</Tag>,
     title: 'Web Design Retainer',
     children: (
       <>
@@ -414,17 +547,17 @@ export const Row: Story = {
       description:
         'Image column width. Named: `narrow` 25%, `standard` 35%, `wide` 50%. Pass a CSS length / percentage to override.',
     },
-    tint: {
+    serviceLine: {
       control: 'select',
       options: ['none', 'brand', 'marketing', 'information', 'product', 'back-office'],
       mapping: { none: undefined },
       description:
         'Service-line surface tint — a pale wash keyed to a service line. Sets only the surface. Default = no tint.',
     },
-    tintInverse: {
+    serviceLineInverse: {
       control: 'boolean',
       description:
-        'Resolve `tint` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `tint`. Default = false.',
+        'Resolve `serviceLine` to the theme-flipping `-inverse` service surface (white in light, deep hue in dark) instead of the pale `-light` wash. Needs `serviceLine`. Default = false.',
     },
     titleAs: {
       control: 'inline-radio',
@@ -442,6 +575,65 @@ export const Row: Story = {
   ],
 };
 
+
+/**
+ * `layout="row"` with the trailing `status` indicator and the `meta` fact line.
+ * An indicator (Badge / Tag / Dot) goes in `status`, never in `action`; a date
+ * goes in `meta` through `DateTime`.
+ *
+ * @summary layout="row" — status Badge and DateTime meta
+ */
+export const RowStatusMeta: Story = {
+  args: {
+    layout: 'row',
+    overline: <Badge>Marketing</Badge>,
+    title: 'Web Design Retainer',
+    children: <CardDescription>Ongoing design partnership for marketing pages.</CardDescription>,
+    status: <Badge status="positive">Active</Badge>,
+    meta: <DateTime mode="relative" value="2026-11-01T12:00:00Z" />,
+    action: (
+      <Button variant="secondary" size="sm">
+        View
+      </Button>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 720, display: 'flex' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+/**
+ * `layout="stack"` with the `status` indicator and the `meta` fact line;
+ * `badge` remains the media-corner overlay.
+ *
+ * @summary layout="stack" — status Badge and DateTime meta
+ */
+export const StackStatusMeta: Story = {
+  args: {
+    layout: 'stack',
+    overline: <Badge>Marketing</Badge>,
+    title: 'Web Design Retainer',
+    children: <CardDescription>Ongoing design partnership for marketing pages.</CardDescription>,
+    status: <Badge status="positive">Active</Badge>,
+    meta: <DateTime mode="relative" value="2026-11-01T12:00:00Z" />,
+    action: (
+      <Button variant="secondary" size="sm">
+        View
+      </Button>
+    ),
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 320, display: 'flex' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
 
 const TINT_LINES = ['brand', 'marketing', 'information', 'product', 'back-office'] as const;
 /* Explicit token names so canonical-check can resolve each one. */
@@ -469,11 +661,11 @@ const TINT_SURFACES = {
 } as const;
 
 /**
- * Both `tintInverse` values for every service line. Switch the toolbar theme to
+ * Both `serviceLineInverse` values for every service line. Switch the toolbar theme to
  * dark to see `inverse` flip from white to the deep hue while `light` stays a
  * pale wash.
  *
- * @summary tintInverse — light wash vs theme-flipping inverse
+ * @summary serviceLineInverse — light wash vs theme-flipping inverse
  */
 export const TintTones: Story = {
   parameters: { layout: 'padded' },
@@ -481,7 +673,7 @@ export const TintTones: Story = {
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 240px)', gap: 16 }}>
       {TINT_LINES.flatMap((line) =>
         (['light', 'inverse'] as const).map((tone) => (
-          <Card key={`${line}-${tone}`} layout="stack" tint={line} tintInverse={tone === 'inverse'} title={`${line} · ${tone}`} />
+          <Card key={`${line}-${tone}`} layout="stack" serviceLine={line} serviceLineInverse={tone === 'inverse'} title={`${line} · ${tone}`} />
         )),
       )}
     </div>
@@ -523,7 +715,7 @@ export const InteractionTestTintTones: Story = {
       const row = document.createElement('div');
       canvasElement.appendChild(row);
       const rowCard = document.createElement('div');
-      rowCard.className = 'bds-card bds-card--layout-row bds-card--tint-marketing bds-card--emphasis-inverse';
+      rowCard.className = 'bds-card bds-card--layout-row bds-card--service-line-marketing bds-card--emphasis-inverse';
       row.appendChild(rowCard);
       await expect(getComputedStyle(rowCard).backgroundColor).toBe(fill('marketing', 'inverse'));
       row.remove();
@@ -539,8 +731,8 @@ export const InteractionTestTintTones: Story = {
 };
 
 /**
- * Asserts the default (no `layout`) card and `layout="pricing"` resolve `tint`
- * and `tintInverse` to the same surface as `stack` in light and dark, and keep
+ * Asserts the default (no `layout`) card and `layout="pricing"` resolve `serviceLine`
+ * and `serviceLineInverse` to the same surface as `stack` in light and dark, and keep
  * the variant border (#2294).
  *
  * @summary Verifies tint on default + pricing cards, both themes
@@ -551,7 +743,7 @@ export const InteractionTestTintAcrossShapes: Story = {
   render: () => (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 240px)', gap: 16 }}>
       {(['light', 'inverse'] as const).map((tone) => (
-        <Card key={`default-${tone}`} tint="marketing" tintInverse={tone === 'inverse'}>
+        <Card key={`default-${tone}`} serviceLine="marketing" serviceLineInverse={tone === 'inverse'}>
           <CardTitle>{`default · ${tone}`}</CardTitle>
         </Card>
       ))}
@@ -559,8 +751,8 @@ export const InteractionTestTintAcrossShapes: Story = {
         <Card
           key={`pricing-${tone}`}
           layout="pricing"
-          tint="marketing"
-          tintInverse={tone === 'inverse'}
+          serviceLine="marketing"
+          serviceLineInverse={tone === 'inverse'}
           title={`pricing · ${tone}`}
           price="$49"
         />
@@ -586,7 +778,7 @@ export const InteractionTestTintAcrossShapes: Story = {
           for (const tone of ['light', 'inverse'] as const) {
             const card = canvas.getByText(`${shape} · ${tone}`).closest('.bds-card') as HTMLElement;
             await expect(getComputedStyle(card).backgroundColor).toBe(fill(tone));
-            // `tint` sets only the surface — the outlined border survives.
+            // `serviceLine` sets only the surface — the outlined border survives.
             await expect(getComputedStyle(card).borderTopStyle).toBe('solid');
           }
         }

@@ -19,15 +19,19 @@ export interface TimelineEvent {
    * own: put a `Tag` here and an icon in `icon`.
    */
   content?: ReactNode;
-  /** Timestamp string (pre-formatted by consumer) */
-  timestamp: string;
+  /**
+   * Timestamp: a pre-formatted string (wrapped in a `<time>` by this component)
+   * or a node that is its own `<time>`, e.g. `<DateTime mode="relative" />`.
+   */
+  timestamp: ReactNode;
   /**
    * Machine-readable ISO 8601 date/time for the `<time datetime>` attribute
    * (e.g. `2026-04-12` or `2026-04-12T09:30:00Z`). `timestamp` stays the
    * visible text; without `dateTime` the `<time>` element carries no datetime.
+   * Ignored when `timestamp` is a node, which supplies its own `<time>`.
    */
   dateTime?: string;
-  /** Stable React key. Defaults to `timestamp` + `label` + position. */
+  /** Stable React key. Defaults to `label` + position (+ `timestamp` when it is a string). */
   id?: string;
   /** Whether this is the "origin" event — uses brand-colored dot */
   isOrigin?: boolean;
@@ -72,7 +76,7 @@ export function ActivityTimeline({ events, className = '' }: ActivityTimelinePro
         const isOrigin = event.isOrigin ?? idx === 0;
 
         return (
-          <li key={event.id ?? `${event.timestamp}-${event.label}-${idx}`} className="bds-activity-timeline__event">
+          <li key={event.id ?? `${typeof event.timestamp === 'string' ? event.timestamp : ''}-${event.label}-${idx}`} className="bds-activity-timeline__event">
             {/* Rail column: dot + connector line */}
             <div className="bds-activity-timeline__rail">
               <div
@@ -96,7 +100,11 @@ export function ActivityTimeline({ events, className = '' }: ActivityTimelinePro
                 <div className="bds-activity-timeline__body">{event.content}</div>
               )}
               <div className="bds-activity-timeline__timestamp">
-                <time dateTime={event.dateTime}>{event.timestamp}</time>
+                {typeof event.timestamp === 'string' ? (
+                  <time dateTime={event.dateTime}>{event.timestamp}</time>
+                ) : (
+                  event.timestamp
+                )}
               </div>
             </div>
           </li>

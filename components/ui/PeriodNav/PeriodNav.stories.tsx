@@ -5,7 +5,7 @@ import { PeriodNav } from './PeriodNav';
 /* ─── Meta ────────────────────────────────────────────────────── */
 
 const meta: Meta<typeof PeriodNav> = {
-  title: 'Components/period-nav',
+  title: 'Navigation/period-nav',
   component: PeriodNav,
   tags: ['surface-product'],
   parameters: { layout: 'padded' },

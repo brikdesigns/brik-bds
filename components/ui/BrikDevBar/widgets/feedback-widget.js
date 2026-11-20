@@ -17,6 +17,14 @@
  * #1385 once brikdesigns DevTools migrated to the React DevFeedbackWidget
  * (brikdesigns#479) — no live consumer remained.
  *
+ * Inspector bridge contract (brik-bds#3158, ADR-007): two surfaces consume the
+ * inspector's `brik:inspect:report` event and its `detail` (page, section,
+ * component, dom_path, element_tag) — the React DevFeedbackWidget
+ * (brik-client-portal src/components/DevFeedbackWidget.tsx) and this review
+ * widget, which carries the detail into the submission's `section_context`.
+ * Dropping or swapping either listener silently breaks element context: the
+ * comment still posts, it just names no element (portal #6543 did exactly that).
+ *
  * Configuration via data attributes on the script tag. `data-review-token` and
  * `data-api-url` are BOTH required — the widget disables itself if either is
  * absent. Point `data-api-url` at the portal tier that issued the review token;
@@ -106,7 +114,9 @@
   // numbered within that page — everything below reads `pins`.
   let allPins = [];
   let pins = [];
-  let currentPagePath = null;
+  // Seeded at boot, not on first scopePins(): if the pin load is slow or fails,
+  // the nav poll below must still compare against the page the widget loaded on.
+  let currentPagePath = pagePathOf(window.location.href);
   let pendingPin = null;
   let authorName = localStorage.getItem('brik-feedback-name') || '';
   let authorEmail = localStorage.getItem('brik-feedback-email') || '';
@@ -151,8 +161,8 @@
       text-transform: uppercase;
       cursor: pointer;
       box-shadow: var(--elevation-md, 0 4px 24px rgba(0,0,0,0.3));
-      transition: background var(--bds-duration-fast, 0.15s) var(--ease-default, ease),
-                  transform var(--bds-duration-fast, 0.15s) var(--ease-default, ease);
+      transition: background var(--bds-duration-100, 0.15s) var(--ease-default, ease),
+                  transform var(--bds-duration-100, 0.15s) var(--ease-default, ease);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -574,13 +584,18 @@
   // ── Scope pins to the current page ──────────────────────────────────────
   // One widget instance can serve many pages under a single variant key (the
   // portal mounts it once in the layout), so a pin belongs to the page it was
-  // left on. Matching is on pathname only (no query/hash, no trailing slash).
+  // left on. Matching is on pathname plus the `tab` query param (no hash, no
+  // trailing slash): a record page whose sections are `?tab=` views is several
+  // pages to the reviewer, so a pin left on one tab must not show on another.
   // A pin with no stored page_url (legacy rows, older API) matches every page,
   // which is the behaviour single-page mockups rely on.
   function pagePathOf(url) {
     if (!url) return null;
     try {
-      return new URL(url, window.location.href).pathname.replace(/\/+$/, '') || '/';
+      const u = new URL(url, window.location.href);
+      const path = u.pathname.replace(/\/+$/, '') || '/';
+      const tab = u.searchParams.get('tab');
+      return tab ? path + '?tab=' + tab : path;
     } catch (e) {
       console.warn('[Brik Feedback] Could not parse page url:', url, e);
       return null;
@@ -595,9 +610,14 @@
 
   // The widget loads once, so a client-side navigation (history.pushState, no
   // reload) must re-scope the pins itself. Polling the pathname avoids patching
-  // the host app's history API.
+  // the host app's history API. An open form and its dropped pin belong to the
+  // page they were left on, so they close here too rather than sit over the new
+  // page and submit with its path (#3157).
   setInterval(() => {
     if (pagePathOf(window.location.href) === currentPagePath) return;
+    lastReportDetail = null;
+    removePendingPin();
+    removeForm();
     scopePins();
     renderPins();
     refreshListPanel();
@@ -722,6 +742,7 @@
       toast('Click anywhere on the page to drop a pin');
     } else {
       document.documentElement.classList.remove('bfb-crosshair');
+      lastReportDetail = null;
       removePendingPin();
       removeForm();
     }
@@ -900,6 +921,26 @@
     return ctx;
   }
 
+  // The last `brik:inspect:report` detail, held until the next pin consumes it
+  // (or pin mode closes / the page changes). It describes the element the
+  // reviewer locked in the inspector, so it must never ride along on a pin the
+  // report did not start (#3158).
+  let lastReportDetail = null;
+
+  // Fold the inspector's report into a pin's section_context. The detector
+  // output already on `ctx` wins for fields both set; an empty or partial
+  // detail adds nothing, so it cannot clobber detector output.
+  function mergeReportDetail(ctx, detail) {
+    if (!detail) return ctx;
+    const merged = Object.assign({}, ctx);
+    if (detail.page) merged.page = detail.page;
+    if (detail.dom_path) merged.dom_path = detail.dom_path;
+    if (detail.component) merged.component = detail.component;
+    if (detail.section && !merged.section_label) merged.section_label = detail.section;
+    if (detail.element_tag && !merged.element_tag) merged.element_tag = detail.element_tag;
+    return merged;
+  }
+
   // ── Click to pin ────────────────────────────────────────────────────────
   let currentSectionContext = null;
 
@@ -917,7 +958,8 @@
     const y = e.pageY;
 
     // Detect section context before creating the pin overlay
-    currentSectionContext = sectionContextFromDetector(e.target);
+    currentSectionContext = mergeReportDetail(sectionContextFromDetector(e.target), lastReportDetail);
+    lastReportDetail = null;
 
     pendingPin = document.createElement('div');
     pendingPin.className = 'bfb-pin bfb-pin--pending';
@@ -1075,6 +1117,7 @@
     wireTagGroup(formEl.querySelector('.bfb-tags--disposition'), 'data-disposition', (v) => { pendingDisposition = v; });
 
     formEl.querySelector('.bfb-cancel').addEventListener('click', () => {
+      lastReportDetail = null;
       screenshotBase64 = null;
       removePendingPin();
       removeForm();
@@ -1171,6 +1214,7 @@
       allPins.push(newPin);
       pins.push(newPin);
 
+      lastReportDetail = null;
       screenshotBase64 = null;
       removePendingPin();
       removeForm();
@@ -1328,8 +1372,13 @@
   // inspect mode (ADR-007: feedback surfaces consume that event). Open pin mode
   // so the click lands on the feedback UI instead of nothing. Guarded so an
   // already-open feedback mode is not toggled off by a second report.
-  window.addEventListener('brik:inspect:report', () => {
+  // Keep the event's `detail` so the pin dropped next submits with the element
+  // context (dom_path, component, ...) the inspector resolved (#3158). Set after
+  // setFeedbackMode, which is where a stale report would be cleared.
+  window.addEventListener('brik:inspect:report', (e) => {
     if (!feedbackMode) setFeedbackMode(true);
+    const detail = e.detail;
+    lastReportDetail = detail && Object.keys(detail).length > 0 ? detail : null;
   });
 
   // Escape closes the open comment popover (cancel), mirroring the Cancel
@@ -1337,6 +1386,7 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && formEl) {
       e.preventDefault();
+      lastReportDetail = null;
       screenshotBase64 = null;
       removePendingPin();
       removeForm();

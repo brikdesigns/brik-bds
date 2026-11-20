@@ -254,6 +254,8 @@ function scanFile(file, { known, deprecated, replacements }) {
 
     for (const m of line.matchAll(TOKEN_RE)) {
       const tok = m[0];
+      // A token is never glued to a word: `bds-button--size-md` is a BEM modifier, not `--size-md`.
+      if (m.index > 0 && /\w/.test(line[m.index - 1])) continue;
       if (!inFamily(tok)) continue;
       if (tok.endsWith('-')) continue;           // dangling glob stub (`--text-`)
       const after = line.slice(m.index + tok.length);

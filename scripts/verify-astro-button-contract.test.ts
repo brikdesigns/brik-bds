@@ -3,7 +3,7 @@
  *
  * The Astro blueprints (`content-system/blueprints/astro/*.astro`) hand-roll
  * `Button`'s markup as literal class strings
- * (`bds-button bds-button--{variant} bds-button--{size}` + a
+ * (`bds-button bds-button--variant-{variant} bds-button--size-{size}` + a
  * `bds-button__content` span) because Astro can't render the React `<Button>`.
  * That copy is invisible to the type system: if `Button`'s class contract
  * changes — a renamed modifier, a dropped variant, a restructured content slot
@@ -40,9 +40,10 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const ASTRO_DIR = join(HERE, '../content-system/blueprints/astro');
 const BUTTON_TSX = join(HERE, '../components/ui/Button/Button.tsx');
 
+// Every shipped style — Button's `variant` is one flat list (#3275).
 const VARIANTS: ButtonVariant[] = [
-  'primary', 'outline', 'secondary', 'ghost', 'inverse', 'on-color',
-  'destructive', 'positive', 'danger', 'danger-outline', 'danger-ghost',
+  'primary', 'secondary', 'outline', 'ghost', 'inverse', 'on-color',
+  'negative', 'negative-outline', 'negative-ghost', 'positive',
 ];
 const SIZES: ButtonSize[] = ['tiny', 'sm', 'md', 'lg', 'xl'];
 

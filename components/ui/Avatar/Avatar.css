@@ -22,12 +22,12 @@
    appearance); black holds AA across all six mid-saturated system hues,
    where `--bds-text-inverse` (white) would fail on yellow/orange. */
 
-.bds-avatar--accent-green  { background-color: var(--bds-background-accent-green);  color: var(--bds-text-on-color-light); }
-.bds-avatar--accent-purple { background-color: var(--bds-background-accent-purple); color: var(--bds-text-on-color-light); }
-.bds-avatar--accent-blue   { background-color: var(--bds-background-accent-blue);   color: var(--bds-text-on-color-light); }
-.bds-avatar--accent-orange { background-color: var(--bds-background-accent-orange); color: var(--bds-text-on-color-light); }
-.bds-avatar--accent-yellow { background-color: var(--bds-background-accent-yellow); color: var(--bds-text-on-color-light); }
-.bds-avatar--accent-red    { background-color: var(--bds-background-accent-red);    color: var(--bds-text-on-color-light); }
+.bds-avatar--color-green  { background-color: var(--bds-background-accent-green);  color: var(--bds-text-on-color-light); }
+.bds-avatar--color-purple { background-color: var(--bds-background-accent-purple); color: var(--bds-text-on-color-light); }
+.bds-avatar--color-blue   { background-color: var(--bds-background-accent-blue);   color: var(--bds-text-on-color-light); }
+.bds-avatar--color-orange { background-color: var(--bds-background-accent-orange); color: var(--bds-text-on-color-light); }
+.bds-avatar--color-yellow { background-color: var(--bds-background-accent-yellow); color: var(--bds-text-on-color-light); }
+.bds-avatar--color-red    { background-color: var(--bds-background-accent-red);    color: var(--bds-text-on-color-light); }
 
 /* ─── Subtle appearance (pale fill) ──────────────────────────── */
 /* `appearance="subtle"` — the pale `--bds-background-accent-{hue}-light` step
@@ -37,26 +37,26 @@
    has no `-light` token (it resolves per theme), and its strong brand text step
    follows it in both themes (the Badge brand subtle pairing). */
 
-.bds-avatar--subtle {
+.bds-avatar--appearance-subtle {
   background-color: var(--bds-background-brand-secondary);
   color: var(--bds-text-brand-primary-strong);
 }
 
-.bds-avatar--subtle.bds-avatar--accent-green  { background-color: var(--bds-background-accent-green-light); color: var(--bds-text-on-color-light); }
-.bds-avatar--subtle.bds-avatar--accent-purple { background-color: var(--bds-background-accent-purple-light); color: var(--bds-text-on-color-light); }
-.bds-avatar--subtle.bds-avatar--accent-blue   { background-color: var(--bds-background-accent-blue-light); color: var(--bds-text-on-color-light); }
-.bds-avatar--subtle.bds-avatar--accent-orange { background-color: var(--bds-background-accent-orange-light); color: var(--bds-text-on-color-light); }
-.bds-avatar--subtle.bds-avatar--accent-yellow { background-color: var(--bds-background-accent-yellow-light); color: var(--bds-text-on-color-light); }
-.bds-avatar--subtle.bds-avatar--accent-red    { background-color: var(--bds-background-accent-red-light); color: var(--bds-text-on-color-light); }
+.bds-avatar--appearance-subtle.bds-avatar--color-green  { background-color: var(--bds-surface-accent-green); color: var(--bds-text-on-color-light); }
+.bds-avatar--appearance-subtle.bds-avatar--color-purple { background-color: var(--bds-surface-accent-purple); color: var(--bds-text-on-color-light); }
+.bds-avatar--appearance-subtle.bds-avatar--color-blue   { background-color: var(--bds-surface-accent-blue); color: var(--bds-text-on-color-light); }
+.bds-avatar--appearance-subtle.bds-avatar--color-orange { background-color: var(--bds-surface-accent-orange); color: var(--bds-text-on-color-light); }
+.bds-avatar--appearance-subtle.bds-avatar--color-yellow { background-color: var(--bds-surface-accent-yellow); color: var(--bds-text-on-color-light); }
+.bds-avatar--appearance-subtle.bds-avatar--color-red    { background-color: var(--bds-surface-accent-red); color: var(--bds-text-on-color-light); }
 
 /* ─── Sizes ──────────────────────────────────────────────────── */
 /* bds-lint-ignore — Figma-driven avatar dimensions, no semantic size token */
 
-.bds-avatar--xs { width: 24px; height: 24px; font-size: var(--bds-body-xs); }
-.bds-avatar--sm { width: 32px; height: 32px; font-size: var(--bds-body-xs); }
-.bds-avatar--md { width: 40px; height: 40px; font-size: var(--bds-body-sm); }
-.bds-avatar--lg { width: 48px; height: 48px; font-size: var(--bds-body-md); }
-.bds-avatar--xl { width: 64px; height: 64px; font-size: var(--bds-heading-sm); }
+.bds-avatar--size-xs { width: 24px; height: 24px; font-size: var(--bds-body-xs); }
+.bds-avatar--size-sm { width: 32px; height: 32px; font-size: var(--bds-body-xs); }
+.bds-avatar--size-md { width: 40px; height: 40px; font-size: var(--bds-body-sm); }
+.bds-avatar--size-lg { width: 48px; height: 48px; font-size: var(--bds-body-md); }
+.bds-avatar--size-xl { width: 64px; height: 64px; font-size: var(--bds-heading-sm); }
 
 /* ─── Image ──────────────────────────────────────────────────── */
 
@@ -78,14 +78,14 @@
   border: var(--bds-border-width-lg) solid var(--bds-background-input);
 }
 
-.bds-avatar--xs .bds-avatar__status,
-.bds-avatar--sm .bds-avatar__status { width: 8px; height: 8px; }
-.bds-avatar--md .bds-avatar__status { width: 10px; height: 10px; }
-.bds-avatar--lg .bds-avatar__status,
-.bds-avatar--xl .bds-avatar__status { width: 12px; height: 12px; }
+.bds-avatar--size-xs .bds-avatar__status,
+.bds-avatar--size-sm .bds-avatar__status { width: 8px; height: 8px; }
+.bds-avatar--size-md .bds-avatar__status { width: 10px; height: 10px; }
+.bds-avatar--size-lg .bds-avatar__status,
+.bds-avatar--size-xl .bds-avatar__status { width: 12px; height: 12px; }
 
-.bds-avatar__status--online  { background-color: var(--bds-background-presence-online); }
-.bds-avatar__status--offline { background-color: var(--bds-background-presence-offline); }
-.bds-avatar__status--busy    { background-color: var(--bds-background-presence-busy); }
-.bds-avatar__status--away    { background-color: var(--bds-background-presence-away); }
+.bds-avatar__status--status-online  { background-color: var(--bds-background-presence-online); }
+.bds-avatar__status--status-offline { background-color: var(--bds-background-presence-offline); }
+.bds-avatar__status--status-busy    { background-color: var(--bds-background-presence-busy); }
+.bds-avatar__status--status-away    { background-color: var(--bds-background-presence-away); }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@brikdesigns/bds",
-  "version": "0.237.0",
+  "version": "0.249.0",
   "description": "Brik Design System — React components, Figma-synced tokens, and Content System (BCS) vocabulary",
   "private": false,
   "main": "dist/lib-entry.cjs",
@@ -69,6 +69,10 @@
       "import": "./scripts/cascade-contract-check.mjs",
       "default": "./scripts/cascade-contract-check.mjs"
     },
+    "./stylelint-plugin": {
+      "import": "./scripts/stylelint-plugin.mjs",
+      "default": "./scripts/stylelint-plugin.mjs"
+    },
     "./check-widget-drift": {
       "types": "./scripts/check-widget-drift.d.ts",
       "import": "./scripts/check-widget-drift.mjs",
@@ -124,6 +128,7 @@
     "scripts/canonical-class-check.d.ts",
     "scripts/cascade-contract-check.mjs",
     "scripts/cascade-contract-check.d.ts",
+    "scripts/stylelint-plugin.mjs",
     "scripts/check-widget-drift.mjs",
     "scripts/check-widget-drift.d.ts",
     "scripts/gen-icon-collection.mjs",
@@ -171,6 +176,8 @@
     "@storybook/addon-mcp": "^0.4.1",
     "@storybook/addon-vitest": "10.6.3",
     "@storybook/react-vite": "10.3.6",
+    "@types/d3-scale": "^4.0.9",
+    "@types/d3-shape": "^3.2.0",
     "@types/react": "^18.3.0",
     "@types/react-dom": "^18.3.0",
     "@vitejs/plugin-react": "^6.0.2",
@@ -189,6 +196,7 @@
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "storybook": "10.6.3",
+    "stylelint": "^18.0.0",
     "typescript": "^5.5.0",
     "vite": "^8.3.5",
     "vitest": "^4.1.11"
@@ -197,6 +205,7 @@
     "@axe-core/playwright": ">=4.10.0",
     "@iconify/react": ">=5.0.0",
     "@playwright/test": ">=1.45.0",
+    "stylelint": ">=18.0.0",
     "lottie-react": ">=3.0.0",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
@@ -206,6 +215,9 @@
       "optional": true
     },
     "@playwright/test": {
+      "optional": true
+    },
+    "stylelint": {
       "optional": true
     }
   },
@@ -363,12 +375,20 @@
   },
   "homepage": "https://brik-bds.io/",
   "dependencies": {
+    "@floating-ui/react-dom": "^2.1.8",
+    "@fullcalendar/core": "^6.1.22",
+    "@fullcalendar/daygrid": "^6.1.22",
+    "@fullcalendar/interaction": "^6.1.22",
+    "@fullcalendar/react": "^6.1.22",
+    "@fullcalendar/timegrid": "^6.1.22",
     "@iconify-json/ph": "^1.2.2",
     "@iconify/react": ">=5.0.0",
     "@radix-ui/react-collapsible": "^1.1.12",
     "@radix-ui/react-dialog": "^1.3.1",
     "@radix-ui/react-popover": "^1.1.15",
     "@tokens-studio/sd-transforms": "^2.0.3",
+    "d3-scale": "^4.0.3",
+    "d3-shape": "^3.2.1",
     "style-dictionary": "^5.5.0"
   }
 }

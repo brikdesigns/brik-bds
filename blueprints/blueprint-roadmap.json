@@ -6,30 +6,6 @@
   "_comment": "Designed-but-unbuilt blueprint layouts. NOT inventory: nothing here dispatches on either rail, and no consumer may read this file as an available-key set. Deliberately schema-distinct from blueprint-library.json — the array is `candidates`, and there is no `is_active` flag to misread. A candidate graduates by being built on the canonical Astro rail (ADR-037), entered in both BLUEPRINT_REGISTRY twins and WIRED_BLUEPRINT_KEYS, then moved into blueprint-library.json.",
   "candidates": [
     {
-      "key": "hero_centered_gradient",
-      "name": "Centered Hero on Gradient",
-      "section_type": "hero",
-      "disposition": "roadmap",
-      "industries": [
-        "universal",
-        "saas",
-        "ecommerce",
-        "beauty",
-        "salon"
-      ],
-      "moods": [
-        "bold",
-        "modern",
-        "energetic",
-        "playful"
-      ],
-      "layout_spec": "Full-width section with mesh gradient or radial glow background (not solid color). All content centered. Display headline (80px, 800 weight) spans 2–3 lines with a color-highlighted word or phrase. Single subheading sentence below (muted). Two CTAs centered. Floating stat cards or social proof badges positioned left and right of the heading using absolute positioning. No body paragraph.",
-      "css_hints": "background: radial-gradient(ellipse 80% 60% at 50% 40%, var(--accent-dim) 0%, transparent 70%); text-align: center; .stat-float { position: absolute; background: rgba(255,255,255,0.08); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 12px 16px; }",
-      "source": "Framer - Mentara",
-      "required_facts": [],
-      "catalogued_on": "2026-04-18"
-    },
-    {
       "key": "hero_fullbleed_photo",
       "name": "Full-Bleed Photo Hero",
       "section_type": "hero",
@@ -53,29 +29,6 @@
       "required_facts": [
         "hero_image_url"
       ],
-      "catalogued_on": "2026-04-18"
-    },
-    {
-      "key": "hero_dark_minimal",
-      "name": "Dark Minimal Hero",
-      "section_type": "hero",
-      "disposition": "roadmap",
-      "industries": [
-        "universal",
-        "legal",
-        "finance",
-        "corporate"
-      ],
-      "moods": [
-        "corporate",
-        "minimal",
-        "trustworthy",
-        "professional"
-      ],
-      "layout_spec": "Dark background (near-black). Left-aligned content. Eyebrow label in accent color with a short horizontal line before it. Headline is 3–5 words maximum, 64–80px, 800 weight, white. No subheading — rely on a single short stat or trust line instead. One primary CTA only. Right side is either empty (letting the headline breathe) or contains a single abstract geometric shape or minimal illustration.",
-      "css_hints": "background: var(--ink); color: #fff; .eyebrow::before { content: \"\"; display: inline-block; width: 20px; height: 1px; background: currentColor; margin-right: 8px; vertical-align: middle; }",
-      "source": "Original research",
-      "required_facts": [],
       "catalogued_on": "2026-04-18"
     },
     {
@@ -130,55 +83,6 @@
       "catalogued_on": "2026-04-18"
     },
     {
-      "key": "features_alternating_split",
-      "name": "Alternating Content Splits",
-      "section_type": "features",
-      "disposition": "roadmap",
-      "industries": [
-        "universal",
-        "healthcare",
-        "real_estate",
-        "legal",
-        "beauty",
-        "salon"
-      ],
-      "moods": [
-        "approachable",
-        "warm",
-        "professional",
-        "trustworthy"
-      ],
-      "layout_spec": "Alternating left/right layout. Each feature is a two-column row: one side is text (eyebrow, heading, 1-sentence body, optional CTA), other side is image, illustration, or abstract visual. Odd rows: text left, visual right. Even rows: visual left, text right. Generous vertical padding between rows (80–100px). Light section background with subtle background color variation between rows.",
-      "css_hints": ".feature-row { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; padding: 80px 0; } .feature-row:nth-child(even) .feature-text { order: 2; } .feature-row:nth-child(even) .feature-visual { order: 1; }",
-      "source": "Framer - Mentara",
-      "required_facts": [],
-      "catalogued_on": "2026-04-18"
-    },
-    {
-      "key": "features_bento_asymmetric",
-      "name": "Asymmetric Bento Grid",
-      "section_type": "features",
-      "disposition": "roadmap",
-      "industries": [
-        "universal",
-        "saas",
-        "ecommerce",
-        "real_estate",
-        "hospitality"
-      ],
-      "moods": [
-        "bold",
-        "modern",
-        "energetic",
-        "luxury"
-      ],
-      "layout_spec": "CSS grid with asymmetric column sizes (2fr 1fr 1fr). Two rows. Top-left card spans both rows (featured card — large photography or dark card with big stat). Remaining cards are equal-size: photography cards with overlay text bottom-left, one stat card in accent background color. All cards have border-radius: 12px and overflow: hidden. Photography cards: image with dark gradient overlay, label and title bottom-left. Stat card: large number (52px, 800 weight) and short descriptor.",
-      "css_hints": ".bento { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 280px 280px; gap: 12px; } .bento-featured { grid-row: span 2; } .bento-card { border-radius: 12px; overflow: hidden; position: relative; }",
-      "source": "Vale demo",
-      "required_facts": [],
-      "catalogued_on": "2026-04-18"
-    },
-    {
       "key": "stats_centered_light",
       "name": "Centered Stats on Light",
       "section_type": "stats",
@@ -199,26 +103,6 @@
       "layout_spec": "Light background section. 3 or 4 metrics centered horizontally with generous spacing between. Each metric: very large display number (64px+, accent color), short label below. Optional short section heading above the metrics. No divider lines between stats — rely on spacing alone. Counter animation on scroll.",
       "css_hints": ".stats-centered { display: flex; justify-content: center; gap: clamp(48px, 8vw, 120px); text-align: center; } .stat-num { font-size: clamp(48px, 6vw, 80px); font-weight: 800; color: var(--accent); }",
       "source": "Framer - Mentara",
-      "required_facts": [],
-      "catalogued_on": "2026-04-18"
-    },
-    {
-      "key": "testimonials_3col_cards",
-      "name": "3-Column Testimonial Cards",
-      "section_type": "testimonials",
-      "disposition": "roadmap",
-      "industries": [
-        "universal"
-      ],
-      "moods": [
-        "approachable",
-        "warm",
-        "trustworthy",
-        "professional"
-      ],
-      "layout_spec": "Light or white background. 3-column card grid. Each card: star rating (5 stars, accent color) top, quote text (italic, 15px, 3–4 lines max), then author row at bottom with avatar (40px circle from UI Avatars), name (700 weight, 14px), and role/company below (muted, 12px). Cards have a subtle border (1px, rule color), border-radius: 12px, and lift on hover (translateY -4px, shadow). Section heading centered above.",
-      "css_hints": ".testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; } .testimonial-card { padding: 32px 28px; border: 1px solid var(--rule); border-radius: 12px; transition: transform 0.25s ease, box-shadow 0.25s; } .testimonial-card:hover { transform: translateY(-4px); }",
-      "source": "Vale demo",
       "required_facts": [],
       "catalogued_on": "2026-04-18"
     },
@@ -415,30 +299,6 @@
       "required_facts": [],
       "catalogued_on": "2026-04-23",
       "notes": "TODO (BDS-PACK-ADD-001): Astro component stubbed — layout declared for pack composition reference only. Build the ServicesNumberedAccordion.astro component in a dedicated session."
-    },
-    {
-      "key": "process_grid_4step_numbered",
-      "name": "Process Grid — 4-Step Numbered",
-      "section_type": "features",
-      "disposition": "roadmap",
-      "industries": [
-        "universal",
-        "real_estate",
-        "legal",
-        "corporate",
-        "finance"
-      ],
-      "moods": [
-        "professional",
-        "trustworthy",
-        "corporate",
-        "modern"
-      ],
-      "layout_spec": "Four-column grid explaining a process in ordered steps. Each cell contains: a large step number (1–4, 56–64px, bold, brand accent), a short step title (H4, 16px, heading font), and a 2-sentence body description (14px, body font, muted color). Optional divider arrows between cells on desktop (hidden on mobile). Background: surface-primary or brand-dark for contrast. No images in cells — numbers carry the visual weight. Used for commercial transactions, brokerage processes, or any trust-building sequence. Collapses to 2×2 on tablet, single column on mobile.",
-      "source": "Vale Partners commercial real-estate — transaction process pattern",
-      "required_facts": [],
-      "catalogued_on": "2026-04-23",
-      "notes": "TODO (BDS-PACK-ADD-001): Astro component stubbed — layout declared for pack composition reference only. Build the ProcessGrid4StepNumbered.astro component in a dedicated session."
     },
     {
       "key": "nav_mega_audience_pathways",

@@ -630,7 +630,7 @@ import { GhlForm } from '@brikdesigns/bds/blueprints-astro';
 
 // Dispatcher page fixture — exercises <BlueprintDispatcher> end-to-end.
 // Includes 8 known sections (covering every v0.1 component) + 1
-// UNKNOWN section with blueprintKey='hero_centered_gradient' (valid
+// UNKNOWN section with blueprintKey='hero_fullbleed_photo' (valid
 // library key but no Astro component yet). The unknown falls through
 // to BlueprintFallback which emits the data-blueprint-unknown-key
 // attribute that CI greps for.
@@ -703,7 +703,18 @@ const sections: BlueprintSection[] = [
   ] }),
   sec('cta_split_contact', { sectionKey: 'd_cta_split', sectionType: 'cta', title: 'Reach out', body: 'Split CTA exercising phone + email.', cta: { label: 'Contact', url: '/contact' } }),
   // Unknown key — falls through to BlueprintFallback.
-  sec('hero_centered_gradient' as KnownBlueprintKey, { sectionKey: 'd_unknown', sectionType: 'hero', title: 'Not shipped yet' }),
+  sec('hero_fullbleed_photo' as KnownBlueprintKey, { sectionKey: 'd_unknown', sectionType: 'hero', title: 'Not shipped yet' }),
+  sec('hero_centered', { sectionKey: 'd_hero_centered', sectionType: 'hero', title: 'A centred opening', body: 'One column, no media.', cta: { label: 'Start', url: '/start' } }),
+  sec('hero_statement', { sectionKey: 'd_hero_statement', sectionType: 'hero', title: 'Say it plainly', subtitle: 'Our approach', cta: { label: 'Get started', url: '/start' } }),
+  sec('features_alternating_split', { sectionKey: 'd_features_alternating', sectionType: 'features', title: 'One story, in rows', items: [
+    { title: 'First row', description: 'Text on one side, media on the other.', href: '/first' },
+    { title: 'Second row', description: 'The sides swap.' },
+  ] }),
+  sec('features_bento_asymmetric', { sectionKey: 'd_features_bento', sectionType: 'features', title: 'One feature leads', items: [
+    { title: 'Featured cell', description: 'Spans two rows on desktop.', href: '/featured' },
+    { title: 'Supporting cell', description: 'An equal cell.' },
+    { title: 'Stat cell', description: 'A headline figure.', stat: '98%' },
+  ] }),
   sec('cta_centered', { sectionKey: 'd_cta_dark', sectionType: 'cta', title: 'End of proof', cta: { label: 'Home', url: '/' } }),
   sec('collection_index', { sectionKey: 'd_collection_index', sectionType: 'content_block', title: 'Latest entries', items: [
     { title: 'First entry', description: 'An excerpt.', href: '/entries/first' },
@@ -711,6 +722,14 @@ const sections: BlueprintSection[] = [
   sec('collection_entry', { sectionKey: 'd_collection_entry', sectionType: 'content_block', title: 'An entry', body: 'Opening paragraph.\\n\\n## A heading\\n\\n- one\\n- two', items: [] }),
   sec('faq_accordion_grouped', { sectionKey: 'd_faq', sectionType: 'faq', title: 'Questions', items: [
     { title: 'A question?', description: 'An answer.', group: 'Topic' },
+  ] }),
+  sec('testimonials_card_grid', { sectionKey: 'd_test_grid', sectionType: 'testimonials', title: 'What clients say', items: [
+    { title: 'Sample Name · Role', description: 'A short quote.', rating: 5 },
+  ] }),
+  sec('process_steps_numbered', { sectionKey: 'd_process', sectionType: 'features', title: 'How it works', items: [
+    { title: 'Step one', description: 'First thing that happens.' },
+    { title: 'Step two', description: 'Second thing that happens.' },
+    { title: 'Step three', description: 'Third thing that happens.' },
   ] }),
 ];
 ---
@@ -750,11 +769,17 @@ const DISPATCH_FIXTURE_KEYS = [
   'story_split',
   'testimonials_featured_large',
   'cta_split_contact',
-  'hero_centered_gradient',
+  'hero_fullbleed_photo',
+  'hero_centered',
+  'hero_statement',
+  'features_alternating_split',
+  'features_bento_asymmetric',
   'cta_centered',
   'collection_index',
   'collection_entry',
   'faq_accordion_grouped',
+  'testimonials_card_grid',
+  'process_steps_numbered',
 ];
 
 /**
@@ -1112,6 +1137,8 @@ const expectedFiles = [
   'content-system/blueprints/astro/CollectionIndex.astro',
   'content-system/blueprints/astro/CollectionEntry.astro',
   'content-system/blueprints/astro/FaqAccordion.astro',
+  'content-system/blueprints/astro/TestimonialsCardGrid.astro',
+  'content-system/blueprints/astro/ProcessStepsNumbered.astro',
   'content-system/blueprints/astro/entry-body.ts',
   // Dispatch surface (PR #7)
   'content-system/blueprints/astro/BlueprintDispatcher.astro',

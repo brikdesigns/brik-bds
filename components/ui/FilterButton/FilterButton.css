@@ -44,21 +44,21 @@
 
 /* Size variants — height scale matches Button/IconButton (4px grid, 8px steps) */
 
-.bds-filter-button__trigger--sm {
+.bds-filter-button__trigger--size-sm {
   height: var(--bds-size-800);
   padding-inline: var(--bds-padding-sm);
   font-size: var(--bds-label-sm);
   gap: var(--bds-gap-sm);
 }
 
-.bds-filter-button__trigger--md {
+.bds-filter-button__trigger--size-md {
   height: var(--bds-size-1000);
   padding-inline: var(--bds-padding-lg);
   font-size: var(--bds-label-md);
   gap: var(--bds-gap-md);
 }
 
-.bds-filter-button__trigger--lg {
+.bds-filter-button__trigger--size-lg {
   height: var(--bds-size-1200);
   padding-inline: var(--bds-padding-xl);
   font-size: var(--bds-label-lg);
@@ -81,12 +81,14 @@
   background-color: var(--bds-background-primary);
   border-radius: var(--bds-border-radius-lg);
   padding: var(--bds-padding-md);
-  box-shadow: var(--bds-shadow-lg);
+  box-shadow: var(--bds-shadow-lifted);
   display: flex;
   flex-direction: column;
   gap: var(--bds-gap-md);
   --bds-filter-button-panel-min-width: 200px; /* component-local dimension; no shared registry rung (#2133) */
   min-width: var(--bds-filter-button-panel-min-width);
+  max-height: min(60vh, 24rem); /* bds-lint-ignore — viewport-relative scroll cap so a long item list never grows past the viewport */
+  overflow-y: auto;
 }
 
 /* ─── Option items ────────────────────────────────────── */

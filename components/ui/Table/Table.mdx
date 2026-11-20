@@ -22,6 +22,14 @@ Sortable headers (`sortable` + `sortDirection` on `<TableHead>`) and checkbox ro
 
 <Canvas of={Stories.SortableWithSelection} />
 
+### Row selection and the bulk bar
+
+Selection is controlled: the consumer owns the selected set and passes it in, so a page or filter change can clear it. `<TableSelectHead>` carries the select-all checkbox (`checked` when every row on the page is selected, `indeterminate` when only some are; `onCheckedChange(true)` selects all, `false` clears). `<TableSelectCell label="Select BUG-101 Save button">` names its row for assistive tech. Pass `selected` on every `<TableRow>` and each row reports `aria-selected="true"` or `"false"`; leave it unset on a table without selection. Selection does not persist across pages.
+
+`<TableBulkBar>` renders above the table while `count` is 1 or more. It states the count, shows consumer `counts` (`[{ label: 'bugs', count: 9 }]`) beside it, holds the consumer's action as children, and `onClear` backs the Clear button. It never takes focus, so a keyboard user stays on the checkbox they just toggled with Space.
+
+<Canvas of={Stories.RowSelectionBulkBar} />
+
 A `<TableCell>` accepts any content. This table exercises the composition catalog in one place — `<TableIconCell>` for the icon-left name, `<TableTextCell>` for the two-line owner, then `<Tag>`, a status `<Badge>`, an inline `<TextInput>`, a `<Tooltip>` header indicator, and a `<TextLink>` inside plain cells.
 
 <Canvas of={Stories.CellTypes} />

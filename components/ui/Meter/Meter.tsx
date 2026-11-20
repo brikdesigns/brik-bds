@@ -23,6 +23,11 @@ export type MeterSize = 'sm' | 'md' | 'lg';
 export type MeterLabelPosition = 'above' | 'below';
 
 /**
+ * Visible value text form: `ratio` → "6/7", `fraction` → "6 of 7".
+ */
+export type MeterValueFormat = 'ratio' | 'fraction';
+
+/**
  * Meter component props
  *
  * Horizontal bar gauge that visualizes a value relative to a maximum.
@@ -47,6 +52,14 @@ export interface MeterProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
   showValue?: boolean;
   /** Custom value formatter (default: "6/7") */
   valueFormatter?: (value: number, max: number) => string;
+  /**
+   * Visible text form (default: "ratio" → "6/7"). "fraction" renders
+   * "3 of 8" plus `unit` ("3 of 8 tasks done") with no " Score" suffix.
+   * `valueFormatter` wins when passed.
+   */
+  valueFormat?: MeterValueFormat;
+  /** Unit text after a fraction value (e.g. "tasks done"). Only used with `valueFormat="fraction"`. */
+  unit?: string;
   /** Position label/value above or below the bar (default: "below") */
   labelPosition?: MeterLabelPosition;
   /** Suffix rendered after the value (default: " Score"). Pass "" to suppress. */
@@ -59,6 +72,10 @@ function defaultFormatter(value: number, max: number): string {
   return `${value}/${max}`;
 }
 
+function fractionFormatter(value: number, max: number): string {
+  return `${value} of ${max}`;
+}
+
 /**
  * Meter — a horizontal bar gauge for visualizing scores and ratings.
  *
@@ -69,6 +86,7 @@ function defaultFormatter(value: number, max: number): string {
  * <Meter value={6} max={7} tone="positive" label="Pass" />
  * <Meter value={3} max={10} tone="warning" label="Fair" size="lg" />
  * <Meter value={1} max={5} tone="negative" label="Fail" showValue={false} />
+ * <Meter value={3} max={8} valueFormat="fraction" unit="tasks done" />
  *
  * // Plain "X/Y" with no suffix (e.g. completion counters):
  * <Meter value={4} max={10} valueSuffix="" />
@@ -87,9 +105,11 @@ export function Meter({
   size = 'md',
   label,
   showValue = true,
-  valueFormatter = defaultFormatter,
+  valueFormatter,
+  valueFormat = 'ratio',
+  unit,
   labelPosition = 'below',
-  valueSuffix = ' Score',
+  valueSuffix,
   fillColor,
   className,
   style,
@@ -98,6 +118,10 @@ export function Meter({
   const resolvedTone =
     resolveRetiredValue('Meter', tone !== undefined ? 'tone' : 'status', tone ?? status, RETIRED_TONES) ?? 'neutral';
   const percentage = max > 0 ? Math.min(Math.max((value / max) * 100, 0), 100) : 0;
+
+  const isFraction = valueFormat === 'fraction' && !valueFormatter;
+  const formatValue = valueFormatter ?? (isFraction ? fractionFormatter : defaultFormatter);
+  const suffix = valueSuffix ?? (isFraction ? (unit ? ` ${unit}` : '') : ' Score');
 
   const textContent = (
     <>
@@ -108,9 +132,9 @@ export function Meter({
       )}
       {showValue && (
         <div>
-          <span className="bds-meter__value">{valueFormatter(value, max)}</span>
-          {valueSuffix && (
-            <span className="bds-meter__value-suffix">{valueSuffix}</span>
+          <span className="bds-meter__value">{formatValue(value, max)}</span>
+          {suffix && (
+            <span className="bds-meter__value-suffix">{suffix}</span>
           )}
         </div>
       )}
@@ -118,11 +142,11 @@ export function Meter({
   );
 
   const track = (
-    <div className={bdsClass('bds-meter__track', `bds-meter__track--${size}`)}>
+    <div className={bdsClass('bds-meter__track', `bds-meter__track--size-${size}`)}>
       <div
         className={bdsClass(
           'bds-meter__fill',
-          `bds-meter__fill--${size}`,
+          `bds-meter__fill--size-${size}`,
           !fillColor && `bds-meter__fill--tone-${resolvedTone}`,
         )}
         style={{

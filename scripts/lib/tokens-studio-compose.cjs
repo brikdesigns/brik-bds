@@ -110,8 +110,11 @@ const DEFAULT_MODES = {
   // See tokens/CASCADE.md § Breakpoint.
   breakpoint: 'default',
   'border-width': 'default',
-  elevation: 'subtle',
   typography: 'default',
+  // #3278: the :root value of each band rung is the `contained` mode;
+  // generate-modes-css.mjs re-emits wide / full-bleed under [data-mode-width].
+  'content-width': 'contained',
+  motion: 'default',
 };
 
 function deepMergeTree(target, source) {
@@ -181,6 +184,10 @@ function cleanTree(obj, warn) {
 // group wrapper. These need wrapping under the collection name so
 // they don't orphan into the global namespace.
 
+const LEGACY_COLLECTION_WRAP = new Set(
+  require('../../tokens/naming-grammar.json').body.legacyCollectionWrap.collections,
+);
+
 function needsWrapping(setData) {
   for (const val of Object.values(setData)) {
     if (val && typeof val === 'object' && val.$value !== undefined) {
@@ -191,6 +198,59 @@ function needsWrapping(setData) {
 }
 
 const noop = () => {};
+
+// ─── Compose elevation shadows (#3058) ────────────────────────────────
+// Figma's `elevation` collection holds each depth as four parts:
+// shadow/{depth}/{offset,blur,spread,color}. A Figma variable cannot hold a
+// box-shadow, so the build composes the parts into one token per depth and
+// drops the parts, the way #2243 dropped the old spread/opacity sub-tokens.
+// x-offset is always 0. A part that aliases a primitive stays a reference, so
+// the CSS reads `var(--bds-shadow-offset-100)`; a raw number gets `px`.
+// Figma variables cannot say "inset" either: a depth whose colour description
+// names an inner shadow (today: sunken) is emitted inset.
+const SHADOW_PARTS = ['offset', 'blur', 'spread', 'color'];
+
+function shadowLength(part, where) {
+  const v = part.$value;
+  if (typeof v === 'number') return v === 0 ? '0' : `${v}px`;
+  if (typeof v === 'string' && /^\{[^}]+\}$/.test(v)) return v;
+  if (typeof v === 'string' && /^-?\d+(\.\d+)?$/.test(v)) return v === '0' ? '0' : `${v}px`;
+  if (typeof v === 'string' && /^-?\d+(\.\d+)?px$/.test(v)) return v;
+  throw new Error(`composeShadows: ${where} has an unreadable length (${JSON.stringify(v)})`);
+}
+
+function shadowColor(part, where) {
+  const v = part.$value;
+  const m = typeof v === 'string' && /^#([0-9a-f]{6})([0-9a-f]{2})?$/i.exec(v);
+  if (!m) throw new Error(`composeShadows: ${where} is not a hex colour (${JSON.stringify(v)})`);
+  const [r, g, b] = [0, 2, 4].map((i) => parseInt(m[1].slice(i, i + 2), 16));
+  const a = m[2] === undefined ? 1 : Math.round((parseInt(m[2], 16) / 255) * 100) / 100;
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+
+function composeShadows(merged) {
+  const shadow = merged.shadow;
+  if (!shadow || typeof shadow !== 'object') return;
+  for (const [depth, group] of Object.entries(shadow)) {
+    if (!group || typeof group !== 'object' || group.$value !== undefined) continue;
+    const keys = Object.keys(group).filter((k) => !k.startsWith('$'));
+    if (!SHADOW_PARTS.every((p) => keys.includes(p))) continue;
+    const extra = keys.filter((k) => !SHADOW_PARTS.includes(k));
+    if (extra.length) throw new Error(`composeShadows: shadow.${depth} has unknown parts (${extra.join(', ')})`);
+    const where = (p) => `shadow.${depth}.${p}`;
+    const description = SHADOW_PARTS.map((p) => group[p].$description).find(Boolean);
+    const inset = /\binset\b/i.test(description || '');
+    const value = [
+      ...(inset ? ['inset'] : []),
+      '0',
+      shadowLength(group.offset, where('offset')),
+      shadowLength(group.blur, where('blur')),
+      shadowLength(group.spread, where('spread')),
+      shadowColor(group.color, where('color')),
+    ].join(' ');
+    shadow[depth] = { $value: value, ...(description ? { $description: description } : {}) };
+  }
+}
 
 /**
  * Merge primitives + one mode per collection into a flat DTCG object.
@@ -235,28 +295,32 @@ function flattenTokensStudio(input, { modes = {}, log = noop, warn = noop } = {}
       continue;
     }
 
-    // Wrap rootless semantic sets under their collection name
-    // e.g. border-width/default → { "border-width": { sm, md, lg } }
-    //      breakpoint/default   → { "breakpoint": { web, tablet, mobile } }
+    // A name is the Figma path (#3278, tokens/naming-grammar.json `body`): no
+    // collection segment is added. The only exception is the legacy list of
+    // collections whose variables still sit at the root —
+    // e.g. border-width/default → { "border-width": { sm, md, lg } }.
+    // Any other rootless set would emit a name Figma never declared, so stop.
     if (col !== 'primitives' && needsWrapping(setData)) {
-      log(`    ↳ Wrapping "${setKey}" tokens under "${col}"`);
+      if (!LEGACY_COLLECTION_WRAP.has(col)) {
+        throw new Error(
+          `Set "${setKey}" has variables at its root. A token name is its Figma path ` +
+          `(tokens/naming-grammar.json body.rule), so rename them in Figma to start ` +
+          `with "${col}/" — the generator does not add the collection name.`,
+        );
+      }
+      log(`    ↳ Wrapping "${setKey}" tokens under "${col}" (legacy, naming-grammar body.legacyCollectionWrap)`);
       deepMergeTree(merged, { [col]: setData });
     } else {
       deepMergeTree(merged, setData);
     }
   }
 
-  // ─── Drop elevation-internal composite sub-tokens (#2243) and the layout
-  // ─── tier (ADR-042) ────────────────────────────────────────────────
-  // The `spread` and `opacity` groups live in the elevation collection ONLY to be
-  // composed into the --shadow-* shorthand by generate-modes-css.mjs, which reads
-  // design-tokens/tokens-studio.json directly — never the flattened SD input. If
-  // left in, Style Dictionary emits them to :root as bare --spread-* / --opacity-*
-  // globals: a shadow alpha masquerading as a general --opacity-md token, which
-  // the token-purpose slot lint rightly rejects. They are elevation-only (asserted
-  // in tokens-studio.json), so deleting the top-level keys is safe.
-  // (The older blur-radius / box-shadow groups still emit — grandfathered,
-  // registered slots; excluding those is a separate cleanup.)
+  // ─── Drop retired sub-token groups (#2243) and the layout tier (ADR-042) ──
+  // `spread` and `opacity` were the old elevation collection's shadow parts.
+  // #3058 replaced that collection with shadow/{depth}/* (composed by
+  // composeShadows below), so neither group exists in Figma today; the delete
+  // stays so a re-introduced bare --spread-* / --opacity-* never reaches :root
+  // as a shadow alpha masquerading as a general opacity token.
   //
   // `layout` (ADR-042) is the device-fluid TIER: generate-modes-css.mjs reads
   // `layout/{mobile,tablet,desktop}` directly from tokens-studio.json and builds
@@ -271,6 +335,8 @@ function flattenTokensStudio(input, { modes = {}, log = noop, warn = noop } = {}
   // `border-width` / `breakpoint`) is the minimal fix, same pattern as
   // spread/opacity above.
   for (const internal of ['spread', 'opacity', 'layout']) delete merged[internal];
+
+  composeShadows(merged);
 
   // ─── Fix font-line-height: Tokens Studio exports % as px ─────
   // Figma stores line-height as percentages (110%, 125%, 150%) but

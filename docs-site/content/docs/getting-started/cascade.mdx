@@ -124,8 +124,7 @@ A Mode varies a token's *value* on a system-wide axis any consumer can toggle. M
 | `spacing` | `data-mode-spacing` | `default` | `compact`, `comfortable`, `spacious` | ✅ |
 | `border-radius` | `data-mode-radius` | `soft` | `sharp`, `round`, `pill` | ⏳ [#340](https://github.com/brikdesigns/brik-bds/issues/340) |
 | `typography` | `data-mode-typography` | `default` | `compact`, `comfortable`, `spacious`, `expressive` | ✅ `modes-typography.css` (heading-* only) |
-| `elevation` | `data-mode-elevation` | `subtle` | `flat`, `lifted`, `dramatic` | ⏳ #340 |
-| `width` | `data-mode-width` | `contained` | `wide`, `full-bleed` | ✅ `modes-width.css` (re-points the page band `--bds-content-width-xl` only) |
+| `width` | `data-mode-width` | `contained` | `wide`, `full-bleed` | ✅ `modes-width.css` (re-points the band rungs `--bds-content-width-{sm,md,lg,xl}`; text rungs stay put) |
 | `breakpoint` | `data-mode-breakpoint` | `default` | — | ⏳ #340 |
 | `icon` | `data-mode-icon` | `solid` | `outline` | ⏳ #340 |
 
@@ -183,6 +182,7 @@ This page is the **canonical adoption contract**: every consumer (portal, brikde
 | `scripts/canonical-check.mjs` | `--text-*` / `--surface-*` / `--background-*` / `--border-*` / `--color-*` names exist in `dist/tokens.css` | BDS pre-commit + CI |
 | `@brikdesigns/bds/canonical-check` (consumer dep) | Same engine published for consumer repos | Consumer pre-commit + CI via `token-audit.sh --canonical-only` |
 | `@brikdesigns/bds/cascade-contract-check` (consumer dep) | Three rules: `no-redefinition` (clause 4 above), `typography-family` (font-family family matches font-size family within a rule), `import-layer` (clause 3 above — every CSS `@import` of `tokens.css` / `styles.css` carries a named `layer()`) | BDS-owned export, imported by consumer `lint-tokens`. Live in brikdesigns; portal wiring tracked in [#1437](https://github.com/brikdesigns/brik-bds/issues/1437) |
+| `@brikdesigns/bds/stylelint-plugin` (consumer dep, optional Stylelint ≥18) | Editor-time wrapper over the two rows above: `bds/canonical-token-name` runs the `canonical-check` name test, `bds/cascade-contract` runs all three `cascade-contract-check` rules. Same allowlist and `exemptTokens` burn-down; the CLI checks stay the CI gate | Consumer editor via `plugins: ['@brikdesigns/bds/stylelint-plugin']` ([#3210](https://github.com/brikdesigns/brik-bds/issues/3210)) |
 | `npm run cascade-contract-check` | The same engine pointed at this docs site's own `app/global.css` — the site that publishes the contract is itself a consumer of it | BDS CI + `npm run validate` |
 
 Run BDS gates locally: `npm run validate`. Consumer gates: `./scripts/token-audit.sh --canonical-only`.

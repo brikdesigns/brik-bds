@@ -1,0 +1,107 @@
+---
+title: Chart
+description: Column, bar, line, donut and sparkline charts on one ChartFrame, coloured only by the chart tokens.
+---
+
+The Chart family draws data as SVG. `BarChart`, `LineChart` and `DonutChart` share one `ChartFrame`: a title, an optional legend, axis labels, a tooltip and a "Show data table" toggle. `Sparkline` is the frameless trend that sits inside a [Stat](/docs/components/stat).
+
+The rules come from ADR-050, the data-visualization layer.
+
+## Pick the chart by the question
+
+| Question | Chart |
+|---|---|
+| How do categories compare? | **Column** (`BarChart`), the default. Use `orientation="horizontal"` for long labels. |
+| How did it change over continuous time? | **Line** (`LineChart`). |
+| What share of the whole? | **Donut** (`DonutChart`), only at 5 categories or fewer. With 6 or more, use column. |
+| Which way is it trending, next to a number? | **Sparkline** inside `Stat`. |
+| Running total over time? | Area is not in v1. Render it as a line. |
+
+## Import
+
+```tsx
+import { BarChart, LineChart, DonutChart, Sparkline } from '@brikdesigns/bds';
+```
+
+## Column and bar
+
+```tsx
+<BarChart
+  title="Monthly revenue"
+  data={[{ month: 'Jan', revenue: 18400 }, { month: 'Feb', revenue: 21250 }]}
+  categoryKey="month"
+  series={[{ key: 'revenue', label: 'Revenue' }]}
+/>
+```
+
+Add `orientation="horizontal"` when category labels are long. Pass more than one series for grouped columns.
+
+## Line
+
+```tsx
+<LineChart
+  title="Weekly visits by channel"
+  data={weeklyVisits}
+  xKey="week"
+  series={[
+    { key: 'organic', label: 'Organic' },
+    { key: 'paid', label: 'Paid' },
+  ]}
+/>
+```
+
+`xKey` values may be Dates, numbers or strings. With more than one series, each line is labelled at its end.
+
+## Donut
+
+```tsx
+<DonutChart
+  title="Invoices by status"
+  data={invoiceStatus}
+  categoryKey="status"
+  valueKey="count"
+  centerLabel="Invoices"
+  colors={{ Paid: 'positive', Due: 'warning', Overdue: 'negative' }}
+/>
+```
+
+The total sits in the centre. A static legend lists each slice with its value and share.
+
+## Sparkline
+
+```tsx
+<Stat
+  label="Weekly visits"
+  value="4,100"
+  trend={{ direction: 'up', delta: '+6% vs last week' }}
+  supplementary={<Sparkline data={visits} label="Weekly visits, last 8 weeks" />}
+/>
+```
+
+`label` is required. It names the image and captions a visually hidden table of every value.
+
+## Colour
+
+Charts use only the 12 `--bds-background-chart-*` tokens (fills; a same-valued `--bds-border-chart-*` stroke set exists for line and axis marks). Set a series colour with `color` on the series (`brand`, `neutral`, `categorical-1` to `-6`, `positive`, `warning`, `negative`, `info`).
+
+- A single series defaults to `brand`.
+- Peer series default to `categorical-1`, `-2`, … in order.
+- Never put text on a chart colour.
+- At most 6 categories.
+
+## Legend
+
+- A legend renders only with more than one series.
+- Each legend item toggles its series.
+- The last visible series cannot be hidden.
+
+## States
+
+Pass `loading`, `error` or `empty` (with optional `emptyState` copy). An empty `data` array renders the empty state on its own. These render through the same shell as [DataView](/docs/components/data-view).
+
+## Accessibility
+
+- The frame is a `<section>` named by its `<h2>` title.
+- The plot is an image with a summary name, such as "Monthly revenue, column chart of 6 categories".
+- "Show data table" reveals a real `Table` with every value. It is a keyboard-reachable button.
+- Colour is never the only cue: the legend, end labels and table all carry the series names.

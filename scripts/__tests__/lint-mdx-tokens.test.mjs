@@ -119,6 +119,12 @@ describe('lint-mdx-tokens', () => {
     expect(code).toBe(0);
   });
 
+  it('does not read a BEM modifier as a token (`bds-button--size-md`, #1926)', () => {
+    const { code, json } = run(fence('<a class="bds-button bds-button--size-md">Go</a>'));
+    expect(code).toBe(0);
+    expect(json.violations).toHaveLength(0);
+  });
+
   it('does NOT scan prose inline-code (scope = fenced code + tables)', () => {
     const { code } = run('A sentence mentioning `--bds-surface-success` in prose.\n');
     expect(code).toBe(0);

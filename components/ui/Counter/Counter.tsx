@@ -58,7 +58,7 @@ export function Counter({
 
   return (
     <span
-      className={bdsClass('bds-counter', `bds-counter--${size}`, `bds-counter--tone-${resolvedTone}`, className)}
+      className={bdsClass('bds-counter', `bds-counter--size-${size}`, `bds-counter--tone-${resolvedTone}`, className)}
       style={style}
       aria-label={`Count: ${count}`}
       {...props}

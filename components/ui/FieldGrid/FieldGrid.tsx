@@ -42,7 +42,7 @@ export function FieldGrid({
     <div
       className={bdsClass(
         'bds-field-grid',
-        `bds-field-grid--cols-${columns}`,
+        `bds-field-grid--columns-${columns}`,
         `bds-field-grid--gap-${gap}`,
         className,
       )}

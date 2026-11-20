@@ -438,8 +438,8 @@ export const InteractionTestSize: Story = {
   ),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    await expect(canvas.getByRole('button', { name: 'Clear filters' })).toHaveClass('bds-button--sm');
-    await expect(canvas.getByRole('button', { name: 'Export' })).toHaveClass('bds-button--sm');
+    await expect(canvas.getByRole('button', { name: 'Clear filters' })).toHaveClass('bds-button--size-sm');
+    await expect(canvas.getByRole('button', { name: 'Export' })).toHaveClass('bds-button--size-sm');
   },
 };
 
@@ -580,8 +580,42 @@ export const InteractionTestSearchLandmark: Story = {
     await expect(landmarks[0]).toContainElement(canvas.getByRole('searchbox'));
     // The field itself carries no landmark role.
     await expect(canvas.getByRole('searchbox')).not.toHaveAttribute('role');
-    // The slot is the first thing in the bar.
-    await expect(landmarks[0].firstElementChild).toContainElement(canvas.getByRole('searchbox'));
+    // The slot sits at the END of the bar (right side), not the start.
+    await expect(landmarks[0].firstElementChild).not.toContainElement(canvas.getByRole('searchbox'));
+    await expect(landmarks[0].querySelector('.bds-filter-bar__search')).toContainElement(
+      canvas.getByRole('searchbox'),
+    );
+  },
+};
+
+/** @summary Verifies search sits right and matches button height */
+export const InteractionTestSearchRightSameHeight: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: searchArgs,
+  decorators: [(Story) => <div style={{ width: 1000 }}><Story /></div>],
+  render: (args) => <SearchDemo args={args as FilterBarProps} filters />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByRole('searchbox');
+    const industry = canvas.getByRole('button', { name: /Industry/ });
+    const toggle = canvas.getByRole('button', { name: /Active only/ });
+    const height = (el: Element) => el.getBoundingClientRect().height;
+    // One control height across the bar: field = FilterButton = FilterToggle.
+    await expect(height(field)).toBe(height(industry));
+    await expect(height(field)).toBe(height(toggle));
+    // ...and the bar's own sm button (Clear, shown once a query narrows the set).
+    await userEvent.type(field, 'acme');
+    await expect(height(canvas.getByRole('button', { name: 'Clear filters' }))).toBe(height(field));
+    await userEvent.clear(field);
+    // Right side: the field starts after both filter controls end.
+    await expect(field.getBoundingClientRect().left).toBeGreaterThanOrEqual(
+      toggle.getBoundingClientRect().right,
+    );
+    // Controls hug the field: the bar's free space is left of the controls.
+    const title = canvas.getByRole('heading', { name: 'Engagements' });
+    await expect(industry.getBoundingClientRect().left).toBeGreaterThan(
+      title.getBoundingClientRect().right,
+    );
   },
 };
 

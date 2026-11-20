@@ -136,7 +136,7 @@ export const InteractionTestOnColorNoLeak: Story = {
     const [outer, nested] = titles;
     await expect(getComputedStyle(outer).color).toBe('rgb(255, 255, 255)');
 
-    // The nested block carries no --on-color modifier, so it must resolve to
+    // The nested block carries no --emphasis-on-color modifier, so it must resolve to
     // --bds-text-primary rather than inheriting the band's on-color white.
     const expected = getComputedStyle(canvasElement)
       .getPropertyValue('--bds-text-primary')

@@ -11,6 +11,7 @@ import {
 import { Icon } from '../Icon';
 import { MapPin } from '../../icons';
 import { bdsClass, type AccessibleNameProps } from '../../utils';
+import { useFloatingPanel } from '../shared/useFloatingPanel';
 import './AddressInput.css';
 
 /**
@@ -95,7 +96,10 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
     const generatedId = useId();
     const inputId = id || (label ? `address-${generatedId}` : undefined);
 
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
     const showDropdown = isFocused && suggestions.length > 0;
+    useFloatingPanel(dropdownRef, showDropdown);
 
     const handleFocus = useCallback(
       (e: React.FocusEvent<HTMLInputElement>) => {
@@ -138,7 +142,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
         ref={wrapperRef}
         className={bdsClass(
           'bds-address-input',
-          `bds-address-input--${size}`,
+          `bds-address-input--size-${size}`,
           fullWidth && 'bds-address-input--full-width',
           className,
         )}
@@ -164,7 +168,7 @@ export const AddressInput = forwardRef<HTMLInputElement, AddressInputProps>(
             {...props}
           />
           {showDropdown && (
-            <div role="listbox" className="bds-address-input__dropdown">
+            <div ref={dropdownRef} role="listbox" className="bds-address-input__dropdown">
               {suggestions.map((suggestion) => (
                 <button
                   key={suggestion.id}

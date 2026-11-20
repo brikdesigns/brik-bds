@@ -520,7 +520,7 @@ export const InteractionTestEditHref: Story = {
 
     const edit = await canvas.findByRole('link', { name: 'Edit' });
     await expect(edit).toHaveAttribute('href', '/services/brand-identity-bundle/edit');
-    await expect(edit).toHaveClass('bds-button--primary');
+    await expect(edit).toHaveClass('bds-button--variant-primary');
     // Same slot as the `onEdit` path — not a second affordance elsewhere.
     await expect(edit.closest('.bds-page-header__actions')).not.toBeNull();
   },

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- report-meta: contract in docs/reports/README.md (ADR-046) -->
+<meta name="report-status" content="active">
+<meta name="report-type" content="audit">
+<meta name="report-themes" content="design-system">
+<meta name="report-subject" content="bds">
+<meta name="report-owner" content="nstaner">
+<meta name="report-generated" content="2026-11-15">
+<meta name="report-supersedes" content="none">
+<meta name="report-cadence" content="once">
+<meta name="report-source" content="manual">
+<!-- /report-meta -->
+<title>Card Usage Audit — 2026-11-15</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.55 -apple-system, "Segoe UI", sans-serif; max-width: 70rem; margin: 2rem auto; padding: 0 1rem; color: #222; background: #fff; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2.25rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  h3 { font-size: 1rem; margin-top: 1.25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  td.n { text-align: right; font-variant-numeric: tabular-nums; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; overflow-wrap: anywhere; }
+  .verdict { background: #fff4e5; border-left: 4px solid #e58a00; padding: .75rem 1rem; }
+  .decide { background: #eef4ff; border-left: 4px solid #2f6fdb; padding: .75rem 1rem; margin: .75rem 0; }
+  .open { background: #fdeeee; border-left: 4px solid #c0392b; padding: .75rem 1rem; margin: .75rem 0; }
+  .verdict p, .decide p, .open p { margin: .35rem 0; }
+  .wrap { overflow-x: auto; }
+  ol, ul { padding-left: 1.3rem; }
+  li { margin: .25rem 0; }
+  small { color: #555; }
+</style>
+</head>
+<body>
+
+<h1>Card Usage Audit — 2026-11-15</h1>
+<p><small>Portal evidence read on <code>brikdesigns/brik-client-portal@d530117ef</code> (<code>origin/staging</code>, pinned to <code>@brikdesigns/bds@0.239.0</code>). BDS evidence read on <code>brikdesigns/brik-bds@b6eec610</code> (<code>main</code>, v0.239.0). Every count below is a <code>git grep</code> over <code>src/**/*.tsx</code> on that portal commit unless the row says otherwise.</small></p>
+
+<div class="verdict">
+<p><strong>Verdict (HIGH confidence):</strong> the portal does not have a card-standards gap, it has a card-<em>adoption</em> gap plus four real holes in BDS. The canon that answers "which display does this data get" already exists (<a href="https://design.brikdesigns.com/docs/build-standards/display-choice">display-choice</a>, <a href="https://design.brikdesigns.com/docs/build-standards/dates-and-times">dates-and-times</a>, <a href="https://design.brikdesigns.com/docs/build-standards/indicators">indicators</a>, the v0.239.0 control-card contract from brik-bds#3159). 55 of 228 <code>&lt;Card&gt;</code> sites bypass it by declaring no <code>layout</code>; 42 distinct sites were classified and 24 of them are either a collection crammed into a card or a card anatomy re-typed by hand.</p>
+<p>The four BDS holes: (1) <code>row</code>/<code>stack</code> layouts have no indicator slot, so every hand-rolled card puts a Badge where only an <code>action</code> fits; (2) <code>Card layout="metric"</code> and <code>Stat</code> are two spellings of one concept; (3) there is no fraction/step summary primitive, so "N of M" is hand-formatted in 7 places; (4) there are no chart tokens or chart components, so every number that is a trend or a part-to-whole is forced into a big-number tile or a label/value list.</p>
+</div>
+
+<h2>1. Census</h2>
+
+<table>
+<tr><th>Measure</th><th class="n">Count</th><th>Source</th></tr>
+<tr><td>Card openers (excluding sub-parts)</td><td class="n">228</td><td><code>git grep -c -P '&lt;Card(?![A-Za-z])'</code></td></tr>
+<tr><td><code>layout="metric"</code></td><td class="n">146</td><td>of 228</td></tr>
+<tr><td><code>layout="control"</code></td><td class="n">23</td><td>of 228; 24 <code>connectionStatus=</code> and 11 <code>stamp=</code> on <code>sources-tab.tsx</code> after portal PR #6892 (merged 2026-11-15)</td></tr>
+<tr><td><code>layout="stack"</code></td><td class="n">4</td><td>of 228</td></tr>
+<tr><td><code>layout="row"</code> / <code>"pricing"</code></td><td class="n">0</td><td>of 228 — the row anatomy is never used, yet 14 sites re-type it by hand (§ 2 class B)</td></tr>
+<tr><td>No <code>layout</code> prop</td><td class="n">55</td><td>228 − 173</td></tr>
+<tr><td><code>heading.card</code> inline on a hand-written <code>&lt;h2&gt;/&lt;h3&gt;</code></td><td class="n">26</td><td>the "title is larger in one card, not the next" symptom</td></tr>
+<tr><td><code>Button variant=</code></td><td class="n">202</td><td>secondary 114 · primary 63 · ghost 16 · outline 9; 16 already carry the v0.239.0 <code>tone</code>/<code>emphasis</code> props (landed in portal PR #6892; <code>git grep -E 'variant="[a-z]+" (tone|emphasis)='</code>). <em>Errata 2026-11-15: the first publish said 0; a <code>\b</code> pattern git grep does not support returned nothing.</em></td></tr>
+<tr><td><code>&lt;ButtonGroup&gt;</code></td><td class="n">71</td><td></td></tr>
+<tr><td><code>&lt;DateTime&gt;</code> (BDS, the canon renderer)</td><td class="n">12</td><td>in 4 files</td></tr>
+<tr><td><code>toLocaleDateString</code></td><td class="n">56</td><td>in 47 files (<code>git grep -o -F</code>, <code>src/**/*.tsx</code>); bare locale call; lint <code>no-bare-locale-datetime</code> exempts date-only columns (#6450)</td></tr>
+<tr><td><code>formatDate(</code> / <code>formatRelativeTime(</code></td><td class="n">97 / 10</td><td><code>formatDate(</code> in 51 files; portal helpers, not <code>DateTime</code></td></tr>
+<tr><td>"Synced " strings</td><td class="n">5</td><td>in 4 files (fixed-string <code>'Synced '</code>); the control-card <code>stamp</code> replaces these on sources cards only. <em>Errata 2026-11-15: the three date rows above were re-counted with the stated patterns; the first publish said 64 / 106 / 38 from looser patterns. Direction unchanged: <code>DateTime</code> is 12 renders against 150+ helper and locale calls.</em></td></tr>
+<tr><td>"N of M" summaries hand-formatted</td><td class="n">7</td><td>§ 5</td></tr>
+<tr><td><code>&lt;Stat&gt;</code> / <code>&lt;Meter&gt;</code> consumed</td><td class="n">0 / 0</td><td>both exist in BDS; neither reaches the portal</td></tr>
+</table>
+
+<h2>2. The 42 no-layout sites, classified</h2>
+
+<p>Classes: <strong>A</strong> list-in-card (a collection crammed into a container) · <strong>B</strong> hand-rolled anatomy (a BDS layout re-typed inline) · <strong>C</strong> section container · <strong>D</strong> selectable tile · <strong>E</strong> status/empty/notice · <strong>F</strong> other.</p>
+
+<table>
+<tr><th>Class</th><th class="n">Sites</th><th>Where (portal <code>src/</code>)</th><th>Target display</th></tr>
+<tr><td><strong>A</strong> list-in-card</td><td class="n">10</td><td><code>reporting-service-kpis.tsx:102</code> · <code>metric-list.tsx:45</code> · <code>company-profile/service-status-rollup.tsx:26</code> · <code>company-profile/service-line-data-section.tsx:119</code> · <code>admin/settings/services/stripe-sync/page.tsx:261,277,317,333,364,389</code> (six <code>DataTable</code>s each wrapped in a Card)</td><td>display-choice § The decision: one record's label/value pairs → <code>FieldGrid</code> in a <code>DataSection</code>; peers you scan down a column → <code>Table</code> in <code>TableView</code>, with no Card around it</td></tr>
+<tr><td><strong>B</strong> hand-rolled anatomy</td><td class="n">14</td><td><code>dashboard/services/page.tsx:177,255</code> · <code>dashboard/services/[id]/page.tsx:227</code> · <code>dashboard/projects/page.tsx:48</code> · <code>company-service-detail/projects-tab.tsx:65</code> · <code>company-service-detail/planning-tab.tsx:106</code> · <code>phase-cards.tsx:42</code> · <code>onboarding-card-list.tsx:196</code> · <code>sheets/company-sheet.tsx:146,207</code> · <code>sheets/contact-sheet.tsx:116</code> · <code>settings-blog-post-read-page.tsx:187</code> · <code>service-sources-panel.tsx:152,178</code></td><td><code>Card layout="row"</code> (overline Tag · title · body · trailing action) once row gains a <code>status</code> slot (§ 3.1); interactive sheet rows → <code>InteractiveListItem</code></td></tr>
+<tr><td><strong>C</strong> section container</td><td class="n">10</td><td><code>new-proposal-form.tsx:519,689,709,867</code> · <code>proposal-section-editor.tsx:49</code> · <code>meeting-notes-picker.tsx:76</code> · <code>brand-draft-card.tsx:67</code> · <code>settings-campaign-email-card.tsx:76</code> · <code>dashboard/services/[id]/page.tsx:171,206</code></td><td>A form step or editor panel is a <code>DataSection</code> (edit mode) with the Card dropped; a wizard step header is <code>ProgressStepper</code>. Only a panel that must float (a draft review) keeps a <code>variant="filled"</code> Card</td></tr>
+<tr><td><strong>D</strong> selectable tile</td><td class="n">1</td><td><code>review/VariantSelectGrid.tsx:142</code> (15 openers, one component)</td><td>Allowed: <code>interactive</code> Card with the ADR-045 selected state, not an inline outline ring</td></tr>
+<tr><td><strong>E</strong> status / empty / notice</td><td class="n">4</td><td><code>company-service-detail/projects-tab.tsx:46</code> · <code>planning-tab.tsx:128</code> · <code>stripe-sync/page.tsx:349,409</code></td><td><code>EmptyState</code> inside the view shell; a surface-level warning is a <code>Banner</code>, never a Card with a red heading</td></tr>
+<tr><td><strong>F</strong> other</td><td class="n">3</td><td><code>sheets/service-sheet.tsx:154,201</code> (read-only text panel inside a <code>Field</code>) · <code>listings/business-listings-record.tsx:372</code></td><td>A paragraph value is a <code>Field</code> value with no Card; the listings tile is a <code>layout="stack"</code> candidate</td></tr>
+</table>
+
+<h3>2.1 Client Dashboard › Services, both surfaces</h3>
+
+<table>
+<tr><th>Surface</th><th>Today</th><th>Shape of the data</th><th>Display the canon selects</th></tr>
+<tr><td>Operator · <code>/admin/companies/[slug]?tab=dashboard&amp;section=services</code> → "Delivery Status" (<code>service-status-rollup.tsx:24-55</code>)</td><td>One padded Card per service line; inside, four label/count rows and a "N of M plan services started" line</td><td>5 lines × 4 peer statuses. The reader scans "Need Attention" <em>down the lines</em></td><td><strong>Table</strong> (line rows, status columns, counts as links) in <code>TableView</code>. The plan fraction is a <code>Meter</code> column or a per-row detail, not a sentence</td></tr>
+<tr><td>Operator · same section → "Service Metrics" (<code>reporting-service-kpis.tsx:97-122</code>)</td><td>One Card per line, 3–6 label/value rows via <code>Cluster</code></td><td>Each line's KPIs are that line's <em>own</em> attributes; labels never repeat across lines</td><td><code>DataSection</code> per line → <code>FieldGrid</code> of <code>Field</code>s; tier values are <code>Badge</code>; percentages are <code>Meter</code> once the chart layer lands (§ 6)</td></tr>
+<tr><td>Operator · "Health and Outcomes" (<code>service-line-data-section.tsx:116-131</code>)</td><td>Card per line wrapping <code>DataSetBlock</code>s (already <code>Field</code>/<code>FieldGrid</code> inside, #6451)</td><td>Same as above</td><td>Drop the Card; the <code>DataSection</code> + <code>FieldGrid</code> already carries it</td></tr>
+<tr><td>Client · <code>/dashboard/services</code> (<code>page.tsx:160-289</code>)</td><td><code>CardList</code> of <code>variant="elevated" padding="lg"</code> Cards, each hand-typing tag + badge + <code>&lt;h2 style={heading.card}&gt;</code> + description + "Since {toLocaleDateString}" + right-aligned price</td><td>Peer entities, each with its own link → cards are <em>correct</em>; the anatomy is not</td><td><code>Card layout="row"</code>: <code>overline</code>=ServiceTag, <code>title</code>, body=description, meta=<code>DateTime mode="relative"</code>, trailing status Badge + price in the new <code>status</code>/<code>meta</code> slots</td></tr>
+<tr><td>Client · <code>/dashboard/reporting</code> KPI cards (same <code>ReportingServiceKpis</code>)</td><td>As the operator "Service Metrics" block</td><td>Same</td><td>Same migration, but client-visible → Open call below</td></tr>
+</table>
+
+<div class="open">
+<p><strong>Open call (client-visible, not decided here):</strong> the client pages <code>/dashboard/services</code> and <code>/dashboard/reporting</code> change what a client sees when their cards move onto <code>layout="row"</code> and <code>FieldGrid</code>. The operator chose on 2026-11-02 (portal #6263) to keep the client KPI cards unchanged while the admin roll-up shipped, and #6273 still carries <code>needs:operator</code> on deleting the 16 empty client slots. Decide: migrate both client pages in this project, or admin-only again.</p>
+</div>
+
+<h2>3. Card anatomy — what the canon says, and the four holes</h2>
+
+<p>Card is one component with a <code>layout</code> axis (ADR-038): <code>stack</code> · <code>row</code> · <code>metric</code> · <code>control</code> · <code>pricing</code>, sharing one slot set (<code>media</code> · <code>overline</code> · <code>title</code> · children · <code>action</code> · <code>badge</code>) and one surface set (<code>variant</code> · <code>tint</code> · <code>padding</code> · <code>interactive</code> · <code>href</code>) — <code>Card.tsx:14-324</code>. The control layout additionally owns <code>logo</code>, <code>status</code> (five values), a typed <code>stamp</code> and a status-driven <code>ButtonGroup</code> (<code>Card.mdx</code> § Control layout, shipped in #3159).</p>
+
+<h3>3.1 Hole: <code>row</code> and <code>stack</code> have no indicator slot</h3>
+<p><code>Card.tsx:735-740</code> renders <code>__row-media</code>, <code>__row-overline</code>, <code>__row-title</code>, body and <code>__row-action</code>; <code>stack</code> adds <code>__stack-badge</code> (a media-corner overlay, <code>:780</code>). Neither has a place for a trailing <em>indicator</em> (status Badge, price, "Included in Plan"). That is why all 14 class-B sites hand-roll: the data has a status and the layout has nowhere correct to put it. Putting a Badge in <code>action</code> is the same misuse #6449 removed from <code>DataSection actions</code>.</p>
+<div class="decide"><p><strong>AGENT DECIDED (revisable):</strong> add <code>status?: ReactNode</code> (an indicator: Badge/Tag/Dot, trailing) and <code>meta?: ReactNode</code> (a <code>DateTime</code> or a short fact line under the body) to <code>row</code> and <code>stack</code>, mirroring <code>__control-status</code> / <code>__control-trailing</code>, documented with the indicators-vs-actions rule — evidence: 14 of 42 no-layout sites re-type exactly this anatomy; display-choice already names "a trailing status" as a list-row property — revert: migrate class B onto <code>InteractiveListItem</code> rows instead and keep Card status-less.</p></div>
+
+<h3>3.2 Hole: <code>Card layout="metric"</code> and <code>Stat</code> are two spellings of one concept</h3>
+<p><code>Stat</code> (<code>Stat.tsx:10-20</code>: <code>value</code> · <code>label</code> · <code>detail</code> · <code>order</code> · <code>size</code>) is documented as "wrap one in Card when it needs a surface". <code>Card layout="metric"</code> (<code>Card.tsx:661</code>, <code>__metric-label</code> · <code>__metric-value</code> · <code>__metric-detail</code> · <code>__metric-action</code>) renders the same three slots with its own CSS. The portal uses metric 146 times and Stat 0 times. ADR-033 is "one name per concept".</p>
+<div class="decide"><p><strong>AGENT DECIDED (revisable):</strong> <code>Card layout="metric"</code> stays the consumer-facing name and renders a <code>Stat</code> internally; <code>Stat</code> gains the single-stat anatomy GitLab specifies (title · value · meta badge/trend · supplementary slot · description, see § 6) so both surfaces share it — evidence: 146 vs 0 adoption, one CSS block per slot today — revert: deprecate <code>metric</code> in favour of <code>&lt;Card&gt;&lt;Stat/&gt;&lt;/Card&gt;</code>.</p></div>
+
+<h3>3.3 Hole: no fraction / step summary primitive</h3>
+<p>Seven sites hand-format "N of M": <code>service-status-rollup.tsx:48</code>, <code>company-service-detail/projects-tab.tsx:112</code>, <code>details-tab.tsx:159</code>, <code>company-profile/sources-tab.tsx:627</code>, <code>admin/projects/[slug]/page.tsx:856</code>, <code>reporting/[reportType]/page.tsx:83</code>, <code>listings/business-listings-record.tsx:318</code>. BDS has <code>Meter</code> (<code>value</code>/<code>max</code>, <code>label</code>, <code>showValue</code>; aria "N of M", <code>Meter.tsx:144</code>) and <code>ProgressStepper</code> (aria "Step N of M", <code>ProgressStepper.tsx:311</code>) but no visible "N of M" text form, and the portal consumes Meter 0 times.</p>
+<div class="decide"><p><strong>AGENT DECIDED (revisable):</strong> a completion fraction is a <code>Meter</code> with <code>valueFormat="fraction"</code> ("3 of 8 tasks done"); a wizard position is <code>ProgressStepper</code>, never prose; the sentence form survives only as a <code>Stat detail</code> — evidence: the 7 sites, both components' aria strings already spell it — revert: ship a <code>formatFraction</code> content-system helper and keep Meter visual-only.</p></div>
+
+<h3>3.4 Hole: no chart layer</h3>
+<p><code>dist/tokens.css</code> has no <code>--chart-*</code> token (<code>grep -c -- '--chart'</code> returns 0 on v0.239.0; the first publish's "comment hit at :1478" was a grep for "categorical" and that line is about <code>--background-info</code>, not charts). <code>components/ui/</code> has Meter, ProgressBar, ProgressCircle and Stat, and nothing that draws a series. § 6.</p>
+
+<h2>4. Buttons in cards</h2>
+<table>
+<tr><th>Rule</th><th>Source</th><th>Portal today</th></tr>
+<tr><td>One primary per group; canonical set is one primary + secondary/ghost</td><td><code>ButtonGroup.mdx:27,45</code> (dev warning on two primaries)</td><td>71 groups; not measured per group — the warning is the gate</td></tr>
+<tr><td>Control-card actions are driven by <code>status</code>: Setup · Retry → action · Enable · read-only "Manage on profile"</td><td><code>Card.mdx</code> § Control layout (#3159)</td><td>23 control cards comply after #6892; the per-source <code>*-source-actions.tsx</code> files still own 30 of the 16-file ghost usages</td></tr>
+<tr><td><code>ghost</code> is the lowest emphasis rung (form axis); <code>tone</code>/<code>emphasis</code> carry valence since v0.239.0</td><td><code>Button.mdx:33-64</code></td><td>16 Buttons carry <code>tone=</code>/<code>emphasis=</code>, all landed by portal PR #6892, which closed #6881 as completed; no migration ticket is owed</td></tr>
+</table>
+<div class="decide"><p><strong>AGENT DECIDED (revisable):</strong> card canon line to add to <code>Card.mdx</code>: a card holds at most one <code>primary</code>, and only when the card <em>is</em> the surface's call to action (an onboarding step, an empty-state CTA); a record card's own action is <code>secondary</code>; <code>ghost</code> is reserved for in-row and toolbar actions inside the card body — evidence: <code>ButtonGroup.mdx:45</code>, <code>onboarding-card-list.tsx:196</code> (primary, correct) vs <code>projects-tab.tsx:65</code> (secondary "View", correct) vs <code>brand-draft-card.tsx:67</code> (primary + ghost inside one section) — revert: leave Button choice per site.</p></div>
+
+<h2>5. Dates, times and feedback stamps</h2>
+<p>The canon exists and is specific: three shapes (<code>date</code> · <code>timestamp</code> · <code>relative</code>), rendered by <code>DateTime</code>; a Field value is never relative, a card meta line is relative (<a href="https://design.brikdesigns.com/docs/build-standards/dates-and-times">dates-and-times</a>). A "Synced 11/4/2026" feedback stamp on a source is the control card's typed <code>stamp</code> ({kind, at, actor}), which renders through <code>DateTime</code>. Adoption: 12 <code>DateTime</code> renders against 64 bare <code>toLocaleDateString</code>, 106 <code>formatDate(</code> and 38 "Synced " strings. The "Since 11/4/2026" line on the client services card (<code>dashboard/services/page.tsx:204,265</code>) is a card meta line and should read "Since Nov 4, 2026" via <code>DateTime mode="date"</code>, or relative, never a bare locale string.</p>
+<div class="decide"><p><strong>AGENT DECIDED (revisable):</strong> no new date standard; the work is a portal migration ticket that retires <code>formatDate</code>/<code>formatRelativeTime</code> in favour of <code>DateTime</code> and widens <code>no-bare-locale-datetime</code> to flag <code>formatDate(</code> as well — evidence: the counts above, #6450 already widened the lint once — revert: keep the helpers and lint only new sites. The 64 <code>toLocaleDateString</code> sites are <strong>unverified</strong> as date-only columns; the lint says they pass, the audit did not re-check each column type.</p></div>
+
+<h2>6. Widening BDS for data: single stat, meters, charts</h2>
+<p>Vendor rules fetched this session (2026-11-15):</p>
+<ul>
+<li><strong>GitLab single stat</strong> — anatomy top to bottom: title (+icon) · value · meta icon or badge (variant success/warning/danger/info/neutral) · supplementary slot (progress bar or trend) · description (max two lines, truncated with tooltip). Use for "an overview of how a metric is performing" and "multiple metrics around a similar topic side-by-side"; do not use "to display the same metric over a period of time (use a chart instead)".</li>
+<li><strong>GitLab charts</strong> — column is the default and "favored over pie"; line for continuous data; area only for cumulated totals; bar = horizontal column; gauge for a value within a range; sparkline for "quick indication of trend" in limited space; legend only with more than one series; one series can never be toggled off; zoom bar only when the chart overflows.</li>
+<li><strong>Atlassian data-viz color</strong> — roles: title/legend <code>color.text</code>, ticks <code>color.text.subtle</code>, gridlines <code>color.border</code>, reference line <code>chart.neutral</code>, single series <code>chart.brand</code>; categorical 1..8 used in numeric order, capped at "5-6 by grouping"; status set success/warning/danger/information/discovery/neutral with a bold rung; 3:1 against the surface, a border between adjacent fills, no text on chart colour, never colour alone, dark mode by token.</li>
+<li><strong>Carbon</strong> — families Simple / Flow / Spatial (catalog, not a decision guide); dashboards: "most important data should have the highest contrast and occupy the largest area", F-shaped order, "consistent colors for each data set within a dashboard", all charts share layout, spacing and legend position.</li>
+<li><strong>Material</strong> — page renders client-side; the fetch returned no content. Not used as evidence.</li>
+</ul>
+
+<h3>6.1 What BDS already has, mapped</h3>
+<table>
+<tr><th>Data question</th><th>BDS today</th><th>Gap</th></tr>
+<tr><td>How big is one number now?</td><td><code>Card layout="metric"</code> / <code>Stat</code></td><td>no trend/meta slot, two spellings (§ 3.2)</td></tr>
+<tr><td>How far along a known range?</td><td><code>Meter</code>, <code>ProgressBar</code>, <code>ProgressCircle</code></td><td>no fraction text form (§ 3.3); portal adoption 0</td></tr>
+<tr><td>Where am I in a sequence?</td><td><code>ProgressStepper</code></td><td>none</td></tr>
+<tr><td>Which of these items passed?</td><td><code>StatusList</code></td><td>none (5 portal sites use it)</td></tr>
+<tr><td>How did it change over time?</td><td>—</td><td>Sparkline inside the stat; Line chart</td></tr>
+<tr><td>How do categories compare?</td><td>—</td><td>Bar/Column chart</td></tr>
+<tr><td>What share of the whole?</td><td>—</td><td>Donut (column preferred where categories exceed ~5)</td></tr>
+<tr><td>Chart colour</td><td>—</td><td><code>--chart-brand</code>, <code>--chart-neutral</code>, <code>--chart-categorical-1..6</code>, <code>--chart-{positive,warning,negative,info}</code> with light/dark values, 3:1 gated by <code>contrast-gate</code></td></tr>
+</table>
+
+<div class="decide"><p><strong>AGENT DECIDED (revisable):</strong> the data layer ships as an ADR plus four sized tickets in this order — (1) chart tokens in the Figma Foundations library → <code>tokens-studio.json</code> → <code>dist/tokens.css</code>, gated by <code>contrast-gate</code>; (2) <code>Stat</code> single-stat anatomy with <code>trend</code> (delta + direction) and <code>Sparkline</code> supplementary slot; (3) <code>Chart</code> family: Bar/Column, Line, Donut on one SVG renderer with a shared <code>ChartFrame</code> (title, legend, axes, tooltip, empty/loading/error through the <code>DataView</code> shells) and a data-table alternative; (4) a <code>Dashboard</code> page archetype under build-standards/page-archetypes applying the Carbon hierarchy rule — evidence: the vendor rules above and the 146 metric tiles that are the only data display the portal can draw today — revert: adopt a charting library wholesale behind BDS tokens (decided in the ADR, not here).</p></div>
+
+<h2>7. The standard, in one table</h2>
+<p>This is the classification the portal applies before any card is written. It composes display-choice (which display) with Card anatomy (which layout) and indicators (which pill).</p>
+<table>
+<tr><th>You have…</th><th>Render</th><th>Never</th></tr>
+<tr><td>Peer entities, each with its own link or button</td><td><code>Card layout="row"</code> (list) or <code>"stack"</code> (grid): overline Tag · title · body · meta <code>DateTime</code> · status Badge · one action</td><td>an inline <code>&lt;h2 style={heading.card}&gt;</code>; a Badge in <code>action</code></td></tr>
+<tr><td>One record's own attributes</td><td><code>DataSection</code> → <code>FieldGrid</code> → <code>Field</code></td><td>a Card of label/value rows</td></tr>
+<tr><td>Rows you compare down a column</td><td><code>Table</code> in <code>TableView</code></td><td>a Card around a table</td></tr>
+<tr><td>One big number</td><td><code>Card layout="metric"</code> (surfaced) / <code>Stat</code> (in a band)</td><td>a Field with a huge value</td></tr>
+<tr><td>A number against a range or a fraction done</td><td><code>Meter</code> (fraction text) / <code>ProgressBar</code></td><td>"3 of 8" prose</td></tr>
+<tr><td>A source with connect/sync/configure</td><td><code>Card layout="control"</code>: logo · title · description · status · stamp · status-driven actions</td><td>a hand-rolled status string, a free-form "Synced …"</td></tr>
+<tr><td>A wizard position</td><td><code>ProgressStepper</code></td><td>"Step 1 of 4" prose</td></tr>
+<tr><td>A date on a card</td><td><code>DateTime mode="relative"</code> (meta) or <code>"date"</code> (fact)</td><td><code>toLocaleDateString</code>, <code>formatDate</code></td></tr>
+<tr><td>A form section or editor</td><td><code>DataSection</code> in edit mode</td><td>an elevated Card per step</td></tr>
+<tr><td>A surface-level warning</td><td><code>Banner</code></td><td>a Card with a red heading</td></tr>
+<tr><td>Nothing yet</td><td><code>EmptyState</code> in the view shell</td><td>a Card with "No X yet"</td></tr>
+</table>
+
+<h2>8. Ticket plan</h2>
+<p>Umbrella in brik-bds (meta:project), children sized per estimation.md. Order is the <code>blocked_by</code> order.</p>
+<table>
+<tr><th>#</th><th>Repo</th><th>Title</th><th>Size</th><th>Blocked by</th></tr>
+<tr><td>1</td><td>brik-bds</td><td>Card row/stack gain <code>status</code> and <code>meta</code> slots; Card.mdx gains the button canon line and the § 7 table</td><td>M</td><td>—</td></tr>
+<tr><td>2</td><td>brik-bds</td><td><code>Stat</code> single-stat anatomy (trend, supplementary, description) and <code>Card layout="metric"</code> renders it</td><td>M</td><td>—</td></tr>
+<tr><td>3</td><td>brik-bds</td><td><code>Meter valueFormat="fraction"</code></td><td>S</td><td>—</td></tr>
+<tr><td>4</td><td>brik-bds</td><td>ADR: data-visualization layer (chart tokens, Stat, Chart family, Dashboard archetype)</td><td>S</td><td>—</td></tr>
+<tr><td>5</td><td>brik-bds</td><td>Chart tokens: Figma Foundations → tokens-studio → <code>--chart-*</code>, contrast-gated</td><td>M</td><td>4</td></tr>
+<tr><td>6</td><td>brik-bds</td><td>Chart family: ChartFrame + Bar/Column, Line, Donut, Sparkline</td><td>L</td><td>5</td></tr>
+<tr><td>7</td><td>portal</td><td>Class A: Delivery Status → Table; Service Metrics / Health and Outcomes → FieldGrid; stripe-sync tables out of Cards</td><td>M</td><td>—</td></tr>
+<tr><td>8</td><td>portal</td><td>Class B: 14 hand-rolled cards onto <code>layout="row"</code>; retire <code>heading.card</code></td><td>M</td><td>1 + release</td></tr>
+<tr><td>9</td><td>portal</td><td>Class C/E/F: form steps and notices off Card (DataSection / Banner / EmptyState)</td><td>S</td><td>—</td></tr>
+<tr><td>10</td><td>portal</td><td>Dates: <code>DateTime</code> everywhere, lint widened to <code>formatDate(</code></td><td>S</td><td>—</td></tr>
+<tr><td>11</td><td>portal</td><td>Fractions: 7 "N of M" sites onto Meter</td><td>XS</td><td>3 + release</td></tr>
+<tr><td>12</td><td>portal</td><td><s>Button tone/emphasis migration</s> — not filed: already shipped in portal PR #6892 (closed #6881)</td><td>—</td><td>—</td></tr>
+</table>
+<p><strong>Filed 2026-11-15</strong> under umbrella brik-bds#3176: rows 1–6 → brik-bds #3177, #3178, #3179, #3180, #3181, #3182; rows 7–11 → portal #6895, #6894, #6896, #6897, #6898. Rows 7 and 8 carry <code>needs:operator</code> for the client-visible pages.</p>
+<p>Client-visible rows (8 on <code>/dashboard/services</code>, 7 on <code>/dashboard/reporting</code>) carry the Open call from § 2.1 and <code>needs:operator</code> until answered.</p>
+
+<h2>9. Method and bounds</h2>
+<ul>
+<li>Counts are <code>git grep</code> on <code>origin/staging@d530117ef</code>; a Card opener is <code>&lt;Card</code> not followed by a letter. Multi-line openers were matched with <code>-U</code>.</li>
+<li>The 42-site classification was read by a subagent from each opener's children; borderline calls are noted in § 2 (line-items editor is C, could be A; the stripe-sync error notice is E, could be A).</li>
+<li>Button-per-card counts were not measured; the ButtonGroup dev warning is the instrument.</li>
+<li>No live screenshot was taken; the Storybook MCP refused the connection this session and the portal was not run.</li>
+<li>Prior work built on: brik-bds#3159 (control contract, merged), portal #6826 (source model), #6446 (read-mode standards, closed), #6263/#6273 (Dashboard › Services roll-up), ADR-038, ADR-033, ADR-045.</li>
+</ul>
+
+</body>
+</html>
