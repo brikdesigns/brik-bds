@@ -48,7 +48,7 @@ The underlying primitive scale, generated from Figma. Use one of these only when
 | `--bds-duration-500` | `800ms` | **no** |
 | `--bds-duration-600` | `1000ms` | **no** |
 
-The break at `--duration-400` is the trap: it reads as 400ms and resolves to 500ms, so an animation lands 25% slower than intended and nothing errors. If you are reaching past `--duration-300`, read the value rather than the name.
+The break at `--bds-duration-400` is the trap: it reads as 400ms and resolves to 500ms, so an animation lands 25% slower than intended and nothing errors. If you are reaching past `--bds-duration-300`, read the value rather than the name.
 
 ## Easing
 
@@ -66,7 +66,7 @@ Four curves, each with a distinct job. Pair `--ease-out` with most UI transition
 Defined alongside the semantic durations in `tokens/gap-fills.css`.
 
 <Callout type="info">
-  Reach for `--ease-out` / `--ease-in` for ordinary decelerate / accelerate needs — there is deliberately no separate `--ease-decel` / `--ease-accel`. `--ease-spring-soft` is the one exception the house curves did not already cover: a settle that overshoots just past its target without the visible bounce of `--ease-spring`.
+  Reach for `--bds-ease-out` / `--bds-ease-in` for ordinary decelerate / accelerate needs — there is deliberately no separate `--ease-decel` / `--ease-accel`. `--bds-ease-spring-soft` is the one exception the house curves did not already cover: a settle that overshoots just past its target without the visible bounce of `--bds-ease-spring`.
 </Callout>
 
 ## Stagger

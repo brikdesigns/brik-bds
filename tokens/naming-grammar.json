@@ -20,7 +20,7 @@
       "never prefixes another registered ID"
     ],
     "registry": {
-      "bds": { "system": "brik-bds", "library": "Foundations + the default (Brik) Brand Kit that ships in dist/tokens.css" },
+      "bds": { "system": "brik-bds", "library": "Foundations + the default (Brik) Brand Kit, authored in Figma; dist/tokens.css is the build output" },
       "vale-partners": { "system": "web/vale-partners", "library": "Vale Partners Brand Kit" },
       "tncld": { "system": "web/tncld", "library": "TNCLD Brand Kit" },
       "birdwell": { "system": "web/birdwell-mutlak", "library": "Birdwell Brand Kit" },
