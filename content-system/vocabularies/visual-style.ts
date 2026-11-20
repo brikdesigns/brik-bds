@@ -3,6 +3,7 @@ import type { AnimationTier } from './animation-tier';
 import type { SpacingMode } from './spacing-mode';
 import type { TypographyMode } from './typography-mode';
 import type { RadiusMode } from './radius-mode';
+import type { ElevationMode } from './elevation-mode';
 import type { BorderWidthMode } from './borderwidth-mode';
 
 /**
@@ -55,6 +56,8 @@ export interface VisualStylePreset {
   spacingMode?: SpacingMode;
   typographyMode?: TypographyMode;
   radiusMode?: RadiusMode;
+  /** @deprecated #3058 — no elevation axis; no preset sets it. Removed next minor. */
+  elevationMode?: ElevationMode;
   borderWidthMode?: BorderWidthMode;
   animationTier?: AnimationTier;
 }
