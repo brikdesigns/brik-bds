@@ -54,17 +54,6 @@
      References the border brand-primary token. Override per-theme for branded focus rings. */
   --bds-border-focus: var(--bds-border-brand-primary);
 
-  /* ── Easing curves (repo-owned) ──
-     Motion curves are declared here, not generated from Figma. The foundations
-     `easing/ease-in` and `easing/ease-out` leaves hold Figma's "String value"
-     placeholder and are filtered out of figma-tokens.css (isCanonicalCssToken in
-     scripts/lib/sd-bds.mjs), so these three declarations are the only source.
-     Promoting them to Figma means an EASING-typed variable (Plugin API only; the REST
-     variables endpoint does not list EASING) plus a pull-path change — see #2602. */
-  --bds-easing-ease-in:     cubic-bezier(0.4, 0, 1, 1); /* bds-lint-ignore — repo-owned curve, no Figma source (#2602) */
-  --bds-easing-ease-out:    cubic-bezier(0, 0, 0.2, 1); /* bds-lint-ignore — repo-owned curve, no Figma source (#2602) */
-  --bds-easing-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
-
   /* ── Missing Semantic Tokens ── */
   /* Light value here; dark value in the :root[data-theme="dark"] block below.
      Keep the two in lockstep, and move both together when promoted to Figma. */
@@ -214,31 +203,6 @@
      full anywhere in this file: dist/tokens.css inlines these comments, and a
      full spelling would keep matching the greps that assert the family is
      gone. */
-
-  /* ── Pale indicator fills — --background-{role}-light (brik-bds#2943) ──
-     The `subtle` appearance of Badge, Tag and Avatar. An indicator is a small
-     element placed ON a surface, so its fill is a --background-* token
-     (token-anatomy § surface vs background); before these existed, the pale
-     tints were only spelled --surface-*, so the components read the surface
-     purpose. `-light` is the pastel tone modifier (color.mdx § -light and
-     -dark), the same one --surface-service-{line}-light carries.
-
-     Each one is a color role-alias of its matching --surface-* tint
-     (ADR-035, sanctioned by lint-token-tiers), so the Brik Brand Kit's
-     per-theme accent tints carry over in both themes without a second
-     declaration. accent-red is the exception: the Brand Kit binds
-     --bds-surface-accent-red to the saturated poppy-500, so its pale fill
-     takes the system red tint directly.
-
-     The label on every one of these is --bds-text-on-color-light: the fills
-     hold a pale value in both themes, so a theme-flipping --bds-text-{role}
-     would fall below AA in dark (OPERATOR CHOSE 2026-11-03: dark ink on every
-     pale fill). contrast-pairings.json gates each pair.
-
-     brand-primary has no pale fill here: --bds-surface-brand-primary is the
-     saturated brand color, and the brand pastel is already
-     --bds-background-brand-secondary. */
-  --bds-background-info-light:          var(--bds-surface-info);
 
   /* ── System color hover/pressed states ──
      Darken system colors for interactive feedback on destructive/positive buttons.
@@ -414,30 +378,6 @@
 
   /* --bds-ease-{out,in,in-out,spring,spring-soft,linear} come from the Figma
      `motion` collection (tokens/figma-tokens.css, #3278). */
-
-  /* ── DEPRECATED step-word aliases (ADR-033 §3, #1923) — DROP NEXT MINOR ──
-     Positional, value-preserving renames of the retired step words. Each old
-     name aliases its NEW t-shirt rung (not a primitive) so mode-varying families
-     keep tracking their per-mode value. Shipped for one minor so the six BDS
-     consumer repos migrate; the follow-up drops this block and clears the
-     remaining #1923 rows from naming-canon-baseline.json.
-
-     `content-width` is NOT backed by a ❖ Brik Foundations variable, so
-     #2594's revert does not reach it — it stays retired. */
-  --bds-content-width-narrow:  var(--bds-content-width-sm); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-sm (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --bds-content-width-default: var(--bds-content-width-md); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-md (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-  --bds-content-width-wide:    var(--bds-content-width-lg); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-lg (ADR-033 §3, #1923); aliases new Semantic to mode-track, drop next minor */
-
-  /* ── DEPRECATED measure aliases (ADR-041, #2615) — DROP NEXT MINOR ──
-     The `--measure-*` family folded into the one ladder's `-text-` rungs. The
-     aliases ship for one minor because `lint-deleted-token-consumers` blocks a
-     bare deletion: brikdesigns still has five live `var(--measure-*)` call
-     sites, and a var() at a deleted name invalidates the whole declaration —
-     the max-width would silently become `none`, not fall back. Each alias
-     resolves to the px width its `ch` value already rendered at the fixed 16px
-     body size (44ch→448, 60ch→600, 72ch→720), so this is a ≤3px move, not a
-     retune. The follow-up drops this block once brikdesigns#1856 has migrated. */
-  --bds-measure-lg: var(--bds-content-width-text-md); /* bds-lint-ignore — DEPRECATED, use --bds-content-width-text-md (ADR-041, #2615); drop next minor */
 
   /* ── DEPRECATED shadow aliases (#3058) — DROP NEXT MINOR ──
      The hand-written --bds-shadow-{sm,md,lg,xl,overlay} were replaced by the
