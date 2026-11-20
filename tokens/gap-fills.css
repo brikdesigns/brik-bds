@@ -454,30 +454,6 @@
   --bds-shadow-lg:      var(--bds-shadow-lifted);   /* bds-lint-ignore — DEPRECATED, use --bds-shadow-lifted (#3058); drop next minor */
   --bds-shadow-overlay: var(--bds-shadow-dramatic); /* bds-lint-ignore — DEPRECATED, use --bds-shadow-dramatic (#3058); drop next minor */
 
-  /* ── DEPRECATED one-step system colours (#3247) — DROP NEXT MINOR ──
-     The Figma primitive-colour rebuild (2026-11-19) replaced the one-step
-     `color/system/{hue}` + `-light` pair with a numeric 3-step ramp
-     `color/system/{hue}/{200,500,800}`. `lint-deleted-token-consumers` blocks
-     a bare deletion: brikdesigns and brik-client-portal still carry 70 live
-     references. Each old name aliases the Figma step it was (base → 500,
-     light → 200), so nothing moves. Same shape as the #3246 duration aliases
-     (3504cd08). The follow-up drops this block once both consumers migrate
-     and clears the matching #3247 rows from naming-canon-baseline.json. */
-  --bds-color-system-red:           var(--bds-color-system-red-500);     /* bds-lint-ignore — DEPRECATED, use --bds-color-system-red-500 (#3247); drop next minor */
-  --bds-color-system-red-light:     var(--bds-color-system-red-200);     /* bds-lint-ignore — DEPRECATED, use --bds-color-system-red-200 (#3247); drop next minor */
-  --bds-color-system-green:         var(--bds-color-system-green-500);   /* bds-lint-ignore — DEPRECATED, use --bds-color-system-green-500 (#3247); drop next minor */
-  --bds-color-system-green-light:   var(--bds-color-system-green-200);   /* bds-lint-ignore — DEPRECATED, use --bds-color-system-green-200 (#3247); drop next minor */
-  --bds-color-system-yellow:        var(--bds-color-system-yellow-500);  /* bds-lint-ignore — DEPRECATED, use --bds-color-system-yellow-500 (#3247); drop next minor */
-  --bds-color-system-yellow-light:  var(--bds-color-system-yellow-200);  /* bds-lint-ignore — DEPRECATED, use --bds-color-system-yellow-200 (#3247); drop next minor */
-  --bds-color-system-blue:          var(--bds-color-system-blue-500);    /* bds-lint-ignore — DEPRECATED, use --bds-color-system-blue-500 (#3247); drop next minor */
-  --bds-color-system-blue-light:    var(--bds-color-system-blue-200);    /* bds-lint-ignore — DEPRECATED, use --bds-color-system-blue-200 (#3247); drop next minor */
-  --bds-color-system-orange:        var(--bds-color-system-orange-500);  /* bds-lint-ignore — DEPRECATED, use --bds-color-system-orange-500 (#3247); drop next minor */
-  --bds-color-system-orange-light:  var(--bds-color-system-orange-200);  /* bds-lint-ignore — DEPRECATED, use --bds-color-system-orange-200 (#3247); drop next minor */
-  --bds-color-system-purple:        var(--bds-color-system-purple-500);  /* bds-lint-ignore — DEPRECATED, use --bds-color-system-purple-500 (#3247); drop next minor */
-  --bds-color-system-purple-light:  var(--bds-color-system-purple-200);  /* bds-lint-ignore — DEPRECATED, use --bds-color-system-purple-200 (#3247); drop next minor */
-  --bds-color-system-neutral:       var(--bds-color-system-neutral-500); /* bds-lint-ignore — DEPRECATED, use --bds-color-system-neutral-500 (#3247); drop next minor */
-  --bds-color-system-neutral-light: var(--bds-color-system-neutral-200); /* bds-lint-ignore — DEPRECATED, use --bds-color-system-neutral-200 (#3247); drop next minor */
-
   /* ── Stacking order (brik-bds#2840, components moved on in #2845) ──
      One ladder for every layer that has to outrank another. Component CSS
      uses these tokens for every layer value; raw 0–4 stays only for stacking
