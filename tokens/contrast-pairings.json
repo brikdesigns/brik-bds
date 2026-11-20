@@ -856,7 +856,7 @@
       "group": "indicator",
       "label": "Subtle indicator label on the info pale fill",
       "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-info-light",
+      "bg": "--bds-surface-info",
       "thresholdType": "AA"
     },
     {

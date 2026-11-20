@@ -189,7 +189,7 @@
 }
 
 .bds-badge--appearance-subtle.bds-badge--tone-info {
-  background-color: var(--bds-background-info-light);
+  background-color: var(--bds-surface-info);
   color: var(--bds-text-on-color-light);
 }
 

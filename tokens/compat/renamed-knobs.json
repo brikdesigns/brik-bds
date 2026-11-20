@@ -78,5 +78,12 @@
   "--blur-radius-md": "--bds-shadow-blur-600",
   "--blur-radius-lg": "--bds-shadow-blur-700",
   "--blur-radius-xl": "--bds-shadow-blur-800",
-  "--shadow-xl": "--bds-shadow-dramatic"
+  "--shadow-xl": "--bds-shadow-dramatic",
+  "--content-width-narrow": "--bds-content-width-sm",
+  "--content-width-default": "--bds-content-width-md",
+  "--content-width-wide": "--bds-content-width-lg",
+  "--easing-ease-in": "--bds-ease-in",
+  "--easing-ease-out": "--bds-ease-out",
+  "--easing-ease-in-out": "--bds-ease-in-out",
+  "--measure-lg": "--bds-content-width-text-md"
 }
