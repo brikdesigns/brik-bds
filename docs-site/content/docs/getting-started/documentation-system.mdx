@@ -38,6 +38,9 @@ Information flows DOWN tiers, never UP. If a lower-tier item gets referenced acr
 | 3c | [brik-rag](https://github.com/brikdesigns/brik-rag) | Agents needing operational know-how | CLI query (`brik-rag query`) | Default destination for new operational content — runbooks, accumulated lessons, incident history |
 | 4 | Memory files (`.claude/projects/.../memory/`) | Agents in that project | Auto-surfaced via `MEMORY.md` | User-specific preferences, one-off project decisions |
 | 5 | Notion pages | Humans (stakeholders) | Never auto-loaded | Stakeholder-facing workflow docs, architecture notes, history |
+| Published | [Fumadocs docs-site](https://design.brikdesigns.com) (`docs-site/content/docs/`) | Humans browsing, and agents with no checkout | On demand — `/docs/<path>.md`, `/llms.txt`, `/llms-full.txt` | Published canon for BDS consumers — component usage, foundations, build standards |
+
+The Published row is not a tier below Tier 5: it sits beside the tiers, because this site is read both by people and by agents. [Agent docs access](https://github.com/brikdesigns/brik-bds/blob/main/docs/runbooks/agent-docs-access.md) covers the agent-readable surface. Promote content here when it is consumer-facing, per Lifecycle step 6.
 
 The standard + skill pairing pattern lives at Tier 3b. brik-bds is the live precedent — five paired files under [`.claude/standards/`](https://github.com/brikdesigns/brik-bds/tree/main/.claude/standards) and [`.claude/skills/`](https://github.com/brikdesigns/brik-bds/tree/main/.claude/skills): `component-build`, `fumadocs-content-standard`, `storybook-mdx-recipe`, `storybook-story-shape`, `storybook-toolbar-globals`. The skill auto-fires on the matching edit path; the standard holds the rules.
 
@@ -72,7 +75,7 @@ Most knowledge starts as a note in a session or a comment on a PR. It earns a mo
 3. **brik-rag entry** (Tier 3c) — when the knowledge is operational (a procedure, an accumulated lesson, an incident postmortem) and applies across Brik work, push it to brik-rag via `brik-rag remember --workflow-type <topic>`.
 4. **Skill or standard** (Tier 3 / 3b) — when an agent should consult this knowledge automatically on a specific trigger (file edit, command, user phrase), promote it to a skill, optionally paired with a standard if there's a ruleset.
 5. **CLAUDE.md** (Tier 0–2) — only if the rule is a safety invariant the agent must never miss. One-line imperative or pointer, never long-form.
-6. **Fumadocs page** (this site) — when stakeholders need to read it without a Claude session.
+6. **Fumadocs page** (this site) — when stakeholders need to read it without a Claude session, or an agent with no checkout needs it through the agent-readable surface.
 
 {/* cascade-vocab-ok:end */}
 
