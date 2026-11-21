@@ -3,7 +3,7 @@ import { bdsClass, resolveRetiredValue } from '../../utils';
 import './Badge.css';
 
 /** Badge valence variants */
-export type BadgeTone = 'positive' | 'warning' | 'negative' | 'info' | 'brand' | 'neutral';
+export type BadgeTone = 'positive' | 'warning' | 'negative' | 'info' | 'neutral';
 
 /** @deprecated Renamed `BadgeTone` (ADR-033 § 2). */
 export type BadgeStatus = BadgeTone;
@@ -12,11 +12,14 @@ export type BadgeStatus = BadgeTone;
  * `progress` was a third spelling of the blue info signal (Counter.css proved
  * it), and the old `info` was the gray system-neutral. ADR-033 § 5 gives the
  * blue to `info` and the gray family to `neutral`, so both fold inward.
+ * `brand` is not a status (the brand colour is a standing accessibility
+ * exception, ADR-015), so it folds to the inert `neutral`.
  */
 const RETIRED_TONES: Record<string, BadgeTone> = {
   error: 'negative',
   success: 'positive',
   progress: 'info',
+  brand: 'neutral',
 };
 
 /** Badge size variants — shared scale with Tag */
@@ -64,9 +67,9 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Badge — status indicator with semantic colors.
+ * Badge — an indicator that expresses a status (a verb).
  *
- * Pill-shaped label for communicating status, category, or count.
+ * Types and categories (nouns) are a `Tag`.
  * Uses BDS system color tokens for consistent status semantics.
  * Sizing scale is shared with Tag for side-by-side alignment.
  *

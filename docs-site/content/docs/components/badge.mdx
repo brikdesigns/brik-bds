@@ -1,9 +1,11 @@
 ---
 title: Badge
-description: Status indicators and labels. Non-interactive — for displaying state, never for triggering actions.
+description: Status indicators (verbs). Non-interactive — for displaying state, never for triggering actions.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+
+Badges are an indicator to express statuses (verbs). See [Badge vs Tag](/docs/build-standards/indicators#badge-vs-tag).
 
 Badge displays contextual status. It uses semantic system colors to communicate state at a glance, with `solid` (saturated), `subtle` (pale) and `outline` (border only) appearances for different surface contexts.
 
@@ -12,14 +14,14 @@ Badge displays contextual status. It uses semantic system colors to communicate 
     {
       title: 'Badge',
       preview: <BDS.Badge tone="positive">Done</BDS.Badge>,
-      whenToUse: 'Read-only status with a value judgment (good/bad/waiting). Published, Active, Failed.',
+      whenToUse: 'Read-only status (good/bad/waiting). Published, Active, Failed.',
       whenNotToUse: 'Wire onClick — Badge is an indicator, not an action.',
       code: `<Badge tone="positive">Done</Badge>`,
     },
     {
       title: 'Tag',
       preview: <BDS.Tag>Cosmetic</BDS.Tag>,
-      whenToUse: 'Neutral categorization without a value judgment. Industry, segment, owner, size.',
+      whenToUse: 'A type or category (a noun). Industry, segment, owner, size.',
       whenNotToUse: 'Use for status — that\'s Badge.',
       code: `<Tag>Cosmetic</Tag>`,
     },
@@ -37,9 +39,9 @@ Badge displays contextual status. It uses semantic system colors to communicate 
 
 - A record's status (Published, Draft, In Review, Archived)
 - Pipeline state (Pending, Processing, Completed, Failed)
-- Categorical states with a value judgment (Healthy/Warning/Critical)
+- Health states (Healthy/Warning/Critical)
 
-For neutral categorization without a status meaning, use [Tag](/docs/components/tag). For interactive pills, use [Chip](/docs/components/chip).
+For a type or category, use [Tag](/docs/components/tag). For interactive pills, use [Chip](/docs/components/chip).
 
 ## Import
 
@@ -57,14 +59,12 @@ Six status colors across four sizes, each available in `solid`, `subtle` and `ou
 <BDS.Badge tone="warning">Pending</BDS.Badge>
 <BDS.Badge tone="negative">Failed</BDS.Badge>
 <BDS.Badge tone="neutral">Note</BDS.Badge>
-<BDS.Badge tone="info">In progress</BDS.Badge>
-<BDS.Badge tone="brand">Featured</BDS.Badge>`}>
+<BDS.Badge tone="info">In progress</BDS.Badge>`}>
   <BDS.Badge tone="positive">Done</BDS.Badge>
   <BDS.Badge tone="warning">Pending</BDS.Badge>
   <BDS.Badge tone="negative">Failed</BDS.Badge>
   <BDS.Badge tone="neutral">Note</BDS.Badge>
   <BDS.Badge tone="info">In progress</BDS.Badge>
-  <BDS.Badge tone="brand">Featured</BDS.Badge>
 </ComponentPreview>
 
 ### Subtle appearance
@@ -114,7 +114,6 @@ Pass `icon` for a leading visual. Required when `size="xs"` (icon-only).
   **Badge is read-only.** Never wire `onClick`, never wrap in a `<Link>`, never trigger behavior. Reading "Active" is different from clicking "Active to filter" — the latter is a [Chip](/docs/components/chip).
 </Callout>
 
-- **Don't pick `brand` for routine status.** It draws the eye like a CTA. Reserve for genuinely-featured states.
 - **Don't mix appearances in the same cluster.** Pick one per row for visual coherence.
 
 ## Accessibility
@@ -144,11 +143,9 @@ Per `tone` (`positive`, `warning`, `negative`, `info`, `neutral`):
 - `--bds-background-{tone}-light` — `subtle` fill
 - `--bds-border-{tone}` — `outline` edge
 
-`brand` is the exception: `solid` is `--bds-background-brand-primary`, `subtle` is `--bds-background-brand-secondary` with `--bds-text-brand-primary-strong`, and `outline` is `--bds-border-brand-primary`.
-
 ## Related
 
-- [Tag](/docs/components/tag) — neutral categorization sibling
+- [Tag](/docs/components/tag) — type and category sibling
 - [Chip](/docs/components/chip) — interactive sibling
 - [BadgeGroup](/docs/components/badge-group) — multi-badge cluster
 - [Dot](/docs/components/dot) — minimal status indicator

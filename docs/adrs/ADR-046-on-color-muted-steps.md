@@ -42,7 +42,7 @@ AGENT DECIDED (revisable): four tokens, one muted step per on-color token — ev
 
 `muted` is already the third step of both families this extends: `--bds-text-muted` and `--bds-border-muted` sit beside `primary` and `secondary`. ADR-033 allows one word per concept, so the quieter step reuses that word rather than adding `faint`, `dim` or `subtle`.
 
-The step goes after the whole parent name. A modifier on an on-color or brand token already sits last: `--bds-text-service-brand-on-dark`, `--bds-text-brand-primary-strong`.
+The step goes after the whole parent name. A modifier on an on-color or brand token already sits last: `--bds-text-service-brand-on-dark`.
 
 No gate enforces the word. Positive control, 2026-11-03: a temporary `--bds-text-on-color-dark-faint` passed both `lint-naming-canon` and `lint-token-purpose-slots`. The choice rests on the precedent above, not on a check.
 

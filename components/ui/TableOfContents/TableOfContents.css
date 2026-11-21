@@ -99,15 +99,11 @@
   background-color: transparent;
 }
 
-/* --bds-text-brand-primary-strong, NOT --bds-text-brand-primary: the label is 14px bold,
-   so WCAG large text (18.66px bold) does not apply and the bar is AA 4.5:1, not
-   the AA-large 3:1 the brand token carries in its heading/accent role.
-   --bds-text-brand-primary (poppy-500) is too light; the strong step is 6.23:1 light
-   / 5.55:1 dark on --bds-surface-primary (the transparent-rail band), where
-   darkening in dark would sink it. Gated as `Rail TOC active label on surface`. */
+/* The active label is brand-coloured: --bds-text-brand-primary, the brand colour's
+   standing AA-large exception (ADR-015). Gated as `Rail TOC active label on surface`. */
 .bds-toc--variant-rail .bds-nav-item--active,
 .bds-toc--variant-rail .bds-nav-item--active:hover {
-  color: var(--bds-text-brand-primary-strong);
+  color: var(--bds-text-brand-primary);
   background-color: transparent;
 }
 }

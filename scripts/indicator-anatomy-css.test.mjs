@@ -20,7 +20,7 @@ const UI = join(dirname(fileURLToPath(import.meta.url)), '..', 'components', 'ui
 const css = (name) => readFileSync(join(UI, name, `${name}.css`), 'utf8');
 
 const HUES = ['blue', 'green', 'orange', 'purple', 'yellow', 'red'];
-const TONES = ['positive', 'warning', 'negative', 'info', 'brand', 'neutral'];
+const TONES = ['positive', 'warning', 'negative', 'info', 'neutral'];
 
 // The subtle-fill token per hue / tone, all Figma-backed `--bds-surface-*`
 // names (#3246, #3250, #3247).
@@ -63,7 +63,7 @@ describe('Badge CSS — subtle and outline', () => {
     },
   );
 
-  it('has no dark-mode override left on brand subtle', () => {
+  it('has no dark-mode override left on Badge subtle', () => {
     expect(badgeCss).not.toContain('data-theme="dark"');
   });
 });

@@ -153,11 +153,6 @@
   color: var(--bds-text-on-color-dark);
 }
 
-.bds-badge--appearance-solid.bds-badge--tone-brand {
-  background-color: var(--bds-background-brand-primary);
-  color: var(--bds-text-on-color-dark);
-}
-
 /* Neutral — the saturated system neutral. `--bds-text-neutral` resolves to the
    same #363636, so the label must be --bds-text-on-color-dark (10.6:1), not
    --bds-text-neutral (1.00:1 — the trap contrast-pairings.json records). */
@@ -193,15 +188,6 @@
   color: var(--bds-text-on-color-light);
 }
 
-/* Brand has no `-light` token: its pale fill is --bds-background-brand-secondary,
-   which resolves per theme (tan-100 light, near-black dark). The strong brand
-   text step follows it in both themes — poppy-700 in light, poppy-500 in dark
-   (#2270) — so no dark-mode override is needed. */
-.bds-badge--appearance-subtle.bds-badge--tone-brand {
-  background-color: var(--bds-background-brand-secondary);
-  color: var(--bds-text-brand-primary-strong);
-}
-
 .bds-badge--appearance-subtle.bds-badge--tone-neutral {
   background-color: var(--bds-surface-neutral);
   color: var(--bds-text-on-color-light);
@@ -223,7 +209,6 @@
 .bds-badge--appearance-outline.bds-badge--tone-warning  { border-color: var(--bds-border-warning); }
 .bds-badge--appearance-outline.bds-badge--tone-negative { border-color: var(--bds-border-negative); }
 .bds-badge--appearance-outline.bds-badge--tone-info     { border-color: var(--bds-border-info); }
-.bds-badge--appearance-outline.bds-badge--tone-brand    { border-color: var(--bds-border-brand-primary); }
 .bds-badge--appearance-outline.bds-badge--tone-neutral  { border-color: var(--bds-border-neutral); }
 
 /* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */

@@ -34,12 +34,12 @@
    with the same dark-ink label, so a hue reads as the same family in both
    appearances. Two-class selectors outrank the one-class solid rules above.
    With no `color`, subtle is the pale brand fill — --bds-background-brand-secondary
-   has no `-light` token (it resolves per theme), and its strong brand text step
-   follows it in both themes (the Badge brand subtle pairing). */
+   has no `-light` token (it resolves per theme). Its label is --bds-text-brand-primary,
+   the brand colour's standing AA-large exception (ADR-015). */
 
 .bds-avatar--appearance-subtle {
   background-color: var(--bds-background-brand-secondary);
-  color: var(--bds-text-brand-primary-strong);
+  color: var(--bds-text-brand-primary);
 }
 
 .bds-avatar--appearance-subtle.bds-avatar--color-green  { background-color: var(--bds-surface-accent-green); color: var(--bds-text-on-color-light); }
