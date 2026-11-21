@@ -80,24 +80,35 @@
 </table></div>
 <p><strong>Retire <code>--active</code> as a state word.</strong> In CSS, <code>:active</code> already means pressed, so a class with the same word will always be misread.</p>
 
-<h2>3. Two kinds of "select": component category vs state</h2>
+<h2>3. Three separate questions: family, semantics, state</h2>
+<p>An earlier draft of this section filed SegmentedControl under "selection input". That was wrong. The docs taxonomy puts it in <strong>Control</strong>, not <strong>Form / Inputs</strong> (<code>docs-site/content/docs/components/meta.json</code>, the <code>---Control---</code> group). Each component answers three questions, and each answer comes from a different source:</p>
 <table>
-<tr><th>Concept</th><th>What it decides</th><th>Where it lives</th></tr>
-<tr><td><strong>Selection-based component</strong> (an input)</td><td>The <em>semantics</em>: radio, checkbox, select, listbox or toggle. Cardinality decides it.</td><td><code>docs/adrs/ADR-045-selection-semantics-follow-cardinality.md</code> §1</td></tr>
-<tr><td><strong>Selected state</strong> (a value on any control)</td><td>The <em>visual</em>: one shared recipe</td><td><code>interaction-states.mdx:107-115</code>, which names "a tint plus a ring". <strong>That ring is the problem</strong> once the focus ring is also brand.</td></tr>
+<tr><th>Question</th><th>Decided by</th><th>Decides</th><th>Source</th></tr>
+<tr><td><strong>Family</strong>: what kind of thing is it?</td><td>Anatomy + intent</td><td>Docs placement and visual vocabulary. A Control or Action built from buttons shows selection as a button does (fill). A Form input shows it as an input does (check, dot, field value).</td><td><code>meta.json</code> groups</td></tr>
+<tr><td><strong>Semantics</strong>: what does a screen reader announce?</td><td>Cardinality</td><td>ARIA role and keyboard. Pick-one = radio group, pick-many = checkbox group, stand-alone = <code>aria-pressed</code>. This is behaviour, not family: a Control can announce as a radio group and stay a Control.</td><td>ADR-045 §1</td></tr>
+<tr><td><strong>State</strong>: what is true right now?</td><td>The state model (§2)</td><td>Which visual channel shows it. Selected = fill, focus = ring, and they never share one.</td><td>§2</td></tr>
 </table>
-<h3>Components by category (code, 2026-11-21)</h3>
+<h3>Components by docs family (meta.json, 2026-11-21)</h3>
+<div class="wrap"><table>
+<tr><th>Family</th><th>Components with a persistent state</th><th>Semantics (ADR-045)</th><th>State</th></tr>
+<tr><td>Control</td><td>SegmentedControl, ToggleSwitch, CompletionToggle, Checklist, Pagination, ProgressStepper</td><td>SegmentedControl = radio group (<code>SegmentedControl.tsx:132-151</code>, kept by ADR-045:98); CompletionToggle = <code>aria-pressed</code></td><td>selected; Pagination and ProgressStepper = current</td></tr>
+<tr><td>Action</td><td>Button <code>selected</code>, FilterToggle, FilterButton</td><td><code>aria-pressed</code></td><td>selected</td></tr>
+<tr><td>Form / Inputs</td><td>Radio / RadioGroup, Checkbox / CheckboxGroup, Select, MultiSelect, DatePicker, TimePicker, ChecklistGroup</td><td>native radio / checkbox / listbox</td><td>selected (<code>:checked</code>); pickers also expanded</td></tr>
+<tr><td>Navigation</td><td>NavItem, TopNavigation, TabBar, Breadcrumb, Menu</td><td><code>aria-current</code>; TabBar <code>aria-selected</code>; Menu active-descendant</td><td>current; TabBar selected-or-current (open); Menu highlighted</td></tr>
+<tr><td>Indicator</td><td>ServiceTagSelect</td><td>native radio group</td><td>selected</td></tr>
+<tr><td>Structure / Overlays</td><td>Accordion, Collapsible, Popover</td><td><code>aria-expanded</code></td><td>expanded</td></tr>
+<tr><td>Assets + utilities</td><td>InteractiveListItem, SelectableMediaTile</td><td><code>aria-pressed</code></td><td>selected</td></tr>
+</table></div>
+<h3>Taxonomy questions this surfaces (not decided here)</h3>
 <table>
-<tr><th>Category</th><th>Components</th><th>State that applies</th></tr>
-<tr><td>Selection input, pick-one</td><td>Radio / RadioGroup, SegmentedControl (<code>role="radiogroup"</code> + <code>role="radio"</code> on <code>&lt;button&gt;</code>, <code>SegmentedControl.tsx:132-151</code>), ServiceTagSelect, Select</td><td>selected (<code>aria-checked</code> / <code>:checked</code>)</td></tr>
-<tr><td>Selection input, pick-many</td><td>Checkbox / CheckboxGroup, MultiSelect, ToggleSwitch</td><td>selected (<code>:checked</code>)</td></tr>
-<tr><td>Stand-alone toggle</td><td>FilterToggle, Button <code>selected</code>, CompletionToggle</td><td>selected (<code>aria-pressed</code>)</td></tr>
-<tr><td>Tabs</td><td>TabBar, Sheet tabs, MediaTabs</td><td>selected (<code>aria-selected</code>), or current when a tab navigates to a URL (open, §7)</td></tr>
-<tr><td>Location</td><td>NavItem, TopNavigation, TableOfContents, Pagination, ProgressStepper, Breadcrumb</td><td>current (<code>aria-current</code>)</td></tr>
-<tr><td>Composite widget options</td><td>Menu, SearchOverlay, AddableTagList / AddableEntryList options, CommentComposer options</td><td>highlighted</td></tr>
-<tr><td>Disclosure</td><td>Accordion, Collapsible, Popover, DatePicker / TimePicker triggers</td><td>expanded</td></tr>
+<tr><th>Placement</th><th>Why it looks off</th></tr>
+<tr><td>FilterToggle and FilterButton in Action, SegmentedControl in Control</td><td>All three are button-built toggles</td></tr>
+<tr><td>ServiceTagSelect in Indicator</td><td>It is a pick-one input built on native radios (<code>service-tag-select.mdx:67</code>)</td></tr>
+<tr><td>Pagination and ProgressStepper in Control</td><td>Their state is current location (<code>aria-current</code>), which is a Navigation trait</td></tr>
+<tr><td><code>segmented-control.mdx:13-31</code> compares it with Select (a Form input) and Switch</td><td>Puts a Control beside an input; the docs also call <code>md</code> "default for forms"</td></tr>
+<tr><td>Storybook titles are flat (<code>Components/segmented-control</code>)</td><td>Storybook has no families, so the two surfaces disagree</td></tr>
 </table>
-<p>The SegmentedControl's anatomy is buttons, but its intent is a pick-one input. So its selected segment is a <strong>checked</strong> value. It is not a "pressed" or "active" button, and it must not borrow the focus ring.</p>
+<p><strong>SegmentedControl:</strong> its family is Control and its anatomy is buttons, so its selected segment takes a button's selected look: a brand fill like <code>Button --selected</code> (<code>Button.css:135-138</code>), with no border. Its semantics stay a radio group, because it is pick-one. Its selected segment must not borrow the focus ring.</p>
 
 <h2>4. Evidence: what <code>--active</code> means today</h2>
 <table>
