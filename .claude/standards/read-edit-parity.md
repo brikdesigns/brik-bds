@@ -5,14 +5,14 @@ type: reference
 scope: brik-bds
 applies-to: consumer-repo read/edit page pairs (e.g. brik-client-portal settings-*-read-page.tsx / settings-*-edit-page.tsx) — advisory today, no BDS-side lint
 retrieved-via: brik-rag query "read edit parity standard"
-last-verified: 2026-08-12
+last-verified: 2026-11-21
 ---
 
 # Read/edit parity standard (BDS)
 
 Rules for keeping a **read (view) surface** and its **edit surface** in sync when both render the same entity. Source of truth lives in this file (git-tracked); agents retrieve via `brik-rag query "read edit parity standard"`.
 
-**Scope / enforcement:** this file is the ruleset only. It ships **advisory** — there is no BDS lint and no auto-fire skill trigger yet. Both the skill trigger (on portal read/edit page paths) and the parity lint gate are tracked separately in [brik-client-portal#3084](https://github.com/brikdesigns/brik-client-portal/issues/3084) (Batch 4). Do not claim CI enforcement for this rule set until that lands.
+**Scope / enforcement:** this file is the ruleset only; BDS has no lint for it. Enforcement lives in the consumer and the loader: the portal CI gate `npm run audit:parity` (brik-client-portal#3084, closed) catches a column the edit form writes that the read view omits, and the auto-firing `ui-change-intake` skill (step 6, `brik-llm/.claude/skills/ui-change-intake/SKILL.md:24`) points an agent at this standard when it scopes one half of a read/edit pair. Do not claim BDS-side CI enforcement for this rule set.
 
 **Worked example:** [brik-client-portal#3085](https://github.com/brikdesigns/brik-client-portal/pull/3085) (merged) — `src/components/settings-service-line-read-page.tsx`, `settings-service-line-edit-page.tsx`, `src/components/sheets/settings-service-line-sheet.tsx`.
 
