@@ -50,6 +50,12 @@ export function renderIndex(): string {
 /** One page as Markdown, titled and self-locating. */
 export async function renderPage(page: DocsPage): Promise<string> {
   const body = renderDataComponents(await page.data.getText('processed'), page.data._exports);
+  // An entity-escaped quote means a JSX attribute was re-serialized lossily,
+  // and an agent copying it types the entity, not the quote (#2619). Fail the
+  // build rather than ship it.
+  if (body.includes('&#x22;')) {
+    throw new Error(`${page.url}: Markdown export contains an entity-escaped quote (&#x22;)`);
+  }
   return `# ${page.data.title} (${page.url})\n\n${body}`;
 }
 
