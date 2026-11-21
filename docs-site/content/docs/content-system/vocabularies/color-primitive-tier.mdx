@@ -94,21 +94,6 @@ Two orthogonal axes pair with the tier vocabulary above. Don't mix them.
   **Figma is source of truth for primitive naming.** When a CSS suffix doesn't match a Figma stop name, the system has drifted. Primitives never carry interaction-state names (`-hover`, `-pressed`); those belong on canonical aliases that *reference* a tonal stop.
 </Callout>
 
-### Deprecated suffix aliases
-
-Pre-2026-Q2, the portal token generator emitted state-named suffixes on primitives — `--{slug}-{color}-subtle/-hover/-pressed/-deep/-deepest`. These are now **deprecation aliases** that point at their Figma-named counterparts via `var()`:
-
-```css
-/* Deprecated — emitted only for backward compatibility */
---vale-partners-navy-subtle:   var(--vale-partners-navy-lightest);
---vale-partners-navy-hover:    var(--vale-partners-navy-lighter);
---vale-partners-navy-pressed:  var(--vale-partners-navy-dark);
---vale-partners-navy-deep:     var(--vale-partners-navy-darker);
---vale-partners-navy-deepest:  var(--vale-partners-navy-darkest);
-```
-
-**Targeted retirement: ≥ 2026-Q3.** New consumer code MUST use the Figma-named tonal stops. Existing references migrate at consumer-repo pace; track via cross-repo grep.
-
 ## Programmatic access
 
 ```ts
