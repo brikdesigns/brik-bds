@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- report-meta: contract in docs/reports/README.md (ADR-046) -->
+<meta name="report-status" content="active">
+<meta name="report-type" content="assessment">
+<meta name="report-themes" content="design-system,accessibility">
+<meta name="report-subject" content="bds">
+<meta name="report-owner" content="nstaner">
+<meta name="report-generated" content="2026-11-21">
+<meta name="report-supersedes" content="none">
+<meta name="report-cadence" content="once">
+<meta name="report-source" content="manual">
+<!-- /report-meta -->
+<title>Interactive State System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.55 -apple-system, "Segoe UI", sans-serif; max-width: 72rem; margin: 2rem auto; padding: 0 1rem; color: #222; background: #fff; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2.25rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  h3 { font-size: 1rem; margin-top: 1.25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; overflow-wrap: anywhere; }
+  .answer { background: #eef6ff; border-left: 4px solid #2b6cb0; padding: .75rem 1rem; margin: 1rem 0; }
+  .open { background: #fff4e5; border-left: 4px solid #dd6b20; padding: .5rem 1rem; margin: .75rem 0; }
+  .HIGH { color: #b00020; font-weight: 600; } .MED { color: #9c4a00; font-weight: 600; } .LOW { color: #555; }
+  .wrap { overflow-x: auto; }
+  figure { margin: .75rem 0; } figcaption { font-size: 13px; color: #555; }
+  img { max-width: 100%; border: 1px solid #ddd; }
+</style>
+</head>
+<body>
+
+<h1>Interactive State System — 2026-11-21</h1>
+<p>Tracking issue: <a href="https://github.com/brikdesigns/brik-bds/issues/3300">brik-bds#3300</a>. Defect found along the way: <a href="https://github.com/brikdesigns/brik-bds/issues/3299">brik-bds#3299</a>.</p>
+
+<div class="answer">
+<p><strong>WCAG does not require a border for a selected state. The border was a valid fix, but it reused the focus colour. So BDS now draws "selected" and "focused" the same way, which is the conflation you spotted.</strong></p>
+<ol>
+<li><strong>WCAG 1.4.11 asks for 3:1 against adjacent colours, not a border.</strong> Any visual cue can carry the state, and flat designs are allowed (§1). A fill swap inside a component is out of 1.4.11's scope, but it must still pass 1.4.1 (not colour alone).</li>
+<li><strong>Selected = focus, literally.</strong> The SegmentedControl's selected border is <code>--bds-border-brand-primary</code> (<code>SegmentedControl.css:88</code>). The focus token is <code>--bds-border-focus: var(--bds-border-brand-primary)</code> (<code>tokens/theme-brand-brik.generated.css:204</code>). Both render <code>rgb(227,83,53)</code> (§5).</li>
+<li><strong>BDS has no state model.</strong> The canon covers hover, press, focus, disabled and "selectable" (<code>interaction-states.mdx</code>). It does not define current, highlighted, expanded, read-only, invalid or loading, and it never says that selection must not use the focus channel.</li>
+<li><strong>"Active" means five things.</strong> The <code>--active</code> class names selected, current page, keyboard highlight, drag-over and filter-applied across 14 components. CSS <code>:active</code> means pressed (§4).</li>
+<li><strong>The drift is measurable.</strong> There are 4 focus-ring colour sources against 1 canon recipe, and the docs prescribe 18 different "selected" looks.</li>
+<li><strong>The DatePicker / TimePicker triggers show no focus at all</strong> (WCAG 2.4.7) → #3299.</li>
+</ol>
+</div>
+
+<h2>1. What WCAG actually says</h2>
+<p>All quotes come from W3C pages fetched 2026-11-21.</p>
+<table>
+<tr><th>Question</th><th>Answer</th><th>Source quote</th></tr>
+<tr><td>Does a selected state need 3:1?</td><td>Yes, against <em>adjacent</em> colours</td><td>"any visual information necessary to indicate state, such as whether a component is selected or focused must also ensure that the information used to identify the control in that state has a minimum 3:1 contrast ratio." (<a href="https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html">1.4.11</a>)</td></tr>
+<tr><td>Must it be a border?</td><td><strong>No</strong></td><td>"It is possible to use a flat design where the status indicator fills the component and does not contrast with the component, but does contrast with the colors adjacent to the component." (1.4.11)</td></tr>
+<tr><td>Must the selected state contrast with the unselected state?</td><td>Not under 1.4.11 when they are not adjacent</td><td>"This success criterion does not require that changes in color that differentiate between states of an individual component meet the 3:1 contrast ratio when they do not appear next to each other." (1.4.11)</td></tr>
+<tr><td>Fill swap inside the component?</td><td>Out of 1.4.11's scope, but 1.4.1 applies</td><td>"The change of background within the component is not in scope of non-text contrast. However, this would not pass Use of color." (1.4.11, Figure 15)</td></tr>
+<tr><td>What passes 1.4.1?</td><td>A lightness change of ≥3:1, or an inverted foreground and background</td><td>"if content is distinguished by inverting an element's foreground and background colors, this would pass" (<a href="https://www.w3.org/WAI/WCAG22/Understanding/use-of-color.html">1.4.1</a>)</td></tr>
+<tr><td>Is focus the same criterion?</td><td>No. Focus is 2.4.7 (plus 2.4.13 at AAA) and must contrast too</td><td>"even when a control does not need to have a visual boundary indicating its hit area, it will still need to have a sufficiently contrasting focus indication." (1.4.11)</td></tr>
+</table>
+<p><strong>For the SegmentedControl:</strong> the selected segment and the unselected segments sit next to each other, so the selected indicator needs 3:1 against the track around it. The white pill on the <code>#f2f2f2</code> track is 1.12:1. That is why <a href="https://github.com/brikdesigns/brikdesigns/issues/1427">brikdesigns#1427</a> (closed) added the border in <code>df146a75</code> (#2936). The border is one valid fix. A fill that clears 3:1 against the track is another, with no border.</p>
+<p><strong>Peer systems.</strong> GitLab Pajamas documents the segmented control as "a button group of equal options where only one can be selected and active". It does not document the selected visual (its Structure section reads "TODO:"). Base Web (Uber), Material 3 and Apple HIG returned empty pages to the fetcher. Their treatments are <strong>unverified</strong>, so this report draws no conclusion from them.</p>
+
+<h2>2. Proposed state model</h2>
+<p>This is a proposal. Each state gets <strong>one meaning, one ARIA attribute, one class word and one visual channel</strong>. No two states share a channel, so selected can never look like focus.</p>
+<div class="wrap"><table>
+<tr><th>Layer</th><th>State</th><th>Means</th><th>DOM / ARIA</th><th>Class word</th><th>Visual channel</th></tr>
+<tr><td rowspan="3">Transient<br><small>pointer or keyboard, every interactive component</small></td><td>hover</td><td>pointer is over it</td><td><code>:hover</code></td><td>—</td><td>overlay or solid <code>-hover</code> fill</td></tr>
+<tr><td>pressed</td><td>pointer or key is down</td><td><code>:active</code></td><td>—</td><td>overlay or solid <code>-pressed</code> fill</td></tr>
+<tr><td>focus</td><td>keyboard focus is here</td><td><code>:focus-visible</code></td><td>—</td><td><strong>outline ring only, reserved</strong>: one recipe, and no other state may draw it</td></tr>
+<tr><td rowspan="3">Availability</td><td>disabled</td><td>can't be used</td><td>native <code>disabled</code></td><td><code>--disabled</code> (non-native only)</td><td>token swap (filled) or fade (unfilled), per ADR-028</td></tr>
+<tr><td>read-only</td><td>visible and focusable, not editable</td><td><code>readonly</code> / <code>aria-readonly</code></td><td><code>--read-only</code></td><td>undefined today, so define it</td></tr>
+<tr><td>loading</td><td>busy</td><td><code>aria-busy</code></td><td><code>--loading</code></td><td>spinner; keeps focus</td></tr>
+<tr><td rowspan="5">Persistent<br><small>value or condition</small></td><td>selected</td><td>chosen value (pick-one, pick-many, or a toggle that is on)</td><td><code>:checked</code> / <code>aria-checked</code> / <code>aria-pressed</code> / <code>aria-selected</code>, chosen by ADR-045 cardinality</td><td><code>--selected</code></td><td><strong>fill</strong> (emphasis). Never the focus ring.</td></tr>
+<tr><td>current</td><td>where you are (page, step, section)</td><td><code>aria-current</code></td><td><code>--current</code></td><td>to define (nav pill, text weight or rail)</td></tr>
+<tr><td>highlighted</td><td>virtual focus in a listbox or menu while DOM focus stays in the input</td><td><code>aria-activedescendant</code></td><td><code>--highlighted</code></td><td>neutral fill</td></tr>
+<tr><td>expanded</td><td>disclosure is open</td><td><code>aria-expanded</code></td><td><code>--open</code></td><td>chevron rotation; undefined today</td></tr>
+<tr><td>invalid</td><td>value fails validation</td><td><code>aria-invalid</code></td><td><code>--tone-negative</code> (as shipped)</td><td>negative border + message</td></tr>
+</table></div>
+<p><strong>Retire <code>--active</code> as a state word.</strong> In CSS, <code>:active</code> already means pressed, so a class with the same word will always be misread.</p>
+
+<h2>3. Two kinds of "select": component category vs state</h2>
+<table>
+<tr><th>Concept</th><th>What it decides</th><th>Where it lives</th></tr>
+<tr><td><strong>Selection-based component</strong> (an input)</td><td>The <em>semantics</em>: radio, checkbox, select, listbox or toggle. Cardinality decides it.</td><td><code>docs/adrs/ADR-045-selection-semantics-follow-cardinality.md</code> §1</td></tr>
+<tr><td><strong>Selected state</strong> (a value on any control)</td><td>The <em>visual</em>: one shared recipe</td><td><code>interaction-states.mdx:107-115</code>, which names "a tint plus a ring". <strong>That ring is the problem</strong> once the focus ring is also brand.</td></tr>
+</table>
+<h3>Components by category (code, 2026-11-21)</h3>
+<table>
+<tr><th>Category</th><th>Components</th><th>State that applies</th></tr>
+<tr><td>Selection input, pick-one</td><td>Radio / RadioGroup, SegmentedControl (<code>role="radiogroup"</code> + <code>role="radio"</code> on <code>&lt;button&gt;</code>, <code>SegmentedControl.tsx:132-151</code>), ServiceTagSelect, Select</td><td>selected (<code>aria-checked</code> / <code>:checked</code>)</td></tr>
+<tr><td>Selection input, pick-many</td><td>Checkbox / CheckboxGroup, MultiSelect, ToggleSwitch</td><td>selected (<code>:checked</code>)</td></tr>
+<tr><td>Stand-alone toggle</td><td>FilterToggle, Button <code>selected</code>, CompletionToggle</td><td>selected (<code>aria-pressed</code>)</td></tr>
+<tr><td>Tabs</td><td>TabBar, Sheet tabs, MediaTabs</td><td>selected (<code>aria-selected</code>), or current when a tab navigates to a URL (open, §7)</td></tr>
+<tr><td>Location</td><td>NavItem, TopNavigation, TableOfContents, Pagination, ProgressStepper, Breadcrumb</td><td>current (<code>aria-current</code>)</td></tr>
+<tr><td>Composite widget options</td><td>Menu, SearchOverlay, AddableTagList / AddableEntryList options, CommentComposer options</td><td>highlighted</td></tr>
+<tr><td>Disclosure</td><td>Accordion, Collapsible, Popover, DatePicker / TimePicker triggers</td><td>expanded</td></tr>
+</table>
+<p>The SegmentedControl's anatomy is buttons, but its intent is a pick-one input. So its selected segment is a <strong>checked</strong> value. It is not a "pressed" or "active" button, and it must not borrow the focus ring.</p>
+
+<h2>4. Evidence: what <code>--active</code> means today</h2>
+<table>
+<tr><th>Meaning</th><th>Components (file:line)</th></tr>
+<tr><td>selected</td><td><code>SegmentedControl.css:84</code>, <code>Sheet.css:165</code></td></tr>
+<tr><td>toggle on / filter applied</td><td><code>FilterToggle.css:25</code>, <code>FilterButton.css:30</code></td></tr>
+<tr><td>current location</td><td><code>NavItem.css:26</code>, <code>TopNavigation.css:68</code>, <code>TableOfContents.css:108</code>, <code>Pagination.css:96</code></td></tr>
+<tr><td>keyboard highlight (active descendant)</td><td><code>Menu.css:138</code>, <code>SearchOverlay.css:84</code>, <code>AddableTagList.css:128</code>, <code>AddableEntryList.css:235</code>, <code>CommentComposer.css:59</code></td></tr>
+<tr><td>drag-over</td><td><code>FileUploader.css:44</code></td></tr>
+</table>
+<p>The same concept also appears under other words: <code>--selected</code> (8 components), <code>--checked</code> (Board, Checklist, CompletionToggle), and <code>[aria-selected]</code> (TabBar). The canon spreads this: <code>.claude/standards/component-build.md:106</code> lists <code>active</code> as an example state modifier. <code>component-build.md:115</code> links the naming canon to <code>docs-site/content/docs/primitives/naming-conventions.mdx</code>, which does not exist (<code>ls</code> found no such directory). ADR-033 has no entry for selected, current or active. Related open work: <a href="https://github.com/brikdesigns/brik-bds/issues/1927">#1927</a> (bare BEM modifiers) and <a href="https://github.com/brikdesigns/brik-bds/issues/2865">#2865</a> (ADR-033 dual spellings).</p>
+
+<h2>5. Evidence: focus vs selected</h2>
+<figure>
+<img alt="SegmentedControl in light mode: the selected segment and the keyboard-focused segment both show a poppy ring" src="data:image/png;base64,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jPPEjgSEFGbNmsXJI69Bz7ZrCTDRPuRJXq62oKNMnTo1V9qCuObBBx9888035eUWi1kWZ599dq52UCiiOYbf3Llz09PTmXtl++9/kndr5Mhvv/123i61NEIK6S/110Eg6xyU/fJTi61btyJMxhqB1113HZaR2k2bNjHYEMfx48ezIMOwNJb17LcjYb/++isupLEShbfddpuxzjVCSbO484xnhJLzQpU4PvCDBRKARHJ+ab9Pnz5Std7CWWJnQ8KOCYYsXkZGODP40UcfDRkyxK6da/HEE08wtfz2229i5zIWWKNfv37szxvtJKB00dRUt/+6l/N+vJPui3wYK6dLpvy+++777rvv7NpXXnlFFIokCOONv8YaEkcnnpBI0ab777+fVYt58+bhVtAncBhztoP3gUgNGzbMWJL38ssv42jQ1aQRFjpoh7k379YWLlwoSocDyFd68cUXcf327NljHALD5tk/EW8LR1WUDj168sknX3/9dXFAsA+rLhSQfg4f8Xr44YdRfDwRNmIEXJW//bhvv/2WvwR0fBb6VaVKFcTx3XfDd4ZgZFE6Pogq/lImDU8eg4K4RTBw4MBp06bdcsstkqF3CkyZTKX79+9nbhapInZhGhClw4Yyo0iamD6JhfEBZc6gy9EJxc5jx45t1KgRHq40SyecP3++y90640TPDr+AwfPUU0+98847nObJFpx+xmFCQoL4+R07djz33HMZkPwlYpIxlnNuBBmTp5xyyrXXXsuSxamnnkqcxdIH22lW2iEokFiAgRcXF3fgwIFy5colJiba3mX58uWRrb9t7fvvv5f9n3vuOd5CgaDMQTljDkFkxVhD7oorrlizZo28xD5kSykQqBKFGcsUZ555pkgSTock+5AhjBO+kSYfq0MymZGwx3kh5OdE8y5OLhuXL18u34E5D13gL7kLfEyi2l69euE/UnvjjTdKloDTt3PnTlFnR/AfC/sldm7SpIl0LWOtwokRevTogbQZaxanZ0otikZOYIhFbGwsvZTci1TRaQu4sHti4MjVWPwFBs/QoUNRMdJq4knVrVv3zjvvlJ7xgUXOtxBU5mpE5nzcK/J6uar27t0r7eTMDd96663m2OTR2r59+yTPyBgWpTOWepYtW9YOh4s4xEePP/64lBk5JkfmFA9CChUqVMDRJnLEFGTrZOP5558vheLFi+e9sJjz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">
+<figcaption>Rendered from <code>dist/tokens.css</code> + <code>theme-brand-brik.generated.css</code> + <code>SegmentedControl.css</code> in Chromium (Playwright), after pressing Tab. Selected border = <code>rgb(227,83,53)</code>. Focus outline = <code>solid 2px rgb(227,83,53)</code>.</figcaption>
+</figure>
+<h3>Focus-ring recipes in component CSS (canon: <code>--border-width-lg</code> · <code>--state-focus</code> = <code>currentColor</code> · 2px offset, <code>interaction-states.mdx:121-125</code>)</h3>
+<table>
+<tr><th>Colour source</th><th>Seen as</th></tr>
+<tr><td><code>--bds-state-focus</code> (canon)</td><td><code>outline: var(--bds-border-width-lg) solid var(--bds-state-focus…)</code>, 10 rules</td></tr>
+<tr><td><code>--bds-border-focus</code> (= brand)</td><td>at <code>--border-width-md</code>, <code>--border-width-lg</code>, a literal <code>2px</code>, and Button's own <code>--button-focus-outline-width</code></td></tr>
+<tr><td><code>--bds-border-brand-primary</code> directly</td><td>SegmentedControl (2px, offset 1px), Radio (box-shadow 2px), Select / TextInput (1px box-shadow)</td></tr>
+<tr><td>brand <code>color-mix</code> glow</td><td><code>box-shadow: 0 0 0 3px color-mix(… 30%, transparent)</code>, 2 rules</td></tr>
+</table>
+<p>Offsets seen: <code>2px</code>, <code>1px</code>, <code>0</code>, <code>--border-width-sm</code>, <code>--border-width-md</code> and a negative inset. Separately, ADR-035 (Proposed) states "the focus ring IS the brand border" (<code>ADR-035:22</code>). That contradicts the <code>currentColor</code> canon, and the token already ships that way.</p>
+<p><strong>Focus with nothing visible:</strong> <code>DatePicker.css:54</code> and <code>TimePicker.css:54</code> set <code>outline: none</code> and have no focus rule. Tabbing onto the trigger changed nothing, while the <code>.bds-select</code> control on the same page drew its ring → <a href="https://github.com/brikdesigns/brik-bds/issues/3299">#3299</a>.</p>
+
+<h2>6. Evidence: how "selected" looks today</h2>
+<table>
+<tr><th>Treatment</th><th>Components (code)</th></tr>
+<tr><td>Brand fill + on-colour label</td><td>Button <code>--selected</code> (<code>Button.css:135-138</code>), FilterToggle, TabBar <code>box</code> (<code>TabBar.css:315-319</code>), NavItem (current), DatePicker day</td></tr>
+<tr><td>Brand tint + inset brand ring</td><td>InteractiveListItem (<code>InteractiveListItem.css:93</code>), SelectableMediaTile (ring only, <code>:108</code>)</td></tr>
+<tr><td>Neutral ring</td><td>ServiceTagSelect (<code>--border-primary</code>, <code>ServiceTagSelect.css:37</code>)</td></tr>
+<tr><td>White pill + brand border (the focus colour)</td><td>SegmentedControl (<code>SegmentedControl.css:84-90</code>)</td></tr>
+<tr><td>Brand underline and/or brand text</td><td>TabBar <code>tab</code> / <code>text</code> / <code>text-underline</code>, Sheet tab, Pagination, TableOfContents</td></tr>
+<tr><td>Neutral fill</td><td>Table row, FilterButton option; Menu / SearchOverlay highlight use the same look</td></tr>
+</table>
+<p>The docs add more: 18 distinct "selected" treatments in prose (TabBar alone has 4). Button <code>selected</code> and the SegmentedControl selected segment have <strong>no documented visual</strong>. <code>service-tag-select.mdx:67</code> is the only doc that keeps the two indicators apart: "The selected pill carries an emphasis ring; the focused radio shows a focus outline."</p>
+
+<h2>7. Docs gaps</h2>
+<table>
+<tr><th>Gap</th><th>Where</th></tr>
+<tr><td>No full state list, and no per-component state matrix (only <code>Select.mdx:27-33</code> has one)</td><td>foundation docs</td></tr>
+<tr><td>Current, highlighted, expanded, read-only, invalid and loading are undefined at foundation level</td><td><code>interaction-states.mdx</code></td></tr>
+<tr><td>No rule that selected must look different from focus</td><td><code>interaction-states.mdx</code></td></tr>
+<tr><td>Button <code>selected</code> default: <code>false</code> in <code>button.mdx:239</code> vs <code>undefined</code> in ADR-045:95; "active option in a group" (<code>button.mdx:116</code>) contradicts ADR-045 §1</td><td>button docs</td></tr>
+<tr><td>Chip makes selection a <em>variant</em> ("<code>primary</code> — Active/selected state, current filter", <code>chip.mdx:54</code>)</td><td>chip docs</td></tr>
+<tr><td>Prop is <code>active</code> everywhere current is meant (<code>nav-item.mdx:26</code> sets <code>aria-current</code>)</td><td>navigation docs</td></tr>
+<tr><td>Hover ramp direction: three conflicting rules (<code>interaction-states.mdx:91</code> deepens vs <code>content-system/vocabularies/color-primitive-tier.mdx:88</code> (hover = <code>-lighter</code>) vs <code>theming/client-themes.mdx:234</code> (hover = <code>-dark</code>))</td><td>colour docs</td></tr>
+<tr><td>TabBar used as section navigation (<code>tab-bar.mdx:8</code>) but announced as <code>aria-selected</code>, not <code>aria-current</code></td><td>tab-bar docs</td></tr>
+</table>
+
+<h2>8. SegmentedControl: the immediate call</h2>
+<figure>
+<img alt="SegmentedControl in Brik dark mode: mid-grey track, black inactive labels, black active pill" src="data:image/png;base64,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">
+<figcaption>Brik dark: the track is <code>#828282</code> (<code>dist/tokens.css:763</code>), the inactive label is fixed black <code>--bds-text-on-color-light</code> (<code>:724</code>), and the active pill is black.</figcaption>
+</figure>
+<div class="open">
+<p><strong>Open call: the selected indicator once the brand border is removed</strong></p>
+<table>
+<tr><th>Option</th><th>Light (vs track #f2f2f2)</th><th>Dark (vs track #828282)</th><th>System fit</th></tr>
+<tr><td><strong>(a) Brand fill</strong>, as Button <code>--selected</code> and TabBar <code>box</code></td><td>3.38:1, passes</td><td>1.02:1, fails until the dark track token changes</td><td>Matches the selected = fill channel</td></tr>
+<tr><td>(b) White pill + shadow</td><td>1.12:1, fails 1.4.11</td><td>—</td><td>Needs a non-colour cue (for example a check icon) to pass</td></tr>
+</table>
+<p>Agent recommendation: (a), plus a dark track that keeps the brand fill at ≥3:1. This is a visible change on every consumer, so it waits for your call.</p>
+</div>
+<p><strong>"Why do we allow components to exclude tokens?"</strong> The inactive item's <code>background-color: transparent</code> (<code>SegmentedControl.css:45</code>) is a CSS keyword with no token behind it (grep of <code>tokens/figma-tokens.css</code> for "transparent": no hits). The one raw colour that is a real escape is <code>box-shadow: 0 1px 3px rgba(0,0,0,0.08)</code>, which uses a <code>bds-lint-ignore</code> (<code>:89</code>).</p>
+
+<h2>9. Proposed next work</h2>
+<p>These become native sub-issues of #3300 once the model in §2 is approved.</p>
+<ol>
+<li>Rewrite <code>interaction-states.mdx</code> to the §2 model, and add the "focus channel is reserved" rule. Amend ADR-035's "focus ring IS the brand border" line, or supersede it.</li>
+<li>SegmentedControl: drop the brand border and apply the §8 call in both themes.</li>
+<li>Rename <code>--active</code> by meaning, in 3 batches: current (4), highlighted (5), selected / toggle / drag-over (5).</li>
+<li>Unify the focus ring onto one recipe, and add a lint that flags any non-canon focus outline colour.</li>
+<li>Fix <code>component-build.md:106</code> and <code>:115</code>.</li>
+</ol>
+
+<h2>Method and limits</h2>
+<ul>
+<li><strong>Component matrix:</strong> a script read every <code>components/ui/*/*.css</code> and <code>*.tsx</code> for state selectors and ARIA. 60 components carry an interactive selector. 34 of the 60 have no focus rule in their own CSS. Each of those may draw the browser's default ring or a composed child's ring, and they were <strong>not checked one by one</strong>. Only <code>outline: none</code> with no replacement is called a defect, and only DatePicker / TimePicker fit that.</li>
+<li><strong>Renders:</strong> all renders are local Chromium runs of the repo CSS. The hosted Storybook returned HTTP 401.</li>
+<li><strong>Docs sweep:</strong> grep over <code>docs-site/content/docs</code>, <code>components/ui/**/*.mdx</code>, <code>docs/adrs</code>, <code>.claude/standards</code>, <code>docs/*.md</code>, <code>tokens/CASCADE.md</code> and <code>content-system</code>. Key citations were spot-checked against the files.</li>
+<li><strong>Vendor:</strong> W3C 1.4.11, W3C 1.4.1 and GitLab Pajamas were fetched. Base Web, Material 3 and Apple HIG returned empty bodies and are unverified.</li>
+</ul>
+
+</body>
+</html>
