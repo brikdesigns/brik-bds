@@ -1,0 +1,36 @@
+---
+title: Upgrading
+description: When a new @brikdesigns/bds version ships, what a breaking change looks like, and how to bump a consumer safely.
+---
+
+BDS publishes a new version of `@brikdesigns/bds` for each git tag. The tag is the publish step and the release record: each one creates a [GitHub Release](https://github.com/brikdesigns/brik-bds/releases) with notes generated from the PRs merged since the previous tag. The full maintainer flow is in [`docs/RELEASE.md`](https://github.com/brikdesigns/brik-bds/blob/main/docs/RELEASE.md).
+
+## Bump cadence
+
+BDS is pre-1.0, so a breaking change ships in the **minor** slot, not a major. A caret range such as `^0.130.0` resolves `>=0.130.0 <0.131.0`. A consumer therefore picks up patches automatically but stays on its minor until it bumps on purpose. The semver policy, including that pre-1.0 exception, is in [`docs/RELEASE.md` § Flow](https://github.com/brikdesigns/brik-bds/blob/main/docs/RELEASE.md#flow).
+
+Brik-managed consumers receive an automated bump PR after each tag. Review it with the checks below rather than bumping by hand.
+
+## What a breaking change looks like
+
+| Change | How it breaks | Where it's recorded |
+|---|---|---|
+| Component API | A prop is renamed or removed, and the build or typecheck fails | The GitHub Release notes, as a commit marked `type(scope)!:` |
+| Token name | A `var(--…)` reference resolves to nothing, and the style silently falls back | The GitHub Release notes |
+| Class hook | A selector in your override CSS silently stops matching | The **Breaking (consumer CSS)** old → new table in [`CHANGELOG.md`](https://github.com/brikdesigns/brik-bds/blob/main/CHANGELOG.md) |
+
+The token and class-hook rows fail without an error, so check them by hand.
+
+## Before you bump
+
+1. Read the GitHub Release for every tag between your current version and the target.
+2. Search [`CHANGELOG.md`](https://github.com/brikdesigns/brik-bds/blob/main/CHANGELOG.md) for each `bds-` class your override CSS targets.
+3. Search your theme and override CSS for every token named in those release notes.
+4. Re-run your typecheck and build, then check light and dark mode in the browser.
+
+If the cascade itself changed, [`tokens/CASCADE.md`](https://github.com/brikdesigns/brik-bds/blob/main/tokens/CASCADE.md) holds the file-level load order, and [The cascade](/docs/getting-started/cascade) holds the adoption contract.
+
+## Related
+
+- [Installation](/docs/getting-started/installation): the quick setup path
+- [Troubleshooting](/docs/getting-started/troubleshooting): setup failures by symptom

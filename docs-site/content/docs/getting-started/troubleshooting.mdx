@@ -1,0 +1,52 @@
+---
+title: Troubleshooting
+description: The common setup failures when wiring BDS into a consumer, listed as symptom, cause, and fix.
+---
+
+Most setup failures trace back to the token cascade. Each entry below names the symptom you see, the cause, and the fix. The fix links to the page that owns the full pattern rather than restating it.
+
+## Dark mode flashes on load
+
+**Symptom.** The page paints in light mode, then switches to dark a moment later.
+
+**Cause.** `data-theme` is set on `<html>` after first paint, by a React effect or a deferred script, so the browser renders the default light tokens first.
+
+**Fix.** Set `data-theme` from an inline `<script>` in `<head>` that runs before first paint. Next.js: the `themeInitScript` in [Framework guides → Root layout](/docs/getting-started/framework-guides#4-root-layout). Astro: the same pattern, described in [Framework guides → Theme and mode switches](/docs/getting-started/framework-guides#5-theme-and-mode-switches).
+
+## Tailwind resets BDS components
+
+**Symptom.** With Tailwind v3 installed, BDS components lose their borders, padding, or font styles.
+
+**Cause.** Tailwind v3's preflight ships unlayered resets. Unlayered CSS beats every named layer, including `@layer bds-components`.
+
+**Fix.** Add the one-rule `revert-layer` bridge from [Framework guides → Tailwind v3 bridge](/docs/getting-started/framework-guides#5-tailwind-v3-bridge).
+
+## Client theme never overrides BDS
+
+**Symptom.** Your `theme-{client}.css` values are ignored and BDS defaults render instead.
+
+**Cause.** An `@import` is missing its `layer()` clause. `tokens.css` ships unlayered, so without `layer(bds-tokens)` it wins the cascade and `client-theme` can never override it. A bare `layer` with no name fails the same way: an anonymous layer can't be ordered against `client-theme`.
+
+**Fix.** Import every BDS file into its named layer, as shown in [Installation → Wire the token cascade](/docs/getting-started/installation#wire-the-token-cascade). The rule is item 3 of [the adoption contract](/docs/getting-started/cascade#the-adoption-contract).
+
+## Theme not applying
+
+**Symptom.** The layers are named, but brand colors or the dark mode still don't show.
+
+**Cause.** One of four wiring slips:
+
+| Check | What goes wrong |
+|---|---|
+| Layer order statement | The `@layer bds-tokens, bds-components, client-theme, client-overrides;` statement sits after an `@import`, or is missing, so the layers are ordered by first appearance instead |
+| Mode attribute | `data-theme` is set on `<body>` or a wrapper instead of `<html>` |
+| Astro import order | `theme-client.css` is not the last stylesheet imported in the base layout, so a BDS `:root` declaration wins |
+| Token redefinition | The client theme redefines a BDS token under a different name, which nothing reads |
+
+**Fix.** Walk the four binding requirements in [the adoption contract](/docs/getting-started/cascade#the-adoption-contract). The [HTML attribute switchboard](/docs/getting-started/cascade#html-attribute-switchboard) lists every attribute and where it goes, and [Client themes → What each theme overrides](/docs/theming/client-themes#what-each-theme-overrides) lists the token names a theme overrides.
+
+## Related
+
+- [Installation](/docs/getting-started/installation): the quick setup path
+- [Framework guides](/docs/getting-started/framework-guides): Next.js and Astro scaffolds
+- [The cascade](/docs/getting-started/cascade): the adoption contract of record
+- [Upgrading](/docs/getting-started/upgrading): bumping `@brikdesigns/bds` safely

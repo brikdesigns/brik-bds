@@ -160,6 +160,8 @@ import { SidebarNavigation } from '@brikdesigns/bds';
 
 ### Common Next.js gotchas
 
+For setup failures listed by symptom (a dark-mode flash, Tailwind resets, a theme that won't apply), see [Troubleshooting](/docs/getting-started/troubleshooting).
+
 <Callout type="warn">
   **Don't import BDS components into Server Components without a `'use client'` boundary.** Most BDS components carry React hooks. Wrap interactive UI in a client component (the `BDSProvider` is one).
 </Callout>
@@ -316,6 +318,8 @@ Astro sites typically use the lightweight tier (CSS-only) plus Lenis for smooth 
 
 ### Common Astro gotchas
 
+For setup failures listed by symptom, including a theme that won't apply, see [Troubleshooting](/docs/getting-started/troubleshooting).
+
 <Callout type="warn">
   **CSS custom properties resolve at use-time, not at definition time.** The `import` order in `BaseLayout.astro` controls *which `:root` declaration wins* — `theme-client.css` loaded last overrides BDS defaults. Don't try to "load styles.css after theme-client.css to make components pick up brand colors" — components reference `var(--bds-background-brand-primary)` lazily; cascade resolves at render time.
 </Callout>
@@ -332,7 +336,7 @@ For clients still on Webflow only. New work goes Next.js or Astro.
 
 The Webflow CSS layer is partially synced from BDS via the Designer Bridge but is **not** the source of truth — token-rename migrations land in BDS first and propagate via the bridge on a manual cadence. Token names match the canonical registry (`--text-primary`, `--background-brand-primary`, etc.) so guidance on this site applies, with the caveat that Webflow's class-naming UI doesn't enforce BDS class conventions.
 
-For the per-token rename log and migration cadence, see the BDS releases changelog.
+For the per-token rename log and migration cadence, see [Upgrading](/docs/getting-started/upgrading) and the [BDS releases](https://github.com/brikdesigns/brik-bds/releases).
 
 ---
 
