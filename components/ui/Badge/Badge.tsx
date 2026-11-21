@@ -67,9 +67,9 @@ export interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Badge — status indicator with semantic colors.
+ * Badge — an indicator that expresses a status (a verb).
  *
- * Pill-shaped label for communicating status, category, or count.
+ * Types and categories (nouns) are a `Tag`.
  * Uses BDS system color tokens for consistent status semantics.
  * Sizing scale is shared with Tag for side-by-side alignment.
  *

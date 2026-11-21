@@ -67,7 +67,9 @@ export interface TagProps extends HTMLAttributes<HTMLSpanElement> {
 }
 
 /**
- * Tag — categorization label.
+ * Tag — an indicator that expresses a type or category (a noun).
+ *
+ * Statuses (verbs) are a `Badge`.
  *
  * Sizing scale is shared with Badge for side-by-side alignment.
  *

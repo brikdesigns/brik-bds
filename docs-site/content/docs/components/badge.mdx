@@ -1,9 +1,11 @@
 ---
 title: Badge
-description: Status indicators and labels. Non-interactive — for displaying state, never for triggering actions.
+description: Status indicators (verbs). Non-interactive — for displaying state, never for triggering actions.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+
+Badges are an indicator to express statuses (verbs). See [Badge vs Tag](/docs/build-standards/indicators#badge-vs-tag).
 
 Badge displays contextual status. It uses semantic system colors to communicate state at a glance, with `solid` (saturated), `subtle` (pale) and `outline` (border only) appearances for different surface contexts.
 
@@ -12,14 +14,14 @@ Badge displays contextual status. It uses semantic system colors to communicate 
     {
       title: 'Badge',
       preview: <BDS.Badge tone="positive">Done</BDS.Badge>,
-      whenToUse: 'Read-only status with a value judgment (good/bad/waiting). Published, Active, Failed.',
+      whenToUse: 'Read-only status (good/bad/waiting). Published, Active, Failed.',
       whenNotToUse: 'Wire onClick — Badge is an indicator, not an action.',
       code: `<Badge tone="positive">Done</Badge>`,
     },
     {
       title: 'Tag',
       preview: <BDS.Tag>Cosmetic</BDS.Tag>,
-      whenToUse: 'Neutral categorization without a value judgment. Industry, segment, owner, size.',
+      whenToUse: 'A type or category (a noun). Industry, segment, owner, size.',
       whenNotToUse: 'Use for status — that\'s Badge.',
       code: `<Tag>Cosmetic</Tag>`,
     },
@@ -37,9 +39,9 @@ Badge displays contextual status. It uses semantic system colors to communicate 
 
 - A record's status (Published, Draft, In Review, Archived)
 - Pipeline state (Pending, Processing, Completed, Failed)
-- Categorical states with a value judgment (Healthy/Warning/Critical)
+- Health states (Healthy/Warning/Critical)
 
-For neutral categorization without a status meaning, use [Tag](/docs/components/tag). For interactive pills, use [Chip](/docs/components/chip).
+For a type or category, use [Tag](/docs/components/tag). For interactive pills, use [Chip](/docs/components/chip).
 
 ## Import
 
@@ -143,7 +145,7 @@ Per `tone` (`positive`, `warning`, `negative`, `info`, `neutral`):
 
 ## Related
 
-- [Tag](/docs/components/tag) — neutral categorization sibling
+- [Tag](/docs/components/tag) — type and category sibling
 - [Chip](/docs/components/chip) — interactive sibling
 - [BadgeGroup](/docs/components/badge-group) — multi-badge cluster
 - [Dot](/docs/components/dot) — minimal status indicator

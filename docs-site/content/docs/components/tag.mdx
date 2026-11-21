@@ -1,9 +1,11 @@
 ---
 title: Tag
-description: Categorization labels. Non-interactive — for what a record *is*, not what a user can *do*.
+description: Type and category indicators (nouns). Non-interactive — for what a record *is*, not what a user can *do*.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
+
+Tags are an indicator used to express types and categories (nouns). See [Badge vs Tag](/docs/build-standards/indicators#badge-vs-tag).
 
 Tag is the indicator-family sibling of [Badge](/docs/components/badge) and [Chip](/docs/components/chip). Use it to label *what a record is* — its industry, segment, owner, size, or any other neutral category. Tag is read-only.
 
@@ -12,15 +14,15 @@ Tag is the indicator-family sibling of [Badge](/docs/components/badge) and [Chip
     {
       title: 'Tag',
       preview: <BDS.Tag>Cosmetic</BDS.Tag>,
-      whenToUse: 'Neutral categorization. Industry, owner, segment, size — facts that have no value judgment.',
+      whenToUse: 'A type or category (a noun). Industry, owner, segment, size.',
       whenNotToUse: 'Use it as a status indicator — that\'s Badge.',
       code: `<Tag>Cosmetic</Tag>`,
     },
     {
       title: 'Badge',
       preview: <BDS.Badge tone="positive">Active</BDS.Badge>,
-      whenToUse: 'Status with a value judgment (good/bad/waiting). Active, Failed, In review.',
-      whenNotToUse: 'Use for neutral categorization — that\'s Tag.',
+      whenToUse: 'A status (a verb). Active, Failed, In review.',
+      whenNotToUse: 'Use for a type or category — that\'s Tag.',
       code: `<Badge tone="positive">Active</Badge>`,
     },
     {
@@ -37,7 +39,7 @@ Tag is the indicator-family sibling of [Badge](/docs/components/badge) and [Chip
 
 - Industry, segment, vertical labels (Dental, Real Estate, Cosmetic)
 - Owner attribution chips on rows
-- Categorical metadata that doesn't carry a status meaning
+- Categorical metadata (types, roles, kinds)
 - Non-interactive labels that need consistent visual treatment
 
 ## Import
@@ -80,7 +82,7 @@ Four sizes (`xs` is icon-only), three appearances and seven colors.
 
 ### Colors
 
-`color` names the category: `neutral` (default) or an accent hue — `blue`, `green`, `orange`, `purple`, `yellow`, `red`. The hues are the same ones Avatar uses. Status colors (positive, warning, negative, info) are not Tag colors; a status is a [Badge](/docs/components/badge) `tone`.
+`color` names the category: `neutral` (default) or an accent hue — `blue`, `green`, `orange`, `purple`, `yellow`, `red`. The hues are the same ones Avatar uses. Status colors (positive, warning, negative, info) are not Tag colors; a status is a [Badge](/docs/components/badge) `tone`. `neutral` is the default; an accent colour is opt-in and must carry a meaning.
 
 ```tsx
 <Tag color="blue">Dental</Tag>
@@ -93,7 +95,7 @@ Four sizes (`xs` is icon-only), three appearances and seven colors.
 Pass `icon` (left) or `trailingIcon` (right). Icon is **required** when `size="xs"` (icon-only).
 
 ```tsx
-<Tag icon={<CertificateIcon />}>Featured</Tag>
+<Tag icon={<CertificateIcon />}>Dental</Tag>
 <Tag trailingIcon={<XCircleIcon />}>Dismiss</Tag>
 <Tag size="xs" icon={<CrownIcon />} />
 ```
@@ -110,7 +112,7 @@ Pass `icon` (left) or `trailingIcon` (right). Icon is **required** when `size="x
   **Tag is read-only.** Never wire `onClick`, never wrap in a `<Link>`, never trigger behavior. The `onRemove` prop exists for backward compat but is **deprecated** — migrate removable pills to [Chip](/docs/components/chip).
 </Callout>
 
-- **Don't use Tag for status with a value judgment.** "Active" / "Failed" / "Pending" are [Badge](/docs/components/badge).
+- **Don't use Tag for a status.** "Active" / "Failed" / "Pending" are [Badge](/docs/components/badge).
 - **Don't use Tag for interactive pills.** Filter toggles, dismissible selections, dropdown triggers are [Chip](/docs/components/chip).
 
 ## Accessibility

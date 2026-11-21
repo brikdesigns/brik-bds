@@ -9,8 +9,8 @@ import {
   type KeyboardEvent,
   type SyntheticEvent,
 } from 'react';
-import { Badge } from '../Badge';
 import { Button } from '../Button';
+import { Tag } from '../Tag';
 import { TextArea } from '../TextArea';
 import { bdsClass } from '../../utils';
 import { useFloatingPanel } from '../shared/useFloatingPanel';
@@ -274,9 +274,9 @@ export function CommentComposer({
                 >
                   <span className="bds-comment-composer__option-label">@{mention.label}</span>
                   {mention.kind && (
-                    <Badge size="sm" appearance="subtle" tone="neutral">
+                    <Tag size="sm" appearance="subtle" color="neutral">
                       {mention.kind === 'agent' ? 'Agent' : 'Person'}
-                    </Badge>
+                    </Tag>
                   )}
                   {mention.description && (
                     <span className="bds-comment-composer__option-description">{mention.description}</span>
