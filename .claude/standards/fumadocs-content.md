@@ -5,7 +5,7 @@ type: reference
 scope: brik-bds
 applies-to: "**/docs-site/content/docs/**/*.mdx"
 retrieved-via: brik-rag query "fumadocs writing standard"
-last-verified: 2026-07-26
+last-verified: 2026-11-21
 ---
 
 # Fumadocs content standard
@@ -140,11 +140,33 @@ When referencing a token, component, or atmosphere, link to the canon page (`/do
 
 ## Allowed Fumadocs components
 
-Use only those already in active use across docs-site:
+Use only those already in active use across docs-site.
+
+**Fumadocs primitives**, imported per page:
 
 - `<Callout type="info|warn|error">` from `fumadocs-ui/components/callout`
 - `<Cards>` / `<Card title href description>` from `fumadocs-ui/components/card`
+- `<Tabs items={[...]}>` / `<Tab>` from `fumadocs-ui/components/tabs`: parallel install or framework variants only
 - Standard markdown tables for comparisons
+
+**BDS docs blocks**, registered in `docs-site/lib/mdx-components.tsx` and callable without an import. That registry is the allowlist: a name not in it is not allowed. Prop shapes live in [Page templates → Building blocks](../../docs-site/content/docs/getting-started/page-templates.mdx#building-blocks).
+
+- `<ComponentPreview code>`: live render plus Code tab, for state and style families
+- `<EmphasisLadder>`: ordered variant ladder, strongest first
+- `<ComparisonGrid>`: "X vs Y vs Z" decision grid for sibling components
+- `<ComponentAnatomy>`: live preview beside numbered parts
+- `<MetadataStrip>`: page-header label/value strip (industry packs, voice patterns)
+- `<ColorGrid>` / `<PaletteGrid>`: color swatches on Primitives pages
+- `<SpacingScale>` / `<SemanticSpacing>`: spacing scales on Primitives pages
+- `<TypographyScale>` / `<FontFamilyShowcase>` / `<SemanticTypographyTable>` / `<FontWeightShowcase>`: type scales on Primitives pages
+- `<BorderRadiusPreview>` / `<BorderWidthPreview>` / `<ShadowScale>`: radius, border, and shadow scales on Primitives pages
+- `<TierBadge tier>`: motion tier tag, the one inline badge a heading may carry
+- `<EffectGrid>` / `<AnimationDemo>` / `<ClipRevealDemo>` / `<GrainDemo>` / `<GlassDemo>` / `<TextEffectDemo>` / `<HoverDemo>` / `<VideoDemo>` / `<SectionThemeDemo>`: live motion-effect demos on Motion pages
+- `<AtmospherePreview>`: sandboxed iframe preview of an atmosphere
+- `<NavigationIASpec>`: an industry pack's navigation IA rendered as a spec
+- `<BlueprintLibrary>`: the blueprint library catalog
+
+**Live BDS components** as `<BDS.Name>` (the whole `@brikdesigns/bds` namespace), usually inside `<ComponentPreview>`. Always namespaced, never imported bare, so they can't collide with `<Card>` or `<Tabs>`.
 
 Adding a new Fumadocs UI component (tabs, accordions, custom MDX components) is a docs-site infrastructure change — open an issue first. Do not introduce ad-hoc components in a content PR.
 
