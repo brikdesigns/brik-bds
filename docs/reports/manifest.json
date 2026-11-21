@@ -2,7 +2,7 @@
   "schema": 1,
   "generated_by": "brikdesigns/brik-llm:scripts/reports/report-meta.py",
   "contract": "docs/reports/README.md#metadata-contract",
-  "count": 12,
+  "count": 13,
   "reports": [
     {
       "path": "docs/reports/2026-09-26-foundations-disconnect-assessment.html",
@@ -135,6 +135,22 @@
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-11-18",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/interactive-state-system-assessment.html",
+      "title": "Interactive State System",
+      "status": "active",
+      "type": "assessment",
+      "themes": [
+        "design-system",
+        "accessibility"
+      ],
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-11-21",
       "supersedes": "none",
       "cadence": "once",
       "source": "manual"
