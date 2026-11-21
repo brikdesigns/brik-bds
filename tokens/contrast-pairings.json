@@ -232,10 +232,10 @@
     {
       "group": "brand",
       "label": "Rail TOC active label on surface",
-      "fg": "--bds-text-brand-primary-strong",
+      "fg": "--bds-text-brand-primary",
       "bg": "--bds-surface-primary",
-      "thresholdType": "AA",
-      "note": "TableOfContents variant=\"rail\" active label \u2014 14px bold, so WCAG large text (18.66px bold) does not apply and the bar is AA 4.5:1, not the AA-large 3:1 that --bds-text-brand-primary carries in its heading/accent role. The rail is now transparent (col_toc dropped its tint, brikdesigns#1458), so the label renders on the band (--bds-surface-primary), not the old --bds-surface-secondary box. --bds-text-brand-primary (poppy-500) is too light; --bds-text-brand-primary-strong darkens to poppy-700 in light and stays poppy-500 in dark, where darkening would sink it (#2270, #2470)."
+      "thresholdType": "AA-large",
+      "note": "TableOfContents variant=\"rail\" active label on the transparent rail's band (--bds-surface-primary). Brand-coloured text is the brand colour's standing accessibility exception (ADR-015): gated AA-large (3:1), like Brand text on page (#2270, #2470)."
     },
     {
       "group": "neutral",
@@ -952,11 +952,11 @@
     },
     {
       "group": "indicator",
-      "label": "Subtle brand indicator label on the brand pale fill",
-      "fg": "--bds-text-brand-primary-strong",
+      "label": "Subtle Avatar label on the brand pale fill",
+      "fg": "--bds-text-brand-primary",
       "bg": "--bds-background-brand-secondary",
-      "thresholdType": "AA",
-      "note": "The `subtle` appearance of a brand Badge and of an Avatar with no `color` (brik-bds#2943). Brand has no `-light` token: its pale fill is --bds-background-brand-secondary, which resolves per theme (tan-100 light, near-black dark). --bds-text-brand-primary-strong follows it in both themes (poppy-700 light, poppy-500 dark), so one row covers both and replaces the two `appliesTo`-scoped rows that tracked Badge's old dark-mode override."
+      "thresholdType": "AA-large",
+      "note": "The `subtle` appearance of an Avatar with no `color` (brik-bds#2943). Brand has no `-light` token: its pale fill is --bds-background-brand-secondary, which resolves per theme (tan-100 light, near-black dark). The label is --bds-text-brand-primary, the brand colour's standing accessibility exception (ADR-015), gated AA-large (3:1)."
     },
     {
       "group": "chart",

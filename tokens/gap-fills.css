@@ -59,32 +59,6 @@
      Keep the two in lockstep, and move both together when promoted to Figma. */
   --bds-background-tertiary: var(--bds-color-grayscale-300);
 
-  /* Theme-responsive AA-safe brand TEXT step (light value here, dark in the
-     :root[data-theme="dark"] block below). --bds-text-brand-primary serves a
-     heading/accent role and is gated AA-large (3:1) on the strength of that
-     size; a brand-colored label at SMALL size has had no token, so the usage
-     rule (BDS-18) sends small copy to
-     --bds-text-primary, which drops the brand entirely.
-
-     TableOfContents `variant="rail"` is the first surface that needs both: a
-     14px bold active label, brand-colored, on --bds-surface-secondary. 14px bold is
-     below WCAG's large-text floor (18.66px bold), so the bar is AA 4.5:1 — and
-     Brik's --bds-text-brand-primary measures 3.38:1 there. Darkening one step
-     gives 5.56:1. Brik dark mode keeps the base step (4.56:1 on the
-     near-black secondary surface); darkening there would sink it.
-
-     Gated as "Rail TOC active label on secondary surface" in
-     contrast-pairings.json. Declared here rather than only as a Brik override
-     because it is a new Semantic token, not a brand re-pin of a generated one
-     (CASCADE.md § "Add a semantic token Figma doesn't export"), and because
-     lint-tokens.js resolves the canonical registry from this file, not the
-     brand theme. RETIRE once the Figma source emits it. (#2270)
-
-     This :root value is the Foundations default, the same grayscale step as
-     --bds-text-brand-primary. Brik's darker brand pin is a Brand Kit variable
-     (#2927), because :root is Foundations-only since #2910. */
-  --bds-text-brand-primary-strong: var(--bds-color-grayscale-950);
-
   /* ── Slider Component Variables ──
      CSS custom properties set dynamically by the Slider component via JS.
      Defined here so the linter knows they are intentional component vars. */
@@ -452,11 +426,4 @@
      No dark value previously existed → light #e0e0e0 fill + light #f2f2f2 text
      = ~1.1:1, invisible. (#916) */
   --bds-background-tertiary: var(--bds-color-grayscale-950);
-
-  /* Dark value for the --bds-text-brand-primary-strong gap-fill (light value above,
-     in :root): the Foundations dark --bds-text-brand-primary step. Pinned
-     explicitly rather than left to inherit the :root value, to keep the
-     light/dark pair in lockstep and self-documenting. Brik's brand pair is a Brand Kit
-     variable (#2270, #2927). */
-  --bds-text-brand-primary-strong: var(--bds-color-grayscale-100);
 }

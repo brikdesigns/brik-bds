@@ -274,7 +274,7 @@ export function CommentComposer({
                 >
                   <span className="bds-comment-composer__option-label">@{mention.label}</span>
                   {mention.kind && (
-                    <Badge size="sm" appearance="subtle" tone={mention.kind === 'agent' ? 'brand' : 'neutral'}>
+                    <Badge size="sm" appearance="subtle" tone="neutral">
                       {mention.kind === 'agent' ? 'Agent' : 'Person'}
                     </Badge>
                   )}

@@ -43,6 +43,12 @@ describe('Badge retired tone values', () => {
     expect(html).not.toContain('bds-badge--progress');
   });
 
+  it('maps the retired `brand` onto `neutral` (brand is not a status)', () => {
+    const html = render({ tone: 'brand' });
+    expect(html).toContain('bds-badge--tone-neutral');
+    expect(html).not.toContain('bds-badge--tone-brand');
+  });
+
   it('honours the deprecated `status` prop', () => {
     expect(render({ status: 'error' })).toContain('bds-badge--tone-negative');
   });

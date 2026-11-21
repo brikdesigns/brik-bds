@@ -17,7 +17,7 @@ const meta: Meta<typeof Badge> = {
   argTypes: {
     status: {
       control: 'select',
-      options: ['positive', 'warning', 'negative', 'info', 'neutral', 'brand'],
+      options: ['positive', 'warning', 'negative', 'info', 'neutral'],
       description:
         'Semantic status tone — drives the badge color. `neutral` is a muted-gray, low-emphasis tone for inert states.',
     },

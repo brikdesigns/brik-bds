@@ -87,7 +87,6 @@ describe('Badge appearance="subtle" contrast (#2402)', () => {
     ['positive', 4.5],
     ['warning', 4.5],
     ['neutral', 4.5],
-    ['brand', 4.5],
     ['negative', 4.5],
   ])('tone="%s" clears AA (%s:1) in both themes on the real rendered badge', async (tone, floor) => {
     const el = await mount(tone);

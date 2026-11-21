@@ -57,14 +57,12 @@ Six status colors across four sizes, each available in `solid`, `subtle` and `ou
 <BDS.Badge tone="warning">Pending</BDS.Badge>
 <BDS.Badge tone="negative">Failed</BDS.Badge>
 <BDS.Badge tone="neutral">Note</BDS.Badge>
-<BDS.Badge tone="info">In progress</BDS.Badge>
-<BDS.Badge tone="brand">Featured</BDS.Badge>`}>
+<BDS.Badge tone="info">In progress</BDS.Badge>`}>
   <BDS.Badge tone="positive">Done</BDS.Badge>
   <BDS.Badge tone="warning">Pending</BDS.Badge>
   <BDS.Badge tone="negative">Failed</BDS.Badge>
   <BDS.Badge tone="neutral">Note</BDS.Badge>
   <BDS.Badge tone="info">In progress</BDS.Badge>
-  <BDS.Badge tone="brand">Featured</BDS.Badge>
 </ComponentPreview>
 
 ### Subtle appearance
@@ -114,7 +112,6 @@ Pass `icon` for a leading visual. Required when `size="xs"` (icon-only).
   **Badge is read-only.** Never wire `onClick`, never wrap in a `<Link>`, never trigger behavior. Reading "Active" is different from clicking "Active to filter" — the latter is a [Chip](/docs/components/chip).
 </Callout>
 
-- **Don't pick `brand` for routine status.** It draws the eye like a CTA. Reserve for genuinely-featured states.
 - **Don't mix appearances in the same cluster.** Pick one per row for visual coherence.
 
 ## Accessibility
@@ -143,8 +140,6 @@ Per `tone` (`positive`, `warning`, `negative`, `info`, `neutral`):
 - `--bds-background-{tone}` — `solid` fill
 - `--bds-background-{tone}-light` — `subtle` fill
 - `--bds-border-{tone}` — `outline` edge
-
-`brand` is the exception: `solid` is `--bds-background-brand-primary`, `subtle` is `--bds-background-brand-secondary` with `--bds-text-brand-primary-strong`, and `outline` is `--bds-border-brand-primary`.
 
 ## Related
 
