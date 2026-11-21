@@ -7,10 +7,13 @@
  * modifier, disabled is the native :disabled state.
  *
  * Token reference:
- * - --bds-background-secondary (track fill)    - --bds-background-primary (active pill)
- * - --bds-background-tertiary (hover/press)    - --bds-text-on-color-light (inactive label)
- * - --bds-text-primary (active/hover label)    - --bds-border-brand-primary (focus ring, active-item boundary)
- * - --bds-border-width-md (item border; item padding is reduced by it)
+ * - --bds-surface-secondary (track fill)            - --bds-text-primary (inactive label)
+ * - --bds-background-secondary-hover (inactive hover/press fill)
+ * - --bds-background-brand-primary (active fill, + -hover / -pressed)
+ * - --bds-text-on-color-dark (active label)         - --bds-border-brand-primary (focus ring)
+ *
+ * The active segment reads as Button --selected does: brand fill, white label,
+ * no border.
  */
 
 /* ── Container / track ── */
@@ -20,7 +23,11 @@
   align-items: center;
   gap: var(--bds-border-width-lg);
   padding: var(--bds-border-width-lg);
-  background-color: var(--bds-background-secondary);
+  /* --bds-surface-secondary, not --bds-background-secondary: the Brik Brand Kit's dark
+     --bds-background-secondary is grayscale-500 (#828282), where the brand fill is 1.02:1
+     (#3303). This token is #f2f2f2 / #1b1b1b, so the brand fill clears 3:1 in both themes.
+     Same fill Stepper, Checklist and ProgressStepper use. */
+  background-color: var(--bds-surface-secondary);
   border-radius: var(--bds-border-radius-md);
   box-sizing: border-box;
 }
@@ -43,19 +50,14 @@
      SAME property — mixing shorthand + non-shorthand triggered React's
      "conflicting style property" warning when these were inline. See #993. */
   background-color: transparent;
-  /* Unified border model (mirrors Button.css) — every item reserves the same
-     border box so the active state shifts nothing. Active overrides border-color only. */
-  border: var(--bds-border-width-md) solid transparent;
+  border: 0;
   border-radius: var(--bds-border-radius-sm);
-  /* Inactive label sits on the --bds-background-secondary track, a light-ish neutral
-     surface in BOTH themes. --bds-text-on-color-light is fixed dark in both themes →
-     AA on the track either way. See contrast-pairings.json. */
-  color: var(--bds-text-on-color-light);
+  /* Inactive label flips with the theme, as the --bds-surface-secondary track does
+     (15.39:1 both themes). See contrast-pairings.json. */
+  color: var(--bds-text-primary);
   min-width: 0;
   transition: background-color var(--bds-duration-100) var(--bds-ease-out),
-    color var(--bds-duration-100) var(--bds-ease-out),
-    border-color var(--bds-duration-100) var(--bds-ease-out),
-    box-shadow var(--bds-duration-100) var(--bds-ease-out);
+    color var(--bds-duration-100) var(--bds-ease-out);
 }
 
 .bds-segmented-control--full-width .bds-segmented-control-item {
@@ -65,28 +67,25 @@
 /* ── Size ── */
 
 .bds-segmented-control--size-sm .bds-segmented-control-item {
-  padding: calc(var(--bds-gap-xs) - var(--bds-border-width-md)) calc(var(--bds-padding-md) - var(--bds-border-width-md));
+  padding: var(--bds-gap-xs) var(--bds-padding-md);
   font-size: var(--bds-label-sm);
 }
 
 .bds-segmented-control--size-md .bds-segmented-control-item {
-  padding: calc(var(--bds-gap-sm) - var(--bds-border-width-md)) calc(var(--bds-padding-lg) - var(--bds-border-width-md));
+  padding: var(--bds-gap-sm) var(--bds-padding-lg);
   font-size: var(--bds-label-md);
 }
 
 .bds-segmented-control--size-lg .bds-segmented-control-item {
-  padding: calc(var(--bds-gap-md) - var(--bds-border-width-md)) calc(var(--bds-padding-xl) - var(--bds-border-width-md));
+  padding: var(--bds-gap-md) var(--bds-padding-xl);
   font-size: var(--bds-label-md);
 }
 
 /* ── Active ── */
 
 .bds-segmented-control-item--active {
-  background-color: var(--bds-background-primary);
-  color: var(--bds-text-primary);
-  /* WCAG 1.4.11: fill alone is 1.12:1 on the track; the border carries the state at ≥3:1. */
-  border-color: var(--bds-border-brand-primary);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08); /* bds-lint-ignore — no composite --box-shadow-* matches this value (nearest is --bds-shadow-subtle 0px 2px 4px 0.06); a --box-shadow-xs is a separate proposal (#2171 out-of-scope) */
+  background-color: var(--bds-background-brand-primary);
+  color: var(--bds-text-on-color-dark);
 }
 
 /* ── Disabled ── */
@@ -100,21 +99,25 @@
 /* ── Inactive hover ── */
 
 .bds-segmented-control-item:hover:not(:disabled):not(.bds-segmented-control-item--active) {
-  background-color: var(--bds-background-tertiary);
-  color: var(--bds-text-primary);
+  background-color: var(--bds-background-secondary-hover);
 }
 
 /* ── Inactive press ── */
 
 .bds-segmented-control-item:active:not(:disabled):not(.bds-segmented-control-item--active) {
-  background-color: var(--bds-background-tertiary);
-  opacity: 0.7;
+  /* Holds the hover fill, as Button --secondary does: no darker neutral step keeps
+     --bds-text-primary at AA in both themes. */
+  background-color: var(--bds-background-secondary-hover);
 }
 
-/* ── Active press ── */
+/* ── Active hover / press ── */
+
+.bds-segmented-control-item--active:hover:not(:disabled) {
+  background-color: var(--bds-background-brand-primary-hover);
+}
 
 .bds-segmented-control-item--active:active:not(:disabled) {
-  opacity: 0.85;
+  background-color: var(--bds-background-brand-primary-pressed);
 }
 
 /* ── Focus visible (keyboard navigation) ── */

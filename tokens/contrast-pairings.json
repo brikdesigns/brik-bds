@@ -76,9 +76,18 @@
     {
       "group": "neutral",
       "label": "SegmentedControl inactive label on track",
-      "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-secondary",
+      "fg": "--bds-text-primary",
+      "bg": "--bds-surface-secondary",
       "thresholdType": "AA"
+    },
+    {
+      "group": "neutral",
+      "label": "SegmentedControl selected fill on track",
+      "fg": "--bds-background-brand-primary",
+      "bg": "--bds-surface-secondary",
+      "components": ["SegmentedControl"],
+      "thresholdType": "AA-large",
+      "note": "UI-component boundary, WCAG 1.4.11 (3:1): the selected segment is a brand fill with no border, so the fill alone carries the state against the track. 3.38:1 light / 4.56:1 dark. The previous --bds-background-secondary track was 1.02:1 against the brand fill in Brik dark (grayscale-500), #3303."
     },
     {
       "group": "neutral",
@@ -97,9 +106,9 @@
     },
     {
       "group": "neutral",
-      "label": "SegmentedControl inactive hover label on tertiary fill",
+      "label": "SegmentedControl inactive hover label on hover fill",
       "fg": "--bds-text-primary",
-      "bg": "--bds-background-tertiary",
+      "bg": "--bds-background-secondary-hover",
       "thresholdType": "AA"
     },
     {
@@ -175,15 +184,12 @@
     {
       "group": "faded",
       "label": "Faded SegmentedControl segment label on track",
-      "fg": "--bds-text-on-color-light",
-      "bg": "--bds-background-secondary",
-      "over": "--bds-background-secondary",
+      "fg": "--bds-text-primary",
+      "bg": "--bds-surface-secondary",
+      "over": "--bds-surface-secondary",
       "alpha": "--bds-state-disabled-opacity",
       "thresholdType": "AA-large",
-      "darkException": {
-        "issue": 1741,
-        "reason": "3.21:1 light passes; dark is 2.66:1 at 0.5. Only the ITEM carries :disabled \u2014 the track never does \u2014 and the item is background-color: transparent (SegmentedControl.css:42), so it is correctly on ADR-028 pt-2's fade and `over` points at the track it fades toward rather than the page. That makes this a FOREGROUND problem, not a mechanism one: the label is --bds-text-on-color-light (black) and the dark track is a mid-grey #828282, so fading black toward it collapses the ratio while the enabled pair is a healthy 5.46:1. It is the 'fade plus a foreground that is not the enabled one' class ADR-028 \u00a7 Consequences pt-2 names. Converting it to the pt-1 swap would repaint a track that nothing disables. Surfaced by #1701; it was invisible before only because no pairing named it."
-      }
+      "note": "Only the ITEM carries :disabled, never the track, and the item is background-color: transparent, so the fade is toward the track. 3.21:1 light / 4.79:1 dark at 0.5. Retires the #1741 dark exception: the label was --bds-text-on-color-light (black) on a #828282 dark track (2.66:1); it is now --bds-text-primary on --bds-surface-secondary, #3303."
     },
     {
       "group": "faded",
