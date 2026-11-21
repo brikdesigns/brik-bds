@@ -135,7 +135,7 @@
   text-transform: var(--bds-text-transform-label);
 }
 
-.bds-menu__item--active {
+.bds-menu__item--current {
   background-color: var(--bds-surface-secondary);
 }
 

@@ -101,8 +101,8 @@
 
 /* The active label is brand-coloured: --bds-text-brand-primary, the brand colour's
    standing AA-large exception (ADR-015). Gated as `Rail TOC active label on surface`. */
-.bds-toc--variant-rail .bds-nav-item--active,
-.bds-toc--variant-rail .bds-nav-item--active:hover {
+.bds-toc--variant-rail .bds-nav-item--current,
+.bds-toc--variant-rail .bds-nav-item--current:hover {
   color: var(--bds-text-brand-primary);
   background-color: transparent;
 }

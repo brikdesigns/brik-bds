@@ -481,7 +481,7 @@ export function Sheet({
                     aria-selected={activeTab === tab.id}
                     className={bdsClass(
                       'bds-sheet__tab',
-                      activeTab === tab.id ? 'bds-sheet__tab--active' : ''
+                      activeTab === tab.id ? 'bds-sheet__tab--selected' : ''
                     )}
                     onClick={() => handleTabClick(tab.id)}
                   >

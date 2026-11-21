@@ -93,7 +93,7 @@
   text-align: center;
 }
 
-.bds-pagination__page--active {
+.bds-pagination__page--current {
   color: var(--bds-text-brand-primary);
   cursor: default;
 }

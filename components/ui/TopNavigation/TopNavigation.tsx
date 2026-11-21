@@ -118,7 +118,7 @@ export function TopNavigation({
                 href={link.href}
                 className={bdsClass(
                   'bds-top-navigation__link',
-                  link.active ? 'bds-top-navigation__link--active' : undefined,
+                  link.active ? 'bds-top-navigation__link--current' : undefined,
                 )}
                 ariaCurrent={link.active ? 'page' : undefined}
               >

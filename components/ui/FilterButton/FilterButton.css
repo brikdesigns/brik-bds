@@ -27,7 +27,7 @@
   box-sizing: border-box;
 }
 
-.bds-filter-button__trigger--active {
+.bds-filter-button__trigger--selected {
   background-color: var(--bds-background-brand-primary);
   color: var(--bds-text-on-color-dark);
 }

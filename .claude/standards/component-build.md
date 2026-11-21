@@ -103,7 +103,7 @@ Inline `style` is acceptable only for:
 ```
 .bds-{component}                       base
 .bds-{component}--{variant}            variant or size
-.bds-{component}--{state}              state (loading, active, disabled)
+.bds-{component}--{state}              state (loading, selected, current, disabled)
 .bds-{component}__{slot}               child element (slot)
 .bds-{component}__{slot}--{modifier}   slot modifier
 ```
@@ -112,7 +112,7 @@ Inline `style` is acceptable only for:
 
 | What | Canon source |
 | --- | --- |
-| BEM rules, `bds-` namespace, structural-only modifier rule, id generation | [Naming Conventions](../../docs-site/content/docs/primitives/naming-conventions.mdx) |
+| BEM rules, `bds-` namespace, structural-only modifier rule, id generation | [Naming Conventions](../../docs-site/content/docs/build-standards/naming-principles.mdx) |
 | Slot pattern spec + banned semantic slots | [`docs/SLOT-ALLOWLIST.md`](../../docs/SLOT-ALLOWLIST.md) |
 | Why the system governs by pattern, not an enumerated allowlist | [ADR-017](../../docs/adrs/ADR-017-slot-pattern-gate-supersedes-closed-allowlist.md) (supersedes [ADR-008](../../docs/adrs/ADR-008-naming-canon-closed-allowlist.md) §2) |
 

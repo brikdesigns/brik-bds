@@ -195,7 +195,7 @@ export function Pagination({
               aria-label={`Page ${item}`}
               aria-current={isActive ? 'page' : undefined}
               onClick={() => onChange(item)}
-              className={bdsClass('bds-pagination__page', isActive && 'bds-pagination__page--active')}
+              className={bdsClass('bds-pagination__page', isActive && 'bds-pagination__page--current')}
             >
               {item}
             </button>
