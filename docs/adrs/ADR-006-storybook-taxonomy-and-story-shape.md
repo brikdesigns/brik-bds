@@ -33,13 +33,15 @@ Two parallel rules. Story files must satisfy both at merge time.
 
 > **Amended 2026-05-16.** The subcategory layer inside `Components/` is abolished and replaced by six flat top-level buckets defined by composition role. See the 2026-05-16 amendment entry and [#629](https://github.com/brikdesigns/brik-bds/issues/629). The `preview.tsx` `storySort.order` is updated in the rename sweep PRs (gated on #618 wrap), not in this amendment.
 
+> **Operational source of truth moved.** The table below is the 2026-05-16 snapshot. `Blocks/` was dissolved into `Components/` on 2026-07-29 (see that amendment) and further buckets have changed since; the live taxonomy is [`storybook-story-shape.md` § Sidebar taxonomy](../../.claude/standards/storybook-story-shape.md#sidebar-taxonomy), matching `.storybook/preview.tsx` `storySort.order`.
+
 The Storybook sidebar uses **six flat component top-levels** plus the unchanged structural ones. No subcategory layer inside any bucket.
 
 | Bucket | Role | Members |
 | --- | --- | --- |
 | **`Components/`** | Single atomic primitive | button, button-group, filter-button, filter-toggle, filter-bar, text-link, address-input, password-input, text-input, text-area, number-input, search-input, select, multi-select, checkbox, radio, completion-toggle, switch, segmented-control, slider, stepper, file-uploader, pagination, badge, badge-group, chip, tag, tag-group, dot, counter, spinner, progress-bar, progress-circle, avatar, banner, empty-state, toast, tooltip, icons, marketing-illustration, divider, meter, service-tag, skeleton, modal, popover, collapsible, testimonial, nav-item |
 | **`Containers/`** | Styled holder composing blocks into a bounded unit (own border/padding/elevation/radius) | card, collapsible-card, pricing-card, card-summary, card-testimonial, form, contact-form, feedback-form, login-form, search-form, sign-up-form, accordion, sheet, sheet-section, dialog, table, menu, notification-list, data-section, activity-timeline, calendar, task-console, board, addable-combo-list, addable-entry-list, addable-field-row-list, addable-tag-list, addable-text-list, catalog-picker |
-| **`Blocks/`** | Fixed slot shape filled with atoms — used standalone and inside Containers | field, field-grid, date-picker, time-picker, bullet-list, checklist, interactive-list-item |
+| **`Blocks/`** *(dissolved 2026-07-29 → `Components/`)* | Fixed slot shape filled with atoms — used standalone and inside Containers | field, field-grid, date-picker, time-picker, bullet-list, checklist, interactive-list-item |
 | **`Layouts/`** | Pure composition primitive — arrangement only, no styling beyond structure | stack, cluster, grid, frame, row, split, card-list |
 | **`Sections/`** | Full-page composed region | nav-bar, footer, sidebar-navigation, sub-navigation, breadcrumb, progress-stepper, page-header, tab-bar |
 | **`Tools/`** | Dev/internal utilities | brik-dev-bar, dev-feedback-widget |
@@ -56,7 +58,7 @@ The Storybook sidebar uses **six flat component top-levels** plus the unchanged 
 
 - **`Components/<subcategory>/`** — the subcategory layer (`Action`, `Form`, `Input`, `Control`, etc.) is removed; atoms go directly to `Components/<component>`.
 - **`Navigation/`** — `nav-bar`, `footer`, `sidebar-navigation`, `breadcrumb`, `progress-stepper` → `Sections/`.
-- **`Displays/`** — bounded holders → `Containers/`; slot-shaped blocks → `Blocks/`; remaining atoms → `Components/`.
+- **`Displays/`** — bounded holders → `Containers/`; slot-shaped blocks → `Blocks/` (since dissolved into `Components/`); remaining atoms → `Components/`.
 
 ### Part B — Story shape: what's inside the file
 
@@ -92,7 +94,7 @@ Decision: ADR-007 wins on file content because it's already merged and lint-enfo
 
 **New component story files** — written after this ADR is accepted — use the amended taxonomy + two-shape model from day one:
 
-- Title goes under `<Bucket>/<component>` using the flat bucket table in Part A (e.g. `Components/button`, `Containers/card`, `Blocks/field`).
+- Title goes under `<Bucket>/<component>` using the live taxonomy in [`storybook-story-shape.md` § Sidebar taxonomy](../../.claude/standards/storybook-story-shape.md#sidebar-taxonomy) (e.g. `Components/button`, `Containers/card`, `Components/field`).
 - No subcategory layer (`Components/Action/button` is the old style — superseded).
 - File contains `Default` (args + controls; canonical first story) plus one args-driven story per meaningful state.
 - No `Variants` / `Tones` / `Patterns` gallery buckets.
