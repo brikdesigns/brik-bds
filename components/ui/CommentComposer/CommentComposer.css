@@ -56,7 +56,7 @@
   cursor: pointer;
 }
 
-.bds-comment-composer__option--active {
+.bds-comment-composer__option--highlighted {
   background-color: var(--bds-background-secondary);
 }
 

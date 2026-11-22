@@ -187,7 +187,7 @@ export function FileUploader({
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); } }}
         className={bdsClass(
           'bds-file-uploader__dropzone',
-          isDragOver ? 'bds-file-uploader__dropzone--active' : undefined,
+          isDragOver ? 'bds-file-uploader__dropzone--drag-over' : undefined,
           disabled ? 'bds-file-uploader__dropzone--disabled' : undefined,
           displayError ? 'bds-file-uploader__dropzone--tone-negative' : undefined,
         )}

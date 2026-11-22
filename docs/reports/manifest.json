@@ -188,6 +188,22 @@
       "source": "manual"
     },
     {
+      "path": "docs/reports/prop-union-audit-2026-11-22.html",
+      "title": "Prop Union Audit",
+      "status": "active",
+      "type": "audit",
+      "themes": [
+        "design-system",
+        "agent-ops"
+      ],
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-11-22",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
       "path": "docs/reports/theming-ac4-diff-2026-10-31.html",
       "title": "Theming AC4 Diff — 2026-10-31",
       "status": "active",

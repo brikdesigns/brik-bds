@@ -37,9 +37,9 @@ Source of truth: [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/mai
 | `placement` | `top` · `bottom` · `left` · `right` | Which side of its anchor a floating element opens on (the `placement` prop) | Tooltip, Popover, Menu |
 | `side` | `right` · `left` · `bottom` | Which viewport edge a docked panel anchors to (the `side` prop) | Sheet |
 
-`error` and `progress` are retired valence words: use `negative` and `info` ([ADR-033 § Retired vocabulary](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#retired-vocabulary)). `brand` is not a valence either: ADR-033 moves it to `emphasis="brand"`. Badge's `tone` still accepts `brand` until that migration lands (see the matrix below), so do not copy it into a new union.
+`error` and `progress` are retired valence words: use `negative` and `info` ([ADR-033 § Retired vocabulary](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#retired-vocabulary)). `brand` is not a valence either: ADR-033 moves it to `emphasis="brand"`. Badge's `tone` dropped `brand` in #3309; Counter's `tone` (`brand`) and Banner's (`announcement`) still carry one until #3313 lands, so do not copy either into a new union.
 
-`size` is not an ADR-033 axis word. It is a step ladder — `xs` · `sm` · `md` · `lg` on indicators, `tiny` · `sm` · `md` · `lg` · `xl` on buttons — and its rungs follow ADR-033 § 3.
+`size` is not an ADR-033 axis word. It is a step ladder — `xs` · `sm` · `md` · `lg` on indicators, `xs` · `sm` · `md` · `lg` · `xl` on buttons — and its rungs follow ADR-033 § 3.
 
 ## variant vs appearance
 
@@ -64,22 +64,22 @@ Source of truth: [`manifest/component-axes.json`](https://github.com/brikdesigns
 
 | Component | `variant` | `appearance` | `size` | `tone` |
 |---|---|---|---|---|
-| Button | `primary` · `secondary` · `outline` · `ghost` · `inverse` · `on-color` · `negative` · `negative-outline` · `negative-ghost` · `positive` (a curated style list, #3275) | — | `tiny` · `sm` · `md` · `lg` · `xl` | — |
+| Button | `primary` · `secondary` · `outline` · `ghost` · `inverse` · `on-color` · `negative` · `negative-outline` · `negative-ghost` · `positive` (a curated style list, #3275) | — | `xs` · `sm` · `md` · `lg` · `xl` | — |
 | LinkButton | shares `ButtonVariant` | — | shares `ButtonSize` | — |
 | IconButton | shares `ButtonVariant` | — | shares `ButtonSize` | — |
 | Chip | `primary` · `secondary` | — | `sm` · `md` · `lg` | — |
-| Card | `outlined` · `brand` · `elevated` · `borderless` | — | — | — |
+| Card | `outlined` · `brand` · `elevated` · `raised` · `borderless` · `filled` | — | — | — |
 | ServiceTag | `text` · `icon-text` · `icon` · `dot` | — | `sm` · `md` · `lg` | — |
 | Tag | — | `solid` · `subtle` · `outline` | `xs` · `sm` · `md` · `lg` | — |
-| Badge | — | `solid` · `subtle` · `outline` | `xs` · `sm` · `md` · `lg` | `positive` · `warning` · `negative` · `info` · `brand` · `neutral` |
+| Badge | — | `solid` · `subtle` · `outline` | `xs` · `sm` · `md` · `lg` | `positive` · `warning` · `negative` · `info` · `neutral` |
 
 **Notes:**
 - `selected` is **not** a variant — it is a boolean state prop on Button / IconButton (`selected={true}`), applied as a modifier on top of any variant. Never list it in the variant union.
 - Chip `appearance` removed in v0.66 — Chip is interactive; emphasis lives on `variant` only.
-- Card `variant` encodes border/elevation style — not a hierarchy or fill axis. `CardPreset` (`control` · `summary` · `display` · `display-row`) is orthogonal to `variant`.
+- Card `variant` encodes border/elevation style — not a hierarchy or fill axis. Card `layout` (`stack` · `row` · `metric` · `control` · `pricing`) is orthogonal to `variant`; it replaced the retired `preset` union.
 - Badge `outline` was once excluded for low contrast. It ships in 0.222 with the tone carried by the border and a `--bds-text-primary` label, so the label never depends on a status color. Tag's `subtle` (transparent + border) was renamed `outline` and its `muted` (quiet neutral fill) renamed `subtle` in the same release (#2943).
 - Tag and Avatar take a `color` (accent hue), Badge takes a `tone`. Color is never a `variant`.
-- **`tone` was `status` before [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md)** — on Badge and Dot, `status` is a deprecated alias honoured for one minor version. `status` itself now names presence or lifecycle (Avatar, Card, Table), never valence. Badge, Dot and Banner all use `tone`; the value sets are per-component (Dot adds `default`, Banner has its own union) and TypeScript is the gate.
+- **`tone` was `status` before [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md)** — on Badge and Dot, `status` is a deprecated alias honoured for one minor version. `status` itself now names presence or lifecycle (Avatar, Card, Table), never valence. Badge, Dot and Banner all use `tone`; the value sets are per-component (Banner has its own union) and TypeScript is the gate. Dot and Toast still add `default`, which is not a valence word; it is retiring in #3314, so do not copy it.
 
 <Callout type="info">
   TypeScript is the authoritative gate. Pass only values the component's declared union includes — never invent values. The manifest shows which types are exported.

@@ -81,7 +81,7 @@
   cursor: pointer;
 }
 
-.bds-search-overlay__row--active {
+.bds-search-overlay__row--highlighted {
   background-color: var(--bds-background-secondary);
 }
 

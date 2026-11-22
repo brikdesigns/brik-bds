@@ -299,7 +299,7 @@ export function SearchOverlay({
                   aria-selected={result === activeRow}
                   className={bdsClass(
                     'bds-search-overlay__row',
-                    result === activeRow && 'bds-search-overlay__row--active',
+                    result === activeRow && 'bds-search-overlay__row--highlighted',
                   )}
                   // Keep focus in the field so the combobox keeps receiving keys.
                   onMouseDown={(event) => event.preventDefault()}

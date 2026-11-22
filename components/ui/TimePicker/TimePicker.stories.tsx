@@ -96,3 +96,35 @@ export const Default: Story = {
     await expect(dialog).toBeVisible();
   },
 };
+
+/**
+ * Tabbing onto the trigger shows a visible focus ring; a keyboard-focused
+ * cell in the open popover shows one too.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestFocusRing: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  render: (args) => {
+    const [value, setValue] = useState('09:00');
+    return <TimePicker {...args} value={value} onChange={setValue} />;
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button');
+
+    await userEvent.tab();
+    await expect(trigger).toHaveFocus();
+    await expect(getComputedStyle(trigger).outlineStyle).toBe('solid');
+    await expect(parseFloat(getComputedStyle(trigger).outlineWidth)).toBeGreaterThan(0);
+
+    await userEvent.keyboard('{Enter}');
+    const body = within(document.body);
+    const dialog = await body.findByRole('dialog', {}, { timeout: 3000 });
+
+    await userEvent.tab();
+    const focused = document.activeElement as HTMLElement;
+    await expect(dialog.contains(focused)).toBe(true);
+    await expect(focused).toHaveClass('bds-time-picker__cell');
+    await expect(getComputedStyle(focused).outlineStyle).toBe('solid');
+  },
+};
