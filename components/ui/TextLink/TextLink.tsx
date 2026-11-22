@@ -16,8 +16,6 @@ const RETIRED_SIZES: Record<string, TextLinkSize> = { default: 'md', small: 'sm'
  */
 export type TextLinkEmphasis = 'brand' | 'neutral';
 
-/** @deprecated Renamed `TextLinkEmphasis` (ADR-033 § 2). */
-export type TextLinkTone = TextLinkEmphasis;
 
 /**
  * TextLink underline visibility

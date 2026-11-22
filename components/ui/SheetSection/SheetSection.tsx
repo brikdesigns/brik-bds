@@ -4,8 +4,6 @@ import './SheetSection.css';
 
 export type SheetSectionSpacing = 'md' | 'lg';
 export type SheetSectionTitleAs = 'h2' | 'h3' | 'h4';
-/** @deprecated Renamed `SheetSectionTitleAs`. */
-export type SheetSectionHeadingLevel = SheetSectionTitleAs;
 
 export interface SheetSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
   /** Section title text. Omit for intro / description-only sections. */
@@ -25,7 +23,7 @@ export interface SheetSectionProps extends Omit<HTMLAttributes<HTMLElement>, 'ti
    * @deprecated Use `titleAs` instead. Honoured for one minor version;
    * `titleAs` wins when both are passed.
    */
-  headingLevel?: SheetSectionHeadingLevel;
+  headingLevel?: SheetSectionTitleAs;
   /** Optional lead paragraph rendered under the title. */
   description?: ReactNode;
   /** Section content — Field, FieldGrid, Card, CardList, Table, TagGroup, BulletList, etc. */

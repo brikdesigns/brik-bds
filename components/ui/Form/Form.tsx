@@ -7,8 +7,6 @@ import './Form.css';
  */
 export type FormOrientation = 'vertical' | 'horizontal';
 
-/** @deprecated Renamed `FormOrientation` (ADR-033 § 2). */
-export type FormLayout = FormOrientation;
 
 /**
  * Form component props

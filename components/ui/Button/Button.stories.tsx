@@ -30,8 +30,6 @@ const meta: Meta<typeof Button> = {
         'Style — one value from a curated list (#3275). `inverse` for inverse surfaces; ' +
         '`on-color` for brand-primary surfaces; `negative*` for destructive actions.',
     },
-    tone: { table: { disable: true } },
-    emphasis: { table: { disable: true } },
     size: {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg', 'xl'],

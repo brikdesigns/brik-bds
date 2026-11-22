@@ -20,13 +20,6 @@ export type ServiceLine = 'brand' | 'marketing' | 'information' | 'product' | 'b
  */
 export type ServiceTagSize = 'sm' | 'md' | 'lg';
 
-/**
- * @deprecated Renamed to `ServiceTagSize` after the Badge → ServiceTag rename
- * (dir renamed in #731). Kept for one release as a non-breaking package-API
- * hatch; removable in the next major version.
- */
-export type ServiceBadgeSize = ServiceTagSize;
-
 export const categoryConfig: Record<ServiceLine, { token: string; label: string }> = {
   brand: { token: 'yellow', label: 'Brand' },
   marketing: { token: 'green', label: 'Marketing' },
