@@ -83,7 +83,7 @@
 
 /* ── Active ── */
 
-.bds-segmented-control-item--active {
+.bds-segmented-control-item--selected {
   background-color: var(--bds-background-brand-primary);
   color: var(--bds-text-on-color-dark);
 }
@@ -98,13 +98,13 @@
 
 /* ── Inactive hover ── */
 
-.bds-segmented-control-item:hover:not(:disabled):not(.bds-segmented-control-item--active) {
+.bds-segmented-control-item:hover:not(:disabled):not(.bds-segmented-control-item--selected) {
   background-color: var(--bds-background-secondary-hover);
 }
 
 /* ── Inactive press ── */
 
-.bds-segmented-control-item:active:not(:disabled):not(.bds-segmented-control-item--active) {
+.bds-segmented-control-item:active:not(:disabled):not(.bds-segmented-control-item--selected) {
   /* Holds the hover fill, as Button --secondary does: no darker neutral step keeps
      --bds-text-primary at AA in both themes. */
   background-color: var(--bds-background-secondary-hover);
@@ -112,11 +112,11 @@
 
 /* ── Active hover / press ── */
 
-.bds-segmented-control-item--active:hover:not(:disabled) {
+.bds-segmented-control-item--selected:hover:not(:disabled) {
   background-color: var(--bds-background-brand-primary-hover);
 }
 
-.bds-segmented-control-item--active:active:not(:disabled) {
+.bds-segmented-control-item--selected:active:not(:disabled) {
   background-color: var(--bds-background-brand-primary-pressed);
 }
 

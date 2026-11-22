@@ -70,7 +70,7 @@ export function NavItem({
 }: NavItemProps) {
   const classes = bdsClass(
     'bds-nav-item',
-    active && 'bds-nav-item--active',
+    active && 'bds-nav-item--current',
     disabled && 'bds-nav-item--disabled',
     iconOnly && 'bds-nav-item--icon-only',
     dot && 'bds-nav-item--has-dot',

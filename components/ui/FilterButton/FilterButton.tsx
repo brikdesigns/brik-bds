@@ -150,7 +150,7 @@ export function FilterButton({
         className={bdsClass(
           'bds-filter-button__trigger',
           `bds-filter-button__trigger--size-${size}`,
-          isActive && 'bds-filter-button__trigger--active',
+          isActive && 'bds-filter-button__trigger--selected',
           disabled && 'bds-filter-button__trigger--disabled',
         )}
         aria-haspopup="listbox"

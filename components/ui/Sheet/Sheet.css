@@ -162,7 +162,7 @@
   color: var(--bds-text-primary);
 }
 
-.bds-sheet__tab--active {
+.bds-sheet__tab--selected {
   color: var(--bds-text-primary);
   border-bottom-color: var(--bds-border-brand-primary);
 }

@@ -65,7 +65,7 @@
   color: var(--bds-text-primary);
 }
 
-.bds-top-navigation__link--active {
+.bds-top-navigation__link--current {
   font-weight: var(--bds-font-weight-semibold);
   color: var(--bds-text-primary);
 }

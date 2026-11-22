@@ -22,7 +22,7 @@
 
 /* ─── Active state ────────────────────────────────────── */
 
-.bds-filter-toggle--active {
+.bds-filter-toggle--selected {
   background-color: var(--bds-background-brand-primary);
   color: var(--bds-text-on-color-dark);
 }

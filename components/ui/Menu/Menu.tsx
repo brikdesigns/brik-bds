@@ -160,9 +160,10 @@ export function MenuItem({ item, isActive, className, style, ...props }: MenuIte
       disabled={item.disabled}
       onClick={item.onClick}
       aria-label={hasContent ? item.label : undefined}
+      aria-current={isActive ? 'true' : undefined}
       className={bdsClass(
         'bds-menu__item',
-        isActive && 'bds-menu__item--active',
+        isActive && 'bds-menu__item--current',
         item.disabled && 'bds-menu__item--disabled',
         hasDescription && 'bds-menu__item--with-description',
         className,

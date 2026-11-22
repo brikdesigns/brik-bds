@@ -118,6 +118,19 @@ Today four components hand-roll it with no shared source — `CompletionToggle`,
 
 Layout is the primary classifier, and there are two: a **list** is vertical, a row; a **grid** is two-dimensional, a tile. A selected row and a selected tile share the *interaction semantics* — the same cardinality rule, brand emphasis — but not the *CSS*. The row draws an inset box that leaves its metrics unchanged; the tile draws a ring with `box-shadow` so the grid doesn't reflow. Never port one layout's selected styling onto the other — they are the same interaction expressed for two different shapes, and conflating them is how a tile inherits a row's inset box and reflows the grid.
 
+## State vocabulary
+
+Four words name four different things. Each has one meaning, one way the code marks it, and a BEM modifier only where the state persists. `--active` is not a state modifier: it never says which of these it means.
+
+| Word | Means | How code marks it |
+| --- | --- | --- |
+| Selected | the value currently chosen | `aria-checked` / `aria-pressed` / `aria-selected`, class `--selected` |
+| Active | being pressed right now | CSS `:active` only, no class |
+| Current | where you are (page, step) | `aria-current`, class `--current` |
+| Focused | where the keyboard is | `:focus-visible` ring only |
+
+A current item must carry `aria-current` so the state is not carried by colour alone (WCAG 4.1.2). `Menu` sets `aria-current="true"` on its current item; `NavItem`, `TopNavigation` and `Pagination` set `aria-current="page"`.
+
 ## Focus ring rules
 
 - **Width** uses `--border-width-lg` — no new dimension token. Mode picks (`data-mode-borderwidth`) propagate automatically.

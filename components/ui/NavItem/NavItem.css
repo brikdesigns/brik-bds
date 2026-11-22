@@ -23,13 +23,13 @@
   background-color: var(--bds-page-secondary);
 }
 
-.bds-nav-item--active {
+.bds-nav-item--current {
   font-weight: var(--bds-font-weight-semibold);
   color: var(--bds-text-on-color-dark);
   background-color: var(--bds-background-brand-primary);
 }
 
-.bds-nav-item--active:hover {
+.bds-nav-item--current:hover {
   background-color: var(--bds-background-brand-primary-hover);
 }
 

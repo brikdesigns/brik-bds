@@ -151,7 +151,7 @@ export function SegmentedControl({
             tabIndex={index === tabStopIndex ? 0 : -1}
             className={bdsClass(
               'bds-segmented-control-item',
-              isActive && 'bds-segmented-control-item--active',
+              isActive && 'bds-segmented-control-item--selected',
             )}
             onClick={() => onChange?.(itemValue)}
           >
