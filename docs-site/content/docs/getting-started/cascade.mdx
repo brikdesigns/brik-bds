@@ -144,7 +144,7 @@ Semantic color tokens — the names components reference, and the only names a B
 | `--text-*` | Type colors | `--bds-text-primary`, `--bds-text-brand-primary`, `--bds-text-on-color-dark` |
 | `--border-*` | Edge colors | `--bds-border-primary`, `--bds-border-brand-primary`, `--bds-border-input` |
 
-Full registry at [Color](/docs/foundation/color). Canonical bundle: `dist/tokens.css`.
+Full registry at [Color](/docs/foundation/color). Build output bundle: `dist/tokens.css`.
 
 <Callout type="warn">
   **Names not in the registry are not real.** Inventing a `--surface-paper`, `--text-on-ink`, `-soft` / `-warm` modifier, or a `--theme-brik-*` / `--brand-{tier}` namespace creates parallel taxonomy drift. If you need a new token, add it to a Library first via Figma → Tokens Studio → Style Dictionary. See [Token Anatomy](/docs/foundation/token-anatomy) for the closed forms.
@@ -179,7 +179,7 @@ This page is the **canonical adoption contract**: every consumer (portal, brikde
 | Gate | What it checks | Where it runs |
 |---|---|---|
 | `scripts/lint-tokens.js` | Hex values in component CSS, nonexistent `var()` references, Primitives used outside their Semantic category | BDS pre-commit + CI (`npm run validate`) |
-| `scripts/canonical-check.mjs` | `--text-*` / `--surface-*` / `--background-*` / `--border-*` / `--color-*` names exist in `dist/tokens.css` | BDS pre-commit + CI |
+| `scripts/canonical-check.mjs` | `--text-*` / `--surface-*` / `--background-*` / `--border-*` / `--color-*` names exist in the built `dist/tokens.css` | BDS pre-commit + CI |
 | `@brikdesigns/bds/canonical-check` (consumer dep) | Same engine published for consumer repos | Consumer pre-commit + CI via `token-audit.sh --canonical-only` |
 | `@brikdesigns/bds/cascade-contract-check` (consumer dep) | Three rules: `no-redefinition` (clause 4 above), `typography-family` (font-family family matches font-size family within a rule), `import-layer` (clause 3 above — every CSS `@import` of `tokens.css` / `styles.css` carries a named `layer()`) | BDS-owned export, imported by consumer `lint-tokens`. Live in brikdesigns; portal wiring tracked in [#1437](https://github.com/brikdesigns/brik-bds/issues/1437) |
 | `@brikdesigns/bds/stylelint-plugin` (consumer dep, optional Stylelint ≥18) | Editor-time wrapper over the two rows above: `bds/canonical-token-name` runs the `canonical-check` name test, `bds/cascade-contract` runs all three `cascade-contract-check` rules. Same allowlist and `exemptTokens` burn-down; the CLI checks stay the CI gate | Consumer editor via `plugins: ['@brikdesigns/bds/stylelint-plugin']` ([#3210](https://github.com/brikdesigns/brik-bds/issues/3210)) |

@@ -8,7 +8,7 @@ import { Callout } from 'fumadocs-ui/components/callout';
 Motion tokens define how long a transition runs and how it accelerates. Three semantic duration aliases cover almost every case; the numeric primitives underneath them exist for the rare long-running animation.
 
 <Callout type="warn">
-  **The numeric suffix is a step index, not a millisecond value.** `--duration-400` is `500ms`, not `400ms`. The suffix tracks milliseconds up to `--duration-300` and then stops. Reach for `--duration-sm` / `--duration-md` / `--duration-lg` instead — they name the intent and cannot be misread.
+  **The numeric suffix is a step index, not a millisecond value.** `--bds-duration-400` is `500ms`, not `400ms`. The suffix tracks milliseconds up to `--bds-duration-300` and then stops. Stay at or below `--bds-duration-300` unless you need the longer rungs — those three equal their millisecond value.
 </Callout>
 
 ## Semantic durations

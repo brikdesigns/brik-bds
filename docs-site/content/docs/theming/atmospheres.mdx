@@ -10,7 +10,7 @@ Atmospheres are **CSS decoration overlays** that sit on top of a client's Tokens
 The portal's theme generator reads `company_profiles.atmosphere` at extraction time and inlines that atmosphere's CSS (from `@brikdesigns/bds/atmospheres/{slug}.css`) into the stored theme artifact. It does not emit an `@import`. The consumer Astro site fetches one theme artifact at build; the atmosphere cascades automatically.
 
 <Callout type="info">
-**Atmospheres are decoration only.** They add vignettes, grain, orbs, and spotlights — they do not set surface colors, and none is tied to light or dark. The only mode-specific rule is the grain blend, keyed to `:root[data-theme="dark"]`. Background and text colors come from the Tokens Dimension (`dist/tokens.css` + the client's `theme-{slug}.css` in `@layer client-theme`). Import `@brikdesigns/bds/page-base.css` after tokens to wire `html/body` background to `var(--bds-page-primary)` before any atmosphere loads.
+**Atmospheres are decoration only.** They add vignettes, grain, orbs, and spotlights — they do not set surface colors, and none is tied to light or dark. The only mode-specific rule is the grain blend, keyed to `:root[data-theme="dark"]`. Background and text colors come from the Tokens Dimension (the built `dist/tokens.css` + the client's `theme-{slug}.css` in `@layer client-theme`). Import `@brikdesigns/bds/page-base.css` after tokens to wire `html/body` background to `var(--bds-page-primary)` before any atmosphere loads.
 </Callout>
 
 ## How atmospheres compose with themes
