@@ -79,6 +79,11 @@
   border-color: var(--bds-border-brand-primary);
 }
 
+.bds-date-picker__trigger:focus-visible {
+  outline: var(--bds-border-width-lg) solid var(--bds-state-focus);
+  outline-offset: 2px;
+}
+
 /* Trigger sizes — heights match Button scale (8px steps, 4px grid) */
 .bds-date-picker--size-sm .bds-date-picker__trigger { font-size: var(--bds-body-sm); height: 32px; }
 .bds-date-picker--size-md .bds-date-picker__trigger { font-size: var(--bds-body-md); height: 40px; }
@@ -159,6 +164,13 @@
   background-color: var(--bds-surface-secondary);
 }
 
+.bds-date-picker__nav-button:focus-visible,
+.bds-date-picker__day:focus-visible,
+.bds-date-picker__month-cell:focus-visible {
+  outline: var(--bds-border-width-lg) solid var(--bds-state-focus);
+  outline-offset: 2px;
+}
+
 /* ─── Day grid ───────────────────────────────────────────────── */
 
 .bds-date-picker__day-grid {
@@ -208,6 +220,11 @@
   background-color: var(--bds-surface-brand-primary);
   color: var(--bds-text-on-color-dark);
   font-weight: var(--bds-font-weight-semibold);
+}
+
+.bds-date-picker__day--selected:focus-visible,
+.bds-date-picker__month-cell--selected:focus-visible {
+  outline-color: var(--bds-border-focus); /* selected text is white; currentColor would vanish against the popover surface */
 }
 
 .bds-date-picker__day--today:not(.bds-date-picker__day--selected) {

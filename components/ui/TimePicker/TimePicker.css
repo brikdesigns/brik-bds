@@ -66,6 +66,11 @@
   border-color: var(--bds-border-primary);
 }
 
+.bds-time-picker__trigger:focus-visible {
+  outline: var(--bds-border-width-lg) solid var(--bds-state-focus);
+  outline-offset: 2px;
+}
+
 .bds-time-picker__trigger--tone-negative {
   border-color: var(--bds-border-negative);
 }
@@ -174,6 +179,12 @@
 
 .bds-time-picker__cell:hover:not(.bds-time-picker__cell--selected) {
   background-color: var(--bds-surface-secondary);
+}
+
+/* The column scrolls and the panel clips overflow, so an outset ring would be cut off; draw it inside the cell. */
+.bds-time-picker__cell:focus-visible {
+  outline: var(--bds-border-width-lg) solid var(--bds-state-focus);
+  outline-offset: calc(-1 * var(--bds-border-width-lg));
 }
 
 .bds-time-picker__cell--selected {

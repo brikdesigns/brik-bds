@@ -284,3 +284,38 @@ export const InteractionTestMonthMinMaxGating: Story = {
     expect(may).not.toBeDisabled();
   },
 };
+
+/**
+ * Tabbing onto the trigger shows a visible focus ring; inside the open
+ * popover the nav buttons and day cells show one too.
+ * @summary Play-function interaction test
+ */
+export const InteractionTestFocusRing: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const trigger = canvas.getByRole('button', { name: /select a date/i });
+
+    await userEvent.tab();
+    await expect(trigger).toHaveFocus();
+    await expect(getComputedStyle(trigger).outlineStyle).toBe('solid');
+    await expect(parseFloat(getComputedStyle(trigger).outlineWidth)).toBeGreaterThan(0);
+
+    await userEvent.keyboard('{Enter}');
+    const body = within(document.body);
+    const dialog = await body.findByRole('dialog', {}, { timeout: 3000 });
+
+    // Tab through the popover: every focused control, nav button and day cell alike, shows a ring.
+    const seen = new Set<string>();
+    await waitFor(() => expect(dialog.contains(document.activeElement)).toBe(true));
+    for (let i = 0; i < 40 && seen.size < 2; i++) {
+      const focused = document.activeElement as HTMLElement;
+      if (dialog.contains(focused)) {
+        await expect(getComputedStyle(focused).outlineStyle).toBe('solid');
+        seen.add(focused.classList.contains('bds-date-picker__day') ? 'day' : 'other');
+      }
+      await userEvent.tab();
+    }
+    await expect(seen.has('day')).toBe(true);
+  },
+};
