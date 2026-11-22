@@ -280,6 +280,7 @@ export const shadowBlur500: string;
 export const shadowBlur600: string;
 export const shadowBlur700: string;
 export const shadowBlur800: string;
+export const shadowBlur1600: string;
 export const shadowOffset0: string;
 export const shadowOffset25: string;
 export const shadowOffset50: string;
@@ -332,7 +333,6 @@ export const shadowFlat: string;
 export const shadowSubtle: string;
 export const shadowRaised: string;
 export const shadowLifted: string;
-/** RAW — no primitive step carries 32px (shadow-blur scale tops out at 16px). Open call: extend the scale or re-pick. */
 export const shadowDramatic: string;
 export const bodyXs: string;
 export const bodyTiny: string;

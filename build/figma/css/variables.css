@@ -250,6 +250,7 @@
   --bds-shadow-blur-600: 12px;
   --bds-shadow-blur-700: 14px;
   --bds-shadow-blur-800: 16px;
+  --bds-shadow-blur-1600: 32px;
   --bds-shadow-offset-0: 0;
   --bds-shadow-offset-25: -4px;
   --bds-shadow-offset-50: -2px;
@@ -323,7 +324,7 @@
   --bds-shadow-subtle: 0 var(--bds-shadow-offset-100) var(--bds-shadow-blur-200) var(--bds-shadow-spread-0) rgba(0, 0, 0, 0.06);
   --bds-shadow-raised: 0 var(--bds-shadow-offset-200) var(--bds-shadow-blur-600) var(--bds-shadow-spread-0) rgba(0, 0, 0, 0.12);
   --bds-shadow-lifted: 0 var(--bds-shadow-offset-200) var(--bds-shadow-blur-800) var(--bds-shadow-spread-0) rgba(0, 0, 0, 0.12);
-  --bds-shadow-dramatic: 0 var(--bds-shadow-offset-200) 32px var(--bds-shadow-spread-0) rgba(0, 0, 0, 0.24); /** RAW — no primitive step carries 32px (shadow-blur scale tops out at 16px). Open call: extend the scale or re-pick. */
+  --bds-shadow-dramatic: 0 var(--bds-shadow-offset-200) var(--bds-shadow-blur-1600) var(--bds-shadow-spread-0) rgba(0, 0, 0, 0.24);
   --bds-body-xs: var(--bds-font-size-50);
   --bds-body-tiny: var(--bds-font-size-25);
   --bds-body-md: var(--bds-font-size-100);
@@ -393,6 +394,7 @@
   --bds-border-accent-purple: var(--bds-color-system-purple-500);
   --bds-border-accent-orange: var(--bds-color-system-orange-500);
   --bds-border-accent-red: var(--bds-color-system-red-500);
+  --bds-border-chart-brand: var(--bds-color-grayscale-950); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke. */
   --bds-border-chart-neutral: var(--bds-color-grayscale-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/neutral; this one styles a border/stroke. */
   --bds-border-chart-categorical-1: var(--bds-color-accent-blue-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-1; this one styles a border/stroke. */
   --bds-border-chart-categorical-2: var(--bds-color-accent-orange-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-2; this one styles a border/stroke. */
@@ -429,6 +431,7 @@
   --bds-background-brand-primary-pressed: var(--bds-color-grayscale-black);
   --bds-background-disabled: var(--bds-color-grayscale-300); /** Disabled button background (all variants) */
   --bds-background-accent-orange: var(--bds-color-system-orange-500);
+  --bds-background-chart-brand: var(--bds-color-grayscale-950);
   --bds-background-chart-neutral: var(--bds-color-grayscale-500);
   --bds-background-chart-categorical-1: var(--bds-color-accent-blue-500);
   --bds-background-chart-categorical-2: var(--bds-color-accent-orange-500);
@@ -472,6 +475,4 @@
   --bds-page-accent-orange: var(--bds-color-system-orange-500);
   --bds-page-accent-red: var(--bds-color-system-red-500);
   --bds-page-accent-purple: var(--bds-color-system-purple-500);
-  --bds-border-chart-brand: var(--bds-border-brand-primary); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke. */
-  --bds-background-chart-brand: var(--bds-border-brand-primary);
 }
