@@ -43,7 +43,7 @@ Use the paintbrush icon in the Storybook toolbar to switch themes in real time.
 </Callout>
 
 - The light/dark switch in [How themes work](#how-themes-work) belongs to Brik's own theme (`theme-brand-brik`). Client themes don't inherit it.
-- A dark section on a light page, or the reverse, is not a second mode. The section reads the inverse tokens, such as `--background-inverse`, which the generator writes for both base modes.
+- A dark section on a light page, or the reverse, is not a second mode. The section reads the inverse tokens, such as `--bds-background-inverse`, which the generator writes for both base modes.
 - When `theme_mode` is unset, the generator guesses: dark if the palette has a `black` primitive, otherwise light. That guess is often wrong, because most palettes include a black. Set the mode before you generate the theme.
 - `theme_mode` is the client's default color mode. A second mode, which gives visitors a toggle, is built only when a client asks for one.
 - Higher contrast is reserved as its own switch, not a third mode. It isn't built yet. See [`tokens/CASCADE.md` § Color-mode contract](https://github.com/brikdesigns/brik-bds/blob/main/tokens/CASCADE.md#color-mode-contract).
@@ -145,12 +145,12 @@ Each `.body.theme-{name}` block overrides a fixed set of **semantic color tokens
 
 - `--bds-background-brand-primary`, `--bds-background-brand-secondary`
 - `--bds-text-primary`, `--bds-text-secondary`, `--bds-text-muted`, `--bds-text-brand-primary`
-- `--bds-surface-primary`, `--bds-surface-secondary`, `--surface-navigation`, `--bds-surface-brand-primary`
+- `--bds-surface-primary`, `--bds-surface-secondary`, `--bds-surface-nav`, `--bds-surface-brand-primary`
 - `--bds-border-primary`, `--bds-border-secondary`, `--bds-border-brand-primary`
 - `--bds-page-primary`, `--bds-page-brand-primary`
 
 <Callout type="info">
-  `--surface-nav` is a deprecated alias for `--surface-navigation`. Both resolve to the same value. Prefer `--surface-navigation` in new client overrides.
+  `--surface-nav` and `--surface-navigation` are retired bare names. Override `--bds-surface-nav` in new client themes; it is hand-authored in `tokens/gap-fills.css`, not generated from Figma.
 </Callout>
 
 **Typography tokens** are not overridden by `data-theme="light"` vs `data-theme="dark"` — both share the Brik font stack. The `theme-client-sim` class demonstrates font family overrides only.
@@ -194,7 +194,7 @@ Some client sites carry **multiple brand colors at once** — Vale Partners has 
 
 ### The pattern
 
-Re-bind `--background-brand-primary`, `--text-brand-primary`, `--border-brand-primary` (and their hover/pressed states) inside a CSS attribute selector. Components stay scope-blind — they keep reading the canonical token. Each subtree the attribute selects gets its own value resolved.
+Re-bind `--bds-background-brand-primary`, `--bds-text-brand-primary`, `--bds-border-brand-primary` (and their hover/pressed states) inside a CSS attribute selector. Components stay scope-blind — they keep reading the canonical token. Each subtree the attribute selects gets its own value resolved.
 
 ```css
 /* theme-vale.css — primitives, then canonical bindings, then scoped overrides */
@@ -254,7 +254,7 @@ Re-bind `--background-brand-primary`, `--text-brand-primary`, `--border-brand-pr
 
 ### One page, three audiences
 
-CSS custom properties scope to the element they're set on and cascade into every descendant. Three audience blocks side-by-side on a homepage are three independent subtrees — each resolves `--background-brand-primary` to its own value:
+CSS custom properties scope to the element they're set on and cascade into every descendant. Three audience blocks side-by-side on a homepage are three independent subtrees — each resolves `--bds-background-brand-primary` to its own value:
 
 ```html
 <section class="services-grid">

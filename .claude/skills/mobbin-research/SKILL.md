@@ -55,7 +55,7 @@ Never allowed out of a Mobbin session:
 - component code or CSS "matching" a reference
 - a duration or easing — see [Motion](#motion-mobbin-is-not-a-source)
 
-A token name is born in Figma only; the authority is the Figma-generated files (`tokens/figma-tokens*.css`, `modes-*.css`, `layout-fluid.css`), not `dist/tokens.css`. For any token
+A token name is born in Figma only ([Token Anatomy](https://design.brikdesigns.com/docs/foundation/token-anatomy)); the authority is the Figma-generated files (`tokens/figma-tokens*.css`, `modes-*.css`, `layout-fluid.css`), not `dist/tokens.css`. For any token
 question arising from a reference, stop and invoke `canon-css` /
 `validate-token-names`. Describing a screenshot in token vocabulary is the exact
 failure mode those skills exist to prevent — a screenshot is the easiest place to

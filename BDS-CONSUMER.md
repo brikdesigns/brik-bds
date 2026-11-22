@@ -16,7 +16,7 @@ For BDS development itself, edit in `~/Documents/GitHub/brik/brik-bds/`, run `np
 
 ## Token Discipline (Non-Negotiable)
 
-1. **All colors must be token references.** No hex values, no `filter` hacks, no `opacity` workarounds. A token name is born in Figma only: if the token you need is not in a Figma-generated file, STOP and ask the operator to add the variable in Figma. NEVER add a name to `gap-fills.css`, and NEVER read `dist/tokens.css` as proof a name is canon (it bundles hand-written names frozen for removal, brik-bds#3239).
+1. **All colors must be token references.** No hex values, no `filter` hacks, no `opacity` workarounds. A token name is born in Figma only ([Token Anatomy](https://design.brikdesigns.com/docs/foundation/token-anatomy)): if the token you need is not in a Figma-generated file, STOP and ask the operator to add the variable in Figma. NEVER add a name to `gap-fills.css`, and NEVER read `dist/tokens.css` as proof a name is canon (it bundles hand-written names frozen for removal, brik-bds#3239).
 2. **Never use a token outside its semantic category.** `--text-*` for text, `--background-*` for backgrounds, `--border-*` for borders.
 3. **Never mix font family with the wrong size scale.** Use composed style presets from `@/lib/styles` instead.
 4. **Before rewriting `:root` or any token file**, grep for all `var(--...)` usages first. A removed token silently breaks every reference.
@@ -133,5 +133,5 @@ Figma occasionally reorganizes variable groups, renaming the emitted CSS variabl
 | Full BDS development workflow | [CLAUDE.md](CLAUDE.md) |
 | Token consumption implementation | [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) |
 | Component build rules & Paper workflow | [.claude/standards/component-build.md](.claude/standards/component-build.md) |
-| Token reference | [Primitives](https://design.brikdesigns.com/docs/foundation) — interactive, pulls live from `dist/tokens.css` |
+| Token reference | [Primitives](https://design.brikdesigns.com/docs/foundation) — interactive, pulls live from the built `dist/tokens.css` |
 | PR checklist | [docs/TOKEN-PR-CHECKLIST.md](docs/TOKEN-PR-CHECKLIST.md) |

@@ -58,7 +58,7 @@ This is a **partial density proxy** — scaling the root font scales every rem-b
 
 ### Viewport — responsive breakpoint testing
 
-Three breakpoints are wired, aligned with the responsive breakpoint tokens (`--breakpoint-mobile`, `--breakpoint-tablet`, `--breakpoint-desktop` in [`dist/tokens.css`](../../dist/tokens.css)):
+Three breakpoints are wired, aligned with the responsive breakpoint tokens (`--breakpoint-mobile`, `--breakpoint-tablet`, `--breakpoint-desktop` in the built [`dist/tokens.css`](../../dist/tokens.css)):
 
 - **`mobile`** — 375 × 667 (iPhone-class)
 - **`tablet`** — 768 × 1024 (iPad-class)

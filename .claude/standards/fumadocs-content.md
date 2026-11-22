@@ -124,7 +124,7 @@ MDX is not plain markdown — two constructs crash the prerender build rather th
 
 ## Token names in code blocks and tables
 
-Every Semantic-tier token name (`--text-*`, `--surface-*`, `--background-*`, `--border-*`, `--color-*`, `--padding-*`, `--gap-*`, `--size-*`, typography families) written in a fenced code block or a markdown table must resolve to a real token in the Figma-generated files (`tokens/figma-tokens*.css`, `modes-*.css`, `layout-fluid.css`) (or a component-scoped CSS-Override-API knob). A documented-but-nonexistent name is the #512 / #553 phantom-token failure — it silently misleads every consumer who copies it. Enforced by `scripts/lint-mdx-tokens.mjs` (CI: MDX Token Check). Grep those files for the correct name rather than guessing.
+Every Semantic-tier token name (`--text-*`, `--surface-*`, `--background-*`, `--border-*`, `--padding-*`, `--gap-*`, `--size-*`, typography families) written in a fenced code block or a markdown table must resolve to a real token in the Figma-generated files (`tokens/figma-tokens*.css`, `modes-*.css`, `layout-fluid.css`) (or a component-scoped CSS-Override-API knob). A documented-but-nonexistent name is the #512 / #553 phantom-token failure — it silently misleads every consumer who copies it. Enforced by `scripts/lint-mdx-tokens.mjs` (CI: MDX Token Check). Grep those files for the correct name rather than guessing.
 
 Naming-pattern placeholders (`--surface-{role}`, `--text-*`, `--size-0…2200`) are not flagged. For a deliberate counter-example — a retired or invented name shown to teach what's wrong — wrap it in `{/* lint-mdx-tokens-ignore-start */}` … `{/* lint-mdx-tokens-ignore-end */}`, or add `lint-mdx-tokens-ignore` on the line.
 
