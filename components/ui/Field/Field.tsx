@@ -1,5 +1,5 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
-import { bdsClass, resolveRetiredValue } from '../../utils';
+import { bdsClass, resolveRetiredProp, resolveRetiredValue } from '../../utils';
 import './Field.css';
 
 export type FieldOrientation = 'vertical' | 'horizontal';
@@ -8,7 +8,11 @@ export type FieldOrientation = 'vertical' | 'horizontal';
 export type FieldLayout = FieldOrientation;
 
 export type FieldSpan = 'full';
-export type FieldTier = 'standard' | 'compact';
+export type FieldDensity = 'comfortable' | 'compact';
+
+/** Retired `tier` spellings → `density` (ADR-033 § 2: density is spacing compression, not tier). */
+const RETIRED_TIERS: Record<string, FieldDensity> = { standard: 'comfortable' };
+const RETIRED_TIER_REPLACEMENTS: Record<string, string> = { standard: 'density="comfortable"' };
 export type FieldHelperTone = 'neutral' | 'negative';
 
 const RETIRED_TONES: Record<string, FieldHelperTone> = { error: 'negative' };
@@ -32,15 +36,20 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
    */
   layout?: FieldLayout;
   /**
-   * Typography tier override. **Omit it** — the tier is derived from the
-   * container, so a Field is page-tier (`--bds-label-md`) by default and sheet-tier
-   * (`--bds-label-sm`) inside a `Sheet` body, with no prop passed.
+   * Label density override. **Omit it** — density is derived from the
+   * container, so a Field is page-density (`--bds-label-md`) by default and
+   * sheet-density (`--bds-label-sm`) inside a `Sheet` body, with no prop passed.
    *
-   * Pass a value only to pin against the container: `standard` forces
+   * Pass a value only to pin against the container: `comfortable` forces
    * `--bds-label-md` even inside a Sheet body, `compact` forces `--bds-label-sm`
    * anywhere. A dual-context component should not pass this at all.
    */
-  tier?: FieldTier;
+  density?: FieldDensity;
+  /**
+   * @deprecated Use `density` instead (ADR-033 § 2). `standard` → `comfortable`;
+   * `compact` is unchanged. Honoured for one minor version; `density` wins when both are passed.
+   */
+  tier?: FieldDensity;
   /**
    * Rendered when `children` is null / undefined / empty string.
    * Defaults to the inline muted string "Not set".
@@ -81,6 +90,7 @@ export function Field({
   children,
   orientation,
   layout,
+  density,
   tier,
   empty = 'Not set',
   span,
@@ -100,6 +110,13 @@ export function Field({
       (orientation ?? layout) as FieldOrientation,
       RETIRED_ORIENTATIONS,
     ) ?? 'vertical';
+  const resolvedDensity = resolveRetiredValue(
+    'Field',
+    'tier',
+    resolveRetiredProp('Field', 'tier', 'density', tier, density),
+    RETIRED_TIERS,
+    RETIRED_TIER_REPLACEMENTS,
+  );
   const showEmpty = isEmpty(children);
 
   return (
@@ -109,7 +126,7 @@ export function Field({
         `bds-field--orientation-${resolvedOrientation}`,
         // Only an explicit tier emits a class. No class = the container's
         // inherited default applies, which is how context adaptivity works.
-        tier && `bds-field--${tier}`,
+        resolvedDensity && `bds-field--density-${resolvedDensity}`,
         span && `bds-field--span-${span}`,
         className,
       )}

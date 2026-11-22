@@ -72,7 +72,7 @@ const withContentEvents = [
           <br />
           Signed copy filed with the engagement.
         </div>
-        <TextLink href="https://example.com/evidence/acceptance-2026-04-12.pdf" size="small">
+        <TextLink href="https://example.com/evidence/acceptance-2026-04-12.pdf" size="sm">
           example.com/evidence/acceptance-2026-04-12.pdf
         </TextLink>
       </Stack>

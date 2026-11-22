@@ -40,7 +40,7 @@ export {
   type TableBulkBarCount,
   type TableMediaCellSize,
   type TableImageFit,
-  type TableSize,
+  type TableDensity,
   type SortDirection,
 } from './Table';
 export { default } from './Table';

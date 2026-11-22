@@ -1,6 +1,6 @@
 import { type HTMLAttributes, type ReactNode, Fragment } from 'react';
 import { type BdsLinkComponent } from '../NavItem';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import './Footer.css';
 
 /**
@@ -127,7 +127,10 @@ export type FooterVariant = 'default' | 'brand' | 'inverse';
  * family. `full` is intentionally omitted — it is equivalent to the default
  * unconstrained footer.
  */
-export type FooterContainerWidth = 'narrow' | 'default' | 'wide' | 'xl';
+export type FooterContainerWidth = 'sm' | 'md' | 'lg' | 'xl';
+
+/** Retired width spellings, honoured for one minor version (ADR-033 § 3). */
+const RETIRED_CONTAINER_WIDTHS: Record<string, FooterContainerWidth> = { narrow: 'sm', default: 'md', wide: 'lg' };
 
 /**
  * Renders a footer link with the injected `linkComponent` (client-side routing)
@@ -231,6 +234,12 @@ export function Footer({
   style,
   ...props
 }: FooterProps) {
+  const resolvedContainerWidth = resolveRetiredValue(
+    'Footer',
+    'containerMaxWidth',
+    containerMaxWidth,
+    RETIRED_CONTAINER_WIDTHS,
+  );
   const hasBottom =
     copyright || (bottomLinks && bottomLinks.length > 0) || socialLinks;
   const hasBottomLeft =
@@ -242,7 +251,7 @@ export function Footer({
       className={bdsClass(
         'bds-footer',
         `bds-footer--variant-${variant}`,
-        containerMaxWidth && `bds-footer--constrain-${containerMaxWidth}`,
+        resolvedContainerWidth && `bds-footer--constrain-${resolvedContainerWidth}`,
         className,
       )}
       style={style}

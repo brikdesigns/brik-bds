@@ -35,8 +35,8 @@ import {
 ### Sizes
 
 ```tsx
-<Table size="default">...</Table>      {/* compact, dense data */}
-<Table size="comfortable">...</Table>  {/* generous padding, 72px cell height */}
+<Table density="compact">...</Table>   {/* compact, dense data */}
+<Table density="comfortable">...</Table> {/* generous padding, 72px cell height */}
 ```
 
 ### Striped
@@ -83,8 +83,8 @@ Don't reach for raw `<a>` or `<button>` — use the BDS components below.
 
 | Cell class | Affordance | Pattern |
 | --- | --- | --- |
-| **Identifier (Name)** | `<TextLink size="small">` opening the **read sheet** for that row (or navigating to the read page when the table has no sheet, e.g. `customer_stories`, `blog_posts`) | Click target |
-| **Foreign-key reference** | `<TextLink size="small">` opening the **read sheet of the referenced entity** (Service Line in a Services row, Service in an Offerings row, Company in admin rows) | Click target |
+| **Identifier (Name)** | `<TextLink size="sm">` opening the **read sheet** for that row (or navigating to the read page when the table has no sheet, e.g. `customer_stories`, `blog_posts`) | Click target |
+| **Foreign-key reference** | `<TextLink size="sm">` opening the **read sheet of the referenced entity** (Service Line in a Services row, Service in an Offerings row, Company in admin rows) | Click target |
 | **Status / Public / Featured (read-only)** | `<Badge>` or plain text | Not interactive |
 | **Actions** | `<TableActionsCell>` with `[View][Edit][⋯]` icon buttons in `size="sm"` | Click targets |
 
@@ -123,16 +123,16 @@ Common icon-button variants:
 
 ### Text links
 
-Use **`<TextLink size="small">`** for the Name cell and any FK cell. Never use raw `<a>` or full-size text links.
+Use **`<TextLink size="sm">`** for the Name cell and any FK cell. Never use raw `<a>` or full-size text links.
 
 ```tsx
 {/* Name cell — opens the row's read sheet */}
-<TextLink size="small" onClick={() => openSheet(service.id)}>
+<TextLink size="sm" onClick={() => openSheet(service.id)}>
   {service.name}
 </TextLink>
 
 {/* FK cell — opens the related entity's read sheet */}
-<TextLink size="small" onClick={() => openSheet(service.serviceLineId, 'service-line')}>
+<TextLink size="sm" onClick={() => openSheet(service.serviceLineId, 'service-line')}>
   {service.serviceLine}
 </TextLink>
 ```
@@ -218,7 +218,8 @@ Typed cells package the recurring cell layouts. Each renders the `<td>` itself, 
 | Prop | Type | Default |
 |---|---|---|
 | `striped` | `boolean` | `false` |
-| `size` | `'default' \| 'comfortable'` | `'default'` |
+| `density` | `'compact' \| 'comfortable'` | `'compact'` |
+| `size` | `'compact' \| 'comfortable'` (deprecated — use `density`) | — |
 | `flush` | `boolean` | `false` |
 | `children` | `ReactNode` *(required)* | — |
 | `headerBorder` | `boolean` | `false` |
@@ -257,7 +258,7 @@ import {
 } from '@brikdesigns/bds';
 import { Badge, Button, TextLink } from '@brikdesigns/bds';
 
-<Table striped size="comfortable">
+<Table striped density="comfortable">
   <TableHeader>
     <TableRow>
       <TableHead sortable sortDirection="asc">Name</TableHead>
@@ -269,12 +270,12 @@ import { Badge, Button, TextLink } from '@brikdesigns/bds';
   <TableBody>
     <TableRow>
       <TableCell>
-        <TextLink size="small" onClick={() => openSheet(service.id)}>
+        <TextLink size="sm" onClick={() => openSheet(service.id)}>
           {service.name}
         </TextLink>
       </TableCell>
       <TableCell>
-        <TextLink size="small" onClick={() => openSheet(service.serviceLineId, 'service-line')}>
+        <TextLink size="sm" onClick={() => openSheet(service.serviceLineId, 'service-line')}>
           {service.serviceLine}
         </TextLink>
       </TableCell>

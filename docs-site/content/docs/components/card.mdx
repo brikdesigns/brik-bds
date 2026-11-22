@@ -127,7 +127,7 @@ Under a `layout`, `media` is a plain `ReactNode` instead — pass the `<Frame>`,
   layout="row"
   overline={<Tag>Case study</Tag>}
   media={<Frame ratio="4-3"><img src="/story.jpg" alt="" /></Frame>}
-  imageWidth="standard"
+  imageWidth="md"
   title="How Northwind tripled conversions"
   action={<Button href="/stories/northwind" variant="outline" size="sm">Read the story</Button>}
 >
@@ -135,7 +135,7 @@ Under a `layout`, `media` is a plain `ReactNode` instead — pass the `<Frame>`,
 </Card>
 ```
 
-`imageWidth` sets the left column: `narrow` (25%), `standard` (35%, default), or `wide` (50%) — or pass any CSS length/percentage string (`"40%"`, `"320px"`).
+`imageWidth` sets the left column: `sm` (25%), `md` (35%, default), or `lg` (50%) — or pass any CSS length/percentage string (`"40%"`, `"320px"`).
 
 ## Metric layout
 
@@ -270,7 +270,7 @@ One flat slot set serves all four arrangements. A slot that a layout does not re
 | `variant` | `'borderless' \| 'elevated' \| 'raised'` | — |
 | `serviceLine` | `CardServiceLine` (service line) | — |
 | `href` | `string` | — |
-| `imageWidth` | `CardDisplayRowImageWidth` (narrow / standard / wide, or any CSS length) | `'standard'` |
+| `imageWidth` | `CardDisplayRowImageWidth` (sm / md / lg, or any CSS length) | `'md'` |
 | `mediaTreatment` | `'flush' \| 'inset'` | `'flush'` |
 | `description` | `ReactNode` | — |
 | `actionAlign` | `'center' \| 'top'` | `'center'` |

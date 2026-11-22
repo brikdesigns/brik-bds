@@ -60,10 +60,10 @@ const meta: Meta<typeof Table> = {
   parameters: { layout: 'padded' },
   argTypes: {
     striped: { control: 'boolean', description: 'Zebra-stripe alternate body rows.' },
-    size: {
+    density: {
       control: 'select',
-      options: ['default', 'comfortable'],
-      description: 'Row density — `default` (compact) or `comfortable` (72px cell height).',
+      options: ['compact', 'comfortable'],
+      description: 'Row density — `compact` (default) or `comfortable` (72px cell height).',
     },
     headerBorder: {
       control: 'boolean',
@@ -104,17 +104,17 @@ type Story = StoryObj<typeof Table>;
    ═══════════════════════════════════════════════════════════════ */
 
 /**
- * Canonical table. Toggle `striped`, `size`, `headerBorder`,
+ * Canonical table. Toggle `striped`, `density`, `headerBorder`,
  * `headerBorderWeight`, `roundedTop`, `roundedBottom`, and `headerBackground`
  * via Controls. Cells accept any content — see the Variants stories for the
  * composition catalog.
  *
- * @summary Themed data table — striped + size are Controls
+ * @summary Themed data table — striped + density are Controls
  */
 export const Default: Story = {
   args: {
     striped: false,
-    size: 'default',
+    density: 'compact',
     headerBorder: false,
     headerBorderWeight: 'md',
     roundedTop: true,
@@ -353,7 +353,7 @@ export const CellTypes: Story = {
               <TableCell><Badge tone={row.status} size="sm">{statusLabel(row.status)}</Badge></TableCell>
               <TableCell><TextInput size="sm" aria-label={`${row.service} note`} placeholder={row.service} /></TableCell>
               <TableCell>
-                <TextLink href="#" size="small" iconAfter={<Icon icon="ph:arrow-square-out" />}>Open</TextLink>
+                <TextLink href="#" size="sm" iconAfter={<Icon icon="ph:arrow-square-out" />}>Open</TextLink>
               </TableCell>
             </TableRow>
           ))}
@@ -389,7 +389,7 @@ export const Loading: Story = {
           <TableSkeletonRow
             key={i}
             columns={4}
-            cellWidths={['long', 'medium', 'short', 'short']}
+            cellWidths={['lg', 'md', 'sm', 'sm']}
           />
         ))}
       </TableBody>
@@ -509,12 +509,12 @@ export const CellLevelInteractivity: Story = {
           {services.map((service) => (
             <TableRow key={service.name}>
               <TableCell>
-                <TextLink href="#" size="small" onClick={(e) => e.preventDefault()}>
+                <TextLink href="#" size="sm" onClick={(e) => e.preventDefault()}>
                   {service.name}
                 </TextLink>
               </TableCell>
               <TableCell>
-                <TextLink href="#" size="small" onClick={(e) => e.preventDefault()}>
+                <TextLink href="#" size="sm" onClick={(e) => e.preventDefault()}>
                   {service.serviceLine}
                 </TextLink>
               </TableCell>
@@ -610,7 +610,7 @@ export const WithAvatarCell: Story = {
               status={presence(u.status)}
               primary={
                 i === 0 ? (
-                  <TextLink href="#" size="small" onClick={(e) => e.preventDefault()}>
+                  <TextLink href="#" size="sm" onClick={(e) => e.preventDefault()}>
                     {u.name}
                   </TextLink>
                 ) : undefined

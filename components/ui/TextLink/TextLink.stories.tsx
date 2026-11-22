@@ -20,8 +20,8 @@ const meta: Meta<typeof TextLink> = {
   argTypes: {
     size: {
       control: 'select',
-      options: ['default', 'small'],
-      description: 'Size variant. `default` is body-md; `small` is body-sm for tight contexts (footnotes, captions).',
+      options: ['md', 'sm'],
+      description: 'Size variant. `md` (default) is body-md; `sm` is body-sm for tight contexts (footnotes, captions).',
     },
     emphasis: {
       control: 'select',
@@ -82,7 +82,7 @@ type Story = StoryObj<typeof TextLink>;
 export const Default: Story = {
   args: {
     href: '#',
-    size: 'default',
+    size: 'md',
     underline: 'hover',
     children: 'Learn more',
   },
