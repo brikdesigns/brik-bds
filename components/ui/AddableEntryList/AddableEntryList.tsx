@@ -571,7 +571,7 @@ function SuggestionModeEdit({
                       aria-selected={idx === combo.activeIndex}
                       className={bdsClass(
                         'bds-addable-entry-list__option',
-                        idx === combo.activeIndex && 'bds-addable-entry-list__option--active',
+                        idx === combo.activeIndex && 'bds-addable-entry-list__option--highlighted',
                       )}
                       onMouseDown={(e) => {
                         e.preventDefault();

@@ -41,7 +41,7 @@
   box-sizing: border-box;
 }
 
-.bds-file-uploader__dropzone--active {
+.bds-file-uploader__dropzone--drag-over {
   border-color: var(--bds-border-brand-primary);
   background-color: color-mix(in srgb, var(--bds-background-brand-primary) 5%, var(--bds-surface-primary));
 }
