@@ -1,24 +1,36 @@
 import { type CSSProperties, type HTMLAttributes, type ReactNode } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredValue } from '../../utils';
 import './ProgressCircle.css';
 
 export type ProgressCircleSize = 'sm' | 'md' | 'lg';
-export type ProgressCircleStatus = 'default' | 'positive' | 'warning' | 'negative';
+export type ProgressCircleTone = 'positive' | 'warning' | 'negative';
+
+/** @deprecated Renamed `ProgressCircleTone` (ADR-033 § 2). */
+export type ProgressCircleStatus = ProgressCircleTone;
+
+/** `default` was the brand fill — what an unset `tone` renders — so it resolves to no tone class. */
+const RETIRED_TONES: Record<string, string> = { default: 'brand' };
+const RETIRED_REPLACEMENTS: Record<string, string> = { default: 'no `tone` (the brand fill is the default)' };
 
 export interface ProgressCircleProps extends Omit<HTMLAttributes<HTMLDivElement>, 'role' | 'children'> {
   /** Progress value from 0 to 100. Ignored when `indeterminate` is true. */
   value: number;
   /** Diameter preset — `sm` 64px, `md` 96px, `lg` 128px */
   size?: ProgressCircleSize;
-  /** Fill color semantic — uses canonical status tokens */
-  status?: ProgressCircleStatus;
+  /** Valence of the fill — omit for the brand fill */
+  tone?: ProgressCircleTone;
+  /**
+   * @deprecated Use `tone` instead (ADR-033 § 2). Honoured for one minor
+   * version; `tone` wins when both are passed.
+   */
+  status?: ProgressCircleTone;
   /** Accessible label for screen readers */
   label?: string;
   /** Centered slot — typically a percentage. Pass `true` to render `${value}%`, a node to render arbitrary content, or omit to render nothing. */
   showValue?: boolean | ReactNode;
   /** Animated continuous spin for unknown duration progress */
   indeterminate?: boolean;
-  /** Override fill stroke color (escape hatch — defaults to status token) */
+  /** Override fill stroke color (escape hatch — defaults to the tone token) */
   fillColor?: string;
 }
 
@@ -45,9 +57,9 @@ const SIZE_CONFIG: Record<ProgressCircleSize, { diameter: number; stroke: number
  * <ProgressCircle value={72} showValue label="Onboarding completion" />
  * ```
  *
- * @example Status
+ * @example Tone
  * ```tsx
- * <ProgressCircle value={100} status="positive" showValue />
+ * <ProgressCircle value={100} tone="positive" showValue />
  * ```
  *
  * @example Indeterminate
@@ -60,7 +72,8 @@ const SIZE_CONFIG: Record<ProgressCircleSize, { diameter: number; stroke: number
 export function ProgressCircle({
   value,
   size = 'md',
-  status = 'default',
+  tone,
+  status,
   label,
   showValue,
   indeterminate = false,
@@ -69,6 +82,13 @@ export function ProgressCircle({
   style,
   ...props
 }: ProgressCircleProps) {
+  const resolvedTone = resolveRetiredValue(
+    'ProgressCircle',
+    tone !== undefined ? 'tone' : 'status',
+    (tone ?? status) as string | undefined,
+    RETIRED_TONES,
+    RETIRED_REPLACEMENTS,
+  );
   const { diameter, stroke } = SIZE_CONFIG[size];
   const radius = (diameter - stroke) / 2;
   const circumference = 2 * Math.PI * radius;
@@ -99,7 +119,7 @@ export function ProgressCircle({
       className={bdsClass(
         'bds-progress-circle',
         `bds-progress-circle--size-${size}`,
-        `bds-progress-circle--${status}`,
+        resolvedTone && resolvedTone !== 'brand' && `bds-progress-circle--tone-${resolvedTone}`,
         indeterminate && 'bds-progress-circle--indeterminate',
         className,
       )}

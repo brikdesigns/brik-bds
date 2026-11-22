@@ -24,19 +24,19 @@ import { Toast } from '@brikdesigns/bds';
 
 ## Variants
 
-Five variants — `default` (no badge) plus four status badges.
+Five tones — `neutral` (no badge) plus four valence badges.
 
 ```tsx
-<Toast title="Just so you know" variant="default" />
-<Toast title="Saved" description="Settings updated." variant="success" />
-<Toast title="Couldn't save" description="Try again." variant="error" />
-<Toast title="Almost there" description="Trial ends tomorrow." variant="warning" />
-<Toast title="Heads up" description="Maintenance scheduled." variant="info" />
+<Toast title="Just so you know" tone="neutral" />
+<Toast title="Saved" description="Settings updated." tone="positive" />
+<Toast title="Couldn't save" description="Try again." tone="negative" />
+<Toast title="Almost there" description="Trial ends tomorrow." tone="warning" />
+<Toast title="Heads up" description="Maintenance scheduled." tone="info" />
 ```
 
-- **`default`** — No badge, no icon. Plain text confirmation.
-- **`success`** — Positive badge, `circle-check` icon.
-- **`error`** — Error badge, `circle-exclamation` icon.
+- **`neutral`** — No badge, no icon. Plain text confirmation.
+- **`positive`** — Positive badge, `circle-check` icon.
+- **`negative`** — Negative badge, `circle-exclamation` icon.
 - **`warning`** — Warning badge, `triangle-exclamation` icon.
 - **`info`** — Info badge, `circle-info` icon.
 
@@ -45,7 +45,7 @@ Five variants — `default` (no badge) plus four status badges.
 `description` is optional. For one-line confirmations the title alone reads cleaner.
 
 ```tsx
-<Toast title="Saved" variant="success" onDismiss={() => hide()} />
+<Toast title="Saved" tone="positive" onDismiss={() => hide()} />
 ```
 
 ### Non-dismissible
@@ -53,7 +53,7 @@ Five variants — `default` (no badge) plus four status badges.
 Omit `onDismiss` and the close button is hidden. Use for self-dismissing toast queues controlled by a parent provider.
 
 ```tsx
-<Toast title="Saved" variant="success" />
+<Toast title="Saved" tone="positive" />
 ```
 
 ## When *not* to use
@@ -79,7 +79,7 @@ Omit `onDismiss` and the close button is hidden. Use for self-dismissing toast q
 |---|---|---|
 | `title` | `ReactNode` *(required)* | — |
 | `description` | `ReactNode` | — |
-| `tone` | `ToastTone` | `'default'` |
+| `tone` | `ToastTone` | `'neutral'` |
 | `variant` | `ToastTone` | — |
 | `onDismiss` | `() => void` | — |
 | `urgency` | `ToastUrgency` | `'polite'` |

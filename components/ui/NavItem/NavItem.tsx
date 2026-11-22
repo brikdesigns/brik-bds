@@ -89,7 +89,7 @@ export function NavItem({
     <>
       {icon && <span className="bds-nav-item__icon">{icon}</span>}
       {!iconOnly && <span className="bds-nav-item__label">{label}</span>}
-      {dot && <Dot status={dot === true ? 'default' : dot} size="sm" aria-hidden="true" />}
+      {dot && <Dot {...(dot === true ? { emphasis: 'brand' as const } : { tone: dot })} size="sm" aria-hidden="true" />}
     </>
   );
 

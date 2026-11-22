@@ -112,7 +112,7 @@ export function ToastProvider({
   const dismiss = useCallback((id: string) => dispatch({ type: 'dismiss', id }), []);
 
   const toast = useCallback(
-    ({ title, description, tone = 'default', urgency, duration: own }: ToastOptions) => {
+    ({ title, description, tone = 'neutral', urgency, duration: own }: ToastOptions) => {
       const id = `bds-toast-${nextId.current++}`;
       dispatch({
         type: 'add',

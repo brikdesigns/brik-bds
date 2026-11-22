@@ -20,15 +20,13 @@ import { Dot } from '@brikdesigns/bds';
 
 ## Variants
 
-### Status colors
+### Tones
 
-<ComponentPreview code={`<BDS.Dot status="default" />
-<BDS.Dot tone="positive" />
+<ComponentPreview code={`<BDS.Dot tone="positive" />
 <BDS.Dot tone="warning" />
 <BDS.Dot tone="negative" />
 <BDS.Dot tone="info" />
 <BDS.Dot tone="neutral" />`}>
-  <BDS.Dot status="default" />
   <BDS.Dot tone="positive" />
   <BDS.Dot tone="warning" />
   <BDS.Dot tone="negative" />
@@ -36,12 +34,11 @@ import { Dot } from '@brikdesigns/bds';
   <BDS.Dot tone="neutral" />
 </ComponentPreview>
 
-- **`default`** — Brand primary. General-purpose indicator.
 - **`positive`** — Online, success, operational.
 - **`warning`** — Away, attention needed.
-- **`error`** — Offline, failure, outage.
+- **`negative`** — Offline, failure, outage.
 - **`info`** — Informational, in-progress.
-- **`neutral`** — Inactive, disabled.
+- **`neutral`** — Inactive, disabled. The default when `tone` is omitted.
 
 ### Sizes
 
@@ -86,8 +83,9 @@ Use `pulse` for active/running states — a continuously running process, a live
 
 | Prop | Type | Default |
 |---|---|---|
-| `tone` | `DotTone` | `'default'` |
+| `tone` | `DotTone` | `'neutral'` |
 | `status` | `DotTone` | — |
+| `emphasis` | `'brand'` | — |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
 | `pulse` | `boolean` | `false` |
 

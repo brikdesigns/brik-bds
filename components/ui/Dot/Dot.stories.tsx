@@ -11,10 +11,10 @@ const meta: Meta<typeof Dot> = {
     layout: 'centered',
   },
   argTypes: {
-    status: {
+    tone: {
       control: 'select',
-      options: ['default', 'positive', 'warning', 'error', 'info', 'neutral'],
-      description: 'Color: `default` brand, `positive` green, `warning` yellow, `error` red, `info` blue, `neutral` gray.',
+      options: ['positive', 'warning', 'negative', 'info', 'neutral'],
+      description: 'Valence: `positive` green, `warning` yellow, `negative` red, `info` blue, `neutral` gray.',
     },
     size: {
       control: 'select',
@@ -35,7 +35,7 @@ type Story = StoryObj<typeof Dot>;
 /** @summary Interactive playground for prop tweaking */
 export const Default: Story = {
   args: {
-    status: 'default',
+    tone: 'neutral',
     size: 'md',
   },
 };

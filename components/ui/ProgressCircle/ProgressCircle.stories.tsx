@@ -16,10 +16,10 @@ const meta: Meta<typeof ProgressCircle> = {
       options: ['sm', 'md', 'lg'],
       description: 'Diameter preset — `sm` 64px, `md` 96px, `lg` 128px.',
     },
-    status: {
+    tone: {
       control: { type: 'inline-radio' },
-      options: ['default', 'positive', 'warning', 'negative'],
-      description: 'Fill color semantic — uses canonical status tokens.',
+      options: [undefined, 'positive', 'warning', 'negative'],
+      description: 'Valence of the fill — omit for the brand fill.',
     },
     label: {
       control: 'text',
@@ -35,7 +35,7 @@ const meta: Meta<typeof ProgressCircle> = {
     },
     fillColor: {
       control: 'color',
-      description: 'Override fill stroke color (escape hatch — defaults to status token).',
+      description: 'Override fill stroke color (escape hatch — defaults to the tone token).',
     },
   },
 };
@@ -45,12 +45,11 @@ type Story = StoryObj<typeof ProgressCircle>;
 
 /* ─── Default ─────────────────────────────────────────────────── */
 
-/** @summary Interactive circular progress — value/status via Controls */
+/** @summary Interactive circular progress — value/tone via Controls */
 export const Default: Story = {
   args: {
     value: 72,
     size: 'md',
-    status: 'default',
     showValue: true,
     label: 'Onboarding completion',
     indeterminate: false,
@@ -58,7 +57,7 @@ export const Default: Story = {
 };
 
 /* ─── Documented capability — arbitrary centered content (Q4) ─────
-   `status` (semantic stroke color), `size`, `value`, `indeterminate` are
+   `tone` (semantic stroke color), `size`, `value`, `indeterminate` are
    Controls on Default — no per-status color-swap stories (ADR-010 Q2,
    matches Dot). Only the ReactNode centered-slot capability earns a story. */
 

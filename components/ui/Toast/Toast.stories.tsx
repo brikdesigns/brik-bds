@@ -12,9 +12,9 @@ const meta: Meta<typeof Toast> = {
   argTypes: {
     title: { control: 'text', description: 'Primary message line.' },
     description: { control: 'text', description: 'Optional secondary line; omit for a title-only toast.' },
-    variant: {
+    tone: {
       control: 'select',
-      options: ['default', 'positive', 'negative', 'warning', 'info'],
+      options: ['neutral', 'positive', 'negative', 'warning', 'info'],
       description: 'Status tone — selects the colored `Badge` icon. The surface stays white.',
     },
     // Controls-only per ADR-010: urgency changes `role` / `aria-live`, which
@@ -24,7 +24,7 @@ const meta: Meta<typeof Toast> = {
       control: 'inline-radio',
       options: ['polite', 'assertive'],
       description:
-        'Screen-reader announcement priority. `polite` (default) waits for a pause; `assertive` interrupts. Independent of `variant`.',
+        'Screen-reader announcement priority. `polite` (default) waits for a pause; `assertive` interrupts. Independent of `tone`.',
     },
   },
 };
@@ -37,7 +37,7 @@ type Story = StoryObj<typeof Toast>;
    ═══════════════════════════════════════════════════════════════ */
 
 /**
- * Neutral toast — no badge. Edit `title` / `description`, switch `variant`,
+ * Neutral toast — no badge. Edit `title` / `description`, switch `tone`,
  * and omit `onDismiss` for a non-dismissible toast via Controls.
  *
  * @summary White-surface notification with optional status badge
@@ -46,7 +46,7 @@ export const Default: Story = {
   args: {
     title: 'Title goes here',
     description: 'Description goes here',
-    variant: 'default',
+    tone: 'neutral',
     onDismiss: () => {},
   },
 };
