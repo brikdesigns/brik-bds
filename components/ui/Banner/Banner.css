@@ -60,18 +60,7 @@
 }
 
 /* Close button — visual contract lives in CloseButton, whose `color: inherit`
- * adapts to the announcement tone's on-color surface. No overrides needed. */
-
-/* ─── Tone: announcement (brand-primary surface) ──────────────── */
-
-.bds-banner--tone-announcement {
-  background-color: var(--bds-surface-brand-primary);
-  color: var(--bds-text-on-color-dark);
-  padding: var(--bds-padding-md) var(--bds-padding-lg);
-  /* Match Button's base radius (--bds-border-radius-md) so the announcement banner
-   * reads as cohesive with adjacent buttons. #1840. */
-  border-radius: var(--bds-border-radius-md);
-}
+ * adapts to the brand emphasis's on-color surface. No overrides needed. */
 
 /* ─── Tones: warning / negative / info / positive (status surfaces) ─── */
 /* Replaces the legacy AlertBanner styling. Secondary surface, primary
@@ -100,5 +89,16 @@
 .bds-banner--tone-info .bds-banner__content,
 .bds-banner--tone-positive .bds-banner__content {
   gap: var(--bds-gap-sm);
+}
+
+/* ─── Emphasis: brand (brand-primary surface) ──────────────── */
+
+.bds-banner--emphasis-brand {
+  background-color: var(--bds-surface-brand-primary);
+  color: var(--bds-text-on-color-dark);
+  padding: var(--bds-padding-md) var(--bds-padding-lg);
+  /* Match Button's base radius (--bds-border-radius-md) so the brand banner
+   * reads as cohesive with adjacent buttons. #1840. */
+  border-radius: var(--bds-border-radius-md);
 }
 }

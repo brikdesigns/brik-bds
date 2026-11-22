@@ -37,7 +37,7 @@ Source of truth: [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/mai
 | `placement` | `top` · `bottom` · `left` · `right` | Which side of its anchor a floating element opens on (the `placement` prop) | Tooltip, Popover, Menu |
 | `side` | `right` · `left` · `bottom` | Which viewport edge a docked panel anchors to (the `side` prop) | Sheet |
 
-`error` and `progress` are retired valence words: use `negative` and `info` ([ADR-033 § Retired vocabulary](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#retired-vocabulary)). `brand` is not a valence either: ADR-033 moves it to `emphasis="brand"`. Badge's `tone` dropped `brand` in #3309; Counter's `tone` (`brand`) and Banner's (`announcement`) still carry one until #3313 lands, so do not copy either into a new union.
+`error` and `progress` are retired valence words: use `negative` and `info` ([ADR-033 § Retired vocabulary](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#retired-vocabulary)). `brand` is not a valence either: ADR-033 moves it to `emphasis="brand"`. Badge's `tone` dropped `brand` in #3309, and Counter's and Banner's followed in #3313 (Banner's `announcement` is now `emphasis="brand"`).
 
 `size` is not an ADR-033 axis word. It is a step ladder — `xs` · `sm` · `md` · `lg` on indicators, `xs` · `sm` · `md` · `lg` · `xl` on buttons — and its rungs follow ADR-033 § 3.
 

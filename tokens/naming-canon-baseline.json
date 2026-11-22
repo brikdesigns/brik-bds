@@ -4,9 +4,6 @@
     "1": {},
     "2": {},
     "3": {
-      "BannerTone#axis": 1925,
-      "BannerTone#mixed": 1925,
-      "CounterTone#mixed": 1925
     },
     "4": {
       "--above": 1927,
@@ -44,14 +41,11 @@
       "--standard": 1927,
       "--tab": 1927,
       "--text": 1927,
-      "--tone-announcement": 1925,
       "--url": 1927,
       "--with-pricing-card": 1927
     },
     "5": {
-      "--tone-brand": 1925,
       "--tone-default": 1925,
-      "CounterTone.brand": 1925,
       "DotTone.default": 1925,
       "ToastTone.default": 1925
     },
