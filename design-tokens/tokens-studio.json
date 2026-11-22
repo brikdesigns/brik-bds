@@ -2316,6 +2316,15 @@
         },
         "$type": "dimension",
         "$value": 16
+      },
+      "1600": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "EFFECT_FLOAT"
+          ]
+        },
+        "$type": "dimension",
+        "$value": 32
       }
     },
     "shadow-offset": {
@@ -3874,8 +3883,7 @@
             ]
           },
           "$type": "number",
-          "$value": 32,
-          "$description": "RAW — no primitive step carries 32px (shadow-blur scale tops out at 16px). Open call: extend the scale or re-pick."
+          "$value": "{shadow-blur.1600}"
         },
         "spread": {
           "$extensions": {
@@ -5882,7 +5890,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{border.brand-primary}",
+          "$value": "{color.grayscale.950}",
           "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke."
         },
         "neutral": {
@@ -6233,7 +6241,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{border.brand-primary}"
+          "$value": "{color.grayscale.950}"
         },
         "neutral": {
           "$extensions": {
@@ -6970,7 +6978,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{border.brand-primary}",
+          "$value": "{color.grayscale.100}",
           "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke."
         },
         "neutral": {
@@ -7321,7 +7329,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{border.brand-primary}"
+          "$value": "{color.grayscale.100}"
         },
         "neutral": {
           "$extensions": {

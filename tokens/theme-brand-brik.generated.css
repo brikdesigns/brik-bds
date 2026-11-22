@@ -95,11 +95,9 @@
   --bds-color-yellow-900: #795e1f;
   --bds-color-yellow-950: #634716;
   --bds-background-image: rgba(23, 23, 23, 0.6);
-  --bds-text-accent-red: var(--bds-color-poppy-500);
   --bds-text-secondary: var(--bds-color-grayscale-800);
   --bds-text-muted: var(--bds-color-grayscale-700);
   --bds-text-brand-primary: var(--bds-color-poppy-500);
-  --bds-text-accent-orange: var(--bds-color-orange-500);
   --bds-text-service-brand: var(--bds-color-yellow-600);
   --bds-text-service-information: var(--bds-color-blue-200);
   --bds-text-service-back-office: var(--bds-color-orange-500);
@@ -116,10 +114,21 @@
   --bds-text-service-brand-on-light: var(--bds-color-yellow-950);
   --bds-text-service-marketing-on-dark: var(--bds-color-green-200);
   --bds-text-accent: var(--bds-color-tan-700);
-  --bds-text-brand-primary-strong: var(--bds-color-poppy-700);
   --bds-border-secondary: var(--bds-color-grayscale-300);
   --bds-border-muted: var(--bds-color-grayscale-300);
   --bds-border-brand-primary: var(--bds-color-poppy-500);
+  --bds-border-accent-yellow: var(--bds-color-yellow-500);
+  --bds-border-accent-blue: var(--bds-color-blue-500);
+  --bds-border-accent-green: var(--bds-color-green-500);
+  --bds-border-accent-purple: var(--bds-color-purple-600);
+  --bds-border-accent-orange: var(--bds-color-orange-500);
+  --bds-border-accent-red: var(--bds-color-poppy-500);
+  --bds-border-chart-categorical-1: var(--bds-color-blue-700);
+  --bds-border-chart-categorical-2: var(--bds-color-purple-500);
+  --bds-border-chart-categorical-3: var(--bds-color-yellow-800);
+  --bds-border-chart-categorical-4: var(--bds-color-green-900);
+  --bds-border-chart-categorical-5: var(--bds-color-pink-700);
+  --bds-border-chart-categorical-6: var(--bds-color-tan-700);
   --bds-border-service-brand: var(--bds-color-yellow-500);
   --bds-border-service-information: var(--bds-color-blue-500);
   --bds-border-service-back-office: var(--bds-color-orange-500);
@@ -137,6 +146,12 @@
   --bds-background-brand-primary-hover: var(--bds-color-poppy-700);
   --bds-background-brand-primary-pressed: var(--bds-color-poppy-800);
   --bds-background-accent-orange: var(--bds-color-orange-400);
+  --bds-background-chart-categorical-1: var(--bds-color-blue-700);
+  --bds-background-chart-categorical-2: var(--bds-color-purple-500);
+  --bds-background-chart-categorical-3: var(--bds-color-yellow-800);
+  --bds-background-chart-categorical-4: var(--bds-color-green-900);
+  --bds-background-chart-categorical-5: var(--bds-color-pink-700);
+  --bds-background-chart-categorical-6: var(--bds-color-tan-700);
   --bds-background-service-brand: var(--bds-color-yellow-500);
   --bds-background-service-brand-on-light: var(--bds-color-yellow-950);
   --bds-background-service-marketing: var(--bds-color-green-400);
@@ -199,19 +214,15 @@
   --bds-page-accent: var(--bds-color-tan-100);
   --bds-page-service-green: var(--bds-color-green-500);
   --bds-page-service-blue: var(--bds-color-blue-200);
-  --bds-border-chart-brand: var(--bds-border-brand-primary);
-  --bds-background-chart-brand: var(--bds-border-brand-primary);
   --bds-border-focus: var(--bds-border-brand-primary);
 }
 
 :root[data-theme="dark"] .theme-brand-brik {
   --bds-background-image: rgba(0, 0, 0, 0.8);
-  --bds-text-accent-red: var(--bds-color-poppy-500);
   --bds-text-secondary: var(--bds-color-grayscale-300);
   --bds-text-muted: var(--bds-color-grayscale-600);
   --bds-text-on-color-light: var(--bds-color-grayscale-black);
   --bds-text-brand-primary: var(--bds-color-poppy-500);
-  --bds-text-accent-orange: var(--bds-color-orange-500);
   --bds-text-service-brand: var(--bds-color-yellow-600);
   --bds-text-service-information: var(--bds-color-blue-300);
   --bds-text-service-back-office: var(--bds-color-orange-500);
@@ -228,13 +239,24 @@
   --bds-text-service-brand-on-light: var(--bds-color-yellow-950);
   --bds-text-service-marketing-on-dark: var(--bds-color-green-300);
   --bds-text-accent: var(--bds-color-tan-400);
-  --bds-text-brand-primary-strong: var(--bds-color-poppy-500);
   --bds-border-primary: var(--bds-color-grayscale-800);
   --bds-border-secondary: var(--bds-color-grayscale-700);
   --bds-border-muted: var(--bds-color-grayscale-700);
   --bds-border-inverse: var(--bds-color-grayscale-black);
   --bds-border-brand-primary: var(--bds-color-poppy-500);
   --bds-border-disabled: var(--bds-color-grayscale-800);
+  --bds-border-accent-yellow: var(--bds-color-yellow-500);
+  --bds-border-accent-blue: var(--bds-color-blue-500);
+  --bds-border-accent-green: var(--bds-color-green-500);
+  --bds-border-accent-purple: var(--bds-color-purple-600);
+  --bds-border-accent-orange: var(--bds-color-orange-500);
+  --bds-border-accent-red: var(--bds-color-poppy-500);
+  --bds-border-chart-categorical-1: var(--bds-color-blue-500);
+  --bds-border-chart-categorical-2: var(--bds-color-purple-500);
+  --bds-border-chart-categorical-3: var(--bds-color-yellow-500);
+  --bds-border-chart-categorical-4: var(--bds-color-green-500);
+  --bds-border-chart-categorical-5: var(--bds-color-pink-500);
+  --bds-border-chart-categorical-6: var(--bds-color-tan-500);
   --bds-border-service-brand: var(--bds-color-yellow-500);
   --bds-border-service-information: var(--bds-color-blue-500);
   --bds-border-service-back-office: var(--bds-color-orange-500);
@@ -256,6 +278,12 @@
   --bds-background-brand-primary-hover: var(--bds-color-poppy-700);
   --bds-background-brand-primary-pressed: var(--bds-color-poppy-800);
   --bds-background-accent-orange: var(--bds-color-orange-400);
+  --bds-background-chart-categorical-1: var(--bds-color-blue-500);
+  --bds-background-chart-categorical-2: var(--bds-color-purple-500);
+  --bds-background-chart-categorical-3: var(--bds-color-yellow-500);
+  --bds-background-chart-categorical-4: var(--bds-color-green-500);
+  --bds-background-chart-categorical-5: var(--bds-color-pink-500);
+  --bds-background-chart-categorical-6: var(--bds-color-tan-500);
   --bds-background-service-brand: var(--bds-color-yellow-500);
   --bds-background-service-brand-on-light: var(--bds-color-yellow-950);
   --bds-background-service-marketing: var(--bds-color-green-400);
@@ -321,8 +349,6 @@
   --bds-page-accent: var(--bds-color-tan-950);
   --bds-page-service-green: var(--bds-color-green-500);
   --bds-page-service-blue: var(--bds-color-blue-200);
-  --bds-border-chart-brand: var(--bds-border-brand-primary);
-  --bds-background-chart-brand: var(--bds-border-brand-primary);
   --bds-border-focus: var(--bds-border-brand-primary);
   --bds-text-on-color-light-muted: color-mix(in srgb, var(--bds-text-on-color-light) 70%, transparent);
 }

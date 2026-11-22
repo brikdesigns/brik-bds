@@ -12,6 +12,7 @@ public enum BDSShadow {
     public static let shadowBlur600: CGFloat = 12
     public static let shadowBlur700: CGFloat = 14
     public static let shadowBlur800: CGFloat = 16
+    public static let shadowBlur1600: CGFloat = 32
     public static let shadowOffset0: CGFloat = 0
     public static let shadowOffset25: CGFloat = -4
     public static let shadowOffset50: CGFloat = -2

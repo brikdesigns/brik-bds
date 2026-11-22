@@ -1117,6 +1117,10 @@
     "800": {
       "$value": 16,
       "$type": "dimension"
+    },
+    "1600": {
+      "$value": 32,
+      "$type": "dimension"
     }
   },
   "shadow-offset": {
@@ -1333,8 +1337,7 @@
       "$value": "0 {shadow-offset.200} {shadow-blur.800} {shadow-spread.0} rgba(0, 0, 0, 0.12)"
     },
     "dramatic": {
-      "$value": "0 {shadow-offset.200} 32px {shadow-spread.0} rgba(0, 0, 0, 0.24)",
-      "$description": "RAW — no primitive step carries 32px (shadow-blur scale tops out at 16px). Open call: extend the scale or re-pick."
+      "$value": "0 {shadow-offset.200} {shadow-blur.1600} {shadow-spread.0} rgba(0, 0, 0, 0.24)"
     }
   },
   "body": {
@@ -1632,7 +1635,7 @@
     },
     "chart": {
       "brand": {
-        "$value": "{border.brand-primary}",
+        "$value": "{color.grayscale.100}",
         "$type": "color",
         "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke."
       },
@@ -1797,7 +1800,7 @@
     },
     "chart": {
       "brand": {
-        "$value": "{border.brand-primary}",
+        "$value": "{color.grayscale.100}",
         "$type": "color"
       },
       "neutral": {

@@ -100,66 +100,6 @@
           },
           "$type": "color",
           "$value": "#314952"
-        },
-        "lightest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.blue.100}",
-          "$description": "DEPRECATED — use color.blue.100 (brik-bds#1739)"
-        },
-        "lighter": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.blue.300}",
-          "$description": "DEPRECATED — use color.blue.300 (brik-bds#1739)"
-        },
-        "light": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.blue.500}",
-          "$description": "DEPRECATED — use color.blue.500 (brik-bds#1739)"
-        },
-        "dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.blue.700}",
-          "$description": "DEPRECATED — use color.blue.700 (brik-bds#1739)"
-        },
-        "darker": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.blue.800}",
-          "$description": "DEPRECATED — use color.blue.800 (brik-bds#1739)"
-        },
-        "darkest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.blue.950}",
-          "$description": "DEPRECATED — use color.blue.950 (brik-bds#1739)"
         }
       },
       "green": {
@@ -261,66 +201,6 @@
           },
           "$type": "color",
           "$value": "#2a5542"
-        },
-        "lightest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.green.100}",
-          "$description": "DEPRECATED — use color.green.100 (brik-bds#1739)"
-        },
-        "lighter": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.green.300}",
-          "$description": "DEPRECATED — use color.green.300 (brik-bds#1739)"
-        },
-        "light": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.green.500}",
-          "$description": "DEPRECATED — use color.green.500 (brik-bds#1739)"
-        },
-        "dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.green.700}",
-          "$description": "DEPRECATED — use color.green.700 (brik-bds#1739)"
-        },
-        "darker": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.green.800}",
-          "$description": "DEPRECATED — use color.green.800 (brik-bds#1739)"
-        },
-        "darkest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.green.950}",
-          "$description": "DEPRECATED — use color.green.950 (brik-bds#1739)"
         }
       },
       "orange": {
@@ -422,66 +302,6 @@
           },
           "$type": "color",
           "$value": "#3f1000"
-        },
-        "lightest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.orange.100}",
-          "$description": "DEPRECATED — use color.orange.100 (brik-bds#1739)"
-        },
-        "lighter": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.orange.300}",
-          "$description": "DEPRECATED — use color.orange.300 (brik-bds#1739)"
-        },
-        "light": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.orange.500}",
-          "$description": "DEPRECATED — use color.orange.500 (brik-bds#1739)"
-        },
-        "dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.orange.700}",
-          "$description": "DEPRECATED — use color.orange.700 (brik-bds#1739)"
-        },
-        "darker": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.orange.800}",
-          "$description": "DEPRECATED — use color.orange.800 (brik-bds#1739)"
-        },
-        "darkest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.orange.950}",
-          "$description": "DEPRECATED — use color.orange.950 (brik-bds#1739)"
         }
       },
       "pink": {
@@ -583,66 +403,6 @@
           },
           "$type": "color",
           "$value": "#8e0057"
-        },
-        "lightest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.pink.100}",
-          "$description": "DEPRECATED — use color.pink.100 (brik-bds#1739)"
-        },
-        "lighter": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.pink.300}",
-          "$description": "DEPRECATED — use color.pink.300 (brik-bds#1739)"
-        },
-        "light": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.pink.500}",
-          "$description": "DEPRECATED — use color.pink.500 (brik-bds#1739)"
-        },
-        "dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.pink.700}",
-          "$description": "DEPRECATED — use color.pink.700 (brik-bds#1739)"
-        },
-        "darker": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.pink.800}",
-          "$description": "DEPRECATED — use color.pink.800 (brik-bds#1739)"
-        },
-        "darkest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.pink.950}",
-          "$description": "DEPRECATED — use color.pink.950 (brik-bds#1739)"
         }
       },
       "poppy": {
@@ -750,66 +510,6 @@
           "$type": "color",
           "$value": "#4a0d00",
           "$description": "Deep accent"
-        },
-        "lightest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.poppy.100}",
-          "$description": "DEPRECATED — use color.poppy.100 (brik-bds#1739)"
-        },
-        "lighter": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.poppy.300}",
-          "$description": "DEPRECATED — use color.poppy.300 (brik-bds#1739)"
-        },
-        "light": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.poppy.500}",
-          "$description": "DEPRECATED — use color.poppy.500 (brik-bds#1739)"
-        },
-        "dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.poppy.700}",
-          "$description": "DEPRECATED — use color.poppy.700 (brik-bds#1739)"
-        },
-        "darker": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.poppy.800}",
-          "$description": "DEPRECATED — use color.poppy.800 (brik-bds#1739)"
-        },
-        "darkest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.poppy.950}",
-          "$description": "DEPRECATED — use color.poppy.950 (brik-bds#1739)"
         }
       },
       "purple": {
@@ -911,66 +611,6 @@
           },
           "$type": "color",
           "$value": "#2b2440"
-        },
-        "lightest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.purple.100}",
-          "$description": "DEPRECATED — use color.purple.100 (brik-bds#1739)"
-        },
-        "lighter": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.purple.300}",
-          "$description": "DEPRECATED — use color.purple.300 (brik-bds#1739)"
-        },
-        "light": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.purple.500}",
-          "$description": "DEPRECATED — use color.purple.500 (brik-bds#1739)"
-        },
-        "dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.purple.700}",
-          "$description": "DEPRECATED — use color.purple.700 (brik-bds#1739)"
-        },
-        "darker": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.purple.800}",
-          "$description": "DEPRECATED — use color.purple.800 (brik-bds#1739)"
-        },
-        "darkest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.purple.950}",
-          "$description": "DEPRECATED — use color.purple.950 (brik-bds#1739)"
         }
       },
       "tan": {
@@ -1073,66 +713,6 @@
           },
           "$type": "color",
           "$value": "#47453c"
-        },
-        "lightest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.tan.100}",
-          "$description": "DEPRECATED — use color.tan.100 (brik-bds#1739)"
-        },
-        "lighter": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.tan.300}",
-          "$description": "DEPRECATED — use color.tan.300 (brik-bds#1739)"
-        },
-        "light": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.tan.500}",
-          "$description": "DEPRECATED — use color.tan.500 (brik-bds#1739)"
-        },
-        "dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.tan.700}",
-          "$description": "DEPRECATED — use color.tan.700 (brik-bds#1739)"
-        },
-        "darker": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.tan.800}",
-          "$description": "DEPRECATED — use color.tan.800 (brik-bds#1739)"
-        },
-        "darkest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.tan.950}",
-          "$description": "DEPRECATED — use color.tan.950 (brik-bds#1739)"
         }
       },
       "yellow": {
@@ -1234,66 +814,6 @@
           },
           "$type": "color",
           "$value": "#634716"
-        },
-        "lightest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.yellow.100}",
-          "$description": "DEPRECATED — use color.yellow.100 (brik-bds#1739)"
-        },
-        "lighter": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.yellow.300}",
-          "$description": "DEPRECATED — use color.yellow.300 (brik-bds#1739)"
-        },
-        "light": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.yellow.500}",
-          "$description": "DEPRECATED — use color.yellow.500 (brik-bds#1739)"
-        },
-        "dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.yellow.700}",
-          "$description": "DEPRECATED — use color.yellow.700 (brik-bds#1739)"
-        },
-        "darker": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.yellow.800}",
-          "$description": "DEPRECATED — use color.yellow.800 (brik-bds#1739)"
-        },
-        "darkest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.yellow.950}",
-          "$description": "DEPRECATED — use color.yellow.950 (brik-bds#1739)"
         }
       },
       "grayscale": {
@@ -1413,66 +933,6 @@
           },
           "$type": "color",
           "$value": "#000000"
-        },
-        "lightest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.grayscale.100}",
-          "$description": "DEPRECATED — use color.grayscale.100 (brik-bds#1739)"
-        },
-        "lighter": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.grayscale.300}",
-          "$description": "DEPRECATED — use color.grayscale.300 (brik-bds#1739)"
-        },
-        "light": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.grayscale.500}",
-          "$description": "DEPRECATED — use color.grayscale.500 (brik-bds#1739)"
-        },
-        "dark": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.grayscale.700}",
-          "$description": "DEPRECATED — use color.grayscale.700 (brik-bds#1739)"
-        },
-        "darker": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.grayscale.800}",
-          "$description": "DEPRECATED — use color.grayscale.800 (brik-bds#1739)"
-        },
-        "darkest": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "ALL_SCOPES"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.grayscale.950}",
-          "$description": "DEPRECATED — use color.grayscale.950 (brik-bds#1739)"
         }
       }
     },
@@ -2016,6 +1476,68 @@
         },
         "$type": "color",
         "$value": "{color.poppy.500}"
+      },
+      "chart": {
+        "categorical-1": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.blue.700}"
+        },
+        "categorical-2": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.purple.500}"
+        },
+        "categorical-3": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.yellow.800}"
+        },
+        "categorical-4": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.green.900}"
+        },
+        "categorical-5": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.pink.700}"
+        },
+        "categorical-6": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.tan.700}"
+        }
       }
     },
     "surface": {
@@ -2374,24 +1896,6 @@
         "$type": "color",
         "$value": "{color.grayscale.white}"
       },
-      "accent-red": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.500}"
-      },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.500}"
-      },
       "muted": {
         "$extensions": {
           "com.figma.scopes": [
@@ -2599,15 +2103,6 @@
         },
         "$type": "color",
         "$value": "{color.system.red.500}"
-      },
-      "brand-primary-strong": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.700}"
       }
     },
     "border": {
@@ -2745,7 +2240,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow.500}"
+        "$value": "{color.yellow.500}"
       },
       "accent-blue": {
         "$extensions": {
@@ -2754,7 +2249,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue.500}"
+        "$value": "{color.blue.500}"
       },
       "accent-green": {
         "$extensions": {
@@ -2763,7 +2258,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.green.500}"
+        "$value": "{color.green.500}"
       },
       "accent-purple": {
         "$extensions": {
@@ -2772,7 +2267,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.purple.500}"
+        "$value": "{color.purple.600}"
       },
       "accent-orange": {
         "$extensions": {
@@ -2781,7 +2276,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange.500}"
+        "$value": "{color.orange.500}"
       },
       "accent-red": {
         "$extensions": {
@@ -2790,7 +2285,63 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.red.500}"
+        "$value": "{color.poppy.500}"
+      },
+      "chart": {
+        "categorical-1": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.blue.700}"
+        },
+        "categorical-2": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.purple.500}"
+        },
+        "categorical-3": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.yellow.800}"
+        },
+        "categorical-4": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.green.900}"
+        },
+        "categorical-5": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.pink.700}"
+        },
+        "categorical-6": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.tan.700}"
+        }
       }
     }
   },
@@ -3286,6 +2837,68 @@
         },
         "$type": "color",
         "$value": "{color.poppy.500}"
+      },
+      "chart": {
+        "categorical-1": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.blue.500}"
+        },
+        "categorical-2": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.purple.500}"
+        },
+        "categorical-3": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.yellow.500}"
+        },
+        "categorical-4": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.green.500}"
+        },
+        "categorical-5": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.pink.500}"
+        },
+        "categorical-6": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "FRAME_FILL",
+              "SHAPE_FILL"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.tan.500}"
+        }
       }
     },
     "surface": {
@@ -3644,24 +3257,6 @@
         "$type": "color",
         "$value": "{color.grayscale.black}"
       },
-      "accent-red": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.500}"
-      },
-      "accent-orange": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.orange.500}"
-      },
       "muted": {
         "$extensions": {
           "com.figma.scopes": [
@@ -3869,15 +3464,6 @@
         },
         "$type": "color",
         "$value": "{color.system.red.500}"
-      },
-      "brand-primary-strong": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.poppy.500}"
       }
     },
     "border": {
@@ -4015,7 +3601,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.yellow.500}"
+        "$value": "{color.yellow.500}"
       },
       "accent-blue": {
         "$extensions": {
@@ -4024,7 +3610,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.blue.500}"
+        "$value": "{color.blue.500}"
       },
       "accent-green": {
         "$extensions": {
@@ -4033,7 +3619,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.green.500}"
+        "$value": "{color.green.500}"
       },
       "accent-purple": {
         "$extensions": {
@@ -4042,7 +3628,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.purple.500}"
+        "$value": "{color.purple.600}"
       },
       "accent-orange": {
         "$extensions": {
@@ -4051,7 +3637,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.orange.500}"
+        "$value": "{color.orange.500}"
       },
       "accent-red": {
         "$extensions": {
@@ -4060,7 +3646,63 @@
           ]
         },
         "$type": "color",
-        "$value": "{color.system.red.500}"
+        "$value": "{color.poppy.500}"
+      },
+      "chart": {
+        "categorical-1": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.blue.500}"
+        },
+        "categorical-2": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.purple.500}"
+        },
+        "categorical-3": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.yellow.500}"
+        },
+        "categorical-4": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.green.500}"
+        },
+        "categorical-5": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.pink.500}"
+        },
+        "categorical-6": {
+          "$extensions": {
+            "com.figma.scopes": [
+              "STROKE_COLOR"
+            ]
+          },
+          "$type": "color",
+          "$value": "{color.tan.500}"
+        }
       }
     }
   },
