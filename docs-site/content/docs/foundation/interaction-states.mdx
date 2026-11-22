@@ -1,6 +1,6 @@
 ---
 title: Interaction States
-description: Tokens for hover, press, focus, and disabled states. Composable across surfaces via overlay primitives + per-brand state-pair semantics.
+description: The state model (transient, availability, persistent) with one class word, ARIA attribute and visual channel per state, plus the tokens for hover, press, focus, and disabled. Composable across surfaces via overlay primitives + per-brand state-pair semantics.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -132,6 +132,38 @@ Four words name four different things. Each has one meaning, one way the code ma
 A popup list option (`role="option"` in `AddableEntryList`, `AddableTagList`, `CommentComposer`, `SearchOverlay`) uses `--highlighted` for the keyboard position, because real focus stays in the text input and `:focus-visible` cannot reach the option. A transient pointer state such as a file dragged over `FileUploader`'s dropzone is `--drag-over`.
 
 A current item must carry `aria-current` so the state is not carried by colour alone (WCAG 4.1.2). `Menu` sets `aria-current="true"` on its current item; `NavItem`, `TopNavigation` and `Pagination` set `aria-current="page"`.
+
+## The three layers
+
+Every state belongs to one of three layers, and each state has one class word, one DOM or ARIA marker, and one visual channel. Two states never share a channel, so a persistent state can never be mistaken for focus.
+
+| Layer | State | Means | DOM / ARIA | Class | Visual channel |
+| --- | --- | --- | --- | --- | --- |
+| Transient | hover | the pointer is over it | `:hover` | none | overlay or solid `-hover` fill |
+| Transient | pressed | a pointer or key is down | `:active` | none | overlay or solid `-pressed` fill |
+| Transient | focus | the keyboard is here | `:focus-visible` | none (`--highlighted` for virtual focus) | outline ring, and nothing else draws it |
+| Availability | disabled | it cannot be used | native `disabled`, else `aria-disabled` | `--disabled` (non-native controls only) | token swap on a filled control, `--state-disabled-opacity` fade on an unfilled one ([ADR-028](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-028-disabled-state-treatment.md)) |
+| Availability | read-only | visible, not editable | `readonly` / `aria-readonly` | `--readonly` | hover and press overlays removed; `cursor: default` |
+| Availability | loading | busy | `aria-busy` | `--loading` | spinner; keeps its place in the tab order |
+| Persistent | selected | the value currently chosen | `:checked` / `aria-checked` / `aria-pressed` / `aria-selected`, chosen by cardinality ([ADR-045](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-045-selection-semantics-follow-cardinality.md)) | `--selected` | brand fill or tint |
+| Persistent | current | where you are (page, step) | `aria-current` | `--current` | per component: nav pill fill or text weight |
+| Persistent | highlighted | the virtual-focus option in a popup list | `aria-activedescendant` on the input | `--highlighted` | neutral fill |
+| Persistent | expanded | a disclosure is open | `aria-expanded` | `--open` on the picker triggers | brand border; a chevron rotation where the component has one |
+| Persistent | invalid | the value fails validation | `aria-invalid` | `--tone-negative` | negative border plus the error message |
+
+<Callout type="info">
+  Where a row's class says "per component", the states are defined once here and each component supplies its own treatment, so a new component picks the row it needs instead of inventing a word. Selection that spans a group follows the cardinality rule in [Selectable](#selectable) above.
+</Callout>
+
+Read-only as shipped is a display-only row that is not focusable (`InteractiveListItem` with `interactive={false}`), so it has no ring. A read-only control that stays focusable keeps the ring, because the ring belongs to focus, not to the read-only state.
+
+## Focus owns the ring
+
+The outline ring is reserved for `:focus-visible`. A persistent state — selected, current, highlighted, expanded, invalid — must not use the outline channel or `--border-focus` to say what it is. It uses fill, weight, a border colour or an icon instead.
+
+This is the rule #3300 exists to keep: when a selected pill drew its border in the focus token, a chosen segment and a keyboard-focused segment looked the same, and a keyboard user could not tell which was which. Keeping the ring for focus means any ring on screen is the keyboard position.
+
+A control that is both selected and focused shows both, in their own channels. When the selected fill would hide the ring (white text on a brand fill, so a `currentColor` ring disappears against a light popover), colour the focus ring with `--border-focus` on that state's `:focus-visible` rule. This changes the ring's colour only, so the ring still means focus. `DatePicker` does this for its selected day and month cells.
 
 ## Focus ring rules
 
