@@ -65,7 +65,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
    * When set, overrides any mode-driven auto-actions.
    */
   actions?: ReactNode;
-  /** Optional `TabBar` (or equivalent) rendered at the bottom of the header — page-level navigation. */
+  /** Optional `TabBar` (or equivalent) rendered at the bottom of the header — status on lists, topics on records. */
   tabs?: ReactNode;
   /** Key/value pairs rendered below the title row (e.g. Owner, Status, Updated). */
   metadata?: MetadataItem[];

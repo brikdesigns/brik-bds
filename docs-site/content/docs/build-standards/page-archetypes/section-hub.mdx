@@ -9,6 +9,8 @@ The page a product section opens on. The user is in a section that holds several
 
 Reach for it when the section has two or more sibling entities that each get their own list. If the page is a set of peer records and nothing sits beside it, that is plain [Collection](/docs/build-standards/page-archetypes/collection). If the page is about one entity split across tabs, that is a [Profile](/docs/build-standards/page-archetypes/profile).
 
+A section's landing page can also be a summary dashboard: no status tabs and no table, only the rail and a set of summary regions. It is the first rail item, `/{section}`, and the rail, header and state-shell rules below still apply. The dashboard body itself is the Dashboard archetype.
+
 A section hub adds nothing to the Collection body. It is a Collection with the three chrome layers around it placed correctly, which is the part consumers kept getting wrong.
 
 ## Composition
@@ -53,7 +55,7 @@ The live canvas is the `Layouts / section-hub` story in Storybook (`layouts-sect
 
 | Layer | URL |
 |---|---|
-| Rail item | The route itself, rendered by the section's route-group layout |
+| Rail item | `/{section}/{subsection}`; the section segment is required, and a route group is never a section boundary |
 | Status tab | `?status=`; the default tab omits the param and the server resolves it |
 | Filter | A param named after the field; kept when the status tab changes, dropped when the rail item changes |
 
