@@ -164,14 +164,29 @@ The six layers above say what a thing *is*. The Control layer holds four bars th
 
 | Chrome | Carries | URL |
 | --- | --- | --- |
-| Sub-nav rail (`SubNavigation`) | The entity or structural segment that partitions rows | Route-group layout at the current URL |
-| Page-header tabs (`TabBar` in `PageHeader`) | Lifecycle status of the current entity | `?status=`, default omitted, resolved on the server |
+| Sub-nav rail (`SubNavigation`) | The entity or structural segment that partitions rows | A path segment, `/{section}/{subsection}` |
+| Page-header tabs (`TabBar` in `PageHeader`) | Lifecycle status on a list, topics on a record | `?status=` on lists, default omitted, resolved on the server; `?tab=` on records only |
 | Filters (`FilterBar`) | Non-partitioning, nullable, multi-valued or high-cardinality attributes | Params named after the field; kept across status tabs, dropped across rail items |
-| Segmented control (`SegmentedControl`) | View mode only, never a data segment | None |
+| Segmented control (`SegmentedControl`) | A view mode or a time window, never a data segment | None for a view mode; `?range=` for a time window, so it survives a shared link |
 
 `?tab=` is reserved for detail pages.
 
-In one line: **rail = entity, page-header tabs = status, filters = attributes, segmented control = view mode.**
+In one line: **rail = entity, page-header tabs = status (lists) or topics (records), filters = attributes, segmented control = view mode or time window.**
+
+Any choice control is one of three things, depending on whether picking it changes:
+
+- **Which page you are on** — rail: a path segment, `<a href>` with `aria-current`.
+- **Which part of the same page you see** — tabs: `?status=` on lists, `?tab=` on records only, `role="tablist"`.
+- **How the same data is drawn** — segmented control: no URL for a view mode, `?range=` for a time window, `role="radiogroup"`.
+
+Each component has one thing it never does:
+
+| Component | Never |
+| --- | --- |
+| Sub-nav rail | A query parameter, or an item built from a data value |
+| Page-header tabs | A switch to a different kind of thing, or a path segment |
+| Filter | Taking a rail slot |
+| Segmented control | Picking a page, a status or a kind of thing |
 
 Two tests settle the borderline cases:
 

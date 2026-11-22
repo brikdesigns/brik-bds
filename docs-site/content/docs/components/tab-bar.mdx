@@ -5,20 +5,20 @@ description: Horizontal tab navigation. Three style variants, on-color mode for 
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-TabBar is for **navigating between sections of a page** — Settings tabs, profile-page sections, content-filter tabs. For switching content in-place inside a single panel, use [SegmentedControl](/docs/components/segmented-control).
+TabBar is for **splitting one page into smaller parts** — lifecycle status on a list, topics on a record. It renders buttons and never owns a URL path; switching to a different kind of thing, or to a subsection, is the sub-navigation rail's job. For switching content in-place inside a single panel, use [SegmentedControl](/docs/components/segmented-control).
 
 <ComparisonGrid
   items={[
     {
       title: 'TabBar',
-      whenToUse: 'Page-level navigation between sections (Settings → Account / Billing / Security).',
+      whenToUse: 'Lifecycle status on a list (All / Active / Archived) or topics on a record (Overview / Activity / Billing).',
       whenNotToUse: 'In-panel content switcher — that\'s SegmentedControl.',
       code: `<TabBar items={...} variant="tab" />`,
     },
     {
       title: 'SegmentedControl',
       whenToUse: 'Switch content in-place inside a single panel (Grid / List, Monthly / Yearly).',
-      whenNotToUse: 'Page navigation with section URLs — use TabBar.',
+      whenNotToUse: 'Choosing a status or a topic — use TabBar. Choosing a page — use the sub-navigation rail.',
       code: `<SegmentedControl items={...} />`,
     },
     {
@@ -32,10 +32,8 @@ TabBar is for **navigating between sections of a page** — Settings tabs, profi
 
 ## Use it for
 
-- Settings page sub-section navigation
-- Profile page sections (Overview / Activity / Connections)
-- Content filter tabs (All / Active / Archived)
-- Any flat sibling-section navigation where each tab corresponds to a distinct view
+- Lifecycle status on a list (All / Active / Archived)
+- Topics on a record (Overview / Activity / Connections)
 
 ## Import
 
