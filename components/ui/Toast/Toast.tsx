@@ -6,7 +6,7 @@ import { Badge } from '../Badge';
 import { CloseButton } from '../CloseButton';
 import './Toast.css';
 
-export type ToastTone = 'default' | 'positive' | 'negative' | 'warning' | 'info';
+export type ToastTone = 'positive' | 'negative' | 'warning' | 'info' | 'neutral';
 
 /** @deprecated Renamed `ToastTone` (ADR-033 § 2). */
 export type ToastVariant = ToastTone;
@@ -14,6 +14,7 @@ export type ToastVariant = ToastTone;
 const RETIRED_TONES: Record<string, ToastTone> = {
   success: 'positive',
   error: 'negative',
+  default: 'neutral',
 };
 
 export type ToastUrgency = 'polite' | 'assertive';
@@ -23,7 +24,7 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
   title: ReactNode;
   /** Description text below the title */
   description?: ReactNode;
-  /** Valence variant — renders a colored Badge icon; surface stays neutral */
+  /** Valence variant — renders a colored Badge icon; `neutral` (the default) renders none, and the surface stays neutral */
   tone?: ToastTone;
   /**
    * @deprecated Use `tone` instead (ADR-033 § 2). Honoured for one minor
@@ -46,7 +47,7 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
   onDismiss?: () => void;
 }
 
-const toneBadge: Record<Exclude<ToastTone, 'default'>, { tone: 'positive' | 'negative' | 'warning' | 'info'; icon: string }> = {
+const toneBadge: Record<Exclude<ToastTone, 'neutral'>, { tone: 'positive' | 'negative' | 'warning' | 'info'; icon: string }> = {
   positive: { tone: 'positive', icon: CheckCircle },
   negative: { tone: 'negative', icon: WarningCircle },
   warning: { tone: 'warning', icon: Warning },
@@ -76,8 +77,8 @@ export function Toast({
 }: ToastProps) {
   const resolvedTone =
     resolveRetiredValue('Toast', tone !== undefined ? 'tone' : 'variant', tone ?? variant, RETIRED_TONES) ??
-    'default';
-  const badge = resolvedTone !== 'default' ? toneBadge[resolvedTone] : null;
+    'neutral';
+  const badge = resolvedTone !== 'neutral' ? toneBadge[resolvedTone] : null;
   // `role="alert"` carries an implicit `aria-live="assertive"`, so pairing
   // role with the matching live value keeps the two from disagreeing in
   // browsers that read one and not the other.

@@ -44,11 +44,7 @@
       "--url": 1927,
       "--with-pricing-card": 1927
     },
-    "5": {
-      "--tone-default": 1925,
-      "DotTone.default": 1925,
-      "ToastTone.default": 1925
-    },
+    "5": {},
     "7": {},
     "8": {
       "--bds-pageheader-top": 2865,

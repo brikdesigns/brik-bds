@@ -14,7 +14,7 @@ White surface notification with optional colored `Badge` icon indicating status.
 
 <Canvas of={Stories.Default} />
 
-Edit `title` / `description`, switch `variant`, and omit `onDismiss` for a non-dismissible toast — all via Controls.
+Edit `title` / `description`, switch `tone`, and omit `onDismiss` for a non-dismissible toast — all via Controls.
 
 ## Variants
 
@@ -88,7 +88,7 @@ Toasts announce **politely** by default — `role="status"` with `aria-live="pol
 
 Pass `urgency="assertive"` to escalate to `role="alert"` / `aria-live="assertive"`, which interrupts whatever the screen reader is saying. Reserve it for messages the user must act on immediately — unsaved work about to be lost, a session expiring.
 
-`urgency` is **independent of `variant`**. A red `error` toast reporting a retry that already succeeded is still `polite`; the colour communicates severity to sighted users, the live region communicates interruption priority to screen-reader users, and those are different questions.
+`urgency` is **independent of `tone`**. A red `error` toast reporting a retry that already succeeded is still `polite`; the colour communicates severity to sighted users, the live region communicates interruption priority to screen-reader users, and those are different questions.
 
 | `urgency` | `role` | `aria-live` | Use for |
 |---|---|---|---|

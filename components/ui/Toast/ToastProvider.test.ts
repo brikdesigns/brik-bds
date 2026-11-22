@@ -13,7 +13,7 @@ import { toastQueueReducer, visibleToasts, type ToastItem } from './toastQueue';
 const item = (id: string): ToastItem => ({
   id,
   title: id,
-  tone: 'default',
+  tone: 'neutral',
   urgency: 'polite',
   duration: 4000,
 });

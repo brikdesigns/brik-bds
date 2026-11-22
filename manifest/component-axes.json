@@ -263,12 +263,6 @@
       "sm",
       "md",
       "lg"
-    ],
-    "status": [
-      "default",
-      "positive",
-      "warning",
-      "negative"
     ]
   },
   "ProgressStepper": {

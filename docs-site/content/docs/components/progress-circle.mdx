@@ -40,14 +40,14 @@ import { ProgressCircle } from '@brikdesigns/bds';
 <ProgressCircle value={72} size="lg" showValue label="Prominent" />
 ```
 
-### Status
+### Tone
 
-`status` recolors the fill stroke via canonical status tokens — `default`, `positive`, `warning`, `negative`.
+`tone` recolors the fill stroke via canonical valence tokens — `positive`, `warning`, `negative`. Omit it for the brand fill.
 
 ```tsx
-<ProgressCircle value={100} status="positive" showValue label="Complete" />
-<ProgressCircle value={40} status="warning" showValue label="Low" />
-<ProgressCircle value={15} status="negative" showValue label="Critical" />
+<ProgressCircle value={100} tone="positive" showValue label="Complete" />
+<ProgressCircle value={40} tone="warning" showValue label="Low" />
+<ProgressCircle value={15} tone="negative" showValue label="Critical" />
 ```
 
 ### Custom center content
@@ -106,7 +106,8 @@ import { ProgressCircle } from '@brikdesigns/bds';
 |---|---|---|
 | `value` | `number` (0–100) *(required)* | — |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` |
-| `status` | `'default' \| 'positive' \| 'warning' \| 'negative'` | `'default'` |
+| `tone` | `'positive' \| 'warning' \| 'negative'` | — |
+| `status` | `'positive' \| 'warning' \| 'negative'` | — |
 | `label` | `string` | — |
 | `showValue` | `ReactNode` (`true` renders the percentage) | — |
 | `indeterminate` | `boolean` | `false` |

@@ -203,7 +203,7 @@ export function TabBar({
         >
           {tab.label}
           {tab.dot && (
-            <Dot status={tab.dot === true ? 'default' : tab.dot} size="sm" aria-hidden="true" />
+            <Dot {...(tab.dot === true ? { emphasis: 'brand' as const } : { tone: tab.dot })} size="sm" aria-hidden="true" />
           )}
         </button>
       ))}
