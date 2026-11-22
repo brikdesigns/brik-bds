@@ -314,7 +314,7 @@ const BOOLEAN_MODIFIERS = new Set([
   'disabled', 'active', 'selected', 'open', 'closed', 'loading', 'readonly',
   'required', 'checked', 'expanded', 'collapsed', 'collapsible', 'sticky',
   'unread', 'empty', 'hidden', 'visible', 'focused', 'hovered', 'pressed',
-  'dragging', 'invalid', 'current',
+  'dragging', 'drag-over', 'invalid', 'current',
   // States and predicates (#1927 kind A).
   'clickable', 'non-clickable', 'exiting', 'flash', 'highlighted',
   'indeterminate', 'interactive', 'sortable', 'today', 'placeholder', 'last',

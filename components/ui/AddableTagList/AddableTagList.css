@@ -125,7 +125,7 @@
 }
 
 .bds-addable-tag-list__option:hover,
-.bds-addable-tag-list__option--active {
+.bds-addable-tag-list__option--highlighted {
   background-color: var(--bds-surface-secondary);
 }
 

@@ -265,7 +265,7 @@ export function CommentComposer({
                   aria-selected={mention === active}
                   className={bdsClass(
                     'bds-comment-composer__option',
-                    mention === active && 'bds-comment-composer__option--active',
+                    mention === active && 'bds-comment-composer__option--highlighted',
                   )}
                   // Keep focus in the textarea so it keeps receiving keys.
                   onMouseDown={(event) => event.preventDefault()}
