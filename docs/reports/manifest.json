@@ -2,7 +2,7 @@
   "schema": 1,
   "generated_by": "brikdesigns/brik-llm:scripts/reports/report-meta.py",
   "contract": "docs/reports/README.md#metadata-contract",
-  "count": 13,
+  "count": 14,
   "reports": [
     {
       "path": "docs/reports/2026-09-26-foundations-disconnect-assessment.html",
@@ -151,6 +151,22 @@
       "subject": "bds",
       "owner": "nstaner",
       "generated": "2026-11-21",
+      "supersedes": "none",
+      "cadence": "once",
+      "source": "manual"
+    },
+    {
+      "path": "docs/reports/library-architecture-alignment.html",
+      "title": "Library Architecture Alignment",
+      "status": "active",
+      "type": "assessment",
+      "themes": [
+        "design-system",
+        "agent-ops"
+      ],
+      "subject": "bds",
+      "owner": "nstaner",
+      "generated": "2026-11-22",
       "supersedes": "none",
       "cadence": "once",
       "source": "manual"

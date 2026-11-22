@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<!-- report-meta: contract in docs/reports/README.md (ADR-046) -->
+<meta name="report-status" content="active">
+<meta name="report-type" content="assessment">
+<meta name="report-themes" content="design-system,agent-ops">
+<meta name="report-subject" content="bds">
+<meta name="report-owner" content="nstaner">
+<meta name="report-generated" content="2026-11-22">
+<meta name="report-supersedes" content="none">
+<meta name="report-cadence" content="once">
+<meta name="report-source" content="manual">
+<!-- /report-meta -->
+<title>Library Architecture Alignment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body { font: 15px/1.55 -apple-system, "Segoe UI", sans-serif; max-width: 72rem; margin: 2rem auto; padding: 0 1rem; color: #222; background: #fff; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; margin-top: 2.25rem; border-bottom: 1px solid #ddd; padding-bottom: .25rem; }
+  h3 { font-size: 1rem; margin-top: 1.25rem; }
+  table { border-collapse: collapse; width: 100%; margin: .75rem 0; font-size: 14px; }
+  th, td { border: 1px solid #ccc; padding: .35rem .5rem; text-align: left; vertical-align: top; }
+  th { background: #f4f4f4; }
+  code { font-family: ui-monospace, Menlo, monospace; font-size: .92em; background: #f3f3f3; padding: 0 .2em; overflow-wrap: anywhere; }
+  .answer { background: #eef6ff; border-left: 4px solid #2b6cb0; padding: .75rem 1rem; margin: 1rem 0; }
+  .open { background: #fff4e5; border-left: 4px solid #dd6b20; padding: .5rem 1rem; margin: .75rem 0; }
+  .wrap { overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<h1>Library Architecture Alignment — 2026-11-21</h1>
+<p><em>Assessment only. No token, Figma or component change was made. Written during the session on <a href="https://github.com/brikdesigns/brik-bds/issues/3279">#3279</a> (umbrella <a href="https://github.com/brikdesigns/brik-bds/issues/3239">#3239</a>).</em></p>
+
+<div class="answer">
+<p><strong>We are not aligned because the written system still teaches the old model in several places, and is silent on the three points this session got wrong.</strong> Confidence: HIGH on the evidence below; the model in section 1 is my reading and needs your yes.</p>
+<ol>
+<li><strong>Nothing says what it means when both libraries have a family with the same name.</strong> Foundations and the Brand Kit both have blue, green, orange, purple and yellow. No doc says this is intended. I read it as duplication and proposed deleting the brand side. That was wrong.</li>
+<li><strong>The brand-colour exception is written for one half only.</strong> White text <em>on</em> Poppy is protected in five places. Poppy-coloured text <em>on a light surface</em> is not, and two rows in the contrast data say the opposite ("too light").</li>
+<li><strong>The chart docs say the opposite of your rule.</strong> You say charts use brand colours. The docs say "No brand kit rebinds those primitives".</li>
+<li><strong><code>CASCADE.md</code> still permits manual overrides</strong> in five lines, next to the line that forbids them.</li>
+<li><strong>Figma moved ahead of code, docs and tickets on 2026-11-19.</strong> Figma has plain families. Code, the grammar file, four doc pages and #3279's acceptance criteria still say <code>color/system/*</code> and <code>color/accent/*</code>.</li>
+</ol>
+</div>
+
+<h2>1. The model, stated once — please confirm or correct</h2>
+
+<table>
+<tr><th></th><th>Foundations</th><th>Brik Brand Kit</th></tr>
+<tr><td>Purpose</td><td>Everything that is true in every environment: Brik, every client, the portal. No brand.</td><td>Brik's own identity.</td></tr>
+<tr><td>Colour it owns</td><td>Grayscale (the neutrals). Seven hue families that exist only to give system meaning a colour: amber, blue, green, orange, purple, red, yellow. Annotation and social, as exceptions.</td><td>The brand families: poppy, tan, pink, blue, green, orange, purple, yellow, 11 steps each (live pull, 2026-11-21).</td></tr>
+<tr><td>What the colour is for</td><td>Positive, negative, warning and info look the same wherever BDS runs.</td><td>Brand fills and text, service lines, accents, charts.</td></tr>
+<tr><td>Also owns</td><td>Space, type, radius, border width, elevation, motion. Every semantic token name, each with a default value.</td><td>Brand fonts. Brand values for semantic names Foundations already defined.</td></tr>
+<tr><td>Compiles to</td><td><code>:root</code> in <code>tokens/figma-tokens.css</code> and <code>figma-tokens-dark.css</code></td><td><code>.theme-brand-brik</code> in <code>tokens/theme-brand-brik.generated.css</code></td></tr>
+</table>
+
+<ul>
+<li><strong>How they connect in Figma.</strong> The Brand Kit subscribes to Foundations as a library. Its variables alias Foundations variables where the value is universal: 23 such aliases in the live pull (space, radius, border width, three system colours).</li>
+<li><strong>How it becomes code.</strong> Figma variables → <code>scripts/pull-variables-headless.mjs</code> → <code>scripts/sync-figma-mcp.js --library=…</code> → <code>design-tokens/foundations.json</code> or <code>design-tokens/brand-kits/brik.json</code> → Style Dictionary → the CSS files above → <code>dist/tokens.css</code>. The name is <code>--bds-</code> plus the Figma path. A name is born in Figma only.</li>
+<li><strong>Same family name in both libraries is two different ramps for two jobs.</strong> Foundations blue 500 is <code>#2461b4</code>, the info colour. Brik blue 500 is <code>#8ebbcc</code>, a brand colour (<code>theme-brand-brik.generated.css:25</code>). Scope keeps them apart: one lands on <code>:root</code>, the other on <code>.theme-brand-brik</code>.</li>
+<li><strong>Brand colours are never an agent's to remove or re-value.</strong> They are identity. An overlap is resolved on the Foundations side or not at all.</li>
+<li><strong>Clients have no Brand Kit library.</strong> The portal compiles each client theme into the same slot the Brik kit fills.</li>
+</ul>
+
+<div class="open">
+<p><strong>One thing to check before building, not a proposal.</strong> A system token such as <code>--bds-background-info</code> is declared on <code>:root</code> and resolves there, so it keeps the Foundations blue as long as <code>.theme-brand-brik</code> sits below the root. Storybook puts it on <code>body</code> (<code>.storybook/preview.tsx:107</code>), which is safe. A consumer that put the class on <code>&lt;html&gt;</code> would turn info into Brik blue and positive into Brik green. This could not happen while the Foundations names were <code>color-system-*</code>. I have not checked the consumers.</p>
+</div>
+
+<h2>2. Topic 01 — <code>CASCADE.md</code></h2>
+<p>Line 164 is correct: "Add the variable in Figma and re-pull. A token name is born in Figma only." These lines in the same file contradict or blur it:</p>
+<div class="wrap"><table>
+<tr><th>Line</th><th>What it says</th><th>Problem</th><th>Fix</th></tr>
+<tr><td>168</td><td>"Touch an auto-generated file: Don't. Fix in Figma and re-pull, <em>or add an override in a manual file</em>."</td><td>Permits exactly what line 164 forbids.</td><td>End the sentence at "re-pull".</td></tr>
+<tr><td>175–176</td><td>"The correct place for a correction is a manual file bundled AFTER the auto-generated ones."</td><td>Same.</td><td>Delete.</td></tr>
+<tr><td>163</td><td>"Add a manual <code>figma-corrections.css</code> only as a last resort…"</td><td>Names an escape hatch. An agent under a failing gate takes it.</td><td>Delete the sentence.</td></tr>
+<tr><td>178, 181</td><td>Heading "Manual (safe to edit)" above <code>gap-fills.css — FROZEN</code></td><td>"Safe to edit" and "frozen" on the same item.</td><td>Rename the heading "Hand-written (frozen)".</td></tr>
+<tr><td>186–190</td><td>"Adding a new file to the bundle" procedure</td><td>A how-to for adding a manual token file.</td><td>Delete, or limit to generated mode files.</td></tr>
+<tr><td>10</td><td>"Figma files managed via Tokens Studio"</td><td>Wrong tool. The pull is the headless Plugin API path.</td><td>Name the real path.</td></tr>
+<tr><td>163</td><td><code>bun scripts/pull-variables.js …</code></td><td>The relay path. Line 165 names the headless one.</td><td>One command, the headless one.</td></tr>
+<tr><td>76</td><td><code>.theme-brand-brik[data-theme="dark"]</code></td><td>The generated file uses <code>:root[data-theme="dark"] .theme-brand-brik</code> (line 207).</td><td>Match the generated selector.</td></tr>
+</table></div>
+<p>The line that created <code>-strong</code> ("Add a semantic token Figma doesn't export") is already gone from the file, but <code>tokens/gap-fills.css:79</code> still cites it by name.</p>
+
+<h3>The same stale model elsewhere</h3>
+<div class="wrap"><table>
+<tr><th>Where</th><th>What is wrong</th></tr>
+<tr><td><code>docs-site/…/getting-started/figma-library-architecture.mdx:21</code></td><td>Lists Foundations colour as <code>--color-system-*</code> (gone from Figma) and the Brand Kit as "poppy, tan, etc." The "etc." hides six brand families, five of which share a name with Foundations. Lines 14, 35, 37 say Tokens Studio and <code>pull-variables.js</code>.</td></tr>
+<tr><td><code>docs-site/…/foundation/color-pairings.mdx:58</code></td><td>"No brand kit rebinds those primitives" for chart colours. Opposite of your rule.</td></tr>
+<tr><td><code>docs-site/…/foundation/color.mdx:203–208, 224, 346</code></td><td>Accent and system tokens described as <code>--color-system-{hue}</code>.</td></tr>
+<tr><td><code>docs-site/…/foundation/token-anatomy.mdx:347, 351, 366</code></td><td>Registers <code>--color-system-*</code> as a family with counts.</td></tr>
+<tr><td><code>docs/TOKEN-PR-CHECKLIST.md:117</code></td><td><code>color-system-*</code> rule.</td></tr>
+<tr><td><code>docs-site/…/foundation/index.mdx:105</code></td><td>Relay pull command.</td></tr>
+<tr><td><code>tokens/naming-grammar.json:37, 44–54</code></td><td>One flat family list with no owning library. Still registers <code>system</code>, <code>accent</code> and <code>chart</code> families.</td></tr>
+<tr><td>Notion "Readme"</td><td>Not marked archived. Teaches a three-tier model with semantic tokens living in the Brand Kit, unprefixed names, a git submodule and <code>overrides.css</code>.</td></tr>
+<tr><td>Notion "Relationship Map"</td><td>Marked archived 2026-05-18. No action.</td></tr>
+<tr><td>#3279 acceptance criteria</td><td>Describe a <code>color/system/*</code> structure Figma no longer has.</td></tr>
+</table></div>
+<p>#3281 (another session) is already moving docs to the generated files. Some rows above may be in its diff; I did not read that branch. The recent markdown audit checked where docs point. It did not check whether two lines in one file disagree, which is what this table is.</p>
+
+<h2>3. Topic 02 — the three components and the text colour</h2>
+<div class="wrap"><table>
+<tr><th>Component</th><th>Where</th><th>What is coloured</th><th>Sits on</th><th>Poppy 500</th><th>Poppy 700 (<code>-strong</code>)</th></tr>
+<tr><td>TableOfContents</td><td><code>TableOfContents.css:108–112</code></td><td>Active label in the rail, 14px bold</td><td>white surface</td><td>3.78:1</td><td>6.23:1</td></tr>
+<tr><td>Badge</td><td><code>Badge.css:200–203</code></td><td>Label of the subtle brand badge</td><td>tan 100</td><td>3.32:1</td><td>5.46:1</td></tr>
+<tr><td>Avatar</td><td><code>Avatar.css:40–43</code></td><td>Initials of a subtle avatar with no colour set</td><td>tan 100</td><td>3.32:1</td><td>5.46:1</td></tr>
+</table></div>
+<ul>
+<li><strong>Yes, it is an a11y fix on the Brik brand colour.</strong> <code>--bds-text-brand-primary-strong</code> was added on 2026-09-03 (#2270, commit 8871d853) to darken Poppy from 500 to 700 so the TOC label clears 4.5:1. Badge and Avatar adopted it later (#2943). In dark mode it equals the normal brand text colour.</li>
+<li><strong>It is a hand-written name with a segment the grammar does not have.</strong> <code>strong</code> appears nowhere in <code>tokens/naming-grammar.json</code>. Figma's Brand Kit does not carry it (live pull, 2026-11-21); only the stale mirror <code>design-tokens/brand-kits/brik.json:2603</code> does, which is why the re-pull stopped.</li>
+<li><strong>Canon already answered this and the token went around it.</strong> ADR-015 holds Poppy vibrant and gates "accent/link/tab/breadcrumb affordances" at 3:1. All three labels clear 3:1 in Poppy 500.</li>
+</ul>
+
+<h3>Why agents keep flagging it</h3>
+<div class="wrap"><table>
+<tr><th>Where</th><th>What it teaches</th></tr>
+<tr><td><code>tokens/contrast-pairings.json</code> rows "Rail TOC active label on surface" and "Subtle brand indicator label on the brand pale fill"</td><td>Gated at AA 4.5:1. Note says brand-primary "is too light". The gate fails if anyone restores the brand colour.</td></tr>
+<tr><td><code>contrast-pairings.json</code> policy</td><td>Opens with "AA (4.5:1) for colored brand/service text" before the exception.</td></tr>
+<tr><td>ADR-015 line 97</td><td>The 2026-09-12 amendment "governs the WHITE-on-Poppy-fill case only".</td></tr>
+<tr><td>Root <code>CLAUDE.md</code> invariant</td><td>Covers text on the brand fill. Says nothing about brand-coloured text.</td></tr>
+<tr><td><code>scripts/lint-brand-text-size.js:19</code></td><td>Leaves small brand-coloured labels as an open policy question (#1064 AC3).</td></tr>
+</table></div>
+<p>So an agent that restores the brand colour hits a red gate, and an agent reading the rules finds the exception does not reach this case. Both end up "fixing" it.</p>
+
+<div class="open">
+<p><strong>Proposed, waiting on your yes (it changes what renders):</strong></p>
+<ol>
+<li>The three components read <code>--bds-text-brand-primary</code>. No new name.</li>
+<li>The two pairing rows move to that token at AA-large, and their "too light" notes go.</li>
+<li><code>-strong</code> leaves <code>gap-fills.css</code> and the <code>brik.json</code> mirror; the re-pull then runs clean.</li>
+<li>The rule is written as one sentence covering both halves, in ADR-015, the pairing policy and the root <code>CLAUDE.md</code> invariant: Poppy is never darkened to pass contrast, as a fill or as text. The existing rule that small body copy uses <code>--bds-text-primary</code> stays.</li>
+</ol>
+</div>
+
+<h2>4. Topic 03 — chart colour</h2>
+<p><strong>Your rule:</strong> charts use brand colours; Storybook renders the Brik theme; Foundations colours exist for positive, negative and warning in every environment.</p>
+<div class="wrap"><table>
+<tr><th>Chart token</th><th>Code today</th><th>Figma today</th><th>Under your rule</th></tr>
+<tr><td><code>chart/brand</code></td><td>Follows the brand (<code>theme-brand-brik.generated.css:202–203</code>)</td><td>Same</td><td>Already right</td></tr>
+<tr><td><code>chart/categorical-1…6</code></td><td>Foundations <code>color-accent-*</code> primitives (<code>figma-tokens.css:433–438</code>). The Brik theme does not touch them.</td><td>Accent family removed. Four of the six now point at leftover Foundations primitives: <code>500 2</code> duplicates and <code>-on-dark</code> hues.</td><td>Brand families, set in the Brand Kit</td></tr>
+<tr><td><code>chart/positive, warning, negative, info</code></td><td>Foundations system colours</td><td>Foundations plain families</td><td>Already right</td></tr>
+<tr><td><code>chart/neutral</code></td><td>Grayscale 500</td><td>Same</td><td>Already right</td></tr>
+</table></div>
+<ul>
+<li>The live Brand Kit has no chart variables at all. So today no chart series except <code>brand</code> can show a brand colour, in Storybook or anywhere.</li>
+<li>The confusion with Foundations colours is here: the <code>500 2</code> duplicates, the three <code>-on-dark</code> hues and the old accent family exist in Foundations only to feed chart categoricals. Once categoricals come from the brand, Foundations needs none of them, and the seven families are left doing one job.</li>
+<li>Foundations still needs some default for the six categorical names, for an environment with no brand. My recommendation: point them at the seven families' own steps, with no extra primitives.</li>
+</ul>
+
+<h2>5. Topic 04 — why an agent proposed deleting brand colours</h2>
+<p>What I did: you asked for seven plain families in Foundations. Five already exist by name in the Brand Kit. I treated two ramps with one name as duplication and proposed removing the Brand Kit's.</p>
+<ol>
+<li><strong>No written rule for the overlap.</strong> The architecture page never says the two libraries can share a family name, or which side yields. Until 2026-11-19 they could not collide, because Foundations used <code>color/system/*</code>.</li>
+<li><strong>The architecture page hides the brand families.</strong> "poppy / tan / etc." does not tell a reader that blue, green, orange, purple, yellow and pink are Brik brand colours with brand values.</li>
+<li><strong>I stretched this Project's goal.</strong> #3239 is "a name is born in one place". I applied it as "a name has one definition". Those are different, and theming depends on the second being false.</li>
+<li><strong>The grammar file lists families with no owner.</strong> <code>naming-grammar.json:37</code> is one flat list, so nothing marks a family as brand property.</li>
+<li><strong>I did not apply a rule that already exists.</strong> Brand colour is client-visible identity, and the operating manual says an agent never originates a client-visible cut. That alone should have stopped the suggestion.</li>
+</ol>
+<p><strong>Fix:</strong> one "Ownership and overlap" section on the architecture page carrying section 1 of this report, with the full list of brand families, and one line in <code>brik-bds/CLAUDE.md</code> pointing at it: never propose removing or re-valuing a Brand Kit colour.</p>
+
+<h2>6. What I need from you</h2>
+<ol>
+<li><strong>Section 1:</strong> is the model right? Correct any row.</li>
+<li><strong>Section 3:</strong> yes or no to the three components reading the brand text colour.</li>
+<li><strong>Section 4:</strong> yes or no to chart categoricals moving to the Brand Kit. Which brand family sits on which of the six positions is your pick in Figma.</li>
+</ol>
+<p>After that: the doc fixes in section 2 as one PR, then #3279 is rewritten for the plain families and the full scales, then the build.</p>
+
+<h2>7. Update 2026-11-22 — what moved after this was written</h2>
+<p>Sections 1 to 6 are the 2026-11-21 reading and are left as written. Three things changed since, and one finding is new.</p>
+
+<h3>Decided by the operator on 2026-11-21 (answers to section 6)</h3>
+<ul>
+<li><strong>Section 3 — yes.</strong> Operator: "1 - yes". Badge <code>tone="brand"</code> and <code>--bds-text-brand-primary-strong</code> are retired (#3309, merged). Avatar and the table-of-contents rail read <code>--bds-text-brand-primary</code>.</li>
+<li><strong>Section 4 — yes.</strong> Operator: "yes" and "let's continue with darker steps needed as necessary for green and yellow." Categorical order is blue, purple, yellow, green, pink, tan, with orange left out.</li>
+<li><strong>Indicators.</strong> Operator: "Badges are an indicator to express statuses (verbs). Tags are an indicator used to express types and categories (nouns)." The interactive pill is <code>Chip</code> (#3300, chosen 2026-11-22).</li>
+</ul>
+
+<h3>Now true in the repo (this PR, Part of #3279)</h3>
+<table>
+<tr><th>Section 4 said</th><th>Now</th></tr>
+<tr><td>"The live Brand Kit has no chart variables at all."</td><td>The Brand Kit carries <code>background/chart/categorical-1…6</code> and <code>border/chart/categorical-1…6</code>. <code>theme-brand-brik.generated.css:126–154</code> (light) and <code>:254–286</code> (dark) read them.</td></tr>
+<tr><td><code>-strong</code> survives in the <code>brik.json</code> mirror (section 3).</td><td>The headless re-pull replaced the mirror. <code>git grep -n "brand-primary-strong" -- tokens design-tokens ':!tokens/compat'</code> returns nothing.</td></tr>
+<tr><td>Foundations <code>chart/brand</code> aliases <code>border/brand-primary</code>.</td><td>It aliases <code>color/grayscale/950</code> (light) and <code>color/grayscale/100</code> (dark), the values <code>border/brand-primary</code> already resolved to. Nothing renders differently.</td></tr>
+</table>
+<p><strong>Chart contrast, re-measured against the shipped surfaces.</strong> The earlier dark check used a stand-in <code>#121212</code>. Against <code>--bds-page-primary</code> (<code>#000000</code>) the six dark categoricals measure 6.93:1 to 17.82:1, and against <code>--bds-background-primary</code> (<code>#1b1b1b</code>) 5.68:1 to 14.62:1. The six light categoricals against white measure 3.03:1 (purple) to 4.79:1 (green). All twelve clear the 3:1 non-text bar (WCAG 1.4.11). Control: black on white computes 21.00.</p>
+
+<h3>New finding — why agents treated Badge as a brand or emphasis pill</h3>
+<p><strong>The written rule was right and the code taught the opposite, and agents trust code.</strong> Component code, examples and a lint allowlist contradicted the Badge-versus-Tag rule. Per the merged diff (<code>fecb671a</code>): Badge carried a <code>tone="brand"</code> (a brand colour is not a status); <code>CommentComposer</code> used a Badge for a label that is a type, so it became a Tag; and <code>naming-canon-baseline.json</code> held two <code>BadgeTone</code> entries that excused the mismatch, now dropped. An agent that read the rule and then read the component followed the component. The rule now has one home, <code>build-standards/indicators.mdx#badge-vs-tag</code>, and <code>brand</code> folds to neutral through <code>RETIRED_TONES</code> (#3309).</p>
+<p>This is the same shape as section 3's finding: a gate or an example that teaches the old model outranks a sentence that teaches the new one. The check that would have caught it is the one open on <a href="https://github.com/brikdesigns/brik-bds/issues/3310">#3310</a> (every prop union in <code>components/ui</code> against the written rules).</p>
+
+<h3>Still open</h3>
+<ul>
+<li>The section 2 doc fixes (<code>CASCADE.md</code> and the pages in the second table) are not in this PR.</li>
+<li>#3279 AC4 stays with the operator: delete <code>color/green/950</code> and the six <code>*-on-dark</code> chart primitives after the <code>800</code> steps are reviewed.</li>
+<li>The ownership-and-overlap section on the architecture page and the line in <code>brik-bds/CLAUDE.md</code> (section 5) are not written.</li>
+</ul>
+
+</body>
+</html>

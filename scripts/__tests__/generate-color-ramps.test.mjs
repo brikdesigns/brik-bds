@@ -64,13 +64,11 @@ describe('generate-color-ramps — anchors are preserved byte for byte', () => {
   const kit = JSON.parse(readFileSync(BRAND_KIT, 'utf8'))['primitives/value'].color;
 
   it.each(families)('$label round-trips all six named steps', ({ family, stops }) => {
-    // Post-#1739 the kit holds the value on the numeric stop and the legacy
-    // name is an alias onto it, so the assertion resolves one hop. That is
-    // strictly stronger than the pre-#1739 literal comparison: it pins BOTH
-    // that the alias targets the right stop and that the value is unchanged.
-    for (const [name, stop] of Object.entries(ANCHOR_STOPS)) {
+    // Figma carries only the numeric stops (#3279), so the live kit holds the
+    // anchor value on the numeric stop and no legacy name. The alias hop is
+    // asserted on the fixture in the numeric-only block below.
+    for (const stop of Object.values(ANCHOR_STOPS)) {
       expect(kindOf(stops, stop)).toBe('anchor');
-      expect(kit[family][name].$value).toBe(`{color.${family}.${stop}}`);
       expect(hexOf(stops, stop)).toBe(String(kit[family][stop].$value).toLowerCase());
     }
   });
@@ -83,9 +81,9 @@ describe('generate-color-ramps — anchors are preserved byte for byte', () => {
     }
   });
 
-  it.each(families)('$label marks every legacy alias deprecated', ({ family }) => {
+  it.each(families)('$label carries no legacy named step — Figma has none', ({ family }) => {
     for (const name of Object.keys(ANCHOR_STOPS)) {
-      expect(kit[family][name].$description).toMatch(/^DEPRECATED —/);
+      expect(kit[family][name], `${family}.${name}`).toBeUndefined();
     }
   });
 
@@ -236,10 +234,15 @@ describe('generate-color-ramps — a numeric-only Brand Kit (#2337)', () => {
     // Regression: --apply carried the alias's own `$description` onto the numeric
     // stop, stamping "DEPRECATED — use color.blue.100" onto stop 100 and changing
     // the kit on every run. The header has always claimed this is a no-op.
+    //
+    // The live kit is numeric-only since the Figma re-pull (#3279), so the first
+    // apply builds the aliased fixture and the second is the idempotence check.
     const original = readFileSync(BRAND_KIT, 'utf8');
     try {
       expect(apply().status).toBe(0);
-      expect(readFileSync(BRAND_KIT, 'utf8')).toBe(original);
+      const aliased = readFileSync(BRAND_KIT, 'utf8');
+      expect(apply().status).toBe(0);
+      expect(readFileSync(BRAND_KIT, 'utf8')).toBe(aliased);
     } finally {
       writeFileSync(BRAND_KIT, original);
     }
@@ -248,12 +251,14 @@ describe('generate-color-ramps — a numeric-only Brand Kit (#2337)', () => {
   it('restores all 54 aliases from numeric stops, byte-identical', () => {
     const original = readFileSync(BRAND_KIT, 'utf8');
     try {
-      const { text, removed } = stripNamed(original);
+      expect(apply().status).toBe(0);
+      const aliased = readFileSync(BRAND_KIT, 'utf8');
+      const { text, removed } = stripNamed(aliased);
       expect(removed).toBe(54);
       writeFileSync(BRAND_KIT, text);
 
       expect(apply().status).toBe(0);
-      expect(readFileSync(BRAND_KIT, 'utf8')).toBe(original);
+      expect(readFileSync(BRAND_KIT, 'utf8')).toBe(aliased);
     } finally {
       writeFileSync(BRAND_KIT, original);
     }

@@ -38,6 +38,7 @@
   --bds-border-accent-purple: var(--bds-color-system-purple-500);
   --bds-border-accent-orange: var(--bds-color-system-orange-500);
   --bds-border-accent-red: var(--bds-color-system-red-500);
+  --bds-border-chart-brand: var(--bds-color-grayscale-100); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke. */
   --bds-border-chart-neutral: var(--bds-color-grayscale-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/neutral; this one styles a border/stroke. */
   --bds-border-chart-categorical-1: var(--bds-color-chart-blue-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-1; this one styles a border/stroke. */
   --bds-border-chart-categorical-2: var(--bds-color-chart-orange-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-2; this one styles a border/stroke. */
@@ -74,6 +75,7 @@
   --bds-background-brand-primary-pressed: var(--bds-color-grayscale-black);
   --bds-background-disabled: var(--bds-color-grayscale-800); /** Disabled button background (all variants) */
   --bds-background-accent-orange: var(--bds-color-system-orange-500);
+  --bds-background-chart-brand: var(--bds-color-grayscale-100);
   --bds-background-chart-neutral: var(--bds-color-grayscale-500);
   --bds-background-chart-categorical-1: var(--bds-color-chart-blue-on-dark);
   --bds-background-chart-categorical-2: var(--bds-color-chart-orange-on-dark);
@@ -117,6 +119,4 @@
   --bds-page-accent-orange: var(--bds-color-system-orange-500);
   --bds-page-accent-red: var(--bds-color-system-red-500);
   --bds-page-accent-purple: var(--bds-color-system-purple-500);
-  --bds-border-chart-brand: var(--bds-border-brand-primary); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke. */
-  --bds-background-chart-brand: var(--bds-border-brand-primary);
 }
