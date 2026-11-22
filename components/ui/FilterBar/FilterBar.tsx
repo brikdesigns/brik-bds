@@ -1,7 +1,7 @@
 import { Children, cloneElement, isValidElement, useRef } from 'react';
 import type { HTMLAttributes, ReactElement, ReactNode } from 'react';
 import { Button, type ButtonSize } from '../Button';
-import { Counter, type CounterStatus } from '../Counter';
+import { Counter, type CounterEmphasis, type CounterTone } from '../Counter';
 import { Popover } from '../Popover';
 import { SearchInput, type SearchInputProps } from '../SearchInput';
 import { useElementWidth, withBarSize } from '../shared';
@@ -35,8 +35,8 @@ export interface FilterBarProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ti
    * tab inside a record page).
    */
   titleAs?: FilterBarTitleAs;
-  /** Override the counter's status when a filter is active (default: 'brand') */
-  activeStatus?: CounterStatus;
+  /** Override the counter's colour when a filter is active — a tone, or `brand` for the brand fill (default: 'brand') */
+  activeStatus?: CounterTone | CounterEmphasis;
   /** Callback to clear all filters. When provided, a "Clear filters" button appears while filtered < total. */
   onClear?: () => void;
   /** Label for the Clear button (default: "Clear filters") */
@@ -218,7 +218,8 @@ export function FilterBar({
       {title && <TitleTag className="bds-filter-bar__title">{title}</TitleTag>}
       <Counter
         count={filtered}
-        status={isFiltered ? activeStatus : 'neutral'}
+        tone={isFiltered && activeStatus !== 'brand' ? activeStatus : 'neutral'}
+        emphasis={isFiltered && activeStatus === 'brand' ? 'brand' : undefined}
         size="sm"
       />
       {/* Always mounted so assistive tech announces the change, zero included;

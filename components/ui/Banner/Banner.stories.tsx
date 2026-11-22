@@ -28,16 +28,22 @@ const meta: Meta<typeof Banner> = {
     },
     tone: {
       control: 'select',
-      options: ['announcement', 'warning', 'negative', 'info', 'positive'],
+      options: [undefined, 'warning', 'negative', 'info', 'positive'],
       description:
-        '`announcement` (default) = brand-primary surface, `role="banner"`. ' +
         '`warning` / `negative` / `info` = secondary surface with leading status Badge, `role="alert"`. ' +
-        '`positive` = secondary surface with a leading positive Badge, `role="status"`.',
+        '`positive` = secondary surface with a leading positive Badge, `role="status"`. ' +
+        'Omit for a plain announcement.',
+    },
+    emphasis: {
+      control: 'select',
+      options: [undefined, 'brand'],
+      description:
+        '`brand` = brand-primary surface, `role="banner"`. Default when neither `tone` nor `emphasis` is set.',
     },
     action: {
       control: false,
       description:
-        'Optional ReactNode aligned right (typically a Button). Use `emphasis="on-color"` for announcement tone; default variants for status tones.',
+        'Optional ReactNode aligned right (typically a Button). Use `emphasis="on-color"` on a brand banner; default variants for status tones.',
     },
     onDismiss: {
       action: 'dismissed',
@@ -70,7 +76,7 @@ export const Default: Story = {
 
 /**
  * Brand-primary surface for marketing notices.
- * @summary Announcement tone banner
+ * @summary Brand announcement banner
  */
 export const Announcement: Story = {
   args: {

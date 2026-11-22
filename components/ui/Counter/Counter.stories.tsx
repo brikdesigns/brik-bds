@@ -15,10 +15,15 @@ const meta: Meta<typeof Counter> = {
       control: { type: 'number', min: 0, max: 999 },
       description: 'Numeric count to display.',
     },
-    status: {
+    tone: {
       control: 'select',
-      options: ['success', 'error', 'warning', 'neutral', 'progress', 'brand'],
-      description: 'Status color — pure color axis, no semantic difference between values.',
+      options: ['positive', 'negative', 'warning', 'neutral', 'info'],
+      description: 'Valence color — pure color axis, no semantic difference between values.',
+    },
+    emphasis: {
+      control: 'select',
+      options: [undefined, 'brand'],
+      description: '`brand` paints the brand fill over the `tone` color — general counts and notifications.',
     },
     size: {
       control: 'select',
@@ -41,7 +46,7 @@ type Story = StoryObj<typeof Counter>;
    between values — Controls (ADR-010 Q2), not standalone stories.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary Interactive Counter — status, size, max via Controls */
+/** @summary Interactive Counter — tone, size, max via Controls */
 export const Default: Story = {
   args: {
     count: 5,

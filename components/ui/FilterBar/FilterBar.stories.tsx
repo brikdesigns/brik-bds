@@ -8,10 +8,10 @@ import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
 import { DataSection } from '../DataSection';
 import { PageHeader } from '../PageHeader';
-import type { CounterTone } from '../Counter';
+import type { CounterEmphasis, CounterTone } from '../Counter';
 
 /* ─── Counter tone options for the activeStatus Control ─────────
-   Mirrors `CounterTone` from ../Counter exactly. The `satisfies`
+   Mirrors `CounterTone` plus `CounterEmphasis` from ../Counter exactly. The `satisfies`
    cast catches drift if Counter adds / renames tones.
    ─────────────────────────────────────────────────────────────── */
 const counterToneOptions = [
@@ -21,7 +21,7 @@ const counterToneOptions = [
   'warning',
   'info',
   'neutral',
-] satisfies CounterTone[];
+] satisfies (CounterTone | CounterEmphasis)[];
 
 /* ─── Sample data ─────────────────────────────────────────────── */
 

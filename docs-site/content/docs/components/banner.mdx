@@ -5,13 +5,13 @@ description: Full-width contextual banner. One component covers announcements (b
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-Banner is the canonical full-width banner component. The `tone` prop switches between two visual modes: **announcement** (brand-primary surface, marketing notices) and **status** (secondary surface + leading status Badge, replaces the deprecated AlertBanner).
+Banner is the canonical full-width banner component. `emphasis="brand"` (the default when no `tone` is set) paints the brand-primary surface for marketing notices; `tone` renders a **status** surface with a leading status Badge (replaces the deprecated AlertBanner).
 
 <ComparisonGrid
   items={[
     {
       title: 'Banner',
-      preview: <BDS.Banner title="New feature" tone="announcement" />,
+      preview: <BDS.Banner title="New feature" emphasis="brand" />,
       whenToUse: 'Persistent, dismissible, full-width — site-wide announcements, tone-coded alerts that need to stay visible.',
       whenNotToUse: 'For ephemeral confirmation — that\'s Toast.',
       code: `<Banner title="..." tone="warning" />`,
@@ -35,7 +35,7 @@ Banner is the canonical full-width banner component. The `tone` prop switches be
 
 ## Use it for
 
-- Site-wide marketing announcements (brand-primary surface, default tone)
+- Site-wide marketing announcements (`emphasis="brand"`, the default)
 - Persistent status alerts that need to stay visible (`tone="warning|negative|info"`)
 - Trial-expires / quota-exceeded / system-degraded warnings
 - Maintenance windows, deployment notices
@@ -128,7 +128,8 @@ Pass `onDismiss` to render a close button. Common with announcements.
 |---|---|---|
 | `title` | `ReactNode` *(required)* | — |
 | `description` | `ReactNode` | — |
-| `tone` | `BannerTone` | `'announcement'` |
+| `tone` | `BannerTone` | — |
+| `emphasis` | `'brand'` | `'brand'` when no `tone` |
 | `action` | `ReactNode` | — |
 | `onDismiss` | `() => void` | — |
 

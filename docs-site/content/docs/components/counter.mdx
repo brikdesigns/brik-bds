@@ -32,13 +32,13 @@ Six status colors across four sizes.
 <BDS.Counter count={3} tone="negative" />
 <BDS.Counter count={2} tone="warning" />
 <BDS.Counter count={7} tone="info" />
-<BDS.Counter count={4} tone="brand" />
+<BDS.Counter count={4} emphasis="brand" />
 <BDS.Counter count={9} tone="neutral" />`}>
   <BDS.Counter count={5} tone="positive" />
   <BDS.Counter count={3} tone="negative" />
   <BDS.Counter count={2} tone="warning" />
   <BDS.Counter count={7} tone="info" />
-  <BDS.Counter count={4} tone="brand" />
+  <BDS.Counter count={4} emphasis="brand" />
   <BDS.Counter count={9} tone="neutral" />
 </ComponentPreview>
 
@@ -65,10 +65,10 @@ Six status colors across four sizes.
 
 Use `max` to cap the displayed value. Anything over renders as `{max}+`.
 
-<ComponentPreview code={`<BDS.Counter count={150} max={99} tone="brand" />
-<BDS.Counter count={9} max={99} tone="brand" />`}>
-  <BDS.Counter count={150} max={99} tone="brand" />
-  <BDS.Counter count={9} max={99} tone="brand" />
+<ComponentPreview code={`<BDS.Counter count={150} max={99} emphasis="brand" />
+<BDS.Counter count={9} max={99} emphasis="brand" />`}>
+  <BDS.Counter count={150} max={99} emphasis="brand" />
+  <BDS.Counter count={9} max={99} emphasis="brand" />
 </ComponentPreview>
 
 ## When *not* to use
@@ -88,6 +88,7 @@ Use `max` to cap the displayed value. Anything over renders as `{max}+`.
 |---|---|---|
 | `count` | `number` *(required)* | — |
 | `tone` | `CounterTone` | `'positive'` |
+| `emphasis` | `'brand'` | — |
 | `status` | `CounterTone` | `'success'` |
 | `size` | `CounterSize` | `'sm'` |
 | `max` | `number` | — |

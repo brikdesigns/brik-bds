@@ -6,13 +6,19 @@ import { bdsClass, resolveRetiredValue } from '../../utils';
 import { CloseButton } from '../CloseButton';
 import './Banner.css';
 
-export type BannerTone = 'announcement' | 'warning' | 'negative' | 'info' | 'positive';
+export type BannerTone = 'warning' | 'negative' | 'info' | 'positive';
 
-const RETIRED_TONES: Record<string, BannerTone> = {
+/** Hue source — `brand` paints the brand-primary surface (ADR-033 § 2). */
+export type BannerEmphasis = 'brand';
+
+/** `announcement` was the brand surface; it is a hue source now, so it moves to `emphasis="brand"`. */
+const RETIRED_TONES: Record<string, string> = {
+  announcement: 'announcement',
   error: 'negative',
   information: 'info',
   success: 'positive',
 };
+const RETIRED_REPLACEMENTS: Record<string, string> = { announcement: 'emphasis="brand"' };
 
 export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Bold title text */
@@ -20,46 +26,40 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
   /** Description text beside or below the title */
   description?: ReactNode;
   /**
-   * Visual tone:
-   * - `announcement` (default) — brand-primary surface for marketing notices
-   * - `warning` / `negative` / `info` — secondary surface with leading
-   *   status Badge icon. Switches `role` to `alert` for assistive tech.
+   * Valence, rendered as a leading Badge icon:
+   * - `warning` / `negative` / `info` — secondary surface, `role="alert"`.
    *   Replaces the legacy `AlertBanner` component.
-   * - `positive` — secondary surface with a leading positive Badge (check
-   *   icon). Renders `role="status"` (polite) — it confirms rather than alerts.
+   * - `positive` — secondary surface, `role="status"` (polite) — it confirms
+   *   rather than alerts.
+   * Omit for a plain announcement.
    */
   tone?: BannerTone;
+  /**
+   * Hue source. `brand` paints the brand-primary surface with inverse text and
+   * renders `role="banner"`. Default when neither `tone` nor `emphasis` is set.
+   */
+  emphasis?: BannerEmphasis;
   /** Action element (e.g. Button) aligned to the right */
   action?: ReactNode;
   /** Dismissible — shows close button and calls onDismiss */
   onDismiss?: () => void;
 }
 
-const STATUS_ICON: Record<Exclude<BannerTone, 'announcement'>, string> = {
+const STATUS_ICON: Record<BannerTone, string> = {
   warning: Warning,
   negative: Warning,
   info: Info,
   positive: CheckCircle,
 };
 
-const STATUS_BADGE: Record<
-  Exclude<BannerTone, 'announcement'>,
-  'warning' | 'negative' | 'info' | 'positive'
-> = {
-  warning: 'warning',
-  negative: 'negative',
-  info: 'info',
-  positive: 'positive',
-};
-
 /**
  * Banner — full-width contextual banner.
  *
- * Two tone families share the same component:
+ * Two axes share the same component:
  *
- * - **`announcement`** (default) — brand-primary surface with inverse text.
- *   Use for site-wide announcements, promotions, or marketing notices.
- *   Renders with `role="banner"`.
+ * - **`emphasis="brand"`** (default with no `tone`) — brand-primary surface
+ *   with inverse text. Use for site-wide announcements, promotions, or
+ *   marketing notices. Renders with `role="banner"`.
  * - **`warning` / `negative` / `info`** — secondary surface with a
  *   leading status Badge icon and primary text. Renders with `role="alert"`.
  *   Replaces the legacy `AlertBanner` component (per ADR-004 §3 — same
@@ -67,29 +67,32 @@ const STATUS_BADGE: Record<
  * - **`positive`** — secondary surface with a leading positive Badge (check
  *   icon). Renders with `role="status"` (polite) — a confirmation, not an alert.
  *
- * @summary Full-width banner — announcement or status tones
+ * @summary Full-width banner — brand announcement or status tones
  */
 export function Banner({
   title,
   description,
   tone,
+  emphasis,
   action,
   onDismiss,
   className,
   style,
   ...props
 }: BannerProps) {
-  const resolvedTone =
-    resolveRetiredValue('Banner', 'tone', tone, RETIRED_TONES) ?? 'announcement';
-  const isStatus = resolvedTone !== 'announcement';
-  // positive is a polite confirmation (role="status"); other status tones are
-  // assertive (role="alert"); announcement is a plain landmark (role="banner").
-  const role = !isStatus ? 'banner' : resolvedTone === 'positive' ? 'status' : 'alert';
+  const incoming = resolveRetiredValue<string>('Banner', 'tone', tone, RETIRED_TONES, RETIRED_REPLACEMENTS);
+  const resolvedTone = incoming === 'announcement' ? undefined : (incoming as BannerTone | undefined);
+  const resolvedEmphasis: BannerEmphasis | undefined =
+    emphasis ?? (incoming === 'announcement' || incoming === undefined ? 'brand' : undefined);
+  // brand is a plain landmark (role="banner"); positive is a polite confirmation
+  // (role="status"); other tones are assertive (role="alert").
+  const role =
+    resolvedEmphasis === 'brand' ? 'banner' : resolvedTone === 'positive' ? 'status' : 'alert';
 
-  const badge = isStatus ? (
+  const badge = resolvedTone ? (
     <Badge
       size="xs"
-      tone={STATUS_BADGE[resolvedTone]}
+      tone={resolvedTone}
       icon={<Icon icon={STATUS_ICON[resolvedTone]} />}
     />
   ) : null;
@@ -97,7 +100,12 @@ export function Banner({
   return (
     <div
       role={role}
-      className={bdsClass('bds-banner', `bds-banner--tone-${resolvedTone}`, className)}
+      className={bdsClass(
+        'bds-banner',
+        resolvedTone && `bds-banner--tone-${resolvedTone}`,
+        resolvedEmphasis === 'brand' && 'bds-banner--emphasis-brand',
+        className,
+      )}
       style={style}
       {...props}
     >
