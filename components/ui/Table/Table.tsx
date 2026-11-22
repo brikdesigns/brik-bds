@@ -13,7 +13,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { bdsClass } from '../../utils';
+import { bdsClass, resolveRetiredProp, resolveRetiredValue } from '../../utils';
 import { Avatar, type AvatarStatus } from '../Avatar';
 import { Button } from '../Button';
 import { Checkbox } from '../Checkbox';
@@ -25,7 +25,11 @@ import './Table.css';
 
 // ─── Table (wrapper) ───────────────────────────────────────────
 
-export type TableSize = 'default' | 'comfortable';
+export type TableDensity = 'comfortable' | 'compact';
+
+/** Retired `size` spellings → `density` (ADR-033 § 2: density is spacing compression, not size). */
+const RETIRED_SIZES: Record<string, TableDensity> = { default: 'compact' };
+const RETIRED_REPLACEMENTS: Record<string, string> = { default: 'density="compact"' };
 
 export type TableHeaderBackground = 'primary' | 'secondary';
 
@@ -34,8 +38,13 @@ export type TableHeaderBorderWeight = 'sm' | 'md';
 export interface TableProps extends HTMLAttributes<HTMLTableElement> {
   /** Apply alternating row backgrounds for readability on dense tables. Default `false`. */
   striped?: boolean;
-  /** Row density. `default` is the standard scale; `comfortable` adds extra cell padding for dense data tables. */
-  size?: TableSize;
+  /** Row density. `compact` (default) is the standard scale; `comfortable` adds extra cell padding. */
+  density?: TableDensity;
+  /**
+   * @deprecated Use `density` instead (ADR-033 § 2). `default` → `compact`;
+   * `comfortable` is unchanged. Honoured for one minor version; `density` wins when both are passed.
+   */
+  size?: TableDensity;
   /** Remove left padding on first cell, right padding on last cell */
   flush?: boolean;
   /** Show a bottom border under the header row. Default `false`. */
@@ -60,19 +69,20 @@ export interface TableProps extends HTMLAttributes<HTMLTableElement> {
 }
 
 /**
- * Table — themed data table with striped and size variants.
+ * Table — themed data table with striped and density variants.
  *
  * Layout config is propagated via `data-*` attributes on the table element
- * (`data-size`, `data-striped`, `data-flush`, `data-header-border`,
+ * (`data-density`, `data-striped`, `data-flush`, `data-header-border`,
  * `data-header-border-weight`, `data-rounded-top`, `data-rounded-bottom`,
  * `data-header-bg`). CSS reads those selectors, eliminating the need for
  * React context. `scrollable` wraps the `<table>` in a `.bds-table-scroll` div.
  *
- * @summary Themed data table with striped + size variants
+ * @summary Themed data table with striped + density variants
  */
 export function Table({
   striped = false,
-  size = 'default',
+  density,
+  size,
   flush = false,
   headerBorder = false,
   headerBorderWeight = 'md',
@@ -85,12 +95,20 @@ export function Table({
   style,
   ...props
 }: TableProps) {
+  const resolvedDensity =
+    resolveRetiredValue(
+      'Table',
+      'size',
+      resolveRetiredProp('Table', 'size', 'density', size, density),
+      RETIRED_SIZES,
+      RETIRED_REPLACEMENTS,
+    ) ?? 'compact';
   const table = (
     <table
       className={bdsClass('bds-table', className)}
       style={style}
       data-striped={striped || undefined}
-      data-size={size}
+      data-density={resolvedDensity}
       data-flush={flush || undefined}
       data-header-border={headerBorder || undefined}
       data-header-border-weight={headerBorder ? headerBorderWeight : undefined}
@@ -377,18 +395,21 @@ export function TableCell({
 
 // ─── TableSkeletonRow (<tr> of Skeleton-filled TableCells) ─────
 
-export type TableSkeletonCellWidth = 'short' | 'medium' | 'long';
+export type TableSkeletonCellWidth = 'sm' | 'md' | 'lg';
+
+/** Retired width spellings, honoured for one minor version (ADR-033 § 3). */
+const RETIRED_CELL_WIDTHS: Record<string, TableSkeletonCellWidth> = { short: 'sm', medium: 'md', long: 'lg' };
 
 const tableSkeletonCellWidth: Record<TableSkeletonCellWidth, string> = {
-  short: '40%',
-  medium: '65%',
-  long: '90%',
+  sm: '40%',
+  md: '65%',
+  lg: '90%',
 };
 
 export interface TableSkeletonRowProps extends HTMLAttributes<HTMLTableRowElement> {
   /** Count of `<TableCell>` placeholders to render. */
   columns: number;
-  /** Per-cell width hint — cycles if shorter than `columns`. Default `['medium']`. */
+  /** Per-cell width hint — cycles if shorter than `columns`. Default `['md']`. */
   cellWidths?: TableSkeletonCellWidth[];
 }
 
@@ -397,7 +418,7 @@ export interface TableSkeletonRowProps extends HTMLAttributes<HTMLTableRowElemen
  * `<Skeleton variant="text">` placeholder, for a loading `<TableBody>`.
  *
  * Composes `TableRow` + `TableCell` so it automatically inherits the
- * parent `Table`'s `size` (default vs comfortable) row height and
+ * parent `Table`'s `density` (compact vs comfortable) row height and
  * striping — no separate sizing logic of its own.
  *
  * @example
@@ -405,7 +426,7 @@ export interface TableSkeletonRowProps extends HTMLAttributes<HTMLTableRowElemen
  * <TableBody>
  *   {loading
  *     ? Array.from({ length: 10 }).map((_, i) => (
- *         <TableSkeletonRow key={i} columns={5} cellWidths={['long', 'medium', 'short']} />
+ *         <TableSkeletonRow key={i} columns={5} cellWidths={['lg', 'md', 'sm']} />
  *       ))
  *     : rows.map(...)}
  * </TableBody>
@@ -415,7 +436,7 @@ export interface TableSkeletonRowProps extends HTMLAttributes<HTMLTableRowElemen
  */
 export function TableSkeletonRow({
   columns,
-  cellWidths = ['medium'],
+  cellWidths = ['md'],
   className,
   ...props
 }: TableSkeletonRowProps) {
@@ -425,7 +446,7 @@ export function TableSkeletonRow({
         <TableCell key={i}>
           <Skeleton
             variant="text"
-            width={tableSkeletonCellWidth[cellWidths[i % cellWidths.length]]}
+            width={tableSkeletonCellWidth[resolveRetiredValue('TableSkeletonRow', 'cellWidths', cellWidths[i % cellWidths.length], RETIRED_CELL_WIDTHS)!]}
           />
         </TableCell>
       ))}
@@ -482,8 +503,8 @@ export interface TableActionsCellProps extends TdHTMLAttributes<HTMLTableCellEle
  * @example
  * ```tsx
  * <TableRow>
- *   <TableCell><TextLink size="small" onClick={openSheet}>{service.name}</TextLink></TableCell>
- *   <TableCell><TextLink size="small" onClick={openFkSheet}>{service.serviceLine}</TextLink></TableCell>
+ *   <TableCell><TextLink size="sm" onClick={openSheet}>{service.name}</TextLink></TableCell>
+ *   <TableCell><TextLink size="sm" onClick={openFkSheet}>{service.serviceLine}</TextLink></TableCell>
  *   <TableCell><Badge status="positive" size="sm">Active</Badge></TableCell>
  *   <TableActionsCell>
  *     <Button variant="secondary" icon={<Eye />} label="View" onClick={openSheet} />

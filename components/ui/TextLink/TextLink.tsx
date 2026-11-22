@@ -1,11 +1,14 @@
 import { forwardRef, type AnchorHTMLAttributes, type ReactNode } from 'react';
-import { bdsClass, resolveRetiredProp } from '../../utils';
+import { bdsClass, resolveRetiredProp, resolveRetiredValue } from '../../utils';
 import './TextLink.css';
 
 /**
  * TextLink size variants
  */
-export type TextLinkSize = 'default' | 'small';
+export type TextLinkSize = 'sm' | 'md';
+
+/** Retired size spellings, honoured for one minor version (ADR-033 § 3). */
+const RETIRED_SIZES: Record<string, TextLinkSize> = { default: 'md', small: 'sm' };
 
 /**
  * TextLink hue source — which palette the link colour is drawn from
@@ -25,7 +28,7 @@ export type TextLinkUnderline = 'hover' | 'always' | 'none';
  * TextLink component props
  */
 export interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
-  /** Size variant */
+  /** Size variant. Default `md`. */
   size?: TextLinkSize;
   /**
    * Hue source. `brand` (default) uses the brand link color at rest — the
@@ -70,7 +73,7 @@ export interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
  * @example
  * ```tsx
  * <TextLink href="/about">Learn More</TextLink>
- * <TextLink href="/contact" size="small">Contact Us</TextLink>
+ * <TextLink href="/contact" size="sm">Contact Us</TextLink>
  * <TextLink href="/pricing" underline="always">inline in a sentence</TextLink>
  * <TextLink href="/acme" emphasis="neutral" underline="none">Acme Co</TextLink>
  * ```
@@ -80,7 +83,7 @@ export interface TextLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
 export const TextLink = forwardRef<HTMLAnchorElement, TextLinkProps>(
   (
     {
-      size = 'default',
+      size = 'md',
       emphasis,
       tone,
       underline = 'hover',
@@ -95,11 +98,13 @@ export const TextLink = forwardRef<HTMLAnchorElement, TextLinkProps>(
     const resolvedEmphasis =
       resolveRetiredProp('TextLink', 'tone', 'emphasis', tone, emphasis) ?? 'brand';
 
+    const resolvedSize = resolveRetiredValue('TextLink', 'size', size, RETIRED_SIZES);
+
     const combinedClassName = bdsClass(
       'text-link',
       'bds-text-link',
-      size === 'small' && 'small',
-      size === 'small' && 'bds-text-link-small',
+      resolvedSize === 'sm' && 'small',
+      resolvedSize === 'sm' && 'bds-text-link--size-sm',
       resolvedEmphasis === 'neutral' && 'bds-text-link--emphasis-neutral',
       underline === 'always' && 'bds-text-link--underline-always',
       underline === 'none' && 'bds-text-link--underline-none',

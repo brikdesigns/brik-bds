@@ -96,7 +96,7 @@ const meta: Meta<typeof Footer> = {
     },
     containerMaxWidth: {
       control: 'select',
-      options: [undefined, 'narrow', 'default', 'wide', 'xl'],
+      options: [undefined, 'sm', 'md', 'lg', 'xl'],
       description:
         'Constrain inner content to a `--content-width-*` while the background stays full-bleed. Omit for full-width.',
     },

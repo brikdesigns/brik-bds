@@ -60,7 +60,7 @@ const ITEMS: StatusListItem[] = [
     description: (
       <>
         Privacy policy and terms of service.{' '}
-        <TextLink href="#legal-pages" size="small">
+        <TextLink href="#legal-pages" size="sm">
           View the template
         </TextLink>
       </>

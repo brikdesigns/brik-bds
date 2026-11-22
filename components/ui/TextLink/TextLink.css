@@ -5,7 +5,7 @@
  * Muted text color that transitions to brand color on hover.
  * Token references use the BDS semantic token layer (never primitives).
  *
- * Naming: BEM-lite — .bds-text-link, .bds-text-link--small
+ * Naming: BEM-lite — .bds-text-link, .bds-text-link--size-sm
  */
 
 /* ─── Base ────────────────────────────────────────────────────── */
@@ -35,9 +35,9 @@
   border-radius: var(--bds-border-radius-sm);
 }
 
-/* ─── Small variant ──────────────────────────────────────────── */
+/* ─── Size: sm ─────────────────────────────────────────────── */
 
-.bds-text-link-small {
+.bds-text-link--size-sm {
   font-size: var(--bds-body-sm);
 }
 

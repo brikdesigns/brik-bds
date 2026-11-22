@@ -16,7 +16,7 @@ const meta: Meta<typeof Field> = {
     label: { control: 'text' },
     children: { control: 'text' },
     orientation: { control: 'select', options: ['vertical', 'horizontal'] },
-    tier: { control: 'select', options: ['standard', 'compact'] },
+    density: { control: 'select', options: ['comfortable', 'compact'] },
     empty: { control: 'text' },
     helper: { control: 'text' },
     helperTone: { control: 'select', options: ['neutral', 'negative'] },

@@ -535,7 +535,7 @@ export const Row: Story = {
         Learn more
       </Button>
     ),
-    imageWidth: 'standard',
+    imageWidth: 'md',
   },
   argTypes: {
     variant: { table: { disable: true } },
@@ -543,9 +543,9 @@ export const Row: Story = {
     interactive: { table: { disable: true } },
     imageWidth: {
       control: 'select',
-      options: ['narrow', 'standard', 'wide'],
+      options: ['sm', 'md', 'lg'],
       description:
-        'Image column width. Named: `narrow` 25%, `standard` 35%, `wide` 50%. Pass a CSS length / percentage to override.',
+        'Image column width. Named: `sm` 25%, `md` 35%, `lg` 50%. Pass a CSS length / percentage to override.',
     },
     serviceLine: {
       control: 'select',

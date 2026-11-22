@@ -14,7 +14,7 @@ Data table with composable sub-components (`TableHeader` / `TableBody` / `TableR
 
 <Canvas of={Stories.Default} />
 
-`striped`, `size` (`default` / `comfortable`, 72px cell height), `headerBorder` (off by default), `headerBorderWeight` (`md` default / `sm` to match the data-row divider), `roundedTop` / `roundedBottom` (outer corners, on by default), and `headerBackground` (`secondary` / `primary`) are all Controls on this story.
+`striped`, `density` (`compact` / `comfortable`, 72px cell height), `headerBorder` (off by default), `headerBorderWeight` (`md` default / `sm` to match the data-row divider), `roundedTop` / `roundedBottom` (outer corners, on by default), and `headerBackground` (`secondary` / `primary`) are all Controls on this story.
 
 ## Variants
 
@@ -34,7 +34,7 @@ A `<TableCell>` accepts any content. This table exercises the composition catalo
 
 <Canvas of={Stories.CellTypes} />
 
-`<TableSkeletonRow>` fills a loading `<TableBody>` — pass `columns` to match the header and `cellWidths` (`'short' | 'medium' | 'long'`, cycles if shorter than `columns`) to hint per-cell placeholder width. It composes `TableRow` + `TableCell`, so it automatically inherits the parent `Table`'s `size` row height.
+`<TableSkeletonRow>` fills a loading `<TableBody>` — pass `columns` to match the header and `cellWidths` (`'sm' | 'md' | 'lg'`, cycles if shorter than `columns`) to hint per-cell placeholder width. It composes `TableRow` + `TableCell`, so it automatically inherits the parent `Table`'s `density` row height.
 
 <Canvas of={Stories.Loading} />
 

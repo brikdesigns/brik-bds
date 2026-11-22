@@ -422,8 +422,8 @@
   },
   "TextLink": {
     "size": [
-      "default",
-      "small"
+      "sm",
+      "md"
     ]
   },
   "Texture": {

@@ -104,10 +104,10 @@ const STAMP_LABELS: Record<CardControlStampKind, string> = {
 };
 /**
  * Image-column width for the `row` layout. Named values resolve to fixed
- * percentages (`narrow` 25%, `standard` 35%, `wide` 50%); pass a CSS length /
+ * percentages (`sm` 25%, `md` 35%, `lg` 50%); pass a CSS length /
  * percentage string to override (e.g. `"40%"`, `"320px"`).
  */
-export type CardDisplayRowImageWidth = 'narrow' | 'standard' | 'wide' | (string & {});
+export type CardDisplayRowImageWidth = 'sm' | 'md' | 'lg' | (string & {});
 
 /**
  * Media treatment for the `stack` layout — how the top `media` slot relates to
@@ -290,7 +290,7 @@ interface CardAnatomyProps extends CardBaseProps {
   serviceLineInverse?: boolean;
   /** Surface treatment for a cell on a colored grid — `borderless` / `elevated` / `raised` (`stack`). */
   variant?: 'borderless' | 'elevated' | 'raised';
-  /** Image column width for `row` — `narrow` (25%) / `standard` (35%, default) / `wide` (50%) / any CSS length. */
+  /** Image column width for `row` — `sm` (25%) / `md` (35%, default) / `lg` (50%) / any CSS length. */
   imageWidth?: CardDisplayRowImageWidth;
   /** Media treatment for `stack` — `flush` (default, bleeds to edge) / `inset` (framed with the body). */
   mediaTreatment?: CardMediaTreatment;
@@ -390,7 +390,10 @@ export function Card(props: CardProps) {
   return renderDefault(props);
 }
 
-const NAMED_IMAGE_WIDTHS: ReadonlySet<string> = new Set(['narrow', 'standard', 'wide']);
+const NAMED_IMAGE_WIDTHS: ReadonlySet<string> = new Set(['sm', 'md', 'lg']);
+
+/** Retired image-width spellings, honoured for one minor version (ADR-033 § 3). */
+const RETIRED_IMAGE_WIDTHS: Record<string, string> = { narrow: 'sm', standard: 'md', wide: 'lg' };
 
 /**
  * Render the default Card's leading media slot — an `Avatar` or a square 1:1
@@ -565,7 +568,7 @@ function renderAnatomy({
   serviceLine,
   serviceLineInverse,
   variant,
-  imageWidth = 'standard',
+  imageWidth: imageWidthProp = 'md',
   mediaTreatment = 'flush',
   insetPadding = 'huge',
   href,
@@ -726,6 +729,7 @@ function renderAnatomy({
   }
 
   if (layout === 'row') {
+    const imageWidth = resolveRetiredValue('Card', 'imageWidth', imageWidthProp, RETIRED_IMAGE_WIDTHS) ?? 'md';
     const isNamed = NAMED_IMAGE_WIDTHS.has(imageWidth);
     const classes = bdsClass(
       'bds-card',

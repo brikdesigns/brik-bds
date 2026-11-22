@@ -65,15 +65,15 @@
    auto-centering once the viewport exceeds the target width. Vertical padding
    from the `.bds-footer` shorthand is untouched — only `padding-inline` is
    overridden. */
-.bds-footer--constrain-narrow {
+.bds-footer--constrain-sm {
   padding-inline: max(var(--bds-page-inset), calc((100% - var(--bds-content-width-sm)) / 2));
 }
 
-.bds-footer--constrain-default {
+.bds-footer--constrain-md {
   padding-inline: max(var(--bds-page-inset), calc((100% - var(--bds-content-width-md)) / 2));
 }
 
-.bds-footer--constrain-wide {
+.bds-footer--constrain-lg {
   padding-inline: max(var(--bds-page-inset), calc((100% - var(--bds-content-width-lg)) / 2));
 }
 

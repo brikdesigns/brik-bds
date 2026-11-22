@@ -22,7 +22,7 @@ const events: CommentThreadEvent[] = [
     action: 'opened a pull request',
     kind: 'Reference',
     kindColor: 'purple',
-    body: <TextLink href="https://example.com/pull/3138" size="small">example.com/pull/3138</TextLink>,
+    body: <TextLink href="https://example.com/pull/3138" size="sm">example.com/pull/3138</TextLink>,
     timestamp: 'Apr 12, 2026, 3:15 PM',
     dateTime: '2026-04-12T15:15:00Z',
     icon: <Icon icon={Gear} />,

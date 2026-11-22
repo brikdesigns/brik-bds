@@ -550,7 +550,7 @@
  * Customer Story, Recommended Add-On, featured plan.
  *
  * Image column width comes from a CSS variable that the consumer sets
- * via the named size modifier classes (narrow/standard/wide) OR via
+ * via the named size modifier classes (sm/md/lg) OR via
  * inline style when a custom percentage/length is passed through props.
  * Collapses to vertical stacking at ≤ 640px so the card stays readable
  * on narrow viewports without forcing a layout shift higher up.
@@ -577,9 +577,9 @@
   box-sizing: border-box;
 }
 
-.bds-card--layout-row-narrow   { --bds-card-image-width: 25%; }
-.bds-card--layout-row-standard { --bds-card-image-width: 35%; }
-.bds-card--layout-row-wide     { --bds-card-image-width: 50%; }
+.bds-card--layout-row-sm   { --bds-card-image-width: 25%; }
+.bds-card--layout-row-md { --bds-card-image-width: 35%; }
+.bds-card--layout-row-lg { --bds-card-image-width: 50%; }
 
 .bds-card__row-media {
   position: relative;

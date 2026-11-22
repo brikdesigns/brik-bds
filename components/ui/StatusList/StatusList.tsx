@@ -14,7 +14,7 @@ export interface StatusListItem {
   title: string;
   /**
    * Optional description under the title. `ReactNode` so it can hold inline
-   * content such as a `TextLink size="small"`.
+   * content such as a `TextLink size="sm"`.
    */
   description?: ReactNode;
   /** The row's state. Each state gets its own icon, badge tone and badge label. */
