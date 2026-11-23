@@ -44,7 +44,7 @@ export function Skeleton({
       role="status"
       aria-label="Loading"
       aria-live="polite"
-      className={bdsClass('bds-skeleton', `bds-skeleton--${variant}`, className)}
+      className={bdsClass('bds-skeleton', `bds-skeleton--variant-${variant}`, className)}
       style={Object.keys(dimensionStyle).length > 0 ? dimensionStyle : style}
       {...props}
     />

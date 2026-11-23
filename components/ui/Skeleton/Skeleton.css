@@ -16,19 +16,19 @@
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
-.bds-skeleton--text {
+.bds-skeleton--variant-text {
   width: 100%;
   height: 1em;
   border-radius: var(--bds-border-radius-md);
 }
 
-.bds-skeleton--circular {
+.bds-skeleton--variant-circular {
   width: var(--bds-size-1000);
   height: var(--bds-size-1000);
   border-radius: 50%;
 }
 
-.bds-skeleton--rectangular {
+.bds-skeleton--variant-rectangular {
   width: 100%;
   --bds-skeleton-rectangular-height: 140px; /* component-local dimension; no shared registry rung (#2133) */
   height: var(--bds-skeleton-rectangular-height);

@@ -78,13 +78,9 @@ export interface TabBarProps extends HTMLAttributes<HTMLDivElement> {
   overflow?: TabBarOverflow;
 }
 
-/**
- * Class for a variant. `text-underline` is the one member emitted with its axis
- * prefix (`bds-tab-bar--variant-text-underline`) — ADR-033 § 4 rejects a bare
- * modifier, and the older bare siblings are baselined, not a licence to add one.
- */
+/** Class for a variant: every member carries its axis prefix (ADR-033 § 4). */
 function tabBarVariantClass(variant: TabBarVariant): string {
-  return variant === 'text-underline' ? 'bds-tab-bar--variant-text-underline' : `bds-tab-bar--${variant}`;
+  return `bds-tab-bar--variant-${variant}`;
 }
 
 /**
