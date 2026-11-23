@@ -6,10 +6,8 @@
  * valence one — so a consumer still passing `tone` keeps rendering the same
  * pixels for one minor.
  *
- * TextLink is the pure prop rename (its values were already canonical);
- * SocialIcon and ContactIcon carry the `grayscale` → `neutral` value
- * retirement on top of it, which is why all three are covered rather than one
- * standing in for the set.
+ * All three are the pure `tone` → `emphasis` prop rename, covered together so one
+ * does not stand in for the set.
  *
  * JSX is avoided to keep this a `.test.ts` file (the `components` vitest
  * project's include glob is `**\/*.test.ts`), matching Badge.retired-tone.test.ts.
@@ -55,7 +53,7 @@ describe('TextLink retired `tone` prop', () => {
   });
 });
 
-describe('SocialIcon retired `tone` prop and `grayscale` value', () => {
+describe('SocialIcon retired `tone` prop', () => {
   beforeEach(() => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
@@ -67,14 +65,8 @@ describe('SocialIcon retired `tone` prop and `grayscale` value', () => {
     expect(social({ emphasis: 'brand' })).toContain('bds-social-icon--emphasis-brand');
   });
 
-  it('maps the retired `grayscale` value onto `neutral`', () => {
-    const html = social({ emphasis: 'grayscale' });
-    expect(html).toContain('bds-social-icon--emphasis-neutral');
-    expect(html).not.toContain('grayscale');
-  });
-
-  it('honours the deprecated `tone` prop, retired value included', () => {
-    expect(social({ tone: 'grayscale' })).toContain('bds-social-icon--emphasis-neutral');
+  it('honours the deprecated `tone` prop', () => {
+    expect(social({ tone: 'neutral' })).toContain('bds-social-icon--emphasis-neutral');
     expect(social({ tone: 'accent' })).toContain('bds-social-icon--emphasis-accent');
   });
 
@@ -94,7 +86,7 @@ describe('SocialIcon retired `tone` prop and `grayscale` value', () => {
  * pass `tone` consumes the one warning and every later one is silent by design.
  */
 
-describe('ContactIcon retired `tone` prop and `grayscale` value', () => {
+describe('ContactIcon retired `tone` prop', () => {
   beforeEach(() => {
     vi.spyOn(console, 'warn').mockImplementation(() => {});
   });
@@ -106,14 +98,8 @@ describe('ContactIcon retired `tone` prop and `grayscale` value', () => {
     expect(contact({ emphasis: 'accent' })).toContain('bds-contact-icon--emphasis-accent');
   });
 
-  it('maps the retired `grayscale` value onto `neutral`', () => {
-    const html = contact({ emphasis: 'grayscale' });
-    expect(html).toContain('bds-contact-icon--emphasis-neutral');
-    expect(html).not.toContain('grayscale');
-  });
-
-  it('honours the deprecated `tone` prop, retired value included', () => {
-    expect(contact({ tone: 'grayscale' })).toContain('bds-contact-icon--emphasis-neutral');
+  it('honours the deprecated `tone` prop', () => {
+    expect(contact({ tone: 'neutral' })).toContain('bds-contact-icon--emphasis-neutral');
   });
 
   it('defaults to `neutral` when neither prop is passed', () => {

@@ -230,8 +230,6 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 | Prop | Type | Default |
 |---|---|---|
 | `variant` | `ButtonVariant` | `'primary'` |
-| `tone` | `ButtonTone` *(deprecated — use `variant`)* | — |
-| `emphasis` | `ButtonEmphasis` *(deprecated — use `variant`)* | — |
 | `size` | `ButtonSize` | `'md'` |
 | `iconBefore` | `ReactNode` | — |
 | `iconAfter` | `ReactNode` | — |
@@ -247,8 +245,6 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 |---|---|---|
 | `href` | `string` *(required)* | — |
 | `variant` | `ButtonVariant` | `'primary'` |
-| `tone` | `ButtonTone` *(deprecated — use `variant`)* | — |
-| `emphasis` | `ButtonEmphasis` *(deprecated — use `variant`)* | — |
 | `size` | `ButtonSize` | `'md'` |
 | `iconBefore` | `ReactNode` | — |
 | `iconAfter` | `ReactNode` | — |
@@ -264,8 +260,6 @@ The full prop reference (with auto-extracted TypeScript types and live controls)
 | `icon` | `ReactNode` *(required)* | — |
 | `label` | `string` *(required)* | — |
 | `variant` | `ButtonVariant` | `'ghost'` |
-| `tone` | `ButtonTone` *(deprecated — use `variant`)* | — |
-| `emphasis` | `ButtonEmphasis` *(deprecated — use `variant`)* | — |
 | `size` | `ButtonSize` | `'md'` |
 | `loading` | `boolean` | `false` |
 | `selected` | `boolean` | `false` |
@@ -278,12 +272,7 @@ type ButtonVariant =
   | 'inverse' | 'on-color'
   | 'negative' | 'negative-outline' | 'negative-ghost' | 'positive';
 
-/** @deprecated — fold into `variant` (#3275). */
-type ButtonTone     = 'negative' | 'positive';
-/** @deprecated — fold into `variant` (#3275). */
-type ButtonEmphasis = 'inverse' | 'on-color';
-
-type ButtonSize = 'tiny' | 'sm' | 'md' | 'lg' | 'xl';
+type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 ```
 
 ## CSS Override API

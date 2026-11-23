@@ -46,8 +46,8 @@ describe('Button selected -> aria-pressed', () => {
 
 /**
  * #3275 — Button's style is one flat `variant` list (ADR-033 § Amendments).
- * The class is `bds-button--variant-{value}`. The retired `tone` / `emphasis`
- * props and the `danger*` / `destructive` values still fold in for one minor.
+ * The class is `bds-button--variant-{value}`. The retired `danger*` / `destructive`
+ * values still fold in for one minor.
  */
 import { vi, beforeEach, afterEach } from 'vitest';
 import { composeButtonClasses } from './Button';
@@ -80,19 +80,8 @@ describe('Button flat variant (#3275)', () => {
     [{ variant: 'danger' }, 'negative'],
     [{ variant: 'danger-outline' }, 'negative-outline'],
     [{ variant: 'danger-ghost' }, 'negative-ghost'],
-    [{ tone: 'negative' }, 'negative'],
-    [{ variant: 'outline', tone: 'negative' }, 'negative-outline'],
-    [{ variant: 'ghost', tone: 'negative' }, 'negative-ghost'],
-    [{ tone: 'positive' }, 'positive'],
-    [{ emphasis: 'inverse' }, 'inverse'],
-    [{ variant: 'primary', emphasis: 'on-color' }, 'on-color'],
   ])('folds retired %o into variant="%s"', (props, expected) => {
     expect(cls(props)).toContain(`bds-button--variant-${expected}`);
-  });
-
-  it('keeps the variant when a retired prop has no style on it', () => {
-    expect(cls({ variant: 'secondary', tone: 'negative' })).toContain('bds-button--variant-secondary');
-    expect(cls({ variant: 'outline', emphasis: 'inverse' })).toContain('bds-button--variant-outline');
   });
 
   it('renders through <Button>', () => {

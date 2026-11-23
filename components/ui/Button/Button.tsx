@@ -46,12 +46,6 @@ export type ButtonVariant =
   | 'negative-ghost'
   | 'positive';
 
-/** @deprecated Fold into `variant` — `negative`, `negative-outline`, `negative-ghost`, `positive` (#3275). Removed next minor. */
-export type ButtonTone = 'negative' | 'positive';
-
-/** @deprecated Fold into `variant` — `inverse`, `on-color` (#3275). Removed next minor. */
-export type ButtonEmphasis = 'inverse' | 'on-color';
-
 const RETIRED_VARIANTS: Record<string, ButtonVariant> = {
   destructive: 'negative',
   danger: 'negative',
@@ -59,59 +53,14 @@ const RETIRED_VARIANTS: Record<string, ButtonVariant> = {
   'danger-ghost': 'negative-ghost',
 };
 
-/** The variant a retired `tone` lands on, keyed by the variant it was paired with. */
-const TONE_VARIANTS: Record<ButtonTone, Partial<Record<ButtonVariant, ButtonVariant>>> = {
-  negative: { primary: 'negative', outline: 'negative-outline', ghost: 'negative-ghost' },
-  positive: { primary: 'positive' },
-};
-
-const warnedProps = new Set<string>();
-
-/**
- * The one variant a call resolves to. `tone` and `emphasis` were separate props
- * for one minor (#1983); each still folds into its variant here, with a single
- * warning per spelling, and a pairing that never had a style keeps its variant.
- */
-function resolveVariant(
-  variant: ButtonVariant | undefined,
-  tone: ButtonTone | undefined,
-  emphasis: ButtonEmphasis | undefined,
-): ButtonVariant {
-  const base = resolveRetiredValue('Button', 'variant', variant, RETIRED_VARIANTS) ?? 'primary';
-  const folded = tone ? TONE_VARIANTS[tone]?.[base] : emphasis && base === 'primary' ? emphasis : undefined;
-  if (tone || emphasis) {
-    const spelling = tone ? `tone="${tone}"` : `emphasis="${emphasis}"`;
-    if (!warnedProps.has(spelling)) {
-      warnedProps.add(spelling);
-      console.warn(
-        `[BDS Button] \`${spelling}\` is retired (ADR-033, #3275) — ` +
-          `use \`variant="${folded ?? base}"\`. The old prop is honoured for one minor version and then removed.`,
-      );
-    }
-  }
-  return folded ?? base;
-}
-
 /** Button sizes — shared across text and icon-only modes. */
 export type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-
-/**
- * `tiny` is the retired spelling of the smallest rung (ADR-033 § 3, #1923) —
- * the four other `*Size` unions (Avatar / Badge / Counter / Tag) already spell
- * it `xs`. Honoured at runtime for one minor via `resolveRetiredValue` (which
- * warns once), then removed; TS callers see the type reject `tiny` immediately.
- */
-const RETIRED_SIZES: Record<string, ButtonSize> = { tiny: 'xs' };
 
 // ─── Shared styling props ──────────────────────────────────────────
 
 interface StyleProps {
   /** Style of the button. Default `primary`. */
   variant?: ButtonVariant;
-  /** @deprecated Use `variant` — e.g. `variant="negative-ghost"` (#3275). Removed next minor. */
-  tone?: ButtonTone;
-  /** @deprecated Use `variant="inverse"` / `variant="on-color"` (#3275). Removed next minor. */
-  emphasis?: ButtonEmphasis;
   /** Size of the button */
   size?: ButtonSize;
   /** Stretch to fill container width */
@@ -206,8 +155,6 @@ function isAnchor(props: ElementProps): props is AnchorElementProps {
  */
 export function composeButtonClasses({
   variant,
-  tone,
-  emphasis,
   size = 'md',
   fullWidth = false,
   loading = false,
@@ -216,8 +163,6 @@ export function composeButtonClasses({
   className,
 }: {
   variant?: ButtonVariant;
-  tone?: ButtonTone;
-  emphasis?: ButtonEmphasis;
   size?: ButtonSize;
   fullWidth?: boolean;
   loading?: boolean;
@@ -228,11 +173,8 @@ export function composeButtonClasses({
   return bdsClass(
     'bds-button',
     iconOnly && 'bds-icon-button',
-    `bds-button--variant-${resolveVariant(variant, tone, emphasis)}`,
-    (() => {
-      const s = resolveRetiredValue('Button', 'size', size, RETIRED_SIZES) ?? 'md';
-      return iconOnly ? `bds-icon-button--size-${s}` : `bds-button--size-${s}`;
-    })(),
+    `bds-button--variant-${resolveRetiredValue('Button', 'variant', variant, RETIRED_VARIANTS) ?? 'primary'}`,
+    iconOnly ? `bds-icon-button--size-${size}` : `bds-button--size-${size}`,
     fullWidth && 'bds-button--full-width',
     loading && 'bds-button--loading',
     selected && 'bds-button--selected',
@@ -276,8 +218,6 @@ export function composeButtonClasses({
 export const Button = forwardRef<ButtonRef, ButtonProps>(function Button(props, ref) {
   const {
     variant,
-    tone,
-    emphasis,
     size = 'md',
     fullWidth = false,
     loading = false,
@@ -289,8 +229,6 @@ export const Button = forwardRef<ButtonRef, ButtonProps>(function Button(props, 
   const iconOnly = isIconOnly(rest as ContentProps);
   const classes = composeButtonClasses({
     variant,
-    tone,
-    emphasis,
     size,
     fullWidth,
     loading,

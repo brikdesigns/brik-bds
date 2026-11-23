@@ -2,7 +2,6 @@ export {
   Field,
   type FieldProps,
   type FieldOrientation,
-  type FieldLayout,
   type FieldSpan,
   type FieldDensity,
   type FieldHelperTone,

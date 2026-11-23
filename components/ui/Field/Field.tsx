@@ -4,9 +4,6 @@ import './Field.css';
 
 export type FieldOrientation = 'vertical' | 'horizontal';
 
-/** @deprecated Renamed `FieldOrientation`; values `stacked`/`inline` → `vertical`/`horizontal` (ADR-033 § 2). */
-export type FieldLayout = FieldOrientation;
-
 export type FieldSpan = 'full';
 export type FieldDensity = 'comfortable' | 'compact';
 
@@ -34,7 +31,7 @@ export interface FieldProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childr
    * @deprecated Use `orientation` instead; `stacked`→`vertical`, `inline`→`horizontal`
    * (ADR-033 § 2). Honoured for one minor version; `orientation` wins when both are passed.
    */
-  layout?: FieldLayout;
+  layout?: FieldOrientation;
   /**
    * Label density override. **Omit it** — density is derived from the
    * container, so a Field is page-density (`--bds-label-md`) by default and

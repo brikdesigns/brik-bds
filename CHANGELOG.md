@@ -18,6 +18,19 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Removed (types, exports):** the deprecated aliases no other issue owned ([#3320](https://github.com/brikdesigns/brik-bds/issues/3320)). Each had no use in `NPM_CONSUMERS`.
+
+| Removed | Use |
+|---|---|
+| `ContactIconTone`, `SocialIconTone`, `TextLinkTone` | `ContactIconEmphasis`, `SocialIconEmphasis`, `TextLinkEmphasis` |
+| `FieldLayout`, `FormLayout`, `StackDirection` | `FieldOrientation`, `FormOrientation`, `StackOrientation` |
+| `SheetSectionHeadingLevel` | `SheetSectionTitleAs` |
+| `ServiceBadgeSize` | `ServiceTagSize` |
+| `BackgroundPattern`, `BackgroundPatternProps`, `BackgroundPatternVariant` | `Texture`, `TextureProps`, `TextureVariant` |
+| ContactIcon / SocialIcon `tone="grayscale"` | `emphasis="neutral"` |
+
+Kept because a consumer or an internal caller still uses it: `BreadcrumbSwitcher` / `BreadcrumbSwitcherOption` (portal, brikdesigns), `ServiceLine` `service` (brikdesigns `src/lib/tokens.ts:291`), `Tag` `onRemove` (AddableTagList and MultiSelect still render it).
+
 **Breaking (consumer CSS):** Button's style is now one flat `variant` list, and every style class carries the `variant` axis ([#3275](https://github.com/brikdesigns/brik-bds/issues/3275), ADR-033 § Amendments). The separate `tone` and `emphasis` classes are gone: a Button now emits exactly one `bds-button--variant-*` class. No aliases ship. The same classes apply to `IconButton` and `LinkButton`.
 
 | Old (0.247.0) | New | Prop |
@@ -33,7 +46,7 @@ a consumer greps this file before bumping.
 | `bds-button--ghost.bds-button--tone-negative` | `bds-button--variant-negative-ghost` | `variant="negative-ghost"` |
 | `bds-button--primary.bds-button--tone-positive` | `bds-button--variant-positive` | `variant="positive"` |
 
-**Deprecated (props):** `tone` and `emphasis` on Button, IconButton and LinkButton, the `ButtonTone` and `ButtonEmphasis` types, and Hero's `ctaEmphasis` still work for one minor. Each folds into `variant` and warns once in the console. Use `variant` instead.
+**Removed (props, types):** `tone` and `emphasis` on Button, IconButton and LinkButton, the `ButtonTone` and `ButtonEmphasis` types, Hero's `ctaEmphasis` and Button `size="tiny"` ([#3320](https://github.com/brikdesigns/brik-bds/issues/3320)). Use `variant` and `size="xs"`.
 
 **Breaking (consumer CSS):** Footer's variant modifiers now carry the `variant` axis they derive from, per ADR-033 § 4 ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)). No aliases ship.
 

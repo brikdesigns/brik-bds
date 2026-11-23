@@ -67,7 +67,7 @@
 import { type HTMLAttributes, type ReactNode } from 'react';
 
 import { Button } from '../../../components';
-import type { ButtonVariant, ButtonEmphasis } from '../../../components/ui/Button';
+import type { ButtonVariant } from '../../../components/ui/Button';
 import { bdsClass } from '../../../components/utils';
 import type {
   BlueprintAlign,
@@ -182,8 +182,6 @@ export interface HeroProps extends Omit<HTMLAttributes<HTMLElement>, 'title'> {
    * service-line-tinted surface.
    */
   ctaVariant?: ButtonVariant;
-  /** @deprecated Use `ctaVariant="inverse"` (#3275). Removed next minor. */
-  ctaEmphasis?: ButtonEmphasis;
 }
 
 /**
@@ -218,7 +216,6 @@ function HeroShell({
   breadcrumb,
   eyebrow,
   ctaVariant = 'primary',
-  ctaEmphasis,
   className,
   ...rest
 }: HeroProps) {
@@ -254,7 +251,7 @@ function HeroShell({
           {cta && (
             <Button
               {...(isActionCta(cta) ? { onClick: cta.onClick } : { href: cta.url })}
-              variant={ctaEmphasis ?? ctaVariant}
+              variant={ctaVariant}
               size="md"
             >
               {cta.label}

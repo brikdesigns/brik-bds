@@ -1,5 +1,5 @@
 import { forwardRef, type SVGAttributes } from 'react';
-import { bdsClass, resolveRetiredProp, resolveRetiredValue } from '../../utils';
+import { bdsClass, resolveRetiredProp } from '../../utils';
 import { SOCIAL_ICON_SVGS, SOCIAL_ICON_PLATFORMS, type SocialIconPlatform } from './social-icons.generated';
 import './SocialIcon.css';
 
@@ -33,16 +33,6 @@ export type SocialIconType = 'badge' | 'glyph';
  */
 export type SocialIconEmphasis = 'neutral' | 'brand' | 'accent' | 'inverse';
 
-/** @deprecated Renamed `SocialIconEmphasis` (ADR-033 § 2). */
-export type SocialIconTone = SocialIconEmphasis;
-
-/**
- * ADR-033 § Retired vocabulary → Axis words retires `grayscale` in favour of
- * `neutral` on the emphasis axis. The resolved color is unchanged.
- */
-const RETIRED_EMPHASIS: Record<string, SocialIconEmphasis> = {
-  grayscale: 'neutral',
-};
 
 export type SocialIconSize = 'sm' | 'md' | 'lg';
 
@@ -60,11 +50,10 @@ export interface SocialIconProps extends Omit<SVGAttributes<SVGSVGElement>, 'chi
   /** Hue source. Default: `'neutral'` */
   emphasis?: SocialIconEmphasis;
   /**
-   * @deprecated Use `emphasis` instead (ADR-033 § 2); `grayscale` is now
-   * `neutral`. Honoured for one minor version; `emphasis` wins when both are
+   * @deprecated Use `emphasis` instead (ADR-033 § 2). Honoured for one minor version; `emphasis` wins when both are
    * passed.
    */
-  tone?: SocialIconEmphasis | 'grayscale';
+  tone?: SocialIconEmphasis;
   /** Size variant. Default: `'md'` */
   size?: SocialIconSize;
   /**
@@ -159,16 +148,7 @@ export const SocialIcon = forwardRef<SVGSVGElement, SocialIconProps>(function So
   const svg = SOCIAL_ICON_SVGS[platform];
   if (!svg) return null;
 
-  // The prop rename and the `grayscale` → `neutral` value retirement are
-  // independent migrations, so both paths run: a caller may still be on
-  // `tone`, on `grayscale`, or on either one alone.
-  const resolvedEmphasis =
-    resolveRetiredValue(
-      'SocialIcon',
-      emphasis !== undefined ? 'emphasis' : 'tone',
-      resolveRetiredProp('SocialIcon', 'tone', 'emphasis', tone, emphasis),
-      RETIRED_EMPHASIS,
-    ) ?? 'neutral';
+  const resolvedEmphasis = resolveRetiredProp('SocialIcon', 'tone', 'emphasis', tone, emphasis) ?? 'neutral';
 
   const box = sizeMap[size];
   const accessibleName = label ?? socialIconLabel(platform);

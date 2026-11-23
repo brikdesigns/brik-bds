@@ -1,5 +1,5 @@
 import { forwardRef, type SVGAttributes } from 'react';
-import { bdsClass, resolveRetiredProp, resolveRetiredValue } from '../../utils';
+import { bdsClass, resolveRetiredProp } from '../../utils';
 import { CONTACT_ICON_SVGS, CONTACT_ICON_PLATFORMS, type ContactIconPlatform } from './contact-icons.generated';
 import './ContactIcon.css';
 
@@ -26,16 +26,6 @@ export type ContactIconType = 'badge' | 'glyph';
  */
 export type ContactIconEmphasis = 'neutral' | 'accent';
 
-/** @deprecated Renamed `ContactIconEmphasis` (ADR-033 § 2). */
-export type ContactIconTone = ContactIconEmphasis;
-
-/**
- * ADR-033 § Retired vocabulary → Axis words retires `grayscale` in favour of
- * `neutral` on the emphasis axis. The resolved color is unchanged.
- */
-const RETIRED_EMPHASIS: Record<string, ContactIconEmphasis> = {
-  grayscale: 'neutral',
-};
 
 export type ContactIconSize = 'sm' | 'md' | 'lg';
 
@@ -54,11 +44,10 @@ export interface ContactIconProps extends Omit<SVGAttributes<SVGSVGElement>, 'ch
   /** Hue source. Default: `'neutral'` */
   emphasis?: ContactIconEmphasis;
   /**
-   * @deprecated Use `emphasis` instead (ADR-033 § 2); `grayscale` is now
-   * `neutral`. Honoured for one minor version; `emphasis` wins when both are
+   * @deprecated Use `emphasis` instead (ADR-033 § 2). Honoured for one minor version; `emphasis` wins when both are
    * passed.
    */
-  tone?: ContactIconEmphasis | 'grayscale';
+  tone?: ContactIconEmphasis;
   /** Size variant. Default: `'md'` */
   size?: ContactIconSize;
   /**
@@ -136,16 +125,7 @@ export const ContactIcon = forwardRef<SVGSVGElement, ContactIconProps>(function 
   const svg = CONTACT_ICON_SVGS[platform];
   if (!svg) return null;
 
-  // The prop rename and the `grayscale` → `neutral` value retirement are
-  // independent migrations, so both paths run: a caller may still be on
-  // `tone`, on `grayscale`, or on either one alone.
-  const resolvedEmphasis =
-    resolveRetiredValue(
-      'ContactIcon',
-      emphasis !== undefined ? 'emphasis' : 'tone',
-      resolveRetiredProp('ContactIcon', 'tone', 'emphasis', tone, emphasis),
-      RETIRED_EMPHASIS,
-    ) ?? 'neutral';
+  const resolvedEmphasis = resolveRetiredProp('ContactIcon', 'tone', 'emphasis', tone, emphasis) ?? 'neutral';
 
   const box = sizeMap[size];
   const accessibleName = label ?? contactIconLabel(platform);

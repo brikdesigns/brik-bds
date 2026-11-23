@@ -3,8 +3,6 @@ export type {
   ContactIconProps,
   ContactIconType,
   ContactIconEmphasis,
-  /** @deprecated Renamed `ContactIconEmphasis` (ADR-033 § 2). */
-  ContactIconTone,
   ContactIconSize,
   ContactIconPlatform,
 } from './ContactIcon';

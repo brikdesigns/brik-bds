@@ -4,8 +4,6 @@ import './Stack.css';
 
 export type StackOrientation = 'horizontal' | 'vertical';
 
-/** @deprecated Renamed `StackOrientation` (ADR-033 § 2). */
-export type StackDirection = StackOrientation;
 export type StackGap = 'none' | 'tiny' | 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'huge';
 export type StackAlign = 'start' | 'center' | 'end' | 'stretch' | 'baseline';
 export type StackJustify =
