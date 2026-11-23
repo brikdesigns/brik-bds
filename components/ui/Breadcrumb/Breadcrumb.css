@@ -2,11 +2,15 @@
 /* ─── Breadcrumb ─────────────────────────────────────────────── */
 
 .bds-breadcrumb {
+  /* Anchors the hidden measuring pass (`__measure`). */
+  position: relative;
   display: flex;
-  /* Wrap at crumb boundaries so a trail that outgrows its container never
-     clips the terminal crumb (#468). Below the tablet breakpoint the
-     intermediate crumbs collapse instead — see the media query below. */
-  flex-wrap: wrap;
+  /* One line, never wraps (#3344). A trail that does not fit folds its middle
+     crumbs into the `More breadcrumbs` menu (Breadcrumb.tsx); until that is
+     measured — SSR, first paint — crumbs shrink and their labels ellipsise
+     rather than overflowing. No `overflow: hidden` here: it would clip the
+     overflow menu's panel. */
+  flex-wrap: nowrap;
   gap: var(--bds-gap-md);
   align-items: center;
   min-width: 0;
@@ -15,7 +19,7 @@
 /* ─── Crumb ──────────────────────────────────────────────────── */
 
 /* Each crumb is a real flex box holding its own leading separator, so the
-   pair wraps as a unit (no orphaned `/` starting a line) and the label has a
+   pair stays together (no orphaned `/`) and the label has a
    box to ellipsis against. The item's internal gap matches the nav's, so
    spacing is identical to the `display: contents` wrappers this replaced. */
 .bds-breadcrumb__item {
@@ -40,9 +44,11 @@
   text-decoration: none;
   text-transform: var(--bds-text-transform-label);
   cursor: pointer;
-  /* A single label longer than its container ellipsises rather than
-     overflowing — the case wrapping alone can't reach (#468). */
+  /* A label past the max width ends in an ellipsis; the full label is the
+     accessible name and the `title` (#3344). No dedicated crumb-width token
+     exists, so the cap is half the shortest text rung. */
   min-width: 0;
+  max-width: calc(var(--bds-content-width-text-xs) / 2);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -64,6 +70,7 @@
   text-transform: var(--bds-text-transform-label);
   cursor: default;
   min-width: 0;
+  max-width: calc(var(--bds-content-width-text-xs) / 2);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -80,45 +87,32 @@
   flex-shrink: 0;
 }
 
-/* ─── Collapsed marker ───────────────────────────────────────────
- * Rendered only when the trail has two or more intermediate crumbs
- * (Breadcrumb.tsx), and shown only below the tablet breakpoint. */
+/* ─── Measuring pass ─────────────────────────────────────────────
+ * A hidden copy of the full trail (Breadcrumb.tsx) whose only job is to report
+ * each crumb's natural width, so the overflow decision never depends on what is
+ * currently rendered. Labels come from `data-label` so no text is duplicated
+ * in the DOM. Out of flow, invisible, non-interactive, zero height. */
 
-.bds-breadcrumb__item--ellipsis {
-  display: none;
+.bds-breadcrumb__measure {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  gap: var(--bds-gap-md);
+  align-items: center;
+  width: max-content;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+  pointer-events: none;
 }
 
-.bds-breadcrumb__ellipsis {
-  font-family: var(--bds-font-family-label);
-  font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-regular);
-  line-height: var(--bds-font-line-height-tight);
-  color: var(--bds-text-secondary);
+.bds-breadcrumb__measure .bds-breadcrumb__item {
+  flex-shrink: 0;
 }
 
-/* ─── Narrow viewports — collapse the middle of the trail ────────
- * `Home / … / Current`. 767px is one below --bds-breakpoint-tablet (768px);
- * CSS custom properties can't be used inside @media rules (tokens/index.ts).
- * The intermediate crumbs are visually hidden rather than `display: none`,
- * so screen-reader users keep the full trail — only the sighted mobile
- * layout trades it for the ellipsis. */
-
-@media (--bds-down-tablet) {
-  .bds-breadcrumb__item--ellipsis {
-    display: flex;
-  }
-
-  .bds-breadcrumb__item--collapsible {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px; /* bds-lint-ignore — visually-hidden clip pattern, not text rhythm */
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border: 0;
-  }
+.bds-breadcrumb__measure-label::before {
+  content: attr(data-label);
 }
 
 /* ─── Audience cascade — service-line tinting ────────────────────
@@ -224,9 +218,8 @@
  * No positional selector depends on either slot: `inline-flex` + `flex-shrink:
  * 0` just makes the caret a normal flex child that rides its container's gap
  * (the nav's at the trail's end, the item's mid-trail) and never shrinks when
- * the trail wraps. A mid-trail instance on a crumb that collapses below the
- * tablet breakpoint (`--item--collapsible`) collapses with it — visually
- * hidden, still in the accessibility tree, same as the rest of that crumb.
+ * the trail shrinks. A mid-trail instance on a crumb that folds into the
+ * overflow menu is not rendered — the crumb is a plain link there.
  * Folded in from the former standalone BreadcrumbSwitcher component (#2521). */
 
 .bds-breadcrumb__switch {

@@ -92,11 +92,10 @@ export const Default: Story = {
 };
 
 /**
- * A deep record trail — the shape that outgrows a narrow container. Switch the
- * **Viewport** toolbar global to Mobile (375px) to see the intermediate crumbs
- * collapse to `Home / … / Amendment 4821`; at Tablet (768px) and above the full
- * trail shows and wraps rather than clipping. See #468.
- * @summary Deep trail exercising the narrow-viewport collapse
+ * A deep record trail. It never wraps: when the trail does not fit its
+ * container the first crumb and the last two stay and the middle crumbs fold
+ * into a `More breadcrumbs` menu. Here the container is wide enough for all six.
+ * @summary Deep trail that fits, so nothing folds
  */
 export const LongTrail: Story = {
   args: {
@@ -693,5 +692,231 @@ export const InteractionTestPerCrumbSearchFilter: Story = {
     await expect(canvas.getByRole('button', { name: 'Same industry' })).toHaveAttribute('aria-pressed', 'false');
     await userEvent.click(canvas.getByRole('button', { name: 'Same industry' }));
     await waitFor(() => expect(canvas.getAllByRole('menuitem')).toHaveLength(3));
+  },
+};
+
+/* ═══════════════════════════════════════════════════════════════
+   4. OVERFLOW — #3344. The trail never wraps; when it does not fit, the
+      middle folds into a `More breadcrumbs` menu (Carbon).
+   ═══════════════════════════════════════════════════════════════ */
+
+const DEEP_TRAIL: BreadcrumbItem[] = [
+  { label: 'Companies', href: '#companies' },
+  { label: 'Acme Holdings International', href: '#acme' },
+  { label: 'Service Agreements', href: '#agreements' },
+  { label: '2026 Renewal Package', href: '#renewal' },
+  { label: 'Amendment 4821', href: '#amendment' },
+  { label: 'Signature Run 12' },
+];
+
+/** Story-only fixed-width container (the trail measures its container, not the viewport). */
+const inContainer = (width: string): NonNullable<Story['decorators']> => [
+  (Story) => (
+    <div style={{ width }}>
+      <Story />
+    </div>
+  ),
+];
+
+/**
+ * Six crumbs in a narrow container render on one line as
+ * `first / … / second-last / last`. The `…` is a real button named
+ * `More breadcrumbs`; it opens a menu of the hidden crumbs as links.
+ * @summary Six crumbs in a narrow container fold the middle into a menu
+ */
+export const OverflowNarrowContainer: Story = {
+  args: { items: DEEP_TRAIL },
+  decorators: inContainer('520px'),
+};
+
+/**
+ * On a small viewport only the overflow button and the last crumb remain
+ * (`… / Signature Run 12`). Same trail as `OverflowNarrowContainer`, measured
+ * against the 375px viewport.
+ * @summary At 375px: the overflow button plus the last crumb
+ */
+export const OverflowMobile: Story = {
+  args: { items: DEEP_TRAIL, separator: 'chevron' },
+  globals: { viewport: { value: 'mobile', isRotated: false } },
+};
+
+/**
+ * A label longer than the crumb's max width ends in an ellipsis. The full
+ * label stays the link's accessible name and shows on hover and focus (`title`).
+ * @summary A long label truncates with an ellipsis
+ */
+export const LongLabel: Story = {
+  args: {
+    items: [
+      { label: 'Companies', href: '#companies' },
+      {
+        label:
+          'Acme Holdings International Group of Dental and Orthodontic Practices Limited',
+        href: '#acme',
+      },
+      { label: 'Signature Run 12' },
+    ],
+  },
+};
+
+const hiddenCrumbs = ['Service Agreements', '2026 Renewal Package'];
+
+/**
+ * Tab reaches the overflow button, Enter opens a menu of the folded crumbs as
+ * links, Escape closes it and returns focus to the button.
+ * @summary Asserts Tab reaches the overflow button; Enter opens it
+ */
+export const InteractionTestOverflowMenu: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { items: DEEP_TRAIL },
+  decorators: inContainer('520px'),
+  play: async ({ canvas }) => {
+    const more = await canvas.findByRole('button', { name: 'More breadcrumbs' });
+
+    // One line, first + last two visible, folded crumbs not in the DOM yet.
+    await expect(canvas.getByRole('link', { name: 'Companies' })).toBeInTheDocument();
+    await expect(canvas.getByRole('link', { name: 'Amendment 4821' })).toBeInTheDocument();
+    await expect(canvas.getByText('Signature Run 12')).toHaveAttribute('aria-current', 'page');
+    for (const label of hiddenCrumbs) {
+      await expect(canvas.queryByRole('link', { name: label })).not.toBeInTheDocument();
+    }
+    await expect(more).toHaveAttribute('aria-expanded', 'false');
+
+    // Tab order: first crumb, then the overflow button.
+    await userEvent.tab();
+    await expect(canvas.getByRole('link', { name: 'Companies' })).toHaveFocus();
+    await userEvent.tab();
+    await expect(more).toHaveFocus();
+
+    await userEvent.keyboard('{Enter}');
+    await waitFor(() => expect(more).toHaveAttribute('aria-expanded', 'true'));
+    const items = await canvas.findAllByRole('menuitem');
+    await expect(items.map((item) => item.textContent)).toEqual(
+      expect.arrayContaining(hiddenCrumbs),
+    );
+    await expect(items).toHaveLength(hiddenCrumbs.length + 1);
+    for (const item of items) {
+      await expect(item.tagName).toBe('A');
+      await expect(item).toHaveAttribute('href');
+    }
+
+    await userEvent.keyboard('{Escape}');
+    await waitFor(() => expect(more).toHaveAttribute('aria-expanded', 'false'));
+    await expect(more).toHaveFocus();
+  },
+};
+
+/**
+ * Folded crumbs are plain links in the menu and honour `linkComponent`.
+ * @summary Asserts overflow menu links use the injected linkComponent
+ */
+export const InteractionTestOverflowLinkComponent: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { items: DEEP_TRAIL, linkComponent: MockLink },
+  decorators: inContainer('520px'),
+  play: async ({ canvas }) => {
+    await userEvent.click(await canvas.findByRole('button', { name: 'More breadcrumbs' }));
+    const items = await canvas.findAllByRole('menuitem');
+    await expect(items.length).toBeGreaterThan(0);
+    for (const item of items) {
+      await expect(item).toHaveAttribute('data-link-component', 'mock');
+    }
+  },
+};
+
+/**
+ * A crumb folded into the overflow menu is a plain link — its per-crumb
+ * switcher is not rendered there. Switchers on visible crumbs keep working.
+ * @summary Asserts folded crumbs lose their switcher, visible keep it
+ */
+export const InteractionTestOverflowSwitchers: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: DEEP_TRAIL.map((item) =>
+      item.label === 'Service Agreements'
+        ? {
+            ...item,
+            switcher: { options: SIBLING_SERVICES, switchLabel: 'Switch agreement' },
+          }
+        : item.label === 'Amendment 4821'
+          ? {
+              ...item,
+              switcher: { options: SIBLING_SERVICES, switchLabel: 'Switch amendment' },
+            }
+          : item,
+    ),
+  },
+  decorators: inContainer('520px'),
+  play: async ({ canvas }) => {
+    await canvas.findByRole('button', { name: 'More breadcrumbs' });
+    await expect(canvas.queryByRole('button', { name: 'Switch agreement' })).not.toBeInTheDocument();
+    const visible = canvas.getByRole('button', { name: 'Switch amendment' });
+    await userEvent.click(visible);
+    await expect(await canvas.findAllByRole('menuitem')).toHaveLength(SIBLING_SERVICES.length);
+  },
+};
+
+/**
+ * A short trail that fits its container shows every crumb and no overflow button.
+ * @summary Asserts a three-crumb trail that fits has no overflow button
+ */
+export const InteractionTestFitsNoOverflow: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: [
+      { label: 'Home', href: '#' },
+      { label: 'Products', href: '#' },
+      { label: 'Design System' },
+    ],
+  },
+  decorators: inContainer('520px'),
+  play: async ({ canvas }) => {
+    await expect(canvas.getByRole('link', { name: 'Products' })).toBeInTheDocument();
+    await expect(canvas.queryByRole('button', { name: 'More breadcrumbs' })).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * At 375px the six-crumb trail is `… / last`: the overflow button holds every
+ * other crumb.
+ * @summary Asserts the 375px trail is the button plus the last crumb
+ */
+export const InteractionTestOverflowMobile: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { items: DEEP_TRAIL },
+  globals: { viewport: { value: 'mobile', isRotated: false } },
+  play: async ({ canvas }) => {
+    const more = await canvas.findByRole('button', { name: 'More breadcrumbs' });
+    await expect(canvas.queryAllByRole('link')).toHaveLength(0);
+    await expect(canvas.getByText('Signature Run 12')).toHaveAttribute('aria-current', 'page');
+    await userEvent.click(more);
+    await expect(await canvas.findAllByRole('menuitem')).toHaveLength(DEEP_TRAIL.length - 1);
+  },
+};
+
+/**
+ * A label past the max width truncates, and its full text is the link's
+ * accessible name and its `title`.
+ * @summary Asserts a long label truncates, keeping its full name
+ */
+export const InteractionTestLongLabel: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: {
+    items: [
+      { label: 'Companies', href: '#companies' },
+      {
+        label:
+          'Acme Holdings International Group of Dental and Orthodontic Practices Limited',
+        href: '#acme',
+      },
+      { label: 'Signature Run 12' },
+    ],
+  },
+  play: async ({ canvas }) => {
+    const full = 'Acme Holdings International Group of Dental and Orthodontic Practices Limited';
+    const link = await canvas.findByRole('link', { name: full });
+    await expect(link).toHaveAttribute('title', full);
+    await expect(getComputedStyle(link).textOverflow).toBe('ellipsis');
+    await expect(link.scrollWidth).toBeGreaterThan(link.clientWidth);
   },
 };
