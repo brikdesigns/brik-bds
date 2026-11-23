@@ -318,7 +318,7 @@ const BOOLEAN_MODIFIERS = new Set([
   // States and predicates (#1927 kind A).
   'clickable', 'non-clickable', 'exiting', 'flash', 'highlighted',
   'indeterminate', 'interactive', 'sortable', 'today', 'placeholder', 'last',
-  'origin',
+  'origin', 'link',
   // Structural booleans (#1927 kind A).
   'full-width', 'auto-width', 'icon-only', 'no-border', 'wrap', 'nowrap',
   'has-dot', 'has-errors', 'has-icon', 'has-icon-after', 'has-icon-before',
