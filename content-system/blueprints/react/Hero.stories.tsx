@@ -27,7 +27,7 @@ const meta: Meta<typeof Hero> = {
     docs: {
       description: {
         component:
-          'The `bds-hero` page-hero section primitive (brik-bds#583). One block, a shared content column (breadcrumb → eyebrow → h1 → lead → CTA), and structural-modifier layouts per ADR-008 §3: `bds-hero--interior-minimal` (content only), `bds-hero--split` (content + a composed `media` column), and `bds-hero--with-pricing-card` (interior split with a breadcrumb trail + an `aside` image/price card, brik-bds#1165). Replaces the per-blueprint `bp-hero-*` classes. Hero blueprints own the page `h1`.',
+          'The `bds-hero` page-hero section primitive (brik-bds#583). One block, a shared content column (breadcrumb → eyebrow → h1 → lead → CTA), and structural-modifier layouts per ADR-008 §3: `bds-hero--layout-interior-minimal` (content only), `bds-hero--layout-split` (content + a composed `media` column), and `bds-hero--layout-with-pricing-card` (interior split with a breadcrumb trail + an `aside` image/price card, brik-bds#1165). Replaces the per-blueprint `bp-hero-*` classes. Hero blueprints own the page `h1`.',
       },
     },
   },
@@ -493,7 +493,7 @@ export const InteractionTestInverseScopeCardBreadcrumb: Story = {
     layout: 'interior-minimal',
     title: 'Websites that turn visitors into customers',
     breadcrumb: <Breadcrumb items={crumbs} />,
-    className: 'bds-hero--with-pricing-card',
+    className: 'bds-hero--layout-with-pricing-card',
     'data-service-line': 'marketing',
     'data-inverse-scope': 'card',
   } as Story['args'],

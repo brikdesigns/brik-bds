@@ -79,7 +79,7 @@
 
 /* ── --interior-minimal: single narrow content column, no media ──────────── */
 
-.bds-hero--interior-minimal .bds-hero__container {
+.bds-hero--layout-interior-minimal .bds-hero__container {
   display: flex;
   flex-direction: column;
   gap: var(--bds-gap-md);
@@ -92,14 +92,14 @@
    re-scales the h1 through `--bds-hero-title-font-family` / `-font-size`
    instead of overriding the selector. Same stack placement as `--align-center`,
    but this layout also drops the media column and owns the measure. */
-.bds-hero--centered .bds-hero__container {
+.bds-hero--layout-centered .bds-hero__container {
   display: flex;
   flex-direction: column;
   gap: var(--bds-gap-md);
   max-width: var(--bds-content-width-md);
 }
 
-.bds-hero--centered .bds-hero__content {
+.bds-hero--layout-centered .bds-hero__content {
   align-items: center;
   text-align: center;
 }
@@ -110,36 +110,36 @@
    headline steps up to the display ramp and the eyebrow carries a short rule.
    Surface and text colours come from the shared spine's hooks, so the layout
    follows the theme mode; nothing here pins a dark surface. */
-.bds-hero--statement .bds-hero__container {
+.bds-hero--layout-statement .bds-hero__container {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--bds-gap-xl);
   align-items: center;
 }
 
-.bds-hero--statement .bds-hero__subtitle {
+.bds-hero--layout-statement .bds-hero__subtitle {
   display: inline-flex;
   align-items: center;
   gap: var(--bds-gap-md);
 }
 
-.bds-hero--statement .bds-hero__subtitle::before {
+.bds-hero--layout-statement .bds-hero__subtitle::before {
   content: '';
   width: var(--bds-size-1200);
   border-top: var(--bds-border-width-sm) solid currentColor;
 }
 
-.bds-hero--statement .bds-hero__title {
+.bds-hero--layout-statement .bds-hero__title {
   max-width: var(--bds-content-width-md);
   font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xxl), 7vw, var(--bds-display-lg)));
   font-weight: var(--bds-font-weight-bold);
 }
 
-.bds-hero--statement .bds-hero__lead {
+.bds-hero--layout-statement .bds-hero__lead {
   font-size: var(--bds-body-xl);
 }
 
-.bds-hero--statement .bds-hero__decoration {
+.bds-hero--layout-statement .bds-hero__decoration {
   color: var(--bds-text-brand-primary);
   justify-self: center;
   width: 100%;
@@ -147,7 +147,7 @@
 }
 
 @media (--bds-up-tablet) {
-  .bds-hero--statement[data-decoration] .bds-hero__container {
+  .bds-hero--layout-statement[data-decoration] .bds-hero__container {
     grid-template-columns: 3fr 2fr;
     gap: var(--bds-gap-huge);
   }
@@ -168,11 +168,11 @@
    makes that rail canonical, so React adopts the value rather than the other
    way round (#2344). The base `clamp(--bds-heading-xl, 4vw, …)` was never a
    decision about the 60/40 hero — React simply had no `--split` override. */
-.bds-hero--split .bds-hero__title {
+.bds-hero--layout-split .bds-hero__title {
   font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xxl), 5vw, var(--bds-display-sm)));
 }
 
-.bds-hero--split .bds-hero__container {
+.bds-hero--layout-split .bds-hero__container {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--bds-gap-xl);
@@ -180,12 +180,12 @@
 }
 
 @media (--bds-up-tablet) {
-  .bds-hero--split .bds-hero__container {
+  .bds-hero--layout-split .bds-hero__container {
     grid-template-columns: 3fr 2fr;
     gap: var(--bds-gap-huge);
   }
 
-  .bds-hero--split .bds-hero__title::after {
+  .bds-hero--layout-split .bds-hero__title::after {
     content: '';
     display: block;
     width: 3rem;
@@ -222,7 +222,7 @@
   border-radius: var(--bds-hero-image-radius, var(--bds-border-radius-lg));
 }
 
-.bds-hero--split .bds-hero__missing {
+.bds-hero--layout-split .bds-hero__missing {
   aspect-ratio: var(--bds-aspect-4-5);
 }
 
@@ -233,25 +233,25 @@
    unchanged. The media column is any container child other than the content
    column, so a composed `media` node is placed too. DOM order (content first)
    is never changed. Mirrors ../astro/Hero.astro. */
-.bds-hero--split[data-orientation='vertical'] .bds-hero__missing {
+.bds-hero--layout-split[data-orientation='vertical'] .bds-hero__missing {
   aspect-ratio: var(--bds-aspect-16-9);
 }
 
-.bds-hero--split[data-orientation='vertical'][data-media-position='start']
+.bds-hero--layout-split[data-orientation='vertical'][data-media-position='start']
   .bds-hero__container > :not(.bds-hero__content) {
   order: -1;
 }
 
 @media (--bds-up-tablet) {
-  .bds-hero--split[data-media-position='start'] .bds-hero__container {
+  .bds-hero--layout-split[data-media-position='start'] .bds-hero__container {
     grid-template-columns: 2fr 3fr;
   }
 
-  .bds-hero--split[data-media-position='start'] .bds-hero__container > :not(.bds-hero__content) {
+  .bds-hero--layout-split[data-media-position='start'] .bds-hero__container > :not(.bds-hero__content) {
     order: -1;
   }
 
-  .bds-hero--split[data-orientation='vertical'] .bds-hero__container {
+  .bds-hero--layout-split[data-orientation='vertical'] .bds-hero__container {
     grid-template-columns: 1fr;
   }
 }
@@ -269,7 +269,7 @@
  * --surface-service-* / --bds-background-inverse / --bds-text-inverse token reference
  * is byte-identical, so the audited contrast pairings are preserved. */
 
-.bds-hero--with-pricing-card {
+.bds-hero--layout-with-pricing-card {
   background: var(--bds-hero-background, var(--bds-hero-bg, var(--bds-page-secondary)));
   padding-block: var(
     --bds-hero-padding-y,
@@ -303,7 +303,7 @@
  * Every rule targets `data-service-line`, which a Hero carries on any layout
  * (#2652). The text-colour hooks (headline / eyebrow / lead / brand-primary)
  * ride `.bds-hero[data-service-line]`. Only the tinted surface and the inverse
- * Button hooks stay on `.bds-hero--with-pricing-card`: that layout alone has the
+ * Button hooks stay on `.bds-hero--layout-with-pricing-card`: that layout alone has the
  * tinted surface and the inverse CTA. The value `back-office` is
  * canonical; `service` is a @deprecated alias. Both bind the orange
  * back-office tokens (`service-back-office`, renamed from the bug-named
@@ -315,7 +315,7 @@
   --bds-text-brand-primary: var(--bds-text-service-brand-on-light);
 }
 
-.bds-hero--with-pricing-card[data-service-line='brand'] {
+.bds-hero--layout-with-pricing-card[data-service-line='brand'] {
   background: var(--bds-surface-service-brand-inverse);
   --bds-background-inverse: var(--bds-surface-service-brand-dark);
   --bds-text-on-color-light: var(--bds-color-grayscale-white);
@@ -328,7 +328,7 @@
   --bds-text-brand-primary: var(--bds-text-service-marketing-on-light);
 }
 
-.bds-hero--with-pricing-card[data-service-line='marketing'] {
+.bds-hero--layout-with-pricing-card[data-service-line='marketing'] {
   background: var(--bds-surface-service-marketing-inverse);
   --bds-background-inverse: var(--bds-surface-service-marketing-dark);
   --bds-text-on-color-light: var(--bds-color-grayscale-white);
@@ -341,7 +341,7 @@
   --bds-text-brand-primary: var(--bds-text-service-information-on-light);
 }
 
-.bds-hero--with-pricing-card[data-service-line='information'] {
+.bds-hero--layout-with-pricing-card[data-service-line='information'] {
   background: var(--bds-surface-service-information-inverse);
   --bds-background-inverse: var(--bds-surface-service-information-dark);
   --bds-text-on-color-light: var(--bds-color-grayscale-white);
@@ -354,7 +354,7 @@
   --bds-text-brand-primary: var(--bds-text-service-product-on-light);
 }
 
-.bds-hero--with-pricing-card[data-service-line='product'] {
+.bds-hero--layout-with-pricing-card[data-service-line='product'] {
   background: var(--bds-surface-service-product-inverse);
   --bds-background-inverse: var(--bds-surface-service-product-dark);
   --bds-text-on-color-light: var(--bds-color-grayscale-white);
@@ -368,8 +368,8 @@
   --bds-text-brand-primary: var(--bds-text-service-back-office-on-light);
 }
 
-.bds-hero--with-pricing-card[data-service-line='back-office'],
-.bds-hero--with-pricing-card[data-service-line='service'] {
+.bds-hero--layout-with-pricing-card[data-service-line='back-office'],
+.bds-hero--layout-with-pricing-card[data-service-line='service'] {
   background: var(--bds-surface-service-back-office-inverse);
   --bds-background-inverse: var(--bds-surface-service-back-office-dark);
   --bds-text-on-color-light: var(--bds-color-grayscale-white);
@@ -381,14 +381,14 @@
  * can't sustain white text (2.87–4.36:1); darker ones can. Override
  * --bds-text-inverse per luminance group so all five lines pass AA in dark mode.
  * Uses mode-invariant --bds-text-on-color-light (black) / --bds-text-on-color-dark (white). */
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='brand'],
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='marketing'] {
+:root[data-theme="dark"] .bds-hero--layout-with-pricing-card[data-service-line='brand'],
+:root[data-theme="dark"] .bds-hero--layout-with-pricing-card[data-service-line='marketing'] {
   --bds-text-inverse: var(--bds-text-on-color-light); /* black on yellow/green-darker: 4.82–7.33:1 */
 }
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='information'],
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='product'],
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='back-office'],
-:root[data-theme="dark"] .bds-hero--with-pricing-card[data-service-line='service'] {
+:root[data-theme="dark"] .bds-hero--layout-with-pricing-card[data-service-line='information'],
+:root[data-theme="dark"] .bds-hero--layout-with-pricing-card[data-service-line='product'],
+:root[data-theme="dark"] .bds-hero--layout-with-pricing-card[data-service-line='back-office'],
+:root[data-theme="dark"] .bds-hero--layout-with-pricing-card[data-service-line='service'] {
   --bds-text-inverse: var(--bds-text-on-color-dark);  /* white on blue/purple/orange-darker: 5.48–9.48:1 */
 }
 
@@ -453,7 +453,7 @@
   background-color: var(--bds-background-service-back-office-on-dark);
 }
 
-.bds-hero--with-pricing-card .bds-hero__container {
+.bds-hero--layout-with-pricing-card .bds-hero__container {
   display: grid;
   grid-template-columns: 1fr;
   gap: var(--bds-gap-xl);
@@ -461,7 +461,7 @@
 }
 
 @media (--bds-up-tablet) {
-  .bds-hero--with-pricing-card .bds-hero__container {
+  .bds-hero--layout-with-pricing-card .bds-hero__container {
     grid-template-columns: 58fr 42fr;
     gap: var(--bds-gap-huge);
   }
@@ -514,18 +514,18 @@ img.bds-hero__icon {
 
 /* Pricing-card content column: bolder headline + service-token-driven color
    hooks (default to --bds-text-primary when no audience cascade is active). */
-.bds-hero--with-pricing-card .bds-hero__subtitle {
+.bds-hero--layout-with-pricing-card .bds-hero__subtitle {
   font-weight: var(--bds-font-weight-semibold);
   color: var(--bds-hero-eyebrow-color, var(--bds-text-primary));
 }
 
-.bds-hero--with-pricing-card .bds-hero__title {
+.bds-hero--layout-with-pricing-card .bds-hero__title {
   font-size: var(--bds-hero-title-font-size, clamp(var(--bds-heading-xl), 5vw, var(--bds-heading-xxl)));
   font-weight: var(--bds-font-weight-bold);
   color: var(--bds-hero-headline-color, var(--bds-text-primary));
 }
 
-.bds-hero--with-pricing-card .bds-hero__lead {
+.bds-hero--layout-with-pricing-card .bds-hero__lead {
   margin: 0;
   font-size: var(--bds-body-xl);
   color: var(--bds-hero-lead-color, var(--bds-text-primary));
