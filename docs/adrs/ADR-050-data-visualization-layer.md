@@ -42,6 +42,16 @@ Twelve semantic colour tokens, in both themes. The names are #3181's, with the S
 
 > **Amended 2026-11-19 — the purpose is reverted.** OPERATOR SAID 2026-11-18 (chat): "yes borders need a chart set since tokens are a langauge for specifity as to what's being styled." `chart` is a **role** under the existing purposes, not a purpose: fills are `background/chart/{name}` → `--bds-background-chart-*`, strokes are `border/chart/{name}` → `--bds-border-chart-*`, same twelve names, same values per theme. The Figma Foundations `color` collection carries both sets (the former `chart` collection and the chart primitives are deleted). `Chart.css` binds `currentColor` to the fill set; a per-mark stroke binding is open. Every `--bds-chart-*` below reads as `--bds-background-chart-*`.
 
+> **Amended 2026-11-23 — where the values come from (#3279).** OPERATOR SAID 2026-11-23 (chat, session 0a6e8554:780): "charts that rely on system colors can use existing colors (border-negative, background-negative) removing the need for custom semantic chart tokens. For charts that rely on non-system colors they would adopt brand colors." Then OPERATOR CHOSE 2026-11-23 (0a6e8554:805): keep the status chart tokens and the categorical name → "Yers to both - continue".
+>
+> | Set | Lives in | Aliases |
+> |---|---|---|
+> | `positive` · `warning` · `negative` · `info` | Foundations | `color/system/{hue}/*` — light `800` for positive and warning (the `500` steps miss 3:1 on white), dark `500` |
+> | `categorical-1` … `-6` | Brand Kit | the brand's own families; Foundations carries none |
+> | `brand` · `neutral` | Foundations | `color/grayscale/950` · `/500`; no kit re-points `brand` today |
+>
+> The status set stays as chart tokens: `--bds-background-warning` and `-positive` are badge fills that miss 3:1 as chart marks. The `color/accent/*` primitives and the `-on-dark` chart primitives are deleted. A page with no brand theme leaves `categorical-N` unset; a client kit with no `background/chart/categorical-*` does the same (open gap, `compile-client-theme.mjs` emits only what the kit declares).
+
 The categorical number is a series **index**, not a size step. It orders series; it does not grade them. ADR-033 § 3 (numeric steps for Primitive, t-shirt for Semantic) governs magnitude steps, so it does not reach this index. `lint-naming-canon.mjs` exempts colour tokens from its step rule (`isColorToken`, [lint-naming-canon.mjs:342](../../scripts/lint-naming-canon.mjs#L342)), and the `chart` slot makes these colour tokens. #3181's `pr-checklist.sh` run is the check.
 
 **Values come from Figma.** #3181 adds a `chart` collection to the Foundations library with light and dark modes. This ADR fixes names and rules, not hex values.

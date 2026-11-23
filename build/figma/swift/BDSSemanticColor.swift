@@ -4,7 +4,7 @@
 import SwiftUI
 public enum BDSSemanticColor {
     public static let textNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
-    public static let textPositive = Color(red: 0.1647, green: 0.3333, blue: 0.2588)
+    public static let textPositive = Color(red: 0.0235, green: 0.3333, blue: 0.1647)
     public static let textWarning = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
     public static let textAccentRed = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let textPrimary = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
@@ -13,7 +13,7 @@ public enum BDSSemanticColor {
     public static let textInverse = Color(red: 1.0000, green: 1.0000, blue: 1.0000)
     public static let textOnColorDark = Color(red: 1.0000, green: 1.0000, blue: 1.0000)
     public static let textOnColorLight = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
-    public static let textNeutral = Color(red: 0.2118, green: 0.2118, blue: 0.2118)
+    public static let textNeutral = Color(red: 0.2000, green: 0.2000, blue: 0.2000)
     public static let textBrandPrimary = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
     public static let textTextLink = Color(red: 0.1412, green: 0.3804, blue: 0.7059)
     public static let textDisabled = Color(red: 0.3529, green: 0.3529, blue: 0.3529) /// Disabled button text (all variants)
@@ -29,7 +29,7 @@ public enum BDSSemanticColor {
     public static let borderInverse = Color(red: 1.0000, green: 1.0000, blue: 1.0000)
     public static let borderOnColorDark = Color(red: 1.0000, green: 1.0000, blue: 1.0000)
     public static let borderOnColorLight = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
-    public static let borderNeutral = Color(red: 0.2118, green: 0.2118, blue: 0.2118)
+    public static let borderNeutral = Color(red: 0.3529, green: 0.3529, blue: 0.3529)
     public static let borderBrandPrimary = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
     public static let borderDisabled = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Disabled button border (all variants)
     public static let borderAccentYellow = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
@@ -40,14 +40,8 @@ public enum BDSSemanticColor {
     public static let borderAccentRed = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let borderChartBrand = Color(red: 0.1059, green: 0.1059, blue: 0.1059) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke.
     public static let borderChartNeutral = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/neutral; this one styles a border/stroke.
-    public static let borderChartCategorical1 = Color(red: 0.2784, green: 0.5804, blue: 0.9490) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-1; this one styles a border/stroke.
-    public static let borderChartCategorical2 = Color(red: 0.6000, green: 0.2745, blue: 0.0039) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-2; this one styles a border/stroke.
-    public static let borderChartCategorical3 = Color(red: 0.0588, green: 0.5216, blue: 0.4824) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-3; this one styles a border/stroke.
-    public static let borderChartCategorical4 = Color(red: 0.4314, green: 0.2667, blue: 0.7373) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-4; this one styles a border/stroke.
-    public static let borderChartCategorical5 = Color(red: 0.5255, green: 0.6078, blue: 0.2039) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-5; this one styles a border/stroke.
-    public static let borderChartCategorical6 = Color(red: 0.0275, green: 0.3137, blue: 0.3804) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-6; this one styles a border/stroke.
-    public static let borderChartPositive = Color(red: 0.1647, green: 0.3333, blue: 0.2588) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/positive; this one styles a border/stroke.
-    public static let borderChartWarning = Color(red: 0.6314, green: 0.4235, blue: 0.0118) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/warning; this one styles a border/stroke.
+    public static let borderChartPositive = Color(red: 0.0235, green: 0.3333, blue: 0.1647) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/positive; this one styles a border/stroke.
+    public static let borderChartWarning = Color(red: 0.3451, green: 0.2627, blue: 0.0000) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/warning; this one styles a border/stroke.
     public static let borderChartNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/negative; this one styles a border/stroke.
     public static let borderChartInfo = Color(red: 0.1412, green: 0.3804, blue: 0.7059) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/info; this one styles a border/stroke.
     public static let backgroundNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
@@ -69,7 +63,7 @@ public enum BDSSemanticColor {
     public static let backgroundOnColorDark = Color(red: 1.0000, green: 1.0000, blue: 1.0000)
     public static let backgroundOnColorLight = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
     public static let backgroundAccentYellow = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
-    public static let backgroundNeutral = Color(red: 0.2118, green: 0.2118, blue: 0.2118)
+    public static let backgroundNeutral = Color(red: 0.2000, green: 0.2000, blue: 0.2000)
     public static let backgroundBrandPrimary = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
     public static let backgroundBrandPrimaryHover = Color(red: 0.2000, green: 0.2000, blue: 0.2000)
     public static let backgroundBrandPrimaryPressed = Color(red: 0.0000, green: 0.0000, blue: 0.0000)
@@ -77,14 +71,8 @@ public enum BDSSemanticColor {
     public static let backgroundAccentOrange = Color(red: 0.9490, green: 0.6000, blue: 0.2902)
     public static let backgroundChartBrand = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
     public static let backgroundChartNeutral = Color(red: 0.5098, green: 0.5098, blue: 0.5098)
-    public static let backgroundChartCategorical1 = Color(red: 0.2784, green: 0.5804, blue: 0.9490)
-    public static let backgroundChartCategorical2 = Color(red: 0.6000, green: 0.2745, blue: 0.0039)
-    public static let backgroundChartCategorical3 = Color(red: 0.0588, green: 0.5216, blue: 0.4824)
-    public static let backgroundChartCategorical4 = Color(red: 0.4314, green: 0.2667, blue: 0.7373)
-    public static let backgroundChartCategorical5 = Color(red: 0.5255, green: 0.6078, blue: 0.2039)
-    public static let backgroundChartCategorical6 = Color(red: 0.0275, green: 0.3137, blue: 0.3804)
-    public static let backgroundChartPositive = Color(red: 0.1647, green: 0.3333, blue: 0.2588)
-    public static let backgroundChartWarning = Color(red: 0.6314, green: 0.4235, blue: 0.0118)
+    public static let backgroundChartPositive = Color(red: 0.0235, green: 0.3333, blue: 0.1647)
+    public static let backgroundChartWarning = Color(red: 0.3451, green: 0.2627, blue: 0.0000)
     public static let backgroundChartNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let backgroundChartInfo = Color(red: 0.1412, green: 0.3804, blue: 0.7059)
     public static let backgroundInfo = Color(red: 0.1412, green: 0.3804, blue: 0.7059)
@@ -100,7 +88,7 @@ public enum BDSSemanticColor {
     public static let surfaceSecondary = Color(red: 0.9490, green: 0.9490, blue: 0.9490)
     public static let surfaceSecondaryPressed = Color(red: 0.3529, green: 0.3529, blue: 0.3529)
     public static let surfaceInverse = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
-    public static let surfaceNeutral = Color(red: 0.8314, green: 0.8314, blue: 0.8314)
+    public static let surfaceNeutral = Color(red: 0.8784, green: 0.8784, blue: 0.8784)
     public static let surfaceBrandPrimary = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
     public static let surfaceBrandPrimaryHover = Color(red: 0.2000, green: 0.2000, blue: 0.2000)
     public static let surfaceBrandPrimaryPressed = Color(red: 0.0000, green: 0.0000, blue: 0.0000)
