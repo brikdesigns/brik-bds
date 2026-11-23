@@ -1,0 +1,101 @@
+---
+title: Dashboard
+description: A page that answers "how is it going" across several measures at once — one time range, a KPI row, a primary chart, secondary charts, and the rows behind them.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+The page a user opens to see how something is going: revenue, delivery, usage. It reads several measures at once, over one time range, and leads to the records behind them when the user needs to act.
+
+Reach for it when the page's question is a trend or a total, not a record. If the user is scanning rows to pick one, that is a [Collection](/docs/build-standards/page-archetypes/collection). If the page is one record's attributes, that is a [Record read](/docs/build-standards/page-archetypes/record-read). The shape is recorded in [ADR-050 § 4](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-050-data-visualization-layer.md#4-the-dashboard-page-archetype).
+
+## Composition
+
+Five slots, top to bottom.
+
+| Slot | Component | Carries |
+|---|---|---|
+| 1. Page header | `PageHeader` with the time-range control in `actions` | The one range every chart on the page reads |
+| 2. KPI row | 2–4 `Card` metrics rendering `Stat`, each with an optional `Sparkline` | The headline figures; the most important one goes top-left |
+| 3. Primary chart | One chart in a `ChartFrame`, full width | The page's main question, at the largest size |
+| 4. Secondary charts | Charts in a `Grid` | Supporting measures — fewer charts, not smaller ones |
+| 5. Detail | `TableView` around a `Table` | The rows behind the charts, when the reader needs to act on records |
+
+```tsx
+<Page padding="md" gap="xl">
+  <PageHeader title="Billing" actions={rangeControl} /> {/* the app's own range control */}
+  <PageContent>
+    <Grid columns="auto-fit" minColumnWidth="260px" gap="lg">{/* 2–4 Stat cards */}</Grid>
+    <ChartFrame title="Monthly recurring revenue">{/* primary chart */}</ChartFrame>
+    <Grid columns="auto-fit" minColumnWidth="320px" gap="lg">
+      <ChartFrame title="Invoices by status">{/* secondary */}</ChartFrame>
+      <ChartFrame title="Revenue by service line">{/* secondary */}</ChartFrame>
+    </Grid>
+    <TableView>{/* the rows */}</TableView>
+  </PageContent>
+</Page>
+```
+
+Each chart's type follows the [chart-type rule](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-050-data-visualization-layer.md) in ADR-050 § 3: column to compare categories, line for change over time, donut only at five categories or fewer.
+
+## One range for the page
+
+BDS ships no range control, so the app supplies its own. It lives in the `PageHeader` actions and governs every chart and KPI below it. A chart never carries its own range control: two charts on two ranges cannot be read against each other.
+
+Keep the range in the URL (`?range=`) so a dashboard view can be shared and reloaded. A page that no time range drives — a count of current state, not a trend — omits the control.
+
+## The hierarchy rule
+
+- **The most important data gets the highest contrast and the largest area.** It uses `--bds-chart-brand` and sits in the primary slot.
+- **The page reads in an F shape.** Top row left to right, then down the left edge — so the lead KPI is top-left and the primary chart spans the full width.
+- **One data set keeps one colour on every chart.** A series maps to a categorical index by data set, not by its position in one chart.
+- **Every chart shares one frame.** `ChartFrame` owns the spacing, title and legend position, so charts on the page line up.
+
+## Summary variant
+
+A section's landing page can be a dashboard: the **Summary**. It is the first item in the section's rail, at `/{section}`, and its list pages sit in the rail beside it.
+
+The Summary drops slot 5. Its rows live in the section's own list pages, so the Summary stops at the charts. The rail, header and state-shell rules from [Section hub](/docs/build-standards/page-archetypes/section-hub) still apply around it.
+
+## State shell
+
+Each `ChartFrame` owns its own loading, empty and error states, and so does each KPI. A slow query blanks one chart, never the page. The header and its range control keep rendering while any slot loads, so the user can always change the range.
+
+Slot 5 follows [Collection](/docs/build-standards/page-archetypes/collection#state-shell): `TableView` wraps the table.
+
+<Callout type="info">
+  Load each slot independently — one boundary per chart, not one for the page. When the range changes, each slot shows its own placeholder while it re-queries.
+</Callout>
+
+## Heading ramp
+
+| Element | Level | Token |
+|---|---|---|
+| Page title | `<h1>` | `PageHeader` |
+| Chart title | `<h2>` | `--bds-heading-sm` … `--bds-heading-md` |
+
+Chart titles render `<h2>` because a screen-reader user navigates the page by them. See [Headings](/docs/build-standards/headings).
+
+## Reference implementation
+
+The Brik client portal's admin section dashboards use this shape. Each file is in `brikdesigns/brik-client-portal`:
+
+- `src/components/section-dashboard.tsx` — the five slots, one loading boundary per slot, and the Summary variant (no table).
+- `src/app/(auth)/admin/(billing)/billing/page.tsx` — the Billing dashboard, a full example.
+- `src/components/billing-dashboard-charts.tsx` — the KPI row and charts it fills the slots with.
+- `src/lib/dashboard-range.ts` — the range options and the `?range=` parsing.
+
+## Don'ts
+
+- **Don't give a chart its own time range.** One range governs the page.
+- **Don't shrink charts to fit more.** Use fewer charts.
+- **Don't colour a series by its position.** The same data set keeps the same colour on every chart.
+- **Don't wrap the whole page in one loading state.** Each chart loads on its own.
+- **Don't show a legend for a single series.** The chart title names it.
+
+## Related
+
+- [ADR-050: Data visualization layer](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-050-data-visualization-layer.md) — the source of this shape, the chart-type rule and the chart tokens.
+- [Section hub](/docs/build-standards/page-archetypes/section-hub) — the rail and header a Summary dashboard sits inside.
+- [Collection](/docs/build-standards/page-archetypes/collection) — the detail slot's body.
+- [Headings](/docs/build-standards/headings) — the heading token and element rules.
