@@ -9,12 +9,12 @@
  * The shared spine is a content column: (breadcrumb) → (eyebrow icon) →
  * eyebrow text → `h1` → lead → CTA. Layouts (structural modifiers, per
  * ADR-008 §3):
- *   interior-minimal  — `bds-hero--interior-minimal`   content column only, no media
- *   split             — `bds-hero--split`              content column + `media` column
- *   with-pricing-card — `bds-hero--with-pricing-card`  interior split; content trail +
+ *   interior-minimal  — `bds-hero--layout-interior-minimal`   content column only, no media
+ *   split             — `bds-hero--layout-split`              content column + `media` column
+ *   with-pricing-card — `bds-hero--layout-with-pricing-card`  interior split; content trail +
  *                        an `aside` media card (image + optional price overlay)
- *   centered          — `bds-hero--centered`           single centred column, no media
- *   statement         — `bds-hero--statement`          left-aligned short headline + one CTA,
+ *   centered          — `bds-hero--layout-centered`           single centred column, no media
+ *   statement         — `bds-hero--layout-statement`          left-aligned short headline + one CTA,
  *                        eyebrow with a rule, optional `decoration` column (no media)
  *
  * `media` is an optional composed slot (the split's / pricing-card's second
@@ -229,7 +229,7 @@ function HeroShell({
       className={bdsClass(
         'bds-blueprint-section',
         'bds-hero',
-        `bds-hero--${layout}`,
+        `bds-hero--layout-${layout}`,
         align === 'center' && 'bds-hero--align-center',
         className,
       )}

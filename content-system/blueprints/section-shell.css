@@ -48,7 +48,7 @@
  * written when this was still ADR-014's forbidden raw `clamp()` literal). A
  * family that genuinely needs different rhythm re-declares `padding-block`
  * on a selector of its own, which wins by being unlayered. Two do — `bds-card-grid`'s
- * heavier bottom inset, and `.bds-hero--with-pricing-card`'s tighter interior
+ * heavier bottom inset, and `.bds-hero--layout-with-pricing-card`'s tighter interior
  * rhythm — and `scripts/lint-blueprint-naming.mjs` accepts exactly that shape
  * (modifier- or descendant-scoped) while rejecting a bare re-declaration.
  */

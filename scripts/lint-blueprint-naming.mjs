@@ -313,8 +313,8 @@ function checkHardcodedAspectRatio(file, errors) {
 // A MODIFIER-scoped or descendant-scoped rule is the sanctioned override
 // path and passes — it is unlayered, so it outranks the layered shell
 // without `!important` (ADR-021 §2):
-//   .bds-hero--with-pricing-card       { padding-block: … }  ✓
-//   .bds-hero--interior-minimal .bds-hero__container { max-width: 72ch }  ✓
+//   .bds-hero--layout-with-pricing-card       { padding-block: … }  ✓
+//   .bds-hero--layout-interior-minimal .bds-hero__container { max-width: 72ch }  ✓
 //
 // `padding-block-end` / `-start` longhands also pass: `bds-card-grid`'s
 // heavier bottom inset is a documented asymmetry, not a rhythm re-declaration.
