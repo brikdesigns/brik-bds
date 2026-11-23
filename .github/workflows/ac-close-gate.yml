@@ -32,10 +32,16 @@ name: ac-close-gate
 #   to assert.
 #
 # WHICH REFS
-#   Same-repo `Closes|Fixes|Resolves #N` in top-level prose, using the same
-#   fence-skipping and emphasis-stripping as the sibling guard — a fenced or
-#   `**bold**` close is still a close (brik-llm#2565). `Refs #N`, `Part of #N`
-#   and cross-repo `owner/repo#N` are untouched: they close nothing.
+#   `Closes|Fixes|Resolves #N` and the qualified `Closes owner/repo#N` in
+#   top-level prose, using the same fence-skipping and emphasis-stripping as
+#   the sibling guard — a fenced or `**bold**` close is still a close
+#   (brik-llm#2565). GitHub closes a sibling issue on `KEYWORD OWNER/REPO#N`
+#   (docs.github.com .../linking-a-pull-request-to-an-issue, fetched 2026-11-14),
+#   so a qualified ref is gated too (#4691). The short `repo#N` form is not a
+#   GitHub closing ref and is ignored. `Refs #N` and `Part of #N` close nothing.
+#   A qualified ref is read with this workflow's GITHUB_TOKEN, which sees only
+#   public sibling repos: a private one 404s, warns and is not gated here — the
+#   `pr-task.sh` preflight reads it with the operator's own `gh` login.
 #
 #   From TWO inputs, not one (brik-llm#3306): the PR body AND every commit
 #   message in the PR. GitHub's parser reads commit messages merged to the
@@ -136,9 +142,12 @@ jobs:
             // so the conjugation list must not drift between them.
             const KEYWORD = String.raw`close[sd]?|fix(?:e[sd])?|resolve[sd]?`;
 
-            // `\s*#` only matches a bare `#N`; `owner/repo#N` has no space
-            // before the `#`, so cross-repo refs are excluded by construction.
-            const SAME_REPO_CLOSE = new RegExp(String.raw`\b(?:${KEYWORD})\b:?\s*#(\d+)`, 'gi');
+            // Group 1 is the optional `owner/repo` prefix, group 2 the number.
+            // A bare `repo#N` has no slash, so it never matches the prefix.
+            const CLOSING_REF = new RegExp(
+              String.raw`\b(?:${KEYWORD})\b:?\s*(?:([\w.-]+/[\w.-]+))?#(\d+)`,
+              'gi',
+            );
 
             // A negated close still closes on merge, and the sibling guard
             // already FAILS the PR for it. Counting the ref here too would
@@ -190,7 +199,8 @@ jobs:
 
             // ── Pure scanners (exercised by FIXTURES below) ───────────────
 
-            // Same-repo closing refs in top-level prose. Fenced blocks are
+            // Closing refs in top-level prose: a bare number for this repo,
+            // `owner/repo#N` for a sibling. Fenced blocks are
             // skipped (rule 1 of the sibling guard owns those); negated lines
             // are skipped (rule 2 of the sibling guard owns those).
             function closingRefs(body) {
@@ -203,8 +213,8 @@ jobs:
                 const prose = stripEmphasis(line);
                 if (NEGATED_CLOSE.test(prose)) continue;
                 let m;
-                SAME_REPO_CLOSE.lastIndex = 0;
-                while ((m = SAME_REPO_CLOSE.exec(prose)) !== null) refs.add(m[1]);
+                CLOSING_REF.lastIndex = 0;
+                while ((m = CLOSING_REF.exec(prose)) !== null) refs.add(m[1] ? `${m[1]}#${m[2]}` : m[2]);
               }
               return [...refs];
             }
@@ -394,7 +404,11 @@ jobs:
               { name: 'two refs, one body', body: `Closes ${H}1\nFixes ${H}2`, expect: ['1', '2'] },
               { name: 'Refs closes nothing', body: `Refs ${H}729`, expect: [] },
               { name: 'Part of closes nothing', body: `Part of ${H}729`, expect: [] },
-              { name: 'cross-repo ref is out of scope', body: `Closes brikdesigns/brik-bds${H}729`, expect: [] },
+              { name: 'cross-repo ref is a close', body: `Closes brikdesigns/brik-bds${H}729`, expect: ['brikdesigns/brik-bds#729'] },
+              { name: 'cross-repo Fixes conjugation', body: `Fixes brikdesigns/brik-llm${H}12`, expect: ['brikdesigns/brik-llm#12'] },
+              { name: 'cross-repo ref and same number here stay distinct', body: `Closes ${H}5\nCloses brikdesigns/brik-bds${H}5`, expect: ['5', 'brikdesigns/brik-bds#5'] },
+              { name: 'cross-repo Refs closes nothing', body: `Refs brikdesigns/brik-bds${H}729`, expect: [] },
+              { name: 'short repo#N is not a GitHub closing ref', body: `Closes brik-llm${H}2916`, expect: [] },
               { name: 'fenced close belongs to the sibling guard', body: `\`\`\`\nCloses ${H}729\n\`\`\``, expect: [] },
               { name: 'negated close belongs to the sibling guard', body: `Does NOT close ${H}729`, expect: [] },
               { name: 'bare link is not a close', body: `Ports it (${H}612)`, expect: [] },
@@ -425,10 +439,10 @@ jobs:
                 expect: [],
               },
               {
-                name: 'cross-repo ref in a commit is out of scope',
+                name: 'cross-repo ref in a commit is a close',
                 body: '',
                 commits: [`Closes brikdesigns/brik-bds${H}729`],
-                expect: [],
+                expect: ['brikdesigns/brik-bds#729'],
               },
             ];
 
@@ -944,7 +958,7 @@ jobs:
 
             const refs = allClosingRefs(body, commitMessages);
             if (refs.length === 0) {
-              core.info('No same-repo closing keyword in the PR body or its commits — nothing to gate.');
+              core.info('No closing keyword in the PR body or its commits — nothing to gate.');
               return;
             }
 
@@ -982,13 +996,17 @@ jobs:
 
             const offenders = [];
             const unverified = [];
-            for (const num of refs) {
+            for (const ref of refs) {
+              // A bare number is this repo; `owner/repo#N` is a sibling.
+              const [, qualified, digits] = /^(?:([^#]+)#)?(\d+)$/.exec(ref);
+              const [refOwner, refRepo] = qualified ? qualified.split('/') : [context.repo.owner, context.repo.repo];
+              const label = qualified ? ref : `#${digits}`;
               let issue;
               try {
                 const { data } = await github.rest.issues.get({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: Number(num),
+                  owner: refOwner,
+                  repo: refRepo,
+                  issue_number: Number(digits),
                 });
                 issue = data;
               } catch (e) {
@@ -996,22 +1014,22 @@ jobs:
                 // so on the record rather than passing silently — an unreadable
                 // input read as "clean" is the blind-scan failure brik-llm#1587
                 // already paid for.
-                core.warning(`Could not resolve #${num} (${e.status || e.message}) — not gated.`);
+                core.warning(`Could not resolve ${label} (${e.status || e.message}) — not gated.`);
                 continue;
               }
               const { hasSection, unticked, scheduled } = untickedAcs(issue.body || '');
               if (!hasSection) {
-                core.info(`#${num} has no \`## Acceptance criteria\` section — nothing to assert.`);
+                core.info(`${label} has no \`## Acceptance criteria\` section — nothing to assert.`);
                 continue;
               }
               if (scheduled.length > 0 && !hasVerifiedRun(issue.body)) {
-                unverified.push({ num, title: issue.title, scheduled });
+                unverified.push({ label, title: issue.title, scheduled });
               }
               if (unticked.length === 0) {
-                core.info(`#${num}: all acceptance criteria ticked.`);
+                core.info(`${label}: all acceptance criteria ticked.`);
                 continue;
               }
-              offenders.push({ num, title: issue.title, unticked });
+              offenders.push({ label, title: issue.title, unticked });
             }
 
             if (unverified.length > 0) {
@@ -1023,7 +1041,7 @@ jobs:
                 '',
               ];
               for (const u of unverified) {
-                lines.push(`  #${u.num} — ${u.title}`);
+                lines.push(`  ${u.label} — ${u.title}`);
                 for (const line of u.scheduled) lines.push(`      ${line}`);
                 lines.push('');
               }
@@ -1053,7 +1071,7 @@ jobs:
               '',
             ];
             for (const o of offenders) {
-              messages.push(`  #${o.num} — ${o.title}`);
+              messages.push(`  ${o.label} — ${o.title}`);
               for (const line of o.unticked) messages.push(`      ${line}`);
               messages.push('');
             }
