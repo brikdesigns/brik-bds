@@ -48,7 +48,7 @@ const settle = () => new Promise((r) => setTimeout(r, 150));
  */
 function mountFixture(): HTMLElement {
   const host = document.createElement('div');
-  host.className = 'bds-card bds-card--elevated';
+  host.className = 'bds-card bds-card--variant-elevated';
   host.setAttribute('data-section', 'a11y-fixture');
   host.style.cssText = 'width:200px;height:120px;color:#ffffff;background:#123456;padding:8px';
   host.textContent = 'fixture';
