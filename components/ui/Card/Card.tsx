@@ -13,13 +13,9 @@ import type { ServiceLine } from '../ServiceTag/service-config';
 import './Card.css';
 
 export type CardVariant = 'outlined' | 'brand' | 'elevated' | 'raised' | 'borderless' | 'filled';
-/**
- * Class for a variant. `filled` is the one member emitted with its axis prefix
- * (`bds-card--variant-filled`) — ADR-033 § 4 rejects a new bare modifier, and
- * the older bare siblings are baselined, not a licence to add one.
- */
+/** Class for a variant: every member carries its axis prefix (ADR-033 § 4). */
 function cardVariantClass(variant: CardVariant): string {
-  return variant === 'filled' ? 'bds-card--variant-filled' : `bds-card--${variant}`;
+  return `bds-card--variant-${variant}`;
 }
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 /**

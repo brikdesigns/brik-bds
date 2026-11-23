@@ -810,7 +810,7 @@ function serviceLines(componentsDir) {
  * the block has to interpolate that identifier. Card is why — it imports
  * `ServiceLine` and derives `CardServiceLine` from it, but emits its service
  * surface as the prefixed `bds-card--service-line-${serviceLine}` while
- * `.bds-card--brand` is an
+ * `.bds-card--variant-brand` is an
  * unrelated variant. A directory-level "imports ServiceLine" test would exempt
  * that variant and hide a real § 4 finding.
  */

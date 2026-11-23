@@ -12,19 +12,19 @@
 
 /* ─── Variants ───────────────────────────────────────────────── */
 
-.bds-card--outlined {
+.bds-card--variant-outlined {
   background-color: var(--bds-surface-primary);
   border: var(--bds-border-width-md) solid var(--bds-border-secondary);
   box-shadow: none;
 }
 
-.bds-card--brand {
+.bds-card--variant-brand {
   background-color: var(--bds-surface-primary);
   border: var(--bds-border-width-md) solid var(--bds-border-brand-primary);
   box-shadow: none;
 }
 
-.bds-card--elevated {
+.bds-card--variant-elevated {
   background-color: var(--bds-surface-primary);
   border: none;
   /* Drop shadow removed (brik-bds#1146 / BACKLOG-493) — elevation now reads via
@@ -35,7 +35,7 @@
 /* Raised — surface-primary fill, no border, casts a real drop shadow. The
  * shadow-casting counterpart to the now-flat `elevated` (brik-bds#1146 /
  * BACKLOG-493 removed the shadow there so portal cards read flat). */
-.bds-card--raised {
+.bds-card--variant-raised {
   background-color: var(--bds-surface-primary);
   border: none;
   box-shadow: var(--bds-shadow-raised);
@@ -52,7 +52,7 @@
 /* Borderless — transparent, no border, no shadow. For cards on a colored
  * surface (service-tier / brand-image background) where the outlined ring
  * reads as visual noise; the card inherits the parent surface. */
-.bds-card--borderless {
+.bds-card--variant-borderless {
   background-color: transparent;
   border: none;
   box-shadow: none;
