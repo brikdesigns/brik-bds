@@ -37,7 +37,7 @@ export function Testimonial({
 }: TestimonialProps) {
   return (
     <figure
-      className={bdsClass('bds-testimonial', `bds-testimonial--${variant}`, className)}
+      className={bdsClass('bds-testimonial', `bds-testimonial--variant-${variant}`, className)}
       style={style}
       {...props}
     >
