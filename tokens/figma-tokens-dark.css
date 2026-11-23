@@ -13,7 +13,7 @@
   --bds-text-inverse: var(--bds-color-grayscale-black);
   --bds-text-on-color-dark: var(--bds-color-grayscale-white);
   --bds-text-on-color-light: var(--bds-color-grayscale-950);
-  --bds-text-neutral: var(--bds-color-system-neutral-500);
+  --bds-text-neutral: var(--bds-color-grayscale-800);
   --bds-text-brand-primary: var(--bds-color-grayscale-100);
   --bds-text-text-link: var(--bds-color-system-blue-500);
   --bds-text-disabled: var(--bds-color-grayscale-500); /** Disabled button text (all variants) */
@@ -29,7 +29,7 @@
   --bds-border-inverse: var(--bds-color-grayscale-950);
   --bds-border-on-color-dark: var(--bds-color-grayscale-white);
   --bds-border-on-color-light: var(--bds-color-grayscale-950);
-  --bds-border-neutral: var(--bds-color-system-neutral-500);
+  --bds-border-neutral: var(--bds-color-grayscale-700);
   --bds-border-brand-primary: var(--bds-color-grayscale-100);
   --bds-border-disabled: var(--bds-color-grayscale-500); /** Disabled button border (all variants) */
   --bds-border-accent-yellow: var(--bds-color-system-yellow-500);
@@ -40,12 +40,6 @@
   --bds-border-accent-red: var(--bds-color-system-red-500);
   --bds-border-chart-brand: var(--bds-color-grayscale-100); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke. */
   --bds-border-chart-neutral: var(--bds-color-grayscale-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/neutral; this one styles a border/stroke. */
-  --bds-border-chart-categorical-1: var(--bds-color-chart-blue-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-1; this one styles a border/stroke. */
-  --bds-border-chart-categorical-2: var(--bds-color-chart-orange-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-2; this one styles a border/stroke. */
-  --bds-border-chart-categorical-3: var(--bds-color-chart-teal-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-3; this one styles a border/stroke. */
-  --bds-border-chart-categorical-4: var(--bds-color-chart-violet-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-4; this one styles a border/stroke. */
-  --bds-border-chart-categorical-5: var(--bds-color-chart-olive-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-5; this one styles a border/stroke. */
-  --bds-border-chart-categorical-6: var(--bds-color-chart-cyan-on-dark); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/categorical-6; this one styles a border/stroke. */
   --bds-border-chart-positive: var(--bds-color-system-green-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/positive; this one styles a border/stroke. */
   --bds-border-chart-warning: var(--bds-color-system-yellow-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/warning; this one styles a border/stroke. */
   --bds-border-chart-negative: var(--bds-color-system-red-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/negative; this one styles a border/stroke. */
@@ -69,7 +63,7 @@
   --bds-background-on-color-dark: var(--bds-color-grayscale-white);
   --bds-background-on-color-light: var(--bds-color-grayscale-950);
   --bds-background-accent-yellow: var(--bds-color-system-yellow-500);
-  --bds-background-neutral: var(--bds-color-system-neutral-500);
+  --bds-background-neutral: var(--bds-color-grayscale-800);
   --bds-background-brand-primary: var(--bds-color-grayscale-950);
   --bds-background-brand-primary-hover: var(--bds-color-grayscale-800);
   --bds-background-brand-primary-pressed: var(--bds-color-grayscale-black);
@@ -77,12 +71,6 @@
   --bds-background-accent-orange: var(--bds-color-system-orange-500);
   --bds-background-chart-brand: var(--bds-color-grayscale-100);
   --bds-background-chart-neutral: var(--bds-color-grayscale-500);
-  --bds-background-chart-categorical-1: var(--bds-color-chart-blue-on-dark);
-  --bds-background-chart-categorical-2: var(--bds-color-chart-orange-on-dark);
-  --bds-background-chart-categorical-3: var(--bds-color-chart-teal-on-dark);
-  --bds-background-chart-categorical-4: var(--bds-color-chart-violet-on-dark);
-  --bds-background-chart-categorical-5: var(--bds-color-chart-olive-on-dark);
-  --bds-background-chart-categorical-6: var(--bds-color-chart-cyan-on-dark);
   --bds-background-chart-positive: var(--bds-color-system-green-500);
   --bds-background-chart-warning: var(--bds-color-system-yellow-500);
   --bds-background-chart-negative: var(--bds-color-system-red-500);
@@ -100,7 +88,7 @@
   --bds-surface-secondary: var(--bds-color-grayscale-950);
   --bds-surface-secondary-pressed: var(--bds-color-grayscale-950);
   --bds-surface-inverse: var(--bds-color-grayscale-950);
-  --bds-surface-neutral: var(--bds-color-system-neutral-200);
+  --bds-surface-neutral: var(--bds-color-grayscale-300);
   --bds-surface-brand-primary: var(--bds-color-grayscale-950);
   --bds-surface-brand-primary-hover: var(--bds-color-grayscale-800);
   --bds-surface-brand-primary-pressed: var(--bds-color-grayscale-black);
