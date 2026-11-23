@@ -47,21 +47,34 @@ import { Breadcrumb } from '@brikdesigns/bds';
 />
 ```
 
-### Deep nesting
+### Long trails
 
-For 5+ level hierarchies, consider truncating with an ellipsis or root-only fallback — Breadcrumb itself doesn't auto-truncate; the consumer trims `items` before passing.
+The trail is one line and never wraps. Pass the full hierarchy — Breadcrumb measures it against its own container (not the viewport) and folds it; never trim `items` or insert your own `…` crumb.
+
+- **Overflow.** When the trail does not fit, the first crumb and the last two stay and the crumbs in between fold into a `More breadcrumbs` button. It opens a menu listing the hidden crumbs as links (`linkComponent` is honoured). A folded crumb drops its per-crumb `switcher`; switchers on visible crumbs keep working. A trail that fits never shows the button.
+- **Mobile.** When even `first / … / second-last / last` does not fit — at 375px, say — the trail is the overflow button followed by the last crumb.
+- **Labels.** A label longer than the crumb max width ends in an ellipsis; the full label stays the accessible name and shows on hover through `title`. Keep labels short anyway: a crumb names the page, it does not describe it.
 
 ```tsx
 <Breadcrumb
   items={[
-    { label: 'Home', href: '/' },
-    { label: '…', href: '/clients' },
-    { label: 'Acme Co', href: '/clients/acme' },
-    { label: 'Engagements', href: '/clients/acme/engagements' },
-    { label: 'Brand Refresh' },
+    { label: 'Companies', href: '/admin/companies' },
+    { label: 'Acme Co', href: '/admin/companies/acme' },
+    { label: 'Documents', href: '/admin/companies/acme?tab=documents' },
+    { label: 'Agreements', href: '/admin/companies/acme?tab=documents&section=agreements' },
+    { label: 'Master Services Agreement' },
   ]}
 />
 ```
+
+### Usage guidance
+
+- **Location, not history.** A breadcrumb shows where the page sits in the hierarchy, not the pages the user visited. Back navigation is the browser's job.
+- **One trail shape per product.** Pick one hierarchy (and one `separator`) and use it on every page, so the trail reads the same wherever the user lands.
+- **The last crumb is the current page** — plain text, `aria-current="page"`.
+- **Never wrap.** Do not work around a long trail with a smaller font or a second line; the overflow menu is the rule.
+
+The overflow and mobile rules follow Carbon's [Breadcrumb usage guidelines](https://www.carbondesignsystem.com/building-blocks/core/components/breadcrumb/guidelines) and [accessibility](https://www.carbondesignsystem.com/components/breadcrumb/accessibility).
 
 ## Switcher
 
@@ -175,6 +188,8 @@ The component itself stays scope-blind — only the cascade block in `Breadcrumb
 - The last item carries `aria-current="page"` and renders as plain text — not a link.
 - Earlier items render as `<a>` when `href` is set.
 - Separators are decorative (`aria-hidden`).
+- The overflow `…` is a `<button>` named "More breadcrumbs" in the tab order; Enter opens its menu of hidden crumbs and Escape returns focus to it.
+- A truncated label keeps its full text as the link's accessible name.
 - Switcher search is labelled ("Search options"), each filter toggle is a button with `aria-pressed` and its label as its name, and an empty result is announced through a status region.
 
 ## API
