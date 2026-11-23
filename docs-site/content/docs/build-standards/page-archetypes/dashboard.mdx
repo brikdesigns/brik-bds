@@ -16,7 +16,7 @@ Five slots, top to bottom.
 | Slot | Component | Carries |
 |---|---|---|
 | 1. Page header | `PageHeader` with the time-range control in `actions` | The one range every chart on the page reads |
-| 2. KPI row | 2–4 `Card` metrics rendering `Stat`, each with an optional `Sparkline` | The headline figures; the most important one goes top-left |
+| 2. KPI row | 2–4 `Card` metrics rendering `Stat`, each with an optional `Sparkline` in `Stat`'s `supplementary` slot | The headline figures; the most important one goes top-left |
 | 3. Primary chart | One chart in a `ChartFrame`, full width | The page's main question, at the largest size |
 | 4. Secondary charts | Charts in a `Grid` | Supporting measures — fewer charts, not smaller ones |
 | 5. Detail | `TableView` around a `Table` | The rows behind the charts, when the reader needs to act on records |
@@ -46,7 +46,7 @@ Keep the range in the URL (`?range=`) so a dashboard view can be shared and relo
 
 ## The hierarchy rule
 
-- **The most important data gets the highest contrast and the largest area.** It uses `--bds-chart-brand` and sits in the primary slot.
+- **The most important data gets the highest contrast and the largest area.** It uses `--bds-background-chart-brand` and sits in the primary slot.
 - **The page reads in an F shape.** Top row left to right, then down the left edge — so the lead KPI is top-left and the primary chart spans the full width.
 - **One data set keeps one colour on every chart.** A series maps to a categorical index by data set, not by its position in one chart.
 - **Every chart shares one frame.** `ChartFrame` owns the spacing, title and legend position, so charts on the page line up.
@@ -59,7 +59,7 @@ The Summary drops slot 5. Its rows live in the section's own list pages, so the 
 
 ## State shell
 
-Each `ChartFrame` owns its own loading, empty and error states, and so does each KPI. A slow query blanks one chart, never the page. The header and its range control keep rendering while any slot loads, so the user can always change the range.
+Each `ChartFrame` owns its own loading, empty and error states. `Stat` has none, so give each KPI its own loading boundary in the app. A slow query blanks one chart, never the page. The header and its range control keep rendering while any slot loads, so the user can always change the range.
 
 Slot 5 follows [Collection](/docs/build-standards/page-archetypes/collection#state-shell): `TableView` wraps the table.
 
