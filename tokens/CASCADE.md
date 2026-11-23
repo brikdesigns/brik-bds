@@ -182,6 +182,45 @@ place for a correction is a manual file bundled AFTER the auto-generated ones.
 - `bridge.css` — legacy Webflow aliases (deprecated, opt-in only)
 - `font-audit.css`, `animations.css`, `motion-classes.css` — Storybook/component-level
 
+## Hand-written names Figma can't hold (#3338)
+
+Each name below is declared by a hand-written file (`gap-fills.css`, `ratios.css`, `fluid-type.css`) with no Figma variable behind it. Each has a reason Figma can't hold it. A colour is never listed here, because Figma can hold a colour; a colour name goes into Figma or is deleted. Rule 9 (`scripts/lint-naming-canon.mjs`) baselines these names and fails any new one.
+
+| Name | Why Figma can't hold it |
+|---|---|
+| `--bds-aspect-1-1` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
+| `--bds-aspect-16-9` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
+| `--bds-aspect-2-3` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
+| `--bds-aspect-21-9` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
+| `--bds-aspect-3-2` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
+| `--bds-aspect-3-4` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
+| `--bds-aspect-4-3` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
+| `--bds-aspect-4-5` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
+| `--bds-aspect-9-16` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
+| `--bds-content-width-full` | `100%`. `modes-width.css` points `-xl` at it (`scripts/generate-modes-css.mjs:204`). |
+| `--bds-display-fluid-sm` | A `clamp()` expression. Its endpoints are Figma font sizes; the expression is not a value Figma holds. |
+| `--bds-display-fluid-md` | A `clamp()` expression. Its endpoints are Figma font sizes; the expression is not a value Figma holds. |
+| `--bds-display-fluid-lg` | A `clamp()` expression. Its endpoints are Figma font sizes; the expression is not a value Figma holds. |
+| `--bds-display-fluid-xl` | A `clamp()` expression. Its endpoints are Figma font sizes; the expression is not a value Figma holds. |
+| `--bds-letter-spacing-wide` | `0.05em`. Figma reads a letter-spacing variable as px, not %. |
+| `--bds-pageheader-top` | A runtime slot (`0px`). A component or shell sets it per instance, so it carries no design value. |
+| `--bds-subnav-top` | A runtime slot (`0px`). A component or shell sets it per instance, so it carries no design value. |
+| `--bds-slider-percent` | A runtime slot (`0%`). The Slider sets it per instance. |
+| `--bds-state-focus` | `currentColor`. A Figma colour variable holds a colour, not `currentColor`. |
+| `--bds-text-transform-field-label` | A text case (`capitalize`, `none`, `uppercase`). A Figma string variable binds to font family, style, weight or text content, not case. |
+| `--bds-text-transform-label` | A text case (`capitalize`, `none`, `uppercase`). A Figma string variable binds to font family, style, weight or text content, not case. |
+| `--bds-text-transform-subtitle` | A text case (`capitalize`, `none`, `uppercase`). A Figma string variable binds to font family, style, weight or text content, not case. |
+| `--bds-z-dialog` | A z-index layer. It is an integer stacking order, not a design value Figma holds. |
+| `--bds-z-dropdown` | A z-index layer. It is an integer stacking order, not a design value Figma holds. |
+| `--bds-z-max` | A z-index layer. It is an integer stacking order, not a design value Figma holds. |
+| `--bds-z-modal` | A z-index layer. It is an integer stacking order, not a design value Figma holds. |
+| `--bds-z-page-header` | A z-index layer. It is an integer stacking order, not a design value Figma holds. |
+| `--bds-z-sheet` | A z-index layer. It is an integer stacking order, not a design value Figma holds. |
+| `--bds-z-sheet-backdrop` | A z-index layer. It is an integer stacking order, not a design value Figma holds. |
+| `--bds-z-shell` | A z-index layer. It is an integer stacking order, not a design value Figma holds. |
+| `--bds-z-sticky` | A z-index layer. It is an integer stacking order, not a design value Figma holds. |
+| `--bds-z-tooltip` | A z-index layer. It is an integer stacking order, not a design value Figma holds. |
+
 ## Adding a new file to the bundle
 
 1. Add the file to `tokens/`
