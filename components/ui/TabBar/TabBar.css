@@ -33,11 +33,11 @@
    opacity cannot be switched off per-element once the base rule sets it, hence
    the variant-keyed list instead of one `.bds-tab-bar-item:disabled` rule. The
    on-color selected box item has no swap, so it keeps the fade. */
-.bds-tab-bar--tab .bds-tab-bar-item:disabled,
-.bds-tab-bar--text .bds-tab-bar-item:disabled,
+.bds-tab-bar--variant-tab .bds-tab-bar-item:disabled,
+.bds-tab-bar--variant-text .bds-tab-bar-item:disabled,
 .bds-tab-bar--variant-text-underline .bds-tab-bar-item:disabled,
-.bds-tab-bar--box .bds-tab-bar-item:disabled:not([aria-selected="true"]),
-.bds-tab-bar--box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"]:disabled {
+.bds-tab-bar--variant-box .bds-tab-bar-item:disabled:not([aria-selected="true"]),
+.bds-tab-bar--variant-box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"]:disabled {
   opacity: var(--bds-state-disabled-opacity);
 }
 
@@ -51,7 +51,7 @@
 
 /* Selected box item: brand fill + white label fades to 1.93:1 light / 2.58:1
    dark; the swap measures 5.22:1 / 3.29:1. Not faded (see the list above). */
-.bds-tab-bar--box:not(.bds-tab-bar--emphasis-on-color) .bds-tab-bar-item[aria-selected="true"]:disabled {
+.bds-tab-bar--variant-box:not(.bds-tab-bar--emphasis-on-color) .bds-tab-bar-item[aria-selected="true"]:disabled {
   background-color: var(--bds-background-disabled);
   color: var(--bds-text-disabled);
 }
@@ -68,21 +68,21 @@
 
 /* ── Text variant ── */
 
-.bds-tab-bar--text .bds-tab-bar-item:hover:not(:disabled) {
+.bds-tab-bar--variant-text .bds-tab-bar-item:hover:not(:disabled) {
   color: var(--bds-text-brand-primary);
 }
 
-.bds-tab-bar--text .bds-tab-bar-item:active:not(:disabled) {
+.bds-tab-bar--variant-text .bds-tab-bar-item:active:not(:disabled) {
   opacity: 0.7;
 }
 
 /* ── Text variant on-color ── */
 
-.bds-tab-bar--text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:hover:not(:disabled) {
+.bds-tab-bar--variant-text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:hover:not(:disabled) {
   opacity: 1;
 }
 
-.bds-tab-bar--text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:active:not(:disabled) {
+.bds-tab-bar--variant-text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:active:not(:disabled) {
   opacity: 0.5;
 }
 
@@ -94,7 +94,7 @@
    the tab bar divider matches cards/inputs/nav rather than a 1px hairline.
 */
 
-.bds-tab-bar--tab {
+.bds-tab-bar--variant-tab {
   border-bottom: var(--bds-border-width-md) solid var(--bds-border-secondary);
 }
 
@@ -102,65 +102,65 @@
    transparent border on every item — so toggling active doesn't shift layout.
    Negative margin overlays the item border onto the bar baseline so the
    active indicator replaces (not stacks under) the divider segment. */
-.bds-tab-bar--tab .bds-tab-bar-item {
+.bds-tab-bar--variant-tab .bds-tab-bar-item {
   border-bottom: var(--bds-border-width-lg) solid transparent;
   margin-bottom: calc(-1 * var(--bds-border-width-lg));
 }
 
-.bds-tab-bar--tab .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--variant-tab .bds-tab-bar-item[aria-selected="true"] {
   border-bottom-color: var(--bds-border-brand-primary);
 }
 
-.bds-tab-bar--tab .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+.bds-tab-bar--variant-tab .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
   color: var(--bds-text-primary);
   border-bottom-color: var(--bds-border-primary);
 }
 
-.bds-tab-bar--tab .bds-tab-bar-item:active:not(:disabled) {
+.bds-tab-bar--variant-tab .bds-tab-bar-item:active:not(:disabled) {
   opacity: 0.7;
 }
 
 /* ── Tab variant on-color ── */
 
-.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color {
+.bds-tab-bar--variant-tab.bds-tab-bar--emphasis-on-color {
   border-bottom-color: var(--bds-border-on-color-dark);
 }
 
-.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--variant-tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
   border-bottom-color: var(--bds-border-on-color-dark);
 }
 
-.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+.bds-tab-bar--variant-tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
   opacity: 0.8;
   border-bottom-color: var(--bds-border-on-color-dark);
 }
 
-.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:active:not(:disabled) {
+.bds-tab-bar--variant-tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:active:not(:disabled) {
   opacity: 0.5;
 }
 
 /* ── Box variant ── */
 
-.bds-tab-bar--box .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+.bds-tab-bar--variant-box .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
   background-color: var(--bds-background-secondary);
   color: var(--bds-text-primary);
 }
 
-.bds-tab-bar--box .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
+.bds-tab-bar--variant-box .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
   background-color: var(--bds-background-tertiary);
 }
 
-.bds-tab-bar--box .bds-tab-bar-item[aria-selected="true"]:active:not(:disabled) {
+.bds-tab-bar--variant-box .bds-tab-bar-item[aria-selected="true"]:active:not(:disabled) {
   opacity: 0.85;
 }
 
 /* ── Box variant on-color ── */
 
-.bds-tab-bar--box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
+.bds-tab-bar--variant-box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:hover:not(:disabled):not([aria-selected="true"]) {
   opacity: 0.8;
 }
 
-.bds-tab-bar--box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
+.bds-tab-bar--variant-box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
   opacity: 0.5;
 }
 
@@ -200,13 +200,13 @@
 /* Move the `tab` variant's active indicator from the bottom edge to the
    inline-start edge, and its baseline divider to the start border, so the
    vertical rail reads as a column of tabs rather than a stack of underlines. */
-.bds-tab-bar--tab[data-orientation='vertical'] {
+.bds-tab-bar--variant-tab[data-orientation='vertical'] {
   border-bottom: none;
   border-inline-start: var(--bds-border-width-md) solid var(--bds-border-secondary);
   align-items: stretch;
 }
 
-.bds-tab-bar--tab[data-orientation='vertical'] .bds-tab-bar-item {
+.bds-tab-bar--variant-tab[data-orientation='vertical'] .bds-tab-bar-item {
   border-bottom: none;
   margin-bottom: 0;
   border-inline-start: var(--bds-border-width-lg) solid transparent;
@@ -214,27 +214,27 @@
   padding: var(--bds-padding-md) var(--bds-padding-lg);
 }
 
-.bds-tab-bar--tab[data-orientation='vertical'] .bds-tab-bar-item[aria-selected='true'] {
+.bds-tab-bar--variant-tab[data-orientation='vertical'] .bds-tab-bar-item[aria-selected='true'] {
   border-inline-start-color: var(--bds-border-brand-primary);
 }
 
-.bds-tab-bar--tab[data-orientation='vertical'] .bds-tab-bar-item:hover:not(:disabled):not([aria-selected='true']) {
+.bds-tab-bar--variant-tab[data-orientation='vertical'] .bds-tab-bar-item:hover:not(:disabled):not([aria-selected='true']) {
   border-inline-start-color: var(--bds-border-primary);
 }
 
-.bds-tab-bar--text,
+.bds-tab-bar--variant-text,
 .bds-tab-bar--variant-text-underline,
-.bds-tab-bar--tab {
+.bds-tab-bar--variant-tab {
   gap: var(--bds-gap-xl);
 }
 
-.bds-tab-bar--box {
+.bds-tab-bar--variant-box {
   gap: var(--bds-gap-md);
 }
 
 /* `tab` aligns items to the bar's content-box bottom so the active indicator's
    negative-margin overlap caps the baseline (see the tab-variant note above). */
-.bds-tab-bar--tab {
+.bds-tab-bar--variant-tab {
   align-items: flex-end;
 }
 
@@ -253,17 +253,17 @@
 }
 
 /* ── text ── */
-.bds-tab-bar--text .bds-tab-bar-item {
+.bds-tab-bar--variant-text .bds-tab-bar-item {
   color: var(--bds-text-secondary);
 }
-.bds-tab-bar--text .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--variant-text .bds-tab-bar-item[aria-selected="true"] {
   color: var(--bds-text-brand-primary);
 }
-.bds-tab-bar--text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item {
+.bds-tab-bar--variant-text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item {
   color: var(--bds-text-on-color-dark);
   opacity: 0.6;
 }
-.bds-tab-bar--text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--variant-text.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
   opacity: 1;
 }
 
@@ -288,41 +288,41 @@
 }
 
 /* ── tab (border-bottom + overlap live in the tab-variant section above) ── */
-.bds-tab-bar--tab .bds-tab-bar-item {
+.bds-tab-bar--variant-tab .bds-tab-bar-item {
   color: var(--bds-text-secondary);
   background-color: transparent;
   padding: 0;
   padding-bottom: var(--bds-padding-sm);
 }
-.bds-tab-bar--tab .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--variant-tab .bds-tab-bar-item[aria-selected="true"] {
   color: var(--bds-text-brand-primary);
 }
-.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item {
+.bds-tab-bar--variant-tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item {
   color: var(--bds-text-on-color-dark);
   opacity: 0.6;
 }
-.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--variant-tab.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
   opacity: 1;
 }
 
 /* ── box ── */
-.bds-tab-bar--box .bds-tab-bar-item {
+.bds-tab-bar--variant-box .bds-tab-bar-item {
   color: var(--bds-text-secondary);
   background-color: var(--bds-background-primary);
   padding: var(--bds-padding-lg);
   border: var(--bds-border-width-md) solid var(--bds-border-primary);
 }
-.bds-tab-bar--box .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--variant-box .bds-tab-bar-item[aria-selected="true"] {
   color: var(--bds-text-on-color-dark);
   background-color: var(--bds-background-brand-primary);
   border-color: transparent;
 }
-.bds-tab-bar--box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item {
+.bds-tab-bar--variant-box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item {
   color: var(--bds-text-on-color-dark);
   border-color: var(--bds-border-on-color-dark);
   opacity: 0.6;
 }
-.bds-tab-bar--box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
+.bds-tab-bar--variant-box.bds-tab-bar--emphasis-on-color .bds-tab-bar-item[aria-selected="true"] {
   color: var(--bds-text-on-color-dark);
   background-color: var(--bds-background-brand-primary);
   border-color: transparent;
@@ -350,7 +350,7 @@
   flex-shrink: 0;
 }
 
-.bds-tab-bar--scroll.bds-tab-bar--tab {
+.bds-tab-bar--scroll.bds-tab-bar--variant-tab {
   --bds-tab-bar-baseline: var(--bds-border-secondary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   border-bottom: 0;
   /* The bar keeps its old footprint: bleed above and below, less the 2px the
@@ -362,7 +362,7 @@
   background-position: 0 calc(100% - (var(--bds-tab-bar-bleed) - var(--bds-border-width-md))); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
-.bds-tab-bar--scroll.bds-tab-bar--tab.bds-tab-bar--emphasis-on-color {
+.bds-tab-bar--scroll.bds-tab-bar--variant-tab.bds-tab-bar--emphasis-on-color {
   --bds-tab-bar-baseline: var(--bds-border-on-color-dark); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 }
