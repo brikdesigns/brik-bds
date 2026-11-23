@@ -2,7 +2,7 @@
 /**
  * BDS Chip — Interactive pill for filtering, selection, or input
  *
- * Naming: .bds-chip, .bds-chip--{variant}, .bds-chip--{size}
+ * Naming: .bds-chip, .bds-chip--variant-{variant}, .bds-chip--size-{size}
  */
 
 /* ─── Base ────────────────────────────────────────────────────── */
@@ -70,12 +70,12 @@
 
 /* ─── Variants (hierarchy only) ───────────────────────────────── */
 
-.bds-chip--primary {
+.bds-chip--variant-primary {
   background-color: var(--bds-background-inverse);
   color: var(--bds-text-inverse);
 }
 
-.bds-chip--secondary {
+.bds-chip--variant-secondary {
   background-color: var(--bds-background-secondary);
   color: var(--bds-text-primary);
 }
