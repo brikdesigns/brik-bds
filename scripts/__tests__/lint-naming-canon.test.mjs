@@ -494,7 +494,7 @@ describe('rule 4 — a BEM modifier carries its axis prefix (ADR-033 § 4)', () 
       'indeterminate', 'interactive', 'sortable', 'today', 'placeholder', 'last',
       'origin', 'pulse', 'full-width', 'auto-width', 'icon-only', 'no-border', 'wrap',
       'nowrap', 'has-dot', 'has-errors', 'has-icon', 'has-icon-after',
-      'has-icon-before', 'has-tabs', 'has-trailing', 'with-control', 'with-description',
+      'has-icon-before', 'has-media', 'has-tabs', 'has-trailing', 'with-control', 'with-description',
     ];
     const css = CLEAN_CSS + admitted.map((m) => `.bds-badge--${m} { opacity: 1; }\n`).join('');
     const { code, out } = run({ css });

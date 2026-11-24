@@ -320,7 +320,7 @@ const BOOLEAN_MODIFIERS = new Set([
   'origin', 'link', 'pulse',
   // Structural booleans (#1927 kind A).
   'content-fit', 'full-width', 'auto-width', 'icon-only', 'no-border', 'wrap', 'nowrap',
-  'has-dot', 'has-errors', 'has-icon', 'has-icon-after', 'has-icon-before',
+  'has-dot', 'has-errors', 'has-icon', 'has-icon-after', 'has-icon-before', 'has-media',
   'has-tabs', 'has-trailing', 'with-control', 'with-description',
 ]);
 

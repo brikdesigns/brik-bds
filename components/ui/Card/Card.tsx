@@ -444,7 +444,7 @@ function renderDefault({
     `bds-card--padding-${padding}`,
     serviceLine && `bds-card--service-line-${serviceLine}`,
     serviceLine && serviceLineInverse && 'bds-card--emphasis-inverse',
-    media && 'bds-card--media',
+    media && 'bds-card--has-media',
     interactive && 'bds-card--interactive',
     href && 'bds-card--link',
     className,

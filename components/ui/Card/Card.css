@@ -84,7 +84,7 @@
  * itself comes from the composed Avatar / Image primitive. Mirrors the
  * TableAvatarCell / TableImageCell media cells. */
 
-.bds-card--media {
+.bds-card--has-media {
   flex-direction: row;
   align-items: flex-start;
 }
