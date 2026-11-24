@@ -184,7 +184,7 @@ place for a correction is a manual file bundled AFTER the auto-generated ones.
 
 ## Hand-written names Figma can't hold (#3338)
 
-Each name below is declared by a hand-written file (`gap-fills.css`, `ratios.css`, `fluid-type.css`) with no Figma variable behind it. Each has a reason Figma can't hold it. A colour is never listed here, because Figma can hold a colour; a colour name goes into Figma or is deleted. Rule 9 (`scripts/lint-naming-canon.mjs`) baselines these names and fails any new one.
+Each name below is declared by a hand-written file (`gap-fills.css`, `ratios.css`, `fluid-type.css`) with no Figma variable behind it. Each has a reason Figma can't hold it. A plain colour is never listed here, because Figma can hold a colour; it goes into Figma or is deleted. The one colour exception is a `color-mix()` of another token (ADR-046): Figma can only hold the baked result, which stops following its parent. Rule 9 (`scripts/lint-naming-canon.mjs`) baselines these names and fails any new one.
 
 | Name | Why Figma can't hold it |
 |---|---|
@@ -197,6 +197,14 @@ Each name below is declared by a hand-written file (`gap-fills.css`, `ratios.css
 | `--bds-aspect-4-3` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
 | `--bds-aspect-4-5` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
 | `--bds-aspect-9-16` | A ratio such as `16 / 9`. A Figma number holds one number to two decimals, not a ratio. |
+| `--bds-background-negative-hover` | A `color-mix()` of `--bds-color-system-red-500` toward black. Figma can only hold the result as a fixed colour, which stops following a kit that rebinds the red. |
+| `--bds-background-negative-pressed` | A `color-mix()` of `--bds-color-system-red-500` toward black. Figma can only hold the result as a fixed colour, which stops following a kit that rebinds the red. |
+| `--bds-background-positive-hover` | A `color-mix()` of `--bds-color-system-green-500` toward black. Figma can only hold the result as a fixed colour, which stops following a kit that rebinds the green. |
+| `--bds-background-positive-pressed` | A `color-mix()` of `--bds-color-system-green-500` toward black. Figma can only hold the result as a fixed colour, which stops following a kit that rebinds the green. |
+| `--bds-border-on-color-dark-muted` | A `color-mix()` of its parent `--bds-border-on-color-dark` (ADR-046). Figma can only hold a baked RGBA, which stops following a kit that rebinds the parent. |
+| `--bds-border-on-color-light-muted` | A `color-mix()` of its parent `--bds-border-on-color-light` (ADR-046). Figma can only hold a baked RGBA, which stops following a kit that rebinds the parent. |
+| `--bds-text-on-color-dark-muted` | A `color-mix()` of its parent `--bds-text-on-color-dark` (ADR-046). Figma can only hold a baked RGBA, which stops following a kit that rebinds the parent. |
+| `--bds-text-on-color-light-muted` | A `color-mix()` of its parent `--bds-text-on-color-light` (ADR-046). Figma can only hold a baked RGBA, which stops following a kit that rebinds the parent. |
 | `--bds-content-width-full` | `100%`. `modes-width.css` points `-xl` at it (`scripts/generate-modes-css.mjs:204`). |
 | `--bds-display-fluid-sm` | A `clamp()` expression. Its endpoints are Figma font sizes; the expression is not a value Figma holds. |
 | `--bds-display-fluid-md` | A `clamp()` expression. Its endpoints are Figma font sizes; the expression is not a value Figma holds. |
