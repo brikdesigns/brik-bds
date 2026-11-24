@@ -169,7 +169,7 @@ export function FilterButton({
               type="button"
               className={bdsClass(
                 'bds-filter-button__option',
-                'bds-filter-button__option--all',
+                'bds-filter-button__option--variant-all',
                 !value && 'bds-filter-button__option--selected',
               )}
               role="option"

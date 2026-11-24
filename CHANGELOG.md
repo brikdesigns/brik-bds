@@ -18,6 +18,16 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** the last bare modifiers move onto existing axes ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)); the rule-4 baseline is now empty.
+
+| Old | New |
+|---|---|
+| `bds-tooltip__bubble--portal` | `bds-tooltip__bubble--layout-portal` |
+| `bds-addable-entry-list__read-primary--url` | `bds-addable-entry-list__read-primary--variant-url` |
+| `bds-filter-button__option--all` | `bds-filter-button__option--variant-all` |
+| `bds-sheet-stack__frame--back` | `bds-sheet-stack__frame--variant-back` |
+| `bds-page__content--scroll` | `bds-page__content--overflow-scroll` |
+
 **Breaking (consumer CSS):** Collapsible's toggle-icon modifiers sit on the existing `variant` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)).
 
 | Old | New |

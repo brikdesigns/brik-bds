@@ -141,7 +141,7 @@ export function Tooltip({
       role="tooltip"
       className={bdsClass(
         'bds-tooltip__bubble',
-        'bds-tooltip__bubble--portal',
+        'bds-tooltip__bubble--layout-portal',
         isVisible && pos && 'bds-tooltip__bubble--visible',
       )}
       style={pos

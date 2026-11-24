@@ -65,7 +65,7 @@
 }
 
 /* Own the vertical scroll on fill-height pages (boards, calendars). */
-.bds-page__content--scroll {
+.bds-page__content--overflow-scroll {
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;

@@ -68,7 +68,7 @@ export function PageContent({
         'bds-page__content',
         padding !== 'inherit' && `bds-page__content--padding-${padding}`,
         gap !== 'none' && `bds-page__content--gap-${gap}`,
-        scroll && 'bds-page__content--scroll',
+        scroll && 'bds-page__content--overflow-scroll',
         className,
       )}
       {...props}

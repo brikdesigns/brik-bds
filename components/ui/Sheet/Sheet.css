@@ -248,7 +248,7 @@
   animation: bds-sheet-frame-exit 0.15s ease-in forwards;
 }
 
-.bds-sheet-stack__frame--back {
+.bds-sheet-stack__frame--variant-back {
   animation: bds-sheet-frame-back 0.2s ease-out;
 }
 
