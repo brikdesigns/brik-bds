@@ -162,7 +162,7 @@ The t-shirt vocabulary is `3xs · 2xs · xs · sm · md · lg · xl · 2xl · 3x
 |---|---|---|
 | `border-width` | `thin` · `standard` · `bold` (`:1480-1482`) | **Delete, don't rename.** `--border-width-standard` (2px, mode-invariant) duplicates `--border-width-md` (1px–3px by spacing mode, `:1043`/`:1051`) while silently freezing what the modes vary — so there is no t-shirt rung it can safely become. |
 | `content-width` | `narrow` · `default` · `wide` + one t-shirt `xl` (`:1424-1428`) | **Retire the word ladder** → `sm` · `md` · `lg` · `xl`. `full` (`100%`) is not a step; it survives as a named exception. |
-| `duration` | `fast` · `normal` · `slow` | **Retire** → `--duration-sm` · `-md` · `-lg` alongside the numeric Primitives. |
+| `duration` | `fast` · `normal` · `slow` | **Retire** → the numeric Primitives `--duration-100` · `-200` · `-300`. *Amended 2026-11-24 ([#3281](https://github.com/brikdesigns/brik-bds/issues/3281)): duration has no Semantic tier, so the `sm` · `md` · `lg` target is withdrawn — see § Amendments, "Duration has no Semantic tier".* |
 | `icon` | `tiny` (`:1306`) and `huge` (`:1312`) on a nine-rung ramp that already ships `2xs` and `2xl` | **Retire** → `tiny` becomes `3xs`, `huge` becomes `3xl`. Values unchanged. |
 | `shadow` · `display` | word members are the Semantic elevation / type-ramp sets over numeric Primitive parts | **No change** — two tiers, one slot, per the rule above. `--shadow-overlay` is a named exception (a role, not a step). |
 | `size` · `border-radius` | `pill` · `circle` | **Named exception.** Shape constants with no position on a linear scale; a numeric step cannot express them. |
@@ -256,7 +256,7 @@ Every mapping below is positional and measured; values do not change.
 | ~~`huge`~~ | ~~`--border-width-*`~~ | ~~`2xl`~~ | **Reverted #2594** — ❖ Brik Foundations names this rung `border-width/huge` |
 | `tiny` | `ButtonSize` | `xs` | The smallest rung, which `AvatarSize` / `BadgeSize` / `CounterSize` / `TagSize` already call `xs`. **Stands** — a component size union is not a Foundations variable; Storybook is its source of truth, not Figma. |
 | `thin` · `standard` · `bold` | `--border-width-*` | *deleted, not renamed* | `:1480-1482` — 1px/2px/3px duplicates of `sm`/`md`/`lg` that freeze what the spacing modes vary (`:1042-1052`) |
-| `fast` · `normal` · `slow` | `--duration-*` | `sm` · `md` · `lg` | 100/200/300ms (`:1521-1523`) — three contiguous rungs |
+| `fast` · `normal` · `slow` | `--duration-*` | `100` · `200` · `300` | 100/200/300ms — the numeric Primitives. Was `sm` · `md` · `lg` until the 2026-11-24 amendment ([#3281](https://github.com/brikdesigns/brik-bds/issues/3281)) |
 | `narrow` · `default` · `wide` | `--content-width-*` | `sm` · `md` · `lg` | 640/800/1024px (`:1424-1426`), with `xl` = 1280px already correct |
 
 ### Token families
@@ -687,3 +687,20 @@ OPERATOR SAID 2026-11-19: "let's refactor our elevation logic to ensure alignmen
 - **Migrates:** `.bds-tab-bar--scroll` → `.bds-tab-bar--overflow-scroll`. The `overflow` prop is unchanged; no alias ships. `wrap` is the default and emits no class.
 
 **Enforcement.** `tokens/naming-grammar.json` gains `axes.overflow`, so `*Overflow` unions and `--overflow-*` modifiers are judged against `wrap` · `scroll`. `scroll` does **not** join `BOOLEAN_MODIFIERS`: it is now an `overflow` value, and the set is word-keyed. PageContent's `scroll?: boolean` ([PageContent.tsx:58](../../components/ui/Page/PageContent.tsx)) still emits a bare `bds-page__content--scroll`, so the `--scroll` rule-4 row stays in the baseline for #1927, now owed by Page alone. Planted cases admit `--overflow-scroll` and deny `--overflow-clip`. **Baseline:** unchanged (TabBar no longer emits it; Page still does).
+
+### Duration has no Semantic tier (2026-11-24, [#3281](https://github.com/brikdesigns/brik-bds/issues/3281))
+
+OPERATOR SAID 2026-11-24 (chat, `638610b9-eb8e-48f1-8912-bf3e52a50f43.jsonl:805`): "1 - let's ensure we're aligned on animation logic. We follow a numeric scale at the primitive tier. We capture ease tokens at the next tier. These include ease-out, ease-in, etc. Let's better understand how animation and motion tokens will be used throughout our ecosystem. It seems like t-shirt sizes would clash with existing ease logic. Let's reassess. (e.g. https://atlassian.design/foundations/motion/applying-motion)". OPERATOR SAID 2026-11-24 (same session, `:878`): "go".
+
+**What changes.** § 3's rule (numeric at Primitive, t-shirt at Semantic) does not reach motion. Motion has two tiers, and neither is a t-shirt ladder:
+
+| Tier | Family | Steps | Source |
+|---|---|---|---|
+| Primitive | `--duration-*` | `100` … `600` — a step index, not milliseconds (`400` is 500ms) | ❖ Brik Foundations `primitives/value` → `duration/{step}` |
+| Semantic | `--ease-*` | `out` · `in` · `in-out` · `spring` · `spring-soft` · `linear` — named by behaviour | ❖ Brik Foundations `motion/default` → `ease/{name}` |
+
+Which duration a transition takes is a documented pairing of interaction → duration + ease ([Motion tokens § Pairing](../../docs-site/content/docs/foundation/motion.mdx)), not a token. `--duration-sm` · `-md` · `-lg` are withdrawn as the migration target for `fast` · `normal` · `slow`. The target is the numeric Primitive.
+
+**Why.** A `sm` · `md` · `lg` Semantic duration would sit beside `ease/*` in the same tier with a second vocabulary — size words next to behaviour words. Neither exists in Figma, and #3252 already moved every component onto the numeric Primitives (`tokens/compat/renamed-knobs.json:32-36`). `--duration-marquee` and `--duration-autoplay` stay named exceptions: they are loop periods, not tweens.
+
+**Enforcement.** `tokens/naming-grammar.json` `steps.retired` re-points `fast` · `normal` · `slow` for `--duration-` to `100` · `200` · `300`, so rule 1's message names the numeric target. No new rule, script or workflow. **Baseline:** unchanged.
