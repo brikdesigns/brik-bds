@@ -34,7 +34,7 @@ export function CardList({
     'bds-card-list',
     `bds-card-list--orientation-${orientation}`,
     `bds-card-list--gap-${gap}`,
-    orientation === 'horizontal' && fitContent && 'bds-card-list--fit',
+    orientation === 'horizontal' && fitContent && 'bds-card-list--content-fit',
     className,
   );
 
