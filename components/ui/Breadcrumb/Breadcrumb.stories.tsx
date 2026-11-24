@@ -790,17 +790,18 @@ const COMPANY_PROJECT_TRAIL: BreadcrumbItem[] = [
  */
 export const OverflowSwitcherTrail: Story = {
   args: { items: COMPANY_TAB_TRAIL },
-  decorators: inContainer('320px'),
+  decorators: inContainer('400px'),
 };
 
 /**
  * `Companies / Company / Projects / Project` with switchers on the first three:
- * the company crumb stays, labels ellipsise rather than folding.
+ * the company crumb stays. The longest labels ellipsise first; short ones keep
+ * their text.
  * @summary Four-crumb switcher trail keeps every crumb
  */
 export const OverflowSwitcherProjectTrail: Story = {
   args: { items: COMPANY_PROJECT_TRAIL },
-  decorators: inContainer('360px'),
+  decorators: inContainer('560px'),
 };
 
 /**
@@ -946,7 +947,7 @@ const settleLayout = async () => {
 export const InteractionTestOverflowSwitcherTrail: Story = {
   tags: ['!manifest', 'interaction-test'],
   args: { items: COMPANY_TAB_TRAIL },
-  decorators: inContainer('320px'),
+  decorators: inContainer('400px'),
   play: async ({ canvas }) => {
     await settleLayout();
     const company = canvas.getByRole('link', { name: 'Acme Holdings International' });
@@ -969,13 +970,16 @@ export const InteractionTestOverflowSwitcherTrail: Story = {
 export const InteractionTestOverflowSwitcherProjectTrail: Story = {
   tags: ['!manifest', 'interaction-test'],
   args: { items: COMPANY_PROJECT_TRAIL },
-  decorators: inContainer('360px'),
+  decorators: inContainer('560px'),
   play: async ({ canvas }) => {
     await settleLayout();
     const company = canvas.getByRole('link', { name: 'Acme Holdings International' });
     await expect(company.scrollWidth).toBeGreaterThan(company.clientWidth);
     await expect(canvas.queryByRole('button', { name: 'More breadcrumbs' })).not.toBeInTheDocument();
     await expect(canvas.getAllByRole('link')).toHaveLength(3);
+    // The longest labels shrink first; a short one keeps its text.
+    const companies = canvas.getByRole('link', { name: 'Companies' });
+    await expect(companies.scrollWidth).toBeLessThanOrEqual(companies.clientWidth);
     await userEvent.click(canvas.getByRole('button', { name: 'Switch company' }));
     await expect(await canvas.findAllByRole('menuitem')).toHaveLength(SIBLING_CLIENTS.length);
   },

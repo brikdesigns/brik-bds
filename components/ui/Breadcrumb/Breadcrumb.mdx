@@ -73,8 +73,8 @@ button in the tab order that opens a menu listing the hidden crumbs as links
 **Switcher rule.** A crumb carrying its own `switcher` (two or more options)
 never folds — the menu lists plain links, so folding it would lose the switcher.
 Only switcher-less crumbs fold, each run of them behind its own button; once
-nothing more can fold, the kept labels shrink to an ellipsis instead, full text
-in `title`. A trail with no switchers folds exactly as above.
+nothing more can fold, the kept labels shrink to an ellipsis instead — longest
+first, so a short label keeps its text — with the full text in `title`. A trail with no switchers folds exactly as above.
 
 <Canvas of={Stories.OverflowSwitcherTrail} />
 

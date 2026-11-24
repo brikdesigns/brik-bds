@@ -26,6 +26,8 @@ export type TrailLevel = 'full' | 'collapsed' | 'minimal';
 export interface TrailMeasure {
   /** Natural width of each crumb, leading separator and per-crumb switcher included. */
   crumbs: number[];
+  /** Natural width of each crumb's label alone. Omitted means no label cap. */
+  labels?: number[];
   /**
    * Per crumb, true when it carries a switcher with two or more options. Such a
    * crumb never folds. Omitted means no crumb does.
@@ -59,41 +61,39 @@ export function foldedCrumbs(count: number, level: TrailLevel, pinned?: boolean[
   return folded;
 }
 
-export function chooseTrailLevel({
-  crumbs,
-  pinned,
-  overflow,
-  separator,
-  trailing,
-  gap,
-  available,
-}: TrailMeasure): TrailLevel {
+/**
+ * Rendered width of the trail with `folded` hidden: the kept crumbs, plus one
+ * overflow button per run of consecutive folded crumbs (with its own separator
+ * unless the run starts the trail), plus a gap between every pair of children.
+ */
+function trailWidth(
+  { crumbs, overflow, separator, trailing, gap }: TrailMeasure,
+  folded: number[],
+): number {
+  const hidden = new Set(folded);
+  let total = 0;
+  let children = 0;
+  for (let i = 0; i < crumbs.length; i++) {
+    if (!hidden.has(i)) {
+      total += crumbs[i];
+      children += 1;
+    } else if (!hidden.has(i - 1)) {
+      total += overflow + (i > 0 ? separator : 0);
+      children += 1;
+    }
+  }
+  const tail = trailing > 0 ? gap + trailing : 0;
+  return total + gap * (children - 1) + tail;
+}
+
+export function chooseTrailLevel(measure: TrailMeasure): TrailLevel {
+  const { crumbs, pinned, available } = measure;
   const n = crumbs.length;
   // Unmeasured (SSR, first paint) or too few crumbs to fold: keep everything.
   // A lone long label is handled by its own ellipsis.
   if (available <= 0 || n < 3) return 'full';
 
-  const tail = trailing > 0 ? gap + trailing : 0;
-
-  // Rendered width with `folded` hidden: the kept crumbs, plus one overflow
-  // button per run of consecutive folded crumbs (with its own separator unless
-  // the run starts the trail), plus a gap between every pair of children.
-  const width = (folded: number[]) => {
-    const hidden = new Set(folded);
-    let total = 0;
-    let children = 0;
-    for (let i = 0; i < n; i++) {
-      if (!hidden.has(i)) {
-        total += crumbs[i];
-        children += 1;
-      } else if (!hidden.has(i - 1)) {
-        total += overflow + (i > 0 ? separator : 0);
-        children += 1;
-      }
-    }
-    return total + gap * (children - 1) + tail;
-  };
-
+  const width = (folded: number[]) => trailWidth(measure, folded);
   if (width([]) <= available) return 'full';
 
   // Each level folds a superset of the one before. A level that folds nothing
@@ -110,4 +110,33 @@ export function chooseTrailLevel({
   }
   // Nothing more can fold: the kept labels ellipsise.
   return best;
+}
+
+/**
+ * When a trail with switcher crumbs still does not fit at its level (nothing
+ * left to fold), the one max-width every kept label shares so it does. The
+ * longest labels shrink first and a label shorter than the cap keeps all its
+ * text — flex shrinking alone takes width in proportion to each crumb's size,
+ * which starves a short label to nothing. `null` means no cap: the trail fits,
+ * is unmeasured, or has no switchers (its lone kept label ellipsises in CSS).
+ */
+export function labelCap(measure: TrailMeasure, level: TrailLevel): number | null {
+  const { crumbs, labels, pinned, available } = measure;
+  if (available <= 0 || !labels || !pinned?.some(Boolean)) return null;
+
+  const folded = foldedCrumbs(crumbs.length, level, pinned);
+  const total = trailWidth(measure, folded);
+  if (total <= available) return null;
+
+  const hidden = new Set(folded);
+  const kept = labels.filter((_, i) => !hidden.has(i)).sort((a, b) => a - b);
+  // Everything but the labels is fixed; the labels share what is left.
+  let budget = available - (total - kept.reduce((sum, w) => sum + w, 0));
+  if (budget <= 0) return 0;
+  for (let k = 0; k < kept.length; k++) {
+    const share = budget / (kept.length - k);
+    if (kept[k] > share) return Math.floor(share);
+    budget -= kept[k];
+  }
+  return null;
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { chooseTrailLevel, foldedCrumbs, type TrailMeasure } from './trailOverflow';
+import { chooseTrailLevel, foldedCrumbs, labelCap, type TrailMeasure } from './trailOverflow';
 
 /* Six crumbs of 100px (separator included), an 8px gap, a 32px overflow
  * button with a 12px separator. Full trail = 6*100 + 5*8 = 640. */
@@ -111,5 +111,54 @@ describe('chooseTrailLevel with per-crumb switchers', () => {
     expect(chooseTrailLevel({ ...trail, available: 475 })).toBe('minimal');
     // Below that nothing more can fold: the kept labels ellipsise instead.
     expect(chooseTrailLevel({ ...trail, available: 100 })).toBe('minimal');
+  });
+});
+
+describe('labelCap', () => {
+  // Companies⌄ / Company⌄ / Tab⌄: labels 70, 200, 130, each crumb 40 wider
+  // (separator, caret, gaps). Full = 110 + 240 + 170 + 2*8 = 536.
+  const trail: TrailMeasure = {
+    ...base,
+    crumbs: [110, 240, 170],
+    labels: [70, 200, 130],
+    pinned: switchersOn(3, [0, 1, 2]),
+  };
+
+  it('caps nothing while the trail fits', () => {
+    expect(labelCap({ ...trail, available: 536 }, 'full')).toBeNull();
+  });
+
+  it('trims the longest labels first, to one shared cap, so a short label keeps its text', () => {
+    // Fixed = 536 - 400 = 136, so the labels get 264: 70 stays whole, the
+    // other two share 194 → 97 each.
+    expect(labelCap({ ...trail, available: 400 }, 'full')).toBe(97);
+    // 64 across three labels: every label shrinks to 21.
+    expect(labelCap({ ...trail, available: 200 }, 'full')).toBe(21);
+    expect(labelCap({ ...trail, available: 100 }, 'full')).toBe(0);
+  });
+
+  it('caps only the labels left after folding', () => {
+    // Home / Company⌄ / Tab with Home folded: 32 + 240 + 140 + 2*8 = 428.
+    const mixed: TrailMeasure = {
+      ...base,
+      crumbs: [60, 240, 140],
+      labels: [40, 200, 100],
+      pinned: switchersOn(3, [1]),
+      available: 300,
+    };
+    expect(chooseTrailLevel(mixed)).toBe('minimal');
+    // Fixed = 428 - 300 = 128 → 172 for two labels → 86 each.
+    expect(labelCap(mixed, 'minimal')).toBe(86);
+  });
+
+  it('leaves a trail with no switchers to the flex ellipsis, as before', () => {
+    const plain = { ...trail, pinned: switchersOn(3, []), available: 200 };
+    expect(labelCap(plain, chooseTrailLevel(plain))).toBeNull();
+    expect(labelCap({ ...trail, pinned: undefined, available: 200 }, 'minimal')).toBeNull();
+  });
+
+  it('caps nothing before anything has been measured', () => {
+    expect(labelCap({ ...trail, available: 0 }, 'full')).toBeNull();
+    expect(labelCap({ ...trail, labels: undefined, available: 200 }, 'full')).toBeNull();
   });
 });

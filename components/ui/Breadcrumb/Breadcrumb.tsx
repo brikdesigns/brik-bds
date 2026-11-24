@@ -5,6 +5,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type HTMLAttributes,
   type ReactNode,
 } from 'react';
@@ -15,7 +16,7 @@ import { FilterToggle } from '../FilterToggle/FilterToggle';
 import { Icon } from '../Icon/Icon';
 import { bdsClass } from '../../utils';
 import { useElementWidth } from '../shared/useElementWidth';
-import { chooseTrailLevel, foldedCrumbs, type TrailMeasure } from './trailOverflow';
+import { chooseTrailLevel, foldedCrumbs, labelCap, type TrailMeasure } from './trailOverflow';
 import './Breadcrumb.css';
 
 export interface BreadcrumbItem {
@@ -170,22 +171,24 @@ function BreadcrumbLink({
   linkComponent: LinkComponent,
   href,
   title,
+  style,
   children,
 }: {
   linkComponent?: BdsLinkComponent;
   href: string;
   title: string;
+  style?: CSSProperties;
   children: ReactNode;
 }) {
   if (LinkComponent) {
     return (
-      <LinkComponent href={href} title={title} className="bds-breadcrumb__link">
+      <LinkComponent href={href} title={title} className="bds-breadcrumb__link" style={style}>
         {children}
       </LinkComponent>
     );
   }
   return (
-    <a href={href} title={title} className="bds-breadcrumb__link">
+    <a href={href} title={title} className="bds-breadcrumb__link" style={style}>
       {children}
     </a>
   );
@@ -200,7 +203,7 @@ function BreadcrumbLink({
  * menu of links; when even that does not fit, only the button and the last
  * crumb remain. A crumb carrying its own `switcher` is never folded — only
  * switcher-less crumbs go into the menu, and once nothing more can fold the
- * kept labels shrink to an ellipsis instead. A label past its max width ends
+ * kept labels shrink to an ellipsis instead, longest first. A label past its max width ends
  * in an ellipsis, and its full text is the accessible name and the `title`.
  * Folded crumbs render as plain links in the menu (honouring `linkComponent`).
  *
@@ -257,6 +260,7 @@ export function Breadcrumb({
       const width = (el: Element | null) => (el ? el.getBoundingClientRect().width : 0);
       const next = {
         crumbs: Array.from(root.querySelectorAll('[data-measure="crumb"]')).map(width),
+        labels: Array.from(root.querySelectorAll('[data-measure="label"]')).map(width),
         overflow: width(root.querySelector('[data-measure="overflow"]')),
         separator: width(root.querySelector('[data-measure="separator"]')),
         trailing: width(root.querySelector('[data-measure="trailing"]')),
@@ -275,9 +279,12 @@ export function Breadcrumb({
   // A crumb with a working switcher never folds (the overflow menu lists plain
   // links, so folding it would drop the switcher).
   const pinned = items.map((item) => !!item.switcher && item.switcher.options.length > 1);
-  const level = natural && navWidth !== null
-    ? chooseTrailLevel({ ...natural, pinned, available: navWidth })
-    : 'full';
+  const measured = natural && navWidth !== null ? { ...natural, pinned, available: navWidth } : null;
+  const level = measured ? chooseTrailLevel(measured) : 'full';
+  // Nothing left to fold and still too wide: every kept label shares one max
+  // width, so the longest shrink first and a short one keeps its text.
+  const cap = measured ? labelCap(measured, level) : null;
+  const labelStyle = cap !== null ? { maxWidth: cap } : undefined;
 
   const last = items.length - 1;
   const hidden = new Set(foldedCrumbs(items.length, level, pinned));
@@ -327,11 +334,17 @@ export function Breadcrumb({
                   className="bds-breadcrumb__current"
                   title={item.label}
                   aria-current={isLast ? 'page' : undefined}
+                  style={labelStyle}
                 >
                   {item.label}
                 </span>
               ) : (
-                <BreadcrumbLink linkComponent={linkComponent} href={item.href} title={item.label}>
+                <BreadcrumbLink
+                  linkComponent={linkComponent}
+                  href={item.href}
+                  title={item.label}
+                  style={labelStyle}
+                >
                   {item.label}
                 </BreadcrumbLink>
               )}
@@ -376,6 +389,7 @@ export function Breadcrumb({
                 i === last || !item.href ? 'bds-breadcrumb__current' : 'bds-breadcrumb__link',
               )}
               data-label={item.label}
+              data-measure="label"
             />
             {item.switcher && item.switcher.options.length > 1 && <MeasureButton />}
           </span>
