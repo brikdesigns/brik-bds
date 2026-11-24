@@ -64,6 +64,10 @@ Pass `items`. A row's `description` is a `ReactNode`, so it can hold inline cont
 - State is carried by the badge text, not by color or icon alone. The icon is decorative and hidden from assistive technology.
 - The `message` is rendered in a `role="alert"` region, which is announced assertively when it appears. A failure is the one state the reader must not miss. A row that is already in the negative state at page load is read in place with the rest of the list.
 
+## Lifecycle
+
+A `StatusList` shows while any row is not `complete`. Once every row is complete, the page replaces it with the output it was tracking; the history stays in a timeline. Inside an `ActivityTimeline` event it is a snapshot, never live state. See [Status and events](/docs/build-standards/status-and-events).
+
 ## API
 
 {/* props-check: StatusListProps @ components/ui/StatusList/StatusList.tsx */}
