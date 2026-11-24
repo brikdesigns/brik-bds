@@ -30,6 +30,10 @@
     color: var(--bds-text-info);
   }
 
+  .bds-status-list__icon--status-on-hold {
+    color: var(--bds-text-info);
+  }
+
   .bds-status-list__icon--status-blocked {
     color: var(--bds-text-warning);
   }

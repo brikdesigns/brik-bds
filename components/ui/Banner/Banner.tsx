@@ -1,6 +1,6 @@
 import { type ReactNode, type HTMLAttributes } from 'react';
 import { Icon } from '../Icon';
-import { Warning, Info, CheckCircle } from '../../icons';
+import { STATUS_MAP, type StatusName } from '../../status';
 import { Badge } from '../Badge';
 import { bdsClass, resolveRetiredValue } from '../../utils';
 import { CloseButton } from '../CloseButton';
@@ -45,11 +45,11 @@ export interface BannerProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title
   onDismiss?: () => void;
 }
 
-const STATUS_ICON: Record<BannerTone, string> = {
-  warning: Warning,
-  negative: Warning,
-  info: Info,
-  positive: CheckCircle,
+const TONE_STATUS: Record<BannerTone, StatusName> = {
+  warning: 'blocked',
+  negative: 'negative',
+  info: 'info',
+  positive: 'complete',
 };
 
 /**
@@ -93,7 +93,7 @@ export function Banner({
     <Badge
       size="xs"
       tone={resolvedTone}
-      icon={<Icon icon={STATUS_ICON[resolvedTone]} />}
+      icon={<Icon icon={STATUS_MAP[TONE_STATUS[resolvedTone]].icon} />}
     />
   ) : null;
 

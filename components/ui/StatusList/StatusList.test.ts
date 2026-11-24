@@ -1,7 +1,12 @@
 import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { StatusList, type StatusListItem } from './StatusList';
+
+// Icons render nothing on the server; stand in a marker carrying the name.
+vi.mock('../Icon', () => ({
+  Icon: ({ icon }: { icon: string }) => createElement('i', { 'data-icon': icon }),
+}));
 
 const render = (items: StatusListItem[]) =>
   renderToStaticMarkup(createElement(StatusList, { items }));
@@ -16,8 +21,9 @@ describe('StatusList', () => {
       { ...ROW, id: '3', status: 'not_started' },
       { ...ROW, id: '4', status: 'blocked' },
       { ...ROW, id: '5', status: 'negative' },
+      { ...ROW, id: '6', status: 'on_hold' },
     ]);
-    for (const label of ['Complete', 'In Progress', 'Not Started', 'Blocked', 'Failed']) {
+    for (const label of ['Complete', 'In Progress', 'Not Started', 'Blocked', 'Failed', 'On Hold']) {
       expect(html).toContain(`>${label}<`);
     }
     for (const tone of ['positive', 'info', 'neutral', 'warning', 'negative']) {
@@ -29,7 +35,10 @@ describe('StatusList', () => {
     const html = render([
       { ...ROW, id: '1', status: 'in_progress' },
       { ...ROW, id: '2', status: 'blocked' },
+      { ...ROW, id: '3', status: 'on_hold' },
     ]);
+    expect(html).toContain('bds-status-list__icon--status-on-hold');
+    expect(html).toContain('data-icon="ph:pause-circle"');
     expect(html).toContain('bds-status-list__icon--status-in-progress');
     expect(html).toContain('bds-status-list__icon--status-blocked');
     expect(html).not.toContain('Error');

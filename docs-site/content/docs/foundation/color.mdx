@@ -124,12 +124,13 @@ Canonical Figma tokens for positive, negative, and warning states. Background va
   columns={3}
 />
 
-**Which state takes which valence** — the tokens above say what each valence looks like, not which lifecycle state earns it. One table decides, and every status badge, dot and row resolves through it rather than choosing a colour of its own. [StatusList](/docs/components/status-list) renders the first five rows as one list.
+**Which state takes which valence** — the tokens above say what each valence looks like, not which lifecycle state earns it. One table decides, and every status badge, dot and row resolves through it rather than choosing a colour of its own. [StatusList](/docs/components/status-list) renders the first six rows as one list.
 
 | Lifecycle state | Valence | Example label |
 | --- | --- | --- |
 | Complete, active | `positive` | Complete, Active |
 | In progress | `info` | In Progress |
+| On hold | `info` | On Hold |
 | Not started, inactive, cancelled | `neutral` | Not Started, Inactive, Cancelled |
 | Needs an action before it can proceed (pending, blocked on someone) | `warning` | Needs Attention, Blocked |
 | Failed, overdue | `negative` | Failed, Overdue |
