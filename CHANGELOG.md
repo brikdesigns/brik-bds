@@ -18,6 +18,12 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Card's leading-media modifier is a presence boolean and takes the `has-` prefix ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § 4). The `media` prop is unchanged.
+
+| Old | New |
+|---|---|
+| `bds-card--media` | `bds-card--has-media` |
+
 **Breaking (consumer CSS):** Sheet's floating modifier sits on the `variant` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § 4). The `variant` prop is unchanged.
 
 | Old | New |
