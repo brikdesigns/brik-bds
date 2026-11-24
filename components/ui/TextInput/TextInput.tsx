@@ -103,7 +103,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 
         <div className="bds-text-input__field">
           {iconBefore && (
-            <span className="bds-text-input__icon bds-text-input__icon--before">
+            <span className="bds-text-input__icon bds-text-input__icon--relation-before">
               {iconBefore}
             </span>
           )}
@@ -128,7 +128,7 @@ export const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
           />
 
           {iconAfter && (
-            <span className="bds-text-input__icon bds-text-input__icon--after">
+            <span className="bds-text-input__icon bds-text-input__icon--relation-after">
               {iconAfter}
             </span>
           )}

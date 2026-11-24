@@ -18,6 +18,19 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Collapsible's toggle-icon modifiers sit on the existing `variant` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)).
+
+| Old | New |
+|---|---|
+| `bds-collapsible__icon--plus` / `--minus` | `bds-collapsible__icon--variant-plus` / `--variant-minus` |
+
+**Breaking (consumer CSS):** Meter's label and TextInput's icon modifiers carry the new `relation` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § Amendments). The `labelPosition`, `iconBefore` and `iconAfter` props are unchanged.
+
+| Old | New |
+|---|---|
+| `bds-meter__label--above` / `--below` | `bds-meter__label--relation-above` / `--relation-below` |
+| `bds-text-input__icon--before` / `--after` | `bds-text-input__icon--relation-before` / `--relation-after` |
+
 **Breaking (consumer CSS):** Card's leading-media modifier is a presence boolean and takes the `has-` prefix ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § 4). The `media` prop is unchanged.
 
 | Old | New |
