@@ -57,17 +57,49 @@ Pass `linkComponent` (e.g. `next/link`) so linked crumbs route client-side inste
 
 ## Variants
 
-A deep trail is mobile-safe by default — no prop required. The trail wraps at
-crumb boundaries instead of clipping, and any single label longer than its
-container ellipsises. Below 768px the intermediate crumbs collapse behind a
-single `…` (`Home / … / Amendment 4821`) whenever there are two or more of
-them; they stay in the accessibility tree, so screen readers still announce the
-full trail. Switch the **Viewport** toolbar global to Mobile (375px) and Tablet
-(768px) to compare.
+The trail is one line and never wraps, and needs no prop to do it. It is
+measured against its own container (not the viewport), so it behaves the same in
+a sidebar, a card or a full-width header.
 
 <Canvas of={Stories.LongTrail} />
 
+**Overflow rule.** When the trail does not fit, the first crumb and the last two
+stay and the crumbs in between fold into a `More breadcrumbs` button — a real
+button in the tab order that opens a menu listing the hidden crumbs as links
+(`linkComponent` is honoured). A crumb folded into the menu is a plain link: its
+per-crumb `switcher` is not rendered there. Switchers on visible crumbs keep
+working. A trail that fits never shows the button.
+
+<Canvas of={Stories.OverflowNarrowContainer} />
+
+**Mobile rule.** When even `first / … / second-last / last` does not fit — at
+375px, say — the trail is the overflow button followed by the last crumb. Switch
+the **Viewport** toolbar global to Mobile to compare.
+
+<Canvas of={Stories.OverflowMobile} />
+
+**Label rule.** A label longer than the crumb max width ends in an ellipsis. The
+full label stays the accessible name and also shows on hover through `title`, so
+keep labels short anyway: a crumb names the page, it does not describe it.
+
+<Canvas of={Stories.LongLabel} />
+
 ## Patterns
+
+### Usage guidance
+
+- **Location, not history.** A breadcrumb shows where the page sits in the
+  hierarchy (`Companies / Acme / Agreements`), not the pages the user visited.
+  Back navigation is the browser's job.
+- **One trail shape per product.** Pick one hierarchy (and one `separator`) and
+  use it on every page, so the trail reads the same wherever the user lands.
+- **The last crumb is the current page** — plain text, `aria-current="page"`.
+- **Never wrap.** Do not work around a long trail with a smaller font or a
+  second line; the overflow menu is the rule.
+
+Carbon's guidelines are the reference for the overflow and mobile rules:
+[Breadcrumb usage guidelines](https://www.carbondesignsystem.com/building-blocks/core/components/breadcrumb/guidelines)
+and [accessibility](https://www.carbondesignsystem.com/components/breadcrumb/accessibility).
 
 ### Sibling-record switcher
 

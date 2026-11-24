@@ -98,6 +98,11 @@ const meta = {
       description: 'Direction the panel opens relative to its trigger',
     },
     activeId: { control: 'text', description: 'ID of the item to highlight as active' },
+    linkComponent: {
+      control: false,
+      description:
+        'Render items that carry an `href` with a router-aware component (Next.js `Link`, Remix `Link`) instead of a bare `<a>`. See ADR-012.',
+    },
     search: {
       control: 'object',
       description:

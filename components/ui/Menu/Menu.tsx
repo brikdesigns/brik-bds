@@ -9,6 +9,7 @@ import {
   useState,
 } from 'react';
 import { Button } from '../Button/Button';
+import { type BdsLinkComponent } from '../NavItem';
 import { SearchInput } from '../SearchInput/SearchInput';
 import { bdsClass } from '../../utils';
 import { useFloatingPanel } from '../shared/useFloatingPanel';
@@ -39,6 +40,13 @@ export interface MenuItemData {
   content?: ReactNode;
   /** Disabled state */
   disabled?: boolean;
+  /**
+   * Destination. When set (and the item is not disabled) the item renders as a
+   * link — a real `<a>`, or {@link MenuProps.linkComponent} — with
+   * `role="menuitem"`, so it can be opened in a new tab and routed client-side.
+   * `onClick` still fires first.
+   */
+  href?: string;
   /** Click handler */
   onClick?: () => void;
 }
@@ -135,6 +143,11 @@ export interface MenuProps extends Omit<HTMLAttributes<HTMLDivElement>, 'childre
    * See {@link MenuSearch}.
    */
   search?: MenuSearch;
+  /**
+   * Render items that carry an `href` with a router-aware component (Next.js
+   * `Link`, Remix `Link`) instead of a bare `<a>`. See ADR-012.
+   */
+  linkComponent?: BdsLinkComponent;
 }
 
 /**
@@ -145,14 +158,60 @@ export interface MenuItemProps extends HTMLAttributes<HTMLButtonElement> {
   item: MenuItemData;
   /** Whether this item is active */
   isActive?: boolean;
+  /** Router-aware link for items with an `href`. See ADR-012. */
+  linkComponent?: BdsLinkComponent;
 }
 
 /**
  * MenuItem - Single menu option (exported for direct use)
  */
-export function MenuItem({ item, isActive, className, style, ...props }: MenuItemProps) {
+export function MenuItem({
+  item,
+  isActive,
+  linkComponent: LinkComponent,
+  className,
+  style,
+  ...props
+}: MenuItemProps) {
   const hasContent = item.content != null;
   const hasDescription = !hasContent && !!item.description;
+  const itemClassName = bdsClass(
+    'bds-menu__item',
+    isActive && 'bds-menu__item--current',
+    item.disabled && 'bds-menu__item--disabled',
+    hasDescription && 'bds-menu__item--with-description',
+    className,
+  );
+  const inner = hasContent ? (
+    item.content
+  ) : (
+    <>
+      {item.icon && <span className="bds-menu__icon">{item.icon}</span>}
+      <span className="bds-menu__text">
+        <span className="bds-menu__label">{item.label}</span>
+        {hasDescription && <span className="bds-menu__description">{item.description}</span>}
+      </span>
+    </>
+  );
+
+  if (item.href && !item.disabled) {
+    const anchorProps = {
+      href: item.href,
+      role: 'menuitem',
+      onClick: item.onClick,
+      'aria-label': hasContent ? item.label : undefined,
+      'aria-current': isActive ? ('true' as const) : undefined,
+      className: itemClassName,
+      style,
+      ...(props as HTMLAttributes<HTMLAnchorElement>),
+    };
+    return LinkComponent ? (
+      <LinkComponent {...anchorProps}>{inner}</LinkComponent>
+    ) : (
+      <a {...anchorProps}>{inner}</a>
+    );
+  }
+
   return (
     <button
       type="button"
@@ -161,29 +220,11 @@ export function MenuItem({ item, isActive, className, style, ...props }: MenuIte
       onClick={item.onClick}
       aria-label={hasContent ? item.label : undefined}
       aria-current={isActive ? 'true' : undefined}
-      className={bdsClass(
-        'bds-menu__item',
-        isActive && 'bds-menu__item--current',
-        item.disabled && 'bds-menu__item--disabled',
-        hasDescription && 'bds-menu__item--with-description',
-        className,
-      )}
+      className={itemClassName}
       style={style}
       {...props}
     >
-      {hasContent ? (
-        item.content
-      ) : (
-        <>
-          {item.icon && <span className="bds-menu__icon">{item.icon}</span>}
-          <span className="bds-menu__text">
-            <span className="bds-menu__label">{item.label}</span>
-            {hasDescription && (
-              <span className="bds-menu__description">{item.description}</span>
-            )}
-          </span>
-        </>
-      )}
+      {inner}
     </button>
   );
 }
@@ -223,6 +264,7 @@ export function Menu({
   header,
   placement = 'bottom',
   search,
+  linkComponent,
   className = '',
   style,
   onKeyDown,
@@ -432,6 +474,7 @@ export function Menu({
               <MenuItem
                 key={item.id}
                 item={item}
+                linkComponent={linkComponent}
                 isActive={activeId === item.id}
                 tabIndex={item.id === effectiveTabStop ? 0 : -1}
                 onFocus={() => setTabStopId(item.id)}
@@ -442,6 +485,7 @@ export function Menu({
           <MenuItem
             key={entry.id}
             item={entry}
+            linkComponent={linkComponent}
             isActive={activeId === entry.id}
             tabIndex={entry.id === effectiveTabStop ? 0 : -1}
             onFocus={() => setTabStopId(entry.id)}

@@ -132,6 +132,7 @@ For more sophisticated positioning (collision detection, viewport-aware flips), 
 | `header` | `ReactNode` | — |
 | `placement` | `MenuPlacement` | `'bottom'` |
 | `search` | `MenuSearch` (`{ threshold?, total? }`) | — (field shows when the item count is greater than `threshold`, default `8`) |
+| `linkComponent` | `BdsLinkComponent` | bare `<a>` — renders items that carry an `href` (router-aware `Link`, ADR-012) |
 
 Plus standard `<div>` HTML attributes (excluding `children`).
 
@@ -143,6 +144,7 @@ interface MenuItemData {
   label: ReactNode;
   icon?: ReactNode;
   disabled?: boolean;
+  href?: string; // renders the item as a link (role="menuitem" on <a>)
   onClick?: () => void;
 }
 ```

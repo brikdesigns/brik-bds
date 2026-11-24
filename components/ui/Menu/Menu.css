@@ -133,6 +133,7 @@
   line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-primary);
   text-transform: var(--bds-text-transform-label);
+  text-decoration: none;
 }
 
 .bds-menu__item--current {

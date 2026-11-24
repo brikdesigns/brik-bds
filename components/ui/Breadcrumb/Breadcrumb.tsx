@@ -1,6 +1,7 @@
 import {
   Fragment,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -13,6 +14,8 @@ import { Button } from '../Button/Button';
 import { FilterToggle } from '../FilterToggle/FilterToggle';
 import { Icon } from '../Icon/Icon';
 import { bdsClass } from '../../utils';
+import { useElementWidth } from '../shared/useElementWidth';
+import { chooseTrailLevel, type TrailMeasure } from './trailOverflow';
 import './Breadcrumb.css';
 
 export interface BreadcrumbItem {
@@ -119,7 +122,10 @@ export interface BreadcrumbSwitchMenuProps {
 export interface BreadcrumbProps
   extends HTMLAttributes<HTMLElement>,
     BreadcrumbSwitchMenuProps {
-  /** Crumb trail in order. The last item is rendered as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set. */
+  /**
+   * Crumb trail in order. The last item is rendered as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set.
+   * The trail never wraps: when it does not fit its container the first crumb and the last two stay and the middle crumbs fold into a `More breadcrumbs` menu (on a narrow container, the menu plus the last crumb).
+   */
   items: BreadcrumbItem[];
   /** Visual separator between crumbs. Default `slash` (`/`); `chevron` renders `›`. */
   separator?: BreadcrumbSeparator;
@@ -148,6 +154,9 @@ export interface BreadcrumbProps
   onNavigate?: (href: string, option: BreadcrumbSwitchOption) => void;
 }
 
+// `useLayoutEffect` warns during server rendering; measuring only matters in the browser.
+const useIsomorphicLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
 const SEPARATOR_CHARS: Record<BreadcrumbSeparator, string> = {
   slash: '/',
   chevron: '›',
@@ -160,21 +169,23 @@ const SEPARATOR_CHARS: Record<BreadcrumbSeparator, string> = {
 function BreadcrumbLink({
   linkComponent: LinkComponent,
   href,
+  title,
   children,
 }: {
   linkComponent?: BdsLinkComponent;
   href: string;
+  title: string;
   children: ReactNode;
 }) {
   if (LinkComponent) {
     return (
-      <LinkComponent href={href} className="bds-breadcrumb__link">
+      <LinkComponent href={href} title={title} className="bds-breadcrumb__link">
         {children}
       </LinkComponent>
     );
   }
   return (
-    <a href={href} className="bds-breadcrumb__link">
+    <a href={href} title={title} className="bds-breadcrumb__link">
       {children}
     </a>
   );
@@ -182,6 +193,14 @@ function BreadcrumbLink({
 
 /**
  * Breadcrumb — navigation breadcrumb trail with separator variants.
+ *
+ * The trail is one line and never wraps. It is measured against its own
+ * container: when every crumb does not fit, the first crumb and the last two
+ * stay and the middle crumbs fold into a `More breadcrumbs` button that opens a
+ * menu of links; when even that does not fit, only the button and the last
+ * crumb remain. A label past its max width ends in an ellipsis, and its full
+ * text is the accessible name and the `title`. Folded crumbs render as plain
+ * links in the menu (honouring `linkComponent`) without their `switcher`.
  *
  * Pass two or more `options` (plus a `switchLabel`) to render a sibling-record
  * switcher: a caret after the trail opens a menu of siblings. Without them the
@@ -193,7 +212,7 @@ function BreadcrumbLink({
  * independent of the trailing `options` switcher — a trail can have neither,
  * either, or both.
  *
- * @summary Navigation breadcrumb trail, optional trailing and/or per-crumb sibling-record switcher
+ * @summary Navigation breadcrumb trail that folds overflow into a menu, optional trailing and/or per-crumb sibling-record switcher
  */
 export function Breadcrumb({
   items,
@@ -216,41 +235,81 @@ export function Breadcrumb({
   // only mounts here — so a plain breadcrumb carries no menu state.
   const hasSwitcher = !!options && options.length > 1;
 
-  /* Below the tablet breakpoint the intermediate crumbs collapse behind a
-   * single `…` (Breadcrumb.css). Only worth doing with two or more of them —
-   * a three-crumb trail fits at 375px and would lose its one middle label for
-   * nothing. Everything else relies on the always-on wrap + per-crumb
-   * ellipsis. See #468. */
-  const collapses = items.length > 3;
+  // Overflow is measured, not counted. SSR and the first paint render the full
+  // trail; the hidden measuring pass below reports each crumb's natural width,
+  // and the nav's own width decides how much folds. The decision reads only
+  // the natural widths, never what is rendered, so collapsing cannot feed back
+  // into measuring.
+  const [navRef, navWidth] = useElementWidth<HTMLElement>();
+  const measureRef = useRef<HTMLSpanElement>(null);
+  const [natural, setNatural] = useState<Omit<TrailMeasure, 'available'> | null>(null);
+
+  const signature = items
+    .map((item) => `${item.label}\u0001${item.switcher && item.switcher.options.length > 1 ? 1 : 0}`)
+    .join('\u0002');
+
+  useIsomorphicLayoutEffect(() => {
+    const root = measureRef.current;
+    if (!root) return;
+    const measure = () => {
+      const width = (el: Element | null) => (el ? el.getBoundingClientRect().width : 0);
+      const next = {
+        crumbs: Array.from(root.querySelectorAll('[data-measure="crumb"]')).map(width),
+        overflow: width(root.querySelector('[data-measure="overflow"]')),
+        separator: width(root.querySelector('[data-measure="separator"]')),
+        trailing: width(root.querySelector('[data-measure="trailing"]')),
+        gap: parseFloat(getComputedStyle(root).columnGap) || 0,
+      };
+      setNatural((prev) => (prev && JSON.stringify(prev) === JSON.stringify(next) ? prev : next));
+    };
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(root);
+    return () => observer.disconnect();
+    // The measuring pass re-renders with the trail; `signature` stands in for `items`.
+  }, [signature, separator, hasSwitcher]);
+
+  const level = natural && navWidth !== null
+    ? chooseTrailLevel({ ...natural, available: navWidth })
+    : 'full';
+
+  const last = items.length - 1;
+  const visible = items
+    .map((item, index) => ({ item, index }))
+    .filter(({ index }) => {
+      if (level === 'full') return true;
+      if (level === 'collapsed') return index === 0 || index >= last - 1;
+      return index === last;
+    });
+  const firstFolded = level === 'full' ? last + 1 : level === 'collapsed' ? 1 : 0;
+  const lastFolded = level === 'full' ? -1 : level === 'collapsed' ? last - 2 : last - 1;
+  const folded = items.slice(firstFolded, lastFolded + 1);
 
   return (
     <nav
+      ref={navRef}
       className={bdsClass('bds-breadcrumb', className)}
       style={style}
       aria-label="Breadcrumb"
       {...props}
     >
-      {items.map((item, i) => {
-        const isLast = i === items.length - 1;
-        const isIntermediate = i > 0 && !isLast;
+      {visible.map(({ item, index: i }) => {
+        const isLast = i === last;
         const itemHasSwitcher = !!item.switcher && item.switcher.options.length > 1;
         return (
           <Fragment key={`${item.label}-${i}`}>
-            {collapses && i === 1 && (
-              <span
-                className="bds-breadcrumb__item bds-breadcrumb__item--ellipsis"
-                aria-hidden="true"
-              >
-                <span className="bds-breadcrumb__separator">{separatorChar}</span>
-                <span className="bds-breadcrumb__ellipsis">…</span>
+            {folded.length > 0 && i === lastFolded + 1 && (
+              <span className="bds-breadcrumb__item">
+                {firstFolded > 0 && (
+                  <span className="bds-breadcrumb__separator" aria-hidden="true">
+                    {separatorChar}
+                  </span>
+                )}
+                <BreadcrumbOverflow crumbs={folded} linkComponent={linkComponent} />
               </span>
             )}
-            <span
-              className={bdsClass(
-                'bds-breadcrumb__item',
-                isIntermediate && collapses && 'bds-breadcrumb__item--collapsible'
-              )}
-            >
+            <span className="bds-breadcrumb__item">
               {i > 0 && (
                 <span className="bds-breadcrumb__separator" aria-hidden="true">
                   {separatorChar}
@@ -259,12 +318,13 @@ export function Breadcrumb({
               {isLast || !item.href ? (
                 <span
                   className="bds-breadcrumb__current"
+                  title={item.label}
                   aria-current={isLast ? 'page' : undefined}
                 >
                   {item.label}
                 </span>
               ) : (
-                <BreadcrumbLink linkComponent={linkComponent} href={item.href}>
+                <BreadcrumbLink linkComponent={linkComponent} href={item.href} title={item.label}>
                   {item.label}
                 </BreadcrumbLink>
               )}
@@ -292,7 +352,107 @@ export function Breadcrumb({
           searchThreshold={searchThreshold}
         />
       )}
+      {/* Hidden measuring pass: the full trail's natural widths. Label text is
+          drawn from `data-label` (CSS) so it adds no text to the DOM or the
+          accessibility tree; the buttons are disabled and out of the tab order. */}
+      <span ref={measureRef} className="bds-breadcrumb__measure" aria-hidden="true">
+        {items.map((item, i) => (
+          <span key={i} className="bds-breadcrumb__item" data-measure="crumb">
+            {i > 0 && (
+              <span className="bds-breadcrumb__separator" data-measure="separator">
+                {separatorChar}
+              </span>
+            )}
+            <span
+              className={bdsClass(
+                'bds-breadcrumb__measure-label',
+                i === last || !item.href ? 'bds-breadcrumb__current' : 'bds-breadcrumb__link',
+              )}
+              data-label={item.label}
+            />
+            {item.switcher && item.switcher.options.length > 1 && <MeasureButton />}
+          </span>
+        ))}
+        <span data-measure="overflow" className="bds-breadcrumb__switch">
+          <MeasureButton icon="ph:dots-three" />
+        </span>
+        {hasSwitcher && (
+          <span data-measure="trailing" className="bds-breadcrumb__switch">
+            <MeasureButton />
+          </span>
+        )}
+      </span>
     </nav>
+  );
+}
+
+/** A disabled stand-in for a switch/overflow trigger, used only to measure its width. */
+function MeasureButton({ icon = 'ph:caret-down' }: { icon?: string }) {
+  return (
+    <Button
+      variant="ghost"
+      size="xs"
+      label="Measure"
+      disabled
+      tabIndex={-1}
+      icon={<Icon icon={icon} />}
+    />
+  );
+}
+
+/**
+ * BreadcrumbOverflow — the `More breadcrumbs` button + menu holding the crumbs
+ * folded out of a trail that does not fit. A real button in the tab order; the
+ * folded crumbs are plain links (honouring `linkComponent`), never carrying
+ * their per-crumb switcher. A crumb with no `href` is listed but disabled.
+ */
+function BreadcrumbOverflow({
+  crumbs,
+  linkComponent,
+}: {
+  crumbs: BreadcrumbItem[];
+  linkComponent?: BdsLinkComponent;
+}) {
+  const [isOpen, setIsOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const wasOpen = useRef(false);
+
+  useEffect(() => {
+    // Return focus to the trigger when the menu closes via Escape or an
+    // outside click (same contract as BreadcrumbSwitch).
+    if (wasOpen.current && !isOpen) triggerRef.current?.focus();
+    wasOpen.current = isOpen;
+  }, [isOpen]);
+
+  return (
+    <span className="bds-breadcrumb__switch">
+      <Button
+        ref={triggerRef}
+        variant="ghost"
+        size="xs"
+        label="More breadcrumbs"
+        aria-haspopup="menu"
+        aria-expanded={isOpen}
+        // Keep the mousedown away from Menu's document outside-click listener
+        // so toggling closed on the trigger doesn't immediately reopen.
+        onMouseDown={(e) => e.stopPropagation()}
+        onClick={() => setIsOpen((open) => !open)}
+        icon={<Icon icon="ph:dots-three" />}
+      />
+      <Menu
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        className="bds-breadcrumb__switch-menu"
+        linkComponent={linkComponent}
+        items={crumbs.map((crumb, i) => ({
+          id: `${i}-${crumb.href ?? crumb.label}`,
+          label: crumb.label,
+          href: crumb.href,
+          disabled: !crumb.href,
+          onClick: () => setIsOpen(false),
+        }))}
+      />
+    </span>
   );
 }
 
