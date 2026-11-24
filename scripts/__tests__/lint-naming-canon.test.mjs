@@ -492,7 +492,7 @@ describe('rule 4 — a BEM modifier carries its axis prefix (ADR-033 § 4)', () 
     const admitted = [
       'clickable', 'non-clickable', 'exiting', 'flash', 'highlighted',
       'indeterminate', 'interactive', 'sortable', 'today', 'placeholder', 'last',
-      'origin', 'full-width', 'auto-width', 'icon-only', 'no-border', 'wrap',
+      'origin', 'pulse', 'full-width', 'auto-width', 'icon-only', 'no-border', 'wrap',
       'nowrap', 'has-dot', 'has-errors', 'has-icon', 'has-icon-after',
       'has-icon-before', 'has-tabs', 'has-trailing', 'with-control', 'with-description',
     ];
@@ -505,15 +505,14 @@ describe('rule 4 — a BEM modifier carries its axis prefix (ADR-033 § 4)', () 
   it('does NOT admit a word one block emits from an axis value', () => {
     // The set is keyed by word, so it holds only words that are boolean
     // everywhere. `with-pricing-card` is a Hero `layout` value, `scroll` is a
-    // TabBar `overflow` value, and `pulse` is one of Badge's three CSS-only
-    // animations. A `has-` / `with-` prefix rule would have hidden the first.
+    // TabBar `overflow` value, and `pulse` was one of Badge's three CSS-only
+    // animations until #1927 moved them onto `--motion-*`. A `has-` / `with-` prefix rule would have hidden the first.
     const css = `${CLEAN_CSS}.bds-badge--with-pricing-card { color: red; }\n`
-      + '.bds-badge--scroll { color: red; }\n.bds-badge--pulse { color: red; }\n';
+      + '.bds-badge--scroll { color: red; }\n';
     const { code, out } = run({ css });
     expect(code).toBe(1);
     expect(out).toMatch(/--with-pricing-card — bare modifier/);
     expect(out).toMatch(/--scroll — bare modifier/);
-    expect(out).toMatch(/--pulse — bare modifier/);
   });
 });
 
@@ -1230,5 +1229,27 @@ describe('rule 4 + 5 — the `side` axis and Pagination on `align` (§ Amendment
     const { code, out } = run({ css: `${CLEAN_CSS}.bds-sheet--side-top { top: 0; }\n` });
     expect(code).toBe(1);
     expect(out).toMatch(/--side-top — `top` is on no closed list for the side axis/);
+  });
+});
+
+describe('rule 4 + 5 — the `motion` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed animation modifiers Badge ships', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-badge--motion-enter { opacity: 1; }
+.bds-badge--motion-shake { opacity: 1; }
+.bds-badge--motion-pulse { opacity: 1; }
+`,
+    });
+    expect(out).not.toMatch(/motion-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the bare animation modifier and a motion the amendment did NOT admit', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-badge--shake { opacity: 1; }\n.bds-badge--motion-bounce { opacity: 1; }\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--shake — bare modifier/);
+    expect(out).toMatch(/--motion-bounce — `bounce` is on no closed list for the motion axis/);
   });
 });

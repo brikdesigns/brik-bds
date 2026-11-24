@@ -18,6 +18,16 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Badge's animation classes carry the new `motion` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § Amendments). CSS-only hooks; no prop emits them, so a consumer that adds one by hand must rename it.
+
+| Old | New |
+|---|---|
+| `bds-badge--animate-in` | `bds-badge--motion-enter` |
+| `bds-badge--shake` | `bds-badge--motion-shake` |
+| `bds-badge--pulse` | `bds-badge--motion-pulse` |
+
+Dot's `bds-dot--pulse` is unchanged: it is a boolean state.
+
 **Removed (types, exports):** the deprecated aliases no other issue owned ([#3320](https://github.com/brikdesigns/brik-bds/issues/3320)). Each had no use in `NPM_CONSUMERS`.
 
 | Removed | Use |
