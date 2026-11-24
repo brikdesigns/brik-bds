@@ -150,9 +150,9 @@
       "standard": { "--border-width-": "deleted, not renamed", "default": "md" },
       "thin": { "--border-width-": "deleted, not renamed", "default": "sm" },
       "bold": { "--border-width-": "deleted, not renamed", "default": "lg" },
-      "normal": { "--duration-": "md", "default": "md" },
-      "fast": { "--duration-": "sm", "default": "sm" },
-      "slow": { "--duration-": "lg", "default": "lg" },
+      "normal": { "--duration-": "200", "default": "md" },
+      "fast": { "--duration-": "100", "default": "sm" },
+      "slow": { "--duration-": "300", "default": "lg" },
       "narrow": { "--content-width-": "sm", "default": "sm" },
       "default": { "--content-width-": "md", "default": "md" },
       "wide": { "--content-width-": "lg", "default": "lg" }
