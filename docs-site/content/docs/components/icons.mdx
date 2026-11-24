@@ -98,7 +98,7 @@ For inline icons inside text, use `1em` sizing so the icon scales with the surro
 
 BDS renders `ph:*` icons at **`outline-bold`** weight by default — BDS's standard line density (Phosphor's own regular outline reads as a hairline at small UI sizes). Set the `weight` prop to change it. An icon whose name already encodes a weight (`ph:star-fill`) keeps it; the `weight` prop only rewrites otherwise-unweighted `ph:*` names, and non-`ph:*` icons ignore it.
 
-**Canonical convention:** `outline-bold` is the BDS UI icon weight on **every** surface — navigation, form controls, and general glyphs alike. There is no per-surface split; `fill` is reserved for active/selected states and status. Because the atom applies `outline-bold` by default, routing a glyph through `<Icon>` is enough to inherit the canonical weight — only reach for the `weight` prop to opt a specific icon back to `outline` (or another weight) for a deliberate reason.
+**Canonical convention:** `outline-bold` is the BDS UI icon weight on **every** surface — navigation, form controls, and general glyphs alike. There is no per-surface split; outline is the default, status icons included; `fill` is reserved for selected states where the background colour is active (current convention, open to revisit). Because the atom applies `outline-bold` by default, routing a glyph through `<Icon>` is enough to inherit the canonical weight — only reach for the `weight` prop to opt a specific icon back to `outline` (or another weight) for a deliberate reason.
 
 ```tsx
 <Icon icon="ph:star" />                       {/* outline-bold (default) */}
@@ -123,7 +123,7 @@ You can read the form straight off the SVG path data: `ph:chat-circle` (regular)
 | `outline` | `ph:name` | Phosphor's thin regular outline |
 | `outline-light` | `ph:name-light` | Decorative or quiet contexts |
 | `outline-thin` | `ph:name-thin` | Rare; very specific design intent |
-| `fill` | `ph:name-fill` | Active/selected states, status badges |
+| `fill` | `ph:name-fill` | Selected states on an active background fill |
 | `duotone` | `ph:name-duotone` | Empty states, illustrations |
 
 The former Phosphor-flavored names `regular` (→ `outline`) and `bold` (→ `outline-bold`) still work as `@deprecated` aliases through one minor, so consumers migrate on their own cadence.
@@ -142,8 +142,8 @@ Iconify icons render with `fill="currentColor"`, so they inherit color from the 
   <Icon icon="ph:info" /> Quiet hint
 </span>
 
-{/* status icon */}
-<Icon icon="ph:check-circle-fill" style={{ color: 'var(--bds-text-positive)' }} />
+{/* status icon — unweighted, renders outline-bold */}
+<Icon icon="ph:check-circle" style={{ color: 'var(--bds-text-positive)' }} />
 ```
 
 Text tokens commonly used for icon fill:
@@ -153,10 +153,23 @@ Text tokens commonly used for icon fill:
 | `--bds-text-primary` | Default icon next to body text |
 | `--bds-text-secondary` / `--bds-text-muted` | Quiet / secondary icons |
 | `--bds-text-link` | Icons inside links |
-| `--bds-text-positive` / `--bds-text-negative` / `--bds-text-info` | Status icons |
+| `--bds-text-positive` / `--bds-text-negative` / `--bds-text-warning` / `--bds-text-info` | Status icons (see the table below) |
 | `--bds-text-inverse` | Icons on dark / inverted surfaces |
 
-BDS text tokens are mode-aware, so an icon colored with one retones automatically in `brik-dark` — prefer them over hardcoded colors.
+BDS text tokens are mode-aware, so an icon colored with one retones automatically in `brik-dark` — prefer them over hardcoded colors. The exception is `--bds-text-info`: it is a hand-written gap-fill declared only in `:root` with no dark override until #3338 lands.
+
+### Status icons
+
+Status icons use the unweighted outline name and a text token that carries the tone. The rows come from [StatusList](/docs/components/status-list) and the valence table in [Color](/docs/foundation/color).
+
+| Status | Icon | Text token | Tone |
+|---|---|---|---|
+| `complete` | `ph:check-circle` | `--bds-text-positive` | positive |
+| `in_progress` | `ph:clock` | `--bds-text-info` | info |
+| `not_started` | `ph:circle` | `--bds-text-muted` | neutral |
+| `blocked` | `ph:warning` | `--bds-text-warning` | warning |
+| `on_hold` | `ph:pause-circle` | `--bds-text-info` | info |
+| `negative` (Failed) | `ph:warning-circle` | `--bds-text-negative` | negative |
 
 ### Service-line glyphs
 
