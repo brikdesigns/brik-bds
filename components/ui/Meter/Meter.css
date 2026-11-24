@@ -86,11 +86,11 @@
 
 /* Label ↔ bar is the tight step (--bds-gap-sm); --bds-gap-xs collapses to 0px
    outside default spacing mode. */
-.bds-meter__label--above {
+.bds-meter__label--relation-above {
   margin-bottom: var(--bds-gap-sm);
 }
 
-.bds-meter__label--below {
+.bds-meter__label--relation-below {
   margin-top: var(--bds-gap-sm);
 }
 

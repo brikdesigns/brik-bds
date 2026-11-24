@@ -1,6 +1,6 @@
 ---
 title: Prop Axes
-description: The twenty-six shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span, ratio, fit, anchor, resize, marker, underline, measure, columns, spacing, corner, placement, side, service-line, motion, type, overflow — that any BDS component with overlapping concerns must use.
+description: The twenty-seven shared axis words — tone, status, variant, emphasis, appearance, density, color, orientation, layout, span, ratio, fit, anchor, resize, marker, underline, measure, columns, spacing, corner, placement, side, service-line, motion, type, overflow, relation — that any BDS component with overlapping concerns must use.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -39,6 +39,7 @@ Source of truth: [ADR-033 § 2](https://github.com/brikdesigns/brik-bds/blob/mai
 | `motion` | `enter` · `shake` · `pulse` | Which entrance or attention animation a block plays (CSS-only; class hooks, no prop) | Badge |
 | `type` | `badge` · `glyph` | Whether a mark renders as a filled badge or a bare glyph | SocialIcon, ContactIcon |
 | `overflow` | `wrap` · `scroll` | What a rail does when its items outgrow it | TabBar |
+| `relation` | `before` · `after` · `above` · `below` | Which side of its sibling content an element sits on (CSS hook; the prop is `labelPosition` or `iconBefore`/`iconAfter`) | Meter, TextInput |
 
 `error` and `progress` are retired valence words: use `negative` and `info` ([ADR-033 § Retired vocabulary](https://github.com/brikdesigns/brik-bds/blob/main/docs/adrs/ADR-033-naming-canon-one-word-per-concept.md#retired-vocabulary)). `brand` is not a valence either: ADR-033 moves it to `emphasis="brand"`. Badge's `tone` dropped `brand` in #3309, and Counter's and Banner's followed in #3313 (Banner's `announcement` is now `emphasis="brand"`).
 

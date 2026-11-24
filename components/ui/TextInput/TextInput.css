@@ -135,8 +135,8 @@
   color: var(--bds-text-muted);
 }
 
-.bds-text-input__icon--before { left: var(--bds-padding-xs); }
-.bds-text-input__icon--after  { right: var(--bds-padding-xs); }
+.bds-text-input__icon--relation-before { left: var(--bds-padding-xs); }
+.bds-text-input__icon--relation-after  { right: var(--bds-padding-xs); }
 
 /* ─── Helper / error text ────────────────────────────────────── */
 
