@@ -214,24 +214,24 @@
 /* ─── Notification micro-interactions (keyframes in tokens/animations.css) ── */
 
 /* Pop-in: badge appears with a bounce scale */
-.bds-badge--animate-in {
+.bds-badge--motion-enter {
   animation: bds-pop var(--bds-duration-300) var(--bds-ease-out);
 }
 
 /* Shake: bell icon / notification attention-getter */
-.bds-badge--shake {
+.bds-badge--motion-shake {
   animation: bds-shake 0.5s var(--bds-ease-out); /* bds-lint-ignore — shake needs specific timing */
 }
 
 /* Pulse: persistent attention on unread notification badges */
-.bds-badge--pulse {
+.bds-badge--motion-pulse {
   animation: bds-pop var(--bds-duration-300) var(--bds-ease-out),
     bds-pulse 1.4s var(--bds-ease-in-out) 0.3s infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .bds-badge--animate-in,
-  .bds-badge--shake,
-  .bds-badge--pulse { animation: none; }
+  .bds-badge--motion-enter,
+  .bds-badge--motion-shake,
+  .bds-badge--motion-pulse { animation: none; }
 }
 }

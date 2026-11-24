@@ -652,3 +652,18 @@ OPERATOR SAID 2026-11-19: "let's refactor our elevation logic to ensure alignmen
 
 **Enforcement.** `tokens/naming-grammar.json` gains `steps.familySteps["--shadow-"]`. Rule 1 allows the six words in that family only. `scripts/__tests__/lint-naming-canon.test.mjs` plants an admitted `--bds-shadow-raised` and a denied `--bds-gap-raised`. The `blur-radius` scale slot leaves the grammar with its four hand-written tokens, which had no Figma variable behind them. No new rule, script or workflow. **Baseline:** the alias rows are rule 9, not rule 1. `--bds-shadow-{sm,md,lg}` join rule 9 under #3058, the shape #3274 used for its deprecated aliases. `--bds-shadow-overlay` moves from #3239 to #3058. All four leave with the alias block.
 
+
+### `motion` axis (2026-11-24, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is which entrance or attention animation a block plays. Negative search over `components/**/*.tsx` for `motion`, `animation`, `animate`, `animated`, `attention`, `pulse` and `shake` as prop names found none. `pulse?: boolean` on Dot ([Dot.tsx:29](../../components/ui/Dot/Dot.tsx)) is a state flag, not a choice among animations, and stays a boolean.
+
+- **`bds-badge--animate-in` · `--shake` · `--pulse`:** Badge ([Badge.css](../../components/ui/Badge/Badge.css)). CSS-only class hooks. No prop emits them, so consumers apply them by hand.
+- **`status`, `variant`, `emphasis`:** not it. None names a motion.
+- **`bds-*--motion`, `--animation-*`:** zero other hits.
+
+- **Axis:** motion: the entrance or attention animation a block plays.
+- **Values:** `enter` · `shake` · `pulse`. `animate-in` becomes `enter` because the axis word already says animation.
+- **Migrates:** `.bds-badge--animate-in` → `--motion-enter` · `--shake` → `--motion-shake` · `--pulse` → `--motion-pulse`. No alias ships.
+- **Frees `pulse`:** it joins the boolean list, because Dot's was its only other emitter and that is a boolean prop.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.motion`. `lint-naming-canon` reads it into `AXES` and `MODIFIER_AXES`, so `--motion-*` carries a blessed prefix and rule 5 default-denies any other value (`--motion-bounce`). `pulse` joins `BOOLEAN_MODIFIERS`. Planted cases in `scripts/__tests__/lint-naming-canon.test.mjs` admit the three values, deny a bare `--shake`, and deny `--motion-bounce`. **Baseline:** −3. The `--animate-in`, `--shake` and `--pulse` rule-4 rows leave `tokens/naming-canon-baseline.json`. No new rule, script or workflow.
