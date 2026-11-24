@@ -13,7 +13,7 @@ const meta: Meta<typeof StatusList> = {
     items: {
       control: 'object',
       description:
-        'Rows — each `{ id, title, description?, status, message? }`. `status` is `complete`, `in_progress`, `not_started`, `blocked` or `negative`.',
+        'Rows — each `{ id, title, description?, status, message? }`. `status` is `complete`, `in_progress`, `not_started`, `blocked`, `on_hold` or `negative`.',
     },
     className: { control: 'text', description: 'Extra class on the wrapping `<ul>`.' },
   },
@@ -48,6 +48,12 @@ const ITEMS: StatusListItem[] = [
     status: 'blocked',
   },
   {
+    id: 'analytics',
+    title: 'Analytics Setup',
+    description: 'Paused until the client approves the tracking plan.',
+    status: 'on_hold',
+  },
+  {
     id: 'seo',
     title: 'SEO Metadata',
     description: 'Meta titles, descriptions and Open Graph tags.',
@@ -70,11 +76,11 @@ const ITEMS: StatusListItem[] = [
 ];
 
 /* ═══════════════════════════════════════════════════════════════
-   DEFAULT — all five states, including a negative row with a message
+   DEFAULT — all six states, including a negative row with a message
    and a row whose description holds a small TextLink.
    ═══════════════════════════════════════════════════════════════ */
 
-/** @summary All five states, error message, and inline link */
+/** @summary All six states, error message, and inline link */
 export const Default: Story = {
   args: { items: ITEMS },
 };

@@ -8,5 +8,8 @@ export * from './ui';
 // The flat `ph:*` name constants stay internal; only the semantic action set is public.
 export { ACTION_ICONS, type ActionIconName } from './icons';
 
+// Shared status → tone / icon / label map (brikdesigns/brik-bds#3353).
+export { STATUS_MAP, type StatusName, type StatusEntry } from './status';
+
 // Accessible-name requirement shared by form controls + Modal (brikdesigns/brik-bds#2699).
 export type { AccessibleNameProps, ModalAccessibleNameProps } from './utils';

@@ -1,7 +1,8 @@
 import { type ReactNode, type HTMLAttributes, useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { Icon } from '../Icon';
-import { CaretDownBold, CaretUpBold, X, CheckCircle, Circle, WarningCircle } from '../../icons';
+import { CaretDownBold, CaretUpBold, X } from '../../icons';
+import { STATUS_MAP, type StatusName } from '../../status';
 import { bdsClass } from '../../utils';
 import { Button } from '../Button';
 import { ButtonGroup } from '../ButtonGroup';
@@ -47,20 +48,21 @@ export interface TaskConsoleProps extends Omit<HTMLAttributes<HTMLDivElement>, '
   subtitle?: ReactNode;
 }
 
-/* ─── Status icon map ────────────────────────────────────────── */
+/* ─── Status icon ────────────────────────────────────────────── */
+
+const TASK_STATUS: Record<TaskItemStatus, StatusName> = {
+  pending: 'not_started',
+  in_progress: 'in_progress',
+  completed: 'complete',
+  failed: 'negative',
+};
 
 function StatusIcon({ status }: { status: TaskItemStatus }) {
-  switch (status) {
-    case 'completed':
-      return <Icon icon={CheckCircle} className="bds-task-console__icon bds-task-console__icon--status-completed" />;
-    case 'failed':
-      return <Icon icon={WarningCircle} className="bds-task-console__icon bds-task-console__icon--status-failed" />;
-    case 'in_progress':
-      return <Spinner size="sm" className="bds-task-console__icon bds-task-console__icon--status-in-progress" />;
-    case 'pending':
-    default:
-      return <Icon icon={Circle} className="bds-task-console__icon bds-task-console__icon--status-pending" />;
+  const modifier = `bds-task-console__icon--status-${status.replace('_', '-')}`;
+  if (status === 'in_progress') {
+    return <Spinner size="sm" className={`bds-task-console__icon ${modifier}`} />;
   }
+  return <Icon icon={STATUS_MAP[TASK_STATUS[status]].icon} className={`bds-task-console__icon ${modifier}`} />;
 }
 
 /* ─── Component ──────────────────────────────────────────────── */

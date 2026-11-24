@@ -355,6 +355,7 @@
       "in_progress",
       "not_started",
       "blocked",
+      "on_hold",
       "negative"
     ]
   },

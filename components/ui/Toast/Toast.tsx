@@ -1,6 +1,6 @@
 import { type ReactNode, type HTMLAttributes } from 'react';
 import { Icon } from '../Icon';
-import { CheckCircle, WarningCircle, Warning, Info } from '../../icons';
+import { STATUS_MAP, type StatusName } from '../../status';
 import { bdsClass, resolveRetiredValue } from '../../utils';
 import { Badge } from '../Badge';
 import { CloseButton } from '../CloseButton';
@@ -47,11 +47,11 @@ export interface ToastProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'
   onDismiss?: () => void;
 }
 
-const toneBadge: Record<Exclude<ToastTone, 'neutral'>, { tone: 'positive' | 'negative' | 'warning' | 'info'; icon: string }> = {
-  positive: { tone: 'positive', icon: CheckCircle },
-  negative: { tone: 'negative', icon: WarningCircle },
-  warning: { tone: 'warning', icon: Warning },
-  info: { tone: 'info', icon: Info },
+const TONE_STATUS: Record<Exclude<ToastTone, 'neutral'>, StatusName> = {
+  positive: 'complete',
+  negative: 'negative',
+  warning: 'blocked',
+  info: 'info',
 };
 
 /**
@@ -78,7 +78,7 @@ export function Toast({
   const resolvedTone =
     resolveRetiredValue('Toast', tone !== undefined ? 'tone' : 'variant', tone ?? variant, RETIRED_TONES) ??
     'neutral';
-  const badge = resolvedTone !== 'neutral' ? toneBadge[resolvedTone] : null;
+  const badge = resolvedTone !== 'neutral' ? STATUS_MAP[TONE_STATUS[resolvedTone]] : null;
   // `role="alert"` carries an implicit `aria-live="assertive"`, so pairing
   // role with the matching live value keeps the two from disagreeing in
   // browsers that read one and not the other.

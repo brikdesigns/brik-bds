@@ -1,11 +1,12 @@
 import type { ReactNode } from 'react';
-import { Badge, type BadgeTone } from '../Badge';
+import { Badge } from '../Badge';
 import { Icon } from '../Icon';
 import { InteractiveListItem } from '../InteractiveListItem';
 import { bdsClass } from '../../utils';
+import { STATUS_MAP } from '../../status';
 import './StatusList.css';
 
-export type StatusListStatus = 'complete' | 'in_progress' | 'not_started' | 'blocked' | 'negative';
+export type StatusListStatus = 'complete' | 'in_progress' | 'not_started' | 'blocked' | 'on_hold' | 'negative';
 
 export interface StatusListItem {
   /** Stable identity for the row. */
@@ -33,15 +34,13 @@ export interface StatusListProps {
   className?: string;
 }
 
-const STATUS: Record<
-  StatusListStatus,
-  { icon: string; tone: BadgeTone; label: string; modifier: string }
-> = {
-  complete: { icon: 'ph:check-circle', tone: 'positive', label: 'Complete', modifier: 'status-complete' },
-  in_progress: { icon: 'ph:clock', tone: 'info', label: 'In Progress', modifier: 'status-in-progress' },
-  not_started: { icon: 'ph:circle', tone: 'neutral', label: 'Not Started', modifier: 'status-not-started' },
-  blocked: { icon: 'ph:warning', tone: 'warning', label: 'Blocked', modifier: 'status-blocked' },
-  negative: { icon: 'ph:warning-circle', tone: 'negative', label: 'Failed', modifier: 'tone-negative' },
+const MODIFIER: Record<StatusListStatus, string> = {
+  complete: 'status-complete',
+  in_progress: 'status-in-progress',
+  not_started: 'status-not-started',
+  blocked: 'status-blocked',
+  on_hold: 'status-on-hold',
+  negative: 'tone-negative',
 };
 
 /**
@@ -69,7 +68,8 @@ export function StatusList({ items, className }: StatusListProps) {
   return (
     <ul role="list" className={bdsClass('bds-status-list', className)}>
       {items.map((item) => {
-        const { icon, tone, label, modifier } = STATUS[item.status];
+        const { icon, tone, label } = STATUS_MAP[item.status];
+        const modifier = MODIFIER[item.status];
         const message = item.status === 'negative' ? item.message : undefined;
         const hasMessage = message !== undefined && message !== null && message !== '';
         const hasDescription =

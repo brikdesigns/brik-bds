@@ -8,7 +8,7 @@ import * as Stories from './StatusList.stories';
 
 <ComponentLinks slug="status-list" />
 
-A read-only list of tracked outputs. Each row shows a title, an optional description, and one of five states as a distinct icon plus a status badge. Each state maps to one tone:
+A read-only list of tracked outputs. Each row shows a title, an optional description, and one of six states as a distinct icon plus a status badge. Each state maps to one tone:
 
 | Status | Badge label | Tone | Icon |
 | --- | --- | --- | --- |
@@ -16,9 +16,12 @@ A read-only list of tracked outputs. Each row shows a title, an optional descrip
 | `in_progress` | In Progress | info | `ph:clock` |
 | `not_started` | Not Started | neutral | `ph:circle` |
 | `blocked` | Blocked | warning | `ph:warning` |
+| `on_hold` | On Hold | info | `ph:pause-circle` |
 | `negative` | Failed | negative | `ph:warning-circle` |
 
  Rows are display-only: no click target, and labels are never struck through.
+
+> **Note** — `in_progress` and `on_hold` share the `info` tone, so a `Dot` cannot tell them apart. Use a `Badge` where both can appear.
 
 ## Playground
 

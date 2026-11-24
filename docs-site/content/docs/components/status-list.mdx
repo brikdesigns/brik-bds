@@ -1,11 +1,11 @@
 ---
 title: Status list
-description: Read-only list of tracked outputs, each complete, in progress, not started or failed, with a failure message under a failed row.
+description: Read-only list of tracked outputs, each complete, in progress, not started, blocked, on hold or failed, with a failure message under a failed row.
 ---
 
 import { Callout } from 'fumadocs-ui/components/callout';
 
-StatusList is a read-only list of tracked outputs. Each row shows a title, an optional description, and one of five states as a distinct icon plus a status badge. It is a readout, not a control: rows are not click targets and labels are never struck through.
+StatusList is a read-only list of tracked outputs. Each row shows a title, an optional description, and one of six states as a distinct icon plus a status badge. It is a readout, not a control: rows are not click targets and labels are never struck through.
 
 ## Use it for
 
@@ -54,6 +54,10 @@ Pass `items`. A row's `description` is a `ReactNode`, so it can hold inline cont
   **Don't use StatusList to collect input.** It has no change handler and its rows do nothing on click. If the user needs to toggle completion, use [Checklist](/docs/components/checklist) or [ChecklistGroup](/docs/components/checklist-group).
 </Callout>
 
+<Callout type="warn">
+  **`in_progress` and `on_hold` share the `info` tone.** A `Dot` cannot tell them apart. Use a `Badge` where both can appear.
+</Callout>
+
 ## Accessibility
 
 - Renders a `<ul>` with one `<li>` per row, so assistive technology announces the item count.
@@ -69,4 +73,4 @@ Pass `items`. A row's `description` is a `ReactNode`, so it can hold inline cont
 | `items` | `StatusListItem[]` | — |
 | `className` | `string` | — |
 
-`StatusListItem` is `{ id: string; title: string; description?: ReactNode; status: 'complete' | 'in_progress' | 'not_started' | 'blocked' | 'negative'; message?: ReactNode }`.
+`StatusListItem` is `{ id: string; title: string; description?: ReactNode; status: 'complete' | 'in_progress' | 'not_started' | 'blocked' | 'on_hold' | 'negative'; message?: ReactNode }`.
