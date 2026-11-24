@@ -84,8 +84,9 @@
 .bds-avatar--size-lg .bds-avatar__status,
 .bds-avatar--size-xl .bds-avatar__status { width: 12px; height: 12px; }
 
-.bds-avatar__status--status-online  { background-color: var(--bds-background-presence-online); }
-.bds-avatar__status--status-offline { background-color: var(--bds-background-presence-offline); }
-.bds-avatar__status--status-busy    { background-color: var(--bds-background-presence-busy); }
-.bds-avatar__status--status-away    { background-color: var(--bds-background-presence-away); }
+/* Presence maps onto the valence fills, the same tokens Dot uses (Dot.css). */
+.bds-avatar__status--status-online  { background-color: var(--bds-background-positive); }
+.bds-avatar__status--status-offline { background-color: var(--bds-background-neutral); }
+.bds-avatar__status--status-busy    { background-color: var(--bds-background-negative); }
+.bds-avatar__status--status-away    { background-color: var(--bds-background-warning); }
 }

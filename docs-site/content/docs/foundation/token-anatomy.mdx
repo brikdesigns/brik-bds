@@ -224,7 +224,7 @@ Each segment is fixed vocabulary:
 |---|---|---|
 | `purpose` | `page`, `surface`, `background`, `text`, `border` | `--background-…` |
 | `role` | Closed list — see [Color foundations vocabulary](/docs/getting-started/cascade#color-foundations-vocabulary) | `--background-brand-primary` |
-| `scope` / `scope-value` | A named context that carries its own hue — `service-{line}`, `presence-{state}` | `--background-service-marketing` |
+| `scope` / `scope-value` | A named context that carries its own hue — `service-{line}` | `--background-service-marketing` |
 | `modifier` (optional) | Context / tone / hierarchy — see [Color modifiers](/docs/foundation/color#color-modifiers) | `--background-service-brand-on-light` |
 | `state` (optional) | `hover`, `pressed`, `disabled` | `--background-brand-primary-hover` |
 
@@ -232,7 +232,7 @@ Each segment is fixed vocabulary:
 
 `color` is **not** a purpose. It is the reserved word that opens a color Primitive (`--color-{family}-{step}`), so a Semantic name never begins with it.
 
-Status, service-line, and presence semantic tokens use the **scoped-intent** form — the scope (`service-marketing`, `presence-online`) already names the hue, so they never also take a `-brand`/`-primary` role segment. Everything else uses the plain **intent** form.
+Status and service-line semantic tokens use the **scoped-intent** form — the scope (`service-marketing`) already names the hue, so they never also take a `-brand`/`-primary` role segment. Everything else uses the plain **intent** form.
 
 #### Tenant colour
 

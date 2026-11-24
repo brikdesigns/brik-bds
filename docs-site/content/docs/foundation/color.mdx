@@ -239,17 +239,16 @@ Two consequences worth knowing before you reach for one:
 
 ## Presence
 
-Online/offline indicator tokens used by Avatar and Dot components.
+Presence has no tokens of its own. An online/away/busy/offline dot is a valence signal, so Avatar and Dot both read the valence fills:
 
-<ColorGrid
-  colors={[
-    { name: 'presence-online', cssVar: '--background-presence-online' },
-    { name: 'presence-away', cssVar: '--background-presence-away' },
-    { name: 'presence-busy', cssVar: '--background-presence-busy' },
-    { name: 'presence-offline', cssVar: '--background-presence-offline' },
-  ]}
-  columns={4}
-/>
+| Presence | Token |
+|---|---|
+| Online | `--bds-background-positive` |
+| Away | `--bds-background-warning` |
+| Busy | `--bds-background-negative` |
+| Offline | `--bds-background-neutral` |
+
+The `--bds-background-presence-*` gap-fills were retired in [#3239](https://github.com/brikdesigns/brik-bds/issues/3239).
 
 ## Color modifiers
 
