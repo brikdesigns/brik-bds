@@ -18,6 +18,12 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Collapsible's toggle-icon modifiers sit on the existing `variant` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927)).
+
+| Old | New |
+|---|---|
+| `bds-collapsible__icon--plus` / `--minus` | `bds-collapsible__icon--variant-plus` / `--variant-minus` |
+
 **Breaking (consumer CSS):** Meter's label and TextInput's icon modifiers carry the new `relation` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § Amendments). The `labelPosition`, `iconBefore` and `iconAfter` props are unchanged.
 
 | Old | New |
