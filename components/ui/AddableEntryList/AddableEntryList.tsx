@@ -201,7 +201,7 @@ export function AddableEntryList({
                     rel="noopener noreferrer"
                     className={bdsClass(
                       'bds-addable-entry-list__read-primary',
-                      'bds-addable-entry-list__read-primary--url',
+                      'bds-addable-entry-list__read-primary--variant-url',
                     )}
                   >
                     {entry.primary}

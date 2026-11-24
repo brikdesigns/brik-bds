@@ -82,7 +82,7 @@ export function SheetStackRenderer({ renderFrame, width = '600px', globalFramePr
   const frameClass = bdsClass(
     'bds-sheet-stack__frame',
     isExiting ? 'bds-sheet-stack__frame--exiting' : '',
-    !isExiting && direction === 'back' ? 'bds-sheet-stack__frame--back' : '',
+    !isExiting && direction === 'back' ? 'bds-sheet-stack__frame--variant-back' : '',
   );
 
   // Headless components return null but must stay mounted for effects (data fetching,

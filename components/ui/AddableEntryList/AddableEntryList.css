@@ -70,13 +70,13 @@
   max-width: 100%;
 }
 
-.bds-addable-entry-list__read-primary--url {
+.bds-addable-entry-list__read-primary--variant-url {
   color: var(--bds-text-brand-primary);
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-.bds-addable-entry-list__read-primary--url:hover {
+.bds-addable-entry-list__read-primary--variant-url:hover {
   text-decoration-thickness: 2px;
 }
 

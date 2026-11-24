@@ -62,7 +62,7 @@
 
 /* ─── Portal mode (fixed positioning, escapes overflow) ── */
 
-.bds-tooltip__bubble--portal {
+.bds-tooltip__bubble--layout-portal {
   /* Override placement absolute positioning — inline fixed styles take over */
   position: fixed;
   top: auto;

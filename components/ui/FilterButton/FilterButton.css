@@ -116,7 +116,7 @@
 
 /* "All" / clear entry — separated from concrete options by a hairline.
    Tight structural step; --bds-gap-tiny is 0px outside default spacing mode. */
-.bds-filter-button__option--all {
+.bds-filter-button__option--variant-all {
   margin-bottom: var(--bds-gap-sm);
   border-bottom: var(--bds-border-width-sm) solid var(--bds-border-muted);
   border-radius: 0;

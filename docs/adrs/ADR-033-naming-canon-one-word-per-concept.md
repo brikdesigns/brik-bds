@@ -686,7 +686,7 @@ OPERATOR SAID 2026-11-19: "let's refactor our elevation logic to ensure alignmen
 - **Values:** `wrap` · `scroll`.
 - **Migrates:** `.bds-tab-bar--scroll` → `.bds-tab-bar--overflow-scroll`. The `overflow` prop is unchanged; no alias ships. `wrap` is the default and emits no class.
 
-**Enforcement.** `tokens/naming-grammar.json` gains `axes.overflow`, so `*Overflow` unions and `--overflow-*` modifiers are judged against `wrap` · `scroll`. `scroll` does **not** join `BOOLEAN_MODIFIERS`: it is now an `overflow` value, and the set is word-keyed. PageContent's `scroll?: boolean` ([PageContent.tsx:58](../../components/ui/Page/PageContent.tsx)) still emits a bare `bds-page__content--scroll`, so the `--scroll` rule-4 row stays in the baseline for #1927, now owed by Page alone. Planted cases admit `--overflow-scroll` and deny `--overflow-clip`. **Baseline:** unchanged (TabBar no longer emits it; Page still does).
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.overflow`, so `*Overflow` unions and `--overflow-*` modifiers are judged against `wrap` · `scroll`. `scroll` does **not** join `BOOLEAN_MODIFIERS`: it is now an `overflow` value, and the set is word-keyed. PageContent's `scroll?: boolean` ([PageContent.tsx:58](../../components/ui/Page/PageContent.tsx)) still emits a bare `bds-page__content--scroll`, so the `--scroll` rule-4 row stays in the baseline for #1927, now owed by Page alone. Planted cases admit `--overflow-scroll` and deny `--overflow-clip`. **Baseline:** unchanged (TabBar no longer emits it; Page still does). Follow-up: Page now emits `bds-page__content--overflow-scroll`, so the `--scroll` row is gone (#1927).
 
 ### `relation` axis (2026-11-24, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
 
