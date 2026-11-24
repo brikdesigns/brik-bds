@@ -18,6 +18,12 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** TabBar's scroll modifier carries the new `overflow` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § Amendments). The `overflow` prop is unchanged.
+
+| Old | New |
+|---|---|
+| `bds-tab-bar--scroll` | `bds-tab-bar--overflow-scroll` |
+
 **Breaking (consumer CSS):** SocialIcon and ContactIcon's rendering modifiers carry the new `type` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § Amendments). The `type` prop is unchanged.
 
 | Old | New |

@@ -677,3 +677,13 @@ OPERATOR SAID 2026-11-19: "let's refactor our elevation logic to ensure alignmen
 - **Migrates:** `.bds-social-icon--badge` / `--glyph` → `--type-badge` / `--type-glyph`; same for `.bds-contact-icon--*`. The `type` prop is unchanged; no alias ships.
 
 **Enforcement.** `tokens/naming-grammar.json` gains `axes.type`, and `type` joins `PREFIX_JUDGED_AXES` in `lint-naming-canon` so `AddableEntryPrimaryInputType` is not misread. Planted cases admit `--type-badge` and `--type-glyph` and deny bare `--glyph` and `--type-ring`. **Baseline:** −2. The `--badge` and `--glyph` rule-4 rows leave `tokens/naming-canon-baseline.json`.
+
+### `overflow` axis (2026-11-24, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is what a rail does when its items outgrow it: wrap onto a new row, or scroll on one. It is not an `orientation` (direction), a `layout` (slot arrangement) or a `fit` (media sizing). Negative search over `components/ui/**/*.tsx` (stories excluded) for a prop or union named `overflow`: one hit, `TabBarOverflow = 'wrap' | 'scroll'` ([TabBar.tsx:50](../../components/ui/TabBar/TabBar.tsx)), with the prop at [TabBar.tsx:78](../../components/ui/TabBar/TabBar.tsx). The other `overflow` hits are CSS `overflow` inline styles (DevFeedbackWidget) and a measurement key (Breadcrumb), not props. `wrap` appears elsewhere only as Stack's boolean `wrap` prop, a different concept and not a union member. The word is the incumbent with no competitor; what it lacked was an axis.
+
+- **Axis:** overflow: what a rail does when its items outgrow it.
+- **Values:** `wrap` · `scroll`.
+- **Migrates:** `.bds-tab-bar--scroll` → `.bds-tab-bar--overflow-scroll`. The `overflow` prop is unchanged; no alias ships. `wrap` is the default and emits no class.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.overflow`, so `*Overflow` unions and `--overflow-*` modifiers are judged against `wrap` · `scroll`. `scroll` does **not** join `BOOLEAN_MODIFIERS`: it is now an `overflow` value, and the set is word-keyed. PageContent's `scroll?: boolean` ([PageContent.tsx:58](../../components/ui/Page/PageContent.tsx)) still emits a bare `bds-page__content--scroll`, so the `--scroll` rule-4 row stays in the baseline for #1927, now owed by Page alone. Planted cases admit `--overflow-scroll` and deny `--overflow-clip`. **Baseline:** unchanged (TabBar no longer emits it; Page still does).
