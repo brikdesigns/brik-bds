@@ -7,9 +7,10 @@
   display: flex;
   /* One line, never wraps (#3344). A trail that does not fit folds its middle
      crumbs into the `More breadcrumbs` menu (Breadcrumb.tsx); until that is
-     measured — SSR, first paint — crumbs shrink and their labels ellipsise
-     rather than overflowing. No `overflow: hidden` here: it would clip the
-     overflow menu's panel. */
+     measured — SSR, first paint — and whenever the crumbs left are ones that
+     never fold (each carries its own switcher), crumbs shrink and their labels
+     ellipsise rather than overflowing. No `overflow: hidden` here: it would
+     clip the overflow menu's panel. */
   flex-wrap: nowrap;
   gap: var(--bds-gap-md);
   align-items: center;
@@ -218,8 +219,8 @@
  * No positional selector depends on either slot: `inline-flex` + `flex-shrink:
  * 0` just makes the caret a normal flex child that rides its container's gap
  * (the nav's at the trail's end, the item's mid-trail) and never shrinks when
- * the trail shrinks. A mid-trail instance on a crumb that folds into the
- * overflow menu is not rendered — the crumb is a plain link there.
+ * the trail shrinks. A crumb carrying a switcher never folds into the
+ * overflow menu; its label ellipsises instead.
  * Folded in from the former standalone BreadcrumbSwitcher component (#2521). */
 
 .bds-breadcrumb__switch {

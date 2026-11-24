@@ -51,8 +51,9 @@ import { Breadcrumb } from '@brikdesigns/bds';
 
 The trail is one line and never wraps. Pass the full hierarchy — Breadcrumb measures it against its own container (not the viewport) and folds it; never trim `items` or insert your own `…` crumb.
 
-- **Overflow.** When the trail does not fit, the first crumb and the last two stay and the crumbs in between fold into a `More breadcrumbs` button. It opens a menu listing the hidden crumbs as links (`linkComponent` is honoured). A folded crumb drops its per-crumb `switcher`; switchers on visible crumbs keep working. A trail that fits never shows the button.
+- **Overflow.** When the trail does not fit, the first crumb and the last two stay and the crumbs in between fold into a `More breadcrumbs` button. It opens a menu listing the hidden crumbs as links (`linkComponent` is honoured). A trail that fits never shows the button.
 - **Mobile.** When even `first / … / second-last / last` does not fit — at 375px, say — the trail is the overflow button followed by the last crumb.
+- **Switchers.** A crumb carrying its own `switcher` (two or more options) never folds — the menu lists plain links, so folding it would lose the switcher. Only switcher-less crumbs fold, each run of them behind its own button; once nothing more can fold, the kept labels shrink to an ellipsis instead. A trail with no switchers folds exactly as above.
 - **Labels.** A label longer than the crumb max width ends in an ellipsis; the full label stays the accessible name and shows on hover through `title`. Keep labels short anyway: a crumb names the page, it does not describe it.
 
 ```tsx

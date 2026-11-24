@@ -15,7 +15,7 @@ import { FilterToggle } from '../FilterToggle/FilterToggle';
 import { Icon } from '../Icon/Icon';
 import { bdsClass } from '../../utils';
 import { useElementWidth } from '../shared/useElementWidth';
-import { chooseTrailLevel, type TrailMeasure } from './trailOverflow';
+import { chooseTrailLevel, foldedCrumbs, type TrailMeasure } from './trailOverflow';
 import './Breadcrumb.css';
 
 export interface BreadcrumbItem {
@@ -124,7 +124,7 @@ export interface BreadcrumbProps
     BreadcrumbSwitchMenuProps {
   /**
    * Crumb trail in order. The last item is rendered as plain text with `aria-current="page"`; earlier items render as `<a>` when `href` is set.
-   * The trail never wraps: when it does not fit its container the first crumb and the last two stay and the middle crumbs fold into a `More breadcrumbs` menu (on a narrow container, the menu plus the last crumb).
+   * The trail never wraps: when it does not fit its container the first crumb and the last two stay and the middle crumbs fold into a `More breadcrumbs` menu (on a narrow container, the menu plus the last crumb). A crumb with its own `switcher` never folds; when the trail still does not fit, its label ellipsises instead.
    */
   items: BreadcrumbItem[];
   /** Visual separator between crumbs. Default `slash` (`/`); `chevron` renders `›`. */
@@ -198,9 +198,11 @@ function BreadcrumbLink({
  * container: when every crumb does not fit, the first crumb and the last two
  * stay and the middle crumbs fold into a `More breadcrumbs` button that opens a
  * menu of links; when even that does not fit, only the button and the last
- * crumb remain. A label past its max width ends in an ellipsis, and its full
- * text is the accessible name and the `title`. Folded crumbs render as plain
- * links in the menu (honouring `linkComponent`) without their `switcher`.
+ * crumb remain. A crumb carrying its own `switcher` is never folded — only
+ * switcher-less crumbs go into the menu, and once nothing more can fold the
+ * kept labels shrink to an ellipsis instead. A label past its max width ends
+ * in an ellipsis, and its full text is the accessible name and the `title`.
+ * Folded crumbs render as plain links in the menu (honouring `linkComponent`).
  *
  * Pass two or more `options` (plus a `switchLabel`) to render a sibling-record
  * switcher: a caret after the trail opens a menu of siblings. Without them the
@@ -270,21 +272,25 @@ export function Breadcrumb({
     // The measuring pass re-renders with the trail; `signature` stands in for `items`.
   }, [signature, separator, hasSwitcher]);
 
+  // A crumb with a working switcher never folds (the overflow menu lists plain
+  // links, so folding it would drop the switcher).
+  const pinned = items.map((item) => !!item.switcher && item.switcher.options.length > 1);
   const level = natural && navWidth !== null
-    ? chooseTrailLevel({ ...natural, available: navWidth })
+    ? chooseTrailLevel({ ...natural, pinned, available: navWidth })
     : 'full';
 
   const last = items.length - 1;
+  const hidden = new Set(foldedCrumbs(items.length, level, pinned));
   const visible = items
     .map((item, index) => ({ item, index }))
-    .filter(({ index }) => {
-      if (level === 'full') return true;
-      if (level === 'collapsed') return index === 0 || index >= last - 1;
-      return index === last;
-    });
-  const firstFolded = level === 'full' ? last + 1 : level === 'collapsed' ? 1 : 0;
-  const lastFolded = level === 'full' ? -1 : level === 'collapsed' ? last - 2 : last - 1;
-  const folded = items.slice(firstFolded, lastFolded + 1);
+    .filter(({ index }) => !hidden.has(index));
+  // Each run of consecutive folded crumbs gets its own overflow button, placed
+  // before the crumb that ends the run, so the trail keeps its order.
+  const foldedRunBefore = (index: number) => {
+    const run: BreadcrumbItem[] = [];
+    for (let i = index - 1; hidden.has(i); i--) run.unshift(items[i]);
+    return run;
+  };
 
   return (
     <nav
@@ -296,12 +302,13 @@ export function Breadcrumb({
     >
       {visible.map(({ item, index: i }) => {
         const isLast = i === last;
-        const itemHasSwitcher = !!item.switcher && item.switcher.options.length > 1;
+        const itemHasSwitcher = pinned[i];
+        const folded = foldedRunBefore(i);
         return (
           <Fragment key={`${item.label}-${i}`}>
-            {folded.length > 0 && i === lastFolded + 1 && (
+            {folded.length > 0 && (
               <span className="bds-breadcrumb__item">
-                {firstFolded > 0 && (
+                {i - folded.length > 0 && (
                   <span className="bds-breadcrumb__separator" aria-hidden="true">
                     {separatorChar}
                   </span>
@@ -403,8 +410,9 @@ function MeasureButton({ icon = 'ph:caret-down' }: { icon?: string }) {
 /**
  * BreadcrumbOverflow — the `More breadcrumbs` button + menu holding the crumbs
  * folded out of a trail that does not fit. A real button in the tab order; the
- * folded crumbs are plain links (honouring `linkComponent`), never carrying
- * their per-crumb switcher. A crumb with no `href` is listed but disabled.
+ * folded crumbs are plain links (honouring `linkComponent`) — a crumb with its
+ * own switcher is never folded, so none is lost here. A crumb with no `href`
+ * is listed but disabled.
  */
 function BreadcrumbOverflow({
   crumbs,

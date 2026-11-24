@@ -66,11 +66,17 @@ a sidebar, a card or a full-width header.
 **Overflow rule.** When the trail does not fit, the first crumb and the last two
 stay and the crumbs in between fold into a `More breadcrumbs` button — a real
 button in the tab order that opens a menu listing the hidden crumbs as links
-(`linkComponent` is honoured). A crumb folded into the menu is a plain link: its
-per-crumb `switcher` is not rendered there. Switchers on visible crumbs keep
-working. A trail that fits never shows the button.
+(`linkComponent` is honoured). A trail that fits never shows the button.
 
 <Canvas of={Stories.OverflowNarrowContainer} />
+
+**Switcher rule.** A crumb carrying its own `switcher` (two or more options)
+never folds — the menu lists plain links, so folding it would lose the switcher.
+Only switcher-less crumbs fold, each run of them behind its own button; once
+nothing more can fold, the kept labels shrink to an ellipsis instead, full text
+in `title`. A trail with no switchers folds exactly as above.
+
+<Canvas of={Stories.OverflowSwitcherTrail} />
 
 **Mobile rule.** When even `first / … / second-last / last` does not fit — at
 375px, say — the trail is the overflow button followed by the last crumb. Switch
