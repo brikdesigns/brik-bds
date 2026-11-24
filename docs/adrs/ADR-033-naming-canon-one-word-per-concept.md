@@ -687,3 +687,15 @@ OPERATOR SAID 2026-11-19: "let's refactor our elevation logic to ensure alignmen
 - **Migrates:** `.bds-tab-bar--scroll` → `.bds-tab-bar--overflow-scroll`. The `overflow` prop is unchanged; no alias ships. `wrap` is the default and emits no class.
 
 **Enforcement.** `tokens/naming-grammar.json` gains `axes.overflow`, so `*Overflow` unions and `--overflow-*` modifiers are judged against `wrap` · `scroll`. `scroll` does **not** join `BOOLEAN_MODIFIERS`: it is now an `overflow` value, and the set is word-keyed. PageContent's `scroll?: boolean` ([PageContent.tsx:58](../../components/ui/Page/PageContent.tsx)) still emits a bare `bds-page__content--scroll`, so the `--scroll` rule-4 row stays in the baseline for #1927, now owed by Page alone. Planted cases admit `--overflow-scroll` and deny `--overflow-clip`. **Baseline:** unchanged (TabBar no longer emits it; Page still does).
+
+### `relation` axis (2026-11-24, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+This is the "own search" the `placement` amendment deferred for Meter's `labelPosition` and TextInput's icon `before | after`: both stayed baselined.
+
+**Does an existing § 2 word name this axis?** No. The axis is which side of its sibling content an element sits on: a Meter label against its bar (`above` · `below`, [Meter.tsx:23](../../components/ui/Meter/Meter.tsx)), a TextInput icon against its text (`before` · `after`, [TextInput.tsx:106,131](../../components/ui/TextInput/TextInput.tsx)). It is not `placement` (the side of an anchor a floating element opens on: `top` · `bottom` · `left` · `right`), not `side` (a viewport edge a docked panel anchors to), not `orientation` (a direction), and not `layout` (an arrangement of slots). `position` stays out for the reason the `placement` amendment gave: it names four concepts, and rule 5 would judge every `*Position` union by its type name. Negative search over `components/ui/**/*.tsx` (stories excluded) for the values `above`, `below`, `before`, `after` as union members: only `MeterLabelPosition` hits. `before` and `after` appear as union members nowhere; they are the slot names `iconBefore` and `iconAfter`, which are props, not a union. The word `relation` returned zero hits as a prop, union or class.
+
+- **Axis:** relation: which side of its sibling content an element sits on.
+- **Values:** `before` · `after` · `above` · `below`.
+- **Migrates:** `.bds-meter__label--above` / `--below` → `--relation-above` / `--relation-below`; `.bds-text-input__icon--before` / `--after` → `--relation-before` / `--relation-after`. The `labelPosition`, `iconBefore` and `iconAfter` props are unchanged; no alias ships. `.bds-text-input-field--has-icon-before` / `--has-icon-after` are booleans and stay.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.relation`. Rule 5 judges `--relation-*` modifiers against the four values; no union is named `*Relation`, so none is claimed by its type name. Planted cases admit all four modifiers and deny bare `--above` and `--relation-beside`. **Baseline:** −4. The `--above`, `--below`, `--before` and `--after` rule-4 rows leave `tokens/naming-canon-baseline.json`.

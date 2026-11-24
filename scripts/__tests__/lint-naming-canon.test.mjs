@@ -1290,3 +1290,26 @@ describe('rule 4 + 5 — the `overflow` axis (§ Amendments, #1927)', () => {
     expect(out).toMatch(/--overflow-clip — `clip` is on no closed list for the overflow axis/);
   });
 });
+
+describe('rule 4 + 5 — the `relation` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed relation modifiers Meter and TextInput ship', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-meter__label--relation-above { opacity: 1; }
+.bds-meter__label--relation-below { opacity: 1; }
+.bds-text-input__icon--relation-before { opacity: 1; }
+.bds-text-input__icon--relation-after { opacity: 1; }
+`,
+    });
+    expect(out).not.toMatch(/relation-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the bare modifier and a relation the amendment did NOT admit', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-meter__label--above { opacity: 1; }\n.bds-meter__label--relation-beside { opacity: 1; }\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--above — bare modifier/);
+    expect(out).toMatch(/--relation-beside — `beside` is on no closed list for the relation axis/);
+  });
+});

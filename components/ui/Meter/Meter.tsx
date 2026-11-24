@@ -126,7 +126,7 @@ export function Meter({
   const textContent = (
     <>
       {label && (
-        <span className={bdsClass('bds-meter__label', `bds-meter__label--${labelPosition}`)}>
+        <span className={bdsClass('bds-meter__label', `bds-meter__label--relation-${labelPosition}`)}>
           {label}
         </span>
       )}
