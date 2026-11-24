@@ -136,7 +136,7 @@ export const ContactIcon = forwardRef<SVGSVGElement, ContactIconProps>(function 
       focusable={false}
       className={bdsClass(
         'bds-contact-icon',
-        `bds-contact-icon--${type}`,
+        `bds-contact-icon--type-${type}`,
         `bds-contact-icon--emphasis-${resolvedEmphasis}`,
         className,
       )}

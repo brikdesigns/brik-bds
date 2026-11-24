@@ -1253,3 +1253,24 @@ describe('rule 4 + 5 — the `motion` axis (§ Amendments, #1927)', () => {
     expect(out).toMatch(/--motion-bounce — `bounce` is on no closed list for the motion axis/);
   });
 });
+
+describe('rule 4 + 5 — the `type` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed mark rendering modifiers SocialIcon and ContactIcon ship', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-social-icon--type-badge { opacity: 1; }
+.bds-contact-icon--type-glyph { opacity: 1; }
+`,
+    });
+    expect(out).not.toMatch(/type-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies the bare modifier and a type the amendment did NOT admit', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-social-icon--glyph { opacity: 1; }\n.bds-social-icon--type-ring { opacity: 1; }\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--glyph — bare modifier/);
+    expect(out).toMatch(/--type-ring — `ring` is on no closed list for the type axis/);
+  });
+});

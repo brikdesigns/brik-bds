@@ -18,6 +18,13 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** SocialIcon and ContactIcon's rendering modifiers carry the new `type` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § Amendments). The `type` prop is unchanged.
+
+| Old | New |
+|---|---|
+| `bds-social-icon--badge` / `--glyph` | `bds-social-icon--type-badge` / `--type-glyph` |
+| `bds-contact-icon--badge` / `--glyph` | `bds-contact-icon--type-badge` / `--type-glyph` |
+
 **Breaking (consumer CSS):** Badge's animation classes carry the new `motion` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § Amendments). CSS-only hooks; no prop emits them, so a consumer that adds one by hand must rename it.
 
 | Old | New |

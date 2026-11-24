@@ -159,7 +159,7 @@ export const SocialIcon = forwardRef<SVGSVGElement, SocialIconProps>(function So
       focusable={false}
       className={bdsClass(
         'bds-social-icon',
-        `bds-social-icon--${type}`,
+        `bds-social-icon--type-${type}`,
         `bds-social-icon--emphasis-${resolvedEmphasis}`,
         className,
       )}
