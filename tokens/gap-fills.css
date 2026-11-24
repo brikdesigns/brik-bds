@@ -350,21 +350,6 @@
   /* --bds-ease-{out,in,in-out,spring,spring-soft,linear} come from the Figma
      `motion` collection (tokens/figma-tokens.css, #3278). */
 
-  /* ── DEPRECATED shadow aliases (#3058) — DROP NEXT MINOR ──
-     The hand-written --bds-shadow-{sm,md,lg,xl,overlay} were replaced by the
-     shadows Figma's `elevation` collection now declares
-     (shadow/{depth}/{offset,blur,spread,color}, composed by the build).
-     `lint-deleted-token-consumers` blocks a bare deletion: brik-client-portal
-     still reads sm/md/lg. Each old name aliases the depth with the same value
-     (sm → subtle, md → raised, lg → lifted, overlay → dramatic), so nothing
-     moves. `xl` had no consumer outside BDS and is gone. A consumer that
-     OVERRIDES an old name must rename the override too: BDS components read
-     the new names, so an old-name override no longer reaches them. */
-  --bds-shadow-sm:      var(--bds-shadow-subtle);   /* bds-lint-ignore — DEPRECATED, use --bds-shadow-subtle (#3058); drop next minor */
-  --bds-shadow-md:      var(--bds-shadow-raised);   /* bds-lint-ignore — DEPRECATED, use --bds-shadow-raised (#3058); drop next minor */
-  --bds-shadow-lg:      var(--bds-shadow-lifted);   /* bds-lint-ignore — DEPRECATED, use --bds-shadow-lifted (#3058); drop next minor */
-  --bds-shadow-overlay: var(--bds-shadow-dramatic); /* bds-lint-ignore — DEPRECATED, use --bds-shadow-dramatic (#3058); drop next minor */
-
   /* ── Stacking order (brik-bds#2840, components moved on in #2845) ──
      One ladder for every layer that has to outrank another. Component CSS
      uses these tokens for every layer value; raw 0–4 stays only for stacking
