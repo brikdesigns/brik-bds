@@ -342,6 +342,7 @@ export const textTextLink: string;
 export const textDisabled: string;
 export const textError: string;
 export const textAccentOrange: string;
+export const textInfo: string;
 export const borderNegative: string;
 export const borderPositive: string;
 export const borderWarning: string;
@@ -374,6 +375,7 @@ export const borderChartWarning: string;
 export const borderChartNegative: string;
 /** Chart stroke — line, outline, axis series mark. Same value as background/chart/info; this one styles a border/stroke. */
 export const borderChartInfo: string;
+export const borderInfo: string;
 export const backgroundNegative: string;
 export const backgroundPositive: string;
 export const backgroundWarning: string;

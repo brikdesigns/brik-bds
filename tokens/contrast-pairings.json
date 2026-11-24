@@ -722,6 +722,21 @@
       "thresholdType": "AA"
     },
     {
+      "group": "info",
+      "label": "Info text on surface",
+      "fg": "--bds-text-info",
+      "bg": "--bds-surface-primary",
+      "thresholdType": "AA",
+      "note": "Figma-sourced since #3239: blue.800 light, blue.200 dark. The gap-fill it replaced was blue.500 in both themes and was never gated. StatusList's in-progress icon reads it (StatusList.css:30)."
+    },
+    {
+      "group": "info",
+      "label": "Info text on page",
+      "fg": "--bds-text-info",
+      "bg": "--bds-page-primary",
+      "thresholdType": "AA"
+    },
+    {
       "group": "positive",
       "label": "Solid positive Badge label on fill",
       "fg": "--bds-text-on-color-light",

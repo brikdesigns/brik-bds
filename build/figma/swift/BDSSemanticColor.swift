@@ -19,6 +19,7 @@ public enum BDSSemanticColor {
     public static let textDisabled = Color(red: 0.3529, green: 0.3529, blue: 0.3529) /// Disabled button text (all variants)
     public static let textError = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let textAccentOrange = Color(red: 0.9490, green: 0.6000, blue: 0.2902)
+    public static let textInfo = Color(red: 0.1608, green: 0.2941, blue: 0.4824)
     public static let borderNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let borderPositive = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
     public static let borderWarning = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
@@ -44,6 +45,7 @@ public enum BDSSemanticColor {
     public static let borderChartWarning = Color(red: 0.3451, green: 0.2627, blue: 0.0000) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/warning; this one styles a border/stroke.
     public static let borderChartNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/negative; this one styles a border/stroke.
     public static let borderChartInfo = Color(red: 0.1412, green: 0.3804, blue: 0.7059) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/info; this one styles a border/stroke.
+    public static let borderInfo = Color(red: 0.1412, green: 0.3804, blue: 0.7059)
     public static let backgroundNegative = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
     public static let backgroundPositive = Color(red: 0.1529, green: 0.6824, blue: 0.3765)
     public static let backgroundWarning = Color(red: 0.9490, green: 0.7882, blue: 0.2980)
