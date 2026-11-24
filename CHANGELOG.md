@@ -18,6 +18,12 @@ a consumer greps this file before bumping.
 
 ## Unreleased
 
+**Breaking (consumer CSS):** Sheet's floating modifier sits on the `variant` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § 4). The `variant` prop is unchanged.
+
+| Old | New |
+|---|---|
+| `bds-sheet--floating` | `bds-sheet--variant-floating` |
+
 **Breaking (consumer CSS):** TabBar's scroll modifier carries the new `overflow` axis ([#1927](https://github.com/brikdesigns/brik-bds/issues/1927), ADR-033 § Amendments). The `overflow` prop is unchanged.
 
 | Old | New |
