@@ -91,8 +91,8 @@
   justify-content: center;
 }
 
-.bds-collapsible[data-state="open"] .bds-collapsible__icon--plus { display: none; }
-.bds-collapsible[data-state="closed"] .bds-collapsible__icon--minus { display: none; }
+.bds-collapsible[data-state="open"] .bds-collapsible__icon--variant-plus { display: none; }
+.bds-collapsible[data-state="closed"] .bds-collapsible__icon--variant-minus { display: none; }
 
 /* ─── Content area ────────────────────────────────────── */
 

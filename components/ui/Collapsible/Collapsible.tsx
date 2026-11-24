@@ -66,10 +66,10 @@ export function Collapsible({
         <div className="bds-collapsible__header-right">
           {headerActions}
           <span className="bds-collapsible__toggle" aria-hidden="true">
-            <span className="bds-collapsible__icon bds-collapsible__icon--plus">
+            <span className="bds-collapsible__icon bds-collapsible__icon--variant-plus">
               <Icon icon={Plus} />
             </span>
-            <span className="bds-collapsible__icon bds-collapsible__icon--minus">
+            <span className="bds-collapsible__icon bds-collapsible__icon--variant-minus">
               <Icon icon={Minus} />
             </span>
           </span>
