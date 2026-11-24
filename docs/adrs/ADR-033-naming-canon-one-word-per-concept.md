@@ -716,3 +716,13 @@ Which duration a transition takes is a documented pairing of interaction → dur
 **Why.** A `sm` · `md` · `lg` Semantic duration would sit beside `ease/*` in the same tier with a second vocabulary — size words next to behaviour words. Neither exists in Figma, and #3252 already moved every component onto the numeric Primitives (`tokens/compat/renamed-knobs.json:32-36`). `--duration-marquee` and `--duration-autoplay` stay named exceptions: they are loop periods, not tweens.
 
 **Enforcement.** `tokens/naming-grammar.json` `steps.retired` re-points `fast` · `normal` · `slow` for `--duration-` to `100` · `200` · `300`, so rule 1's message names the numeric target. No new rule, script or workflow. **Baseline:** unchanged.
+
+### Presence reads the valence fills (2026-11-24, [#3239](https://github.com/brikdesigns/brik-bds/issues/3239))
+
+OPERATOR SAID 2026-11-24 (chat, `638610b9-eb8e-48f1-8912-bf3e52a50f43.jsonl:805`): "… 3 - yes", answering "Accept two visual changes? … Avatar's offline dot goes from gray 500 to gray 800." OPERATOR SAID 2026-11-24 (same session, `:878`): "go".
+
+**What changes.** § 2's *Why* paragraph says the `--background-presence-{online,offline,busy,away}` tokens "ship today". They no longer do. #3360 retired the four gap-fills, and Avatar's status dots now read `--bds-background-positive` · `-warning` · `-negative` · `-neutral`, as Dot already did.
+
+**Why § 2 still holds.** The case for `status` = presence/lifecycle rests on the word, not on a token family. `AvatarStatus` (`online|offline|busy|away`) and TaskConsole's lifecycle keep the `status` prop. Only the second argument, "orphaning the presence token family", lapses.
+
+**Enforcement.** None new. The four names left `tokens/naming-canon-baseline.json` and `tokens/compat/legacy-token-names.json` in #3360. **Baseline:** unchanged by this amendment.
