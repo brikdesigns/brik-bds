@@ -135,15 +135,16 @@ Canonical Figma tokens for positive, negative, and warning states. Background va
 | Failed, overdue | `negative` | Failed, Overdue |
 | Elevated tier | `brand` | Premium |
 
-**The `info` signal** — blue, and one of the five valence values. It came from Figma under the `status-` segment until [#1959](https://github.com/brikdesigns/brik-bds/issues/1959) freed the name: the gray family that used to hold `--*-info` is now `--*-neutral`, so `info` means blue and only blue. The `--*-status-info*` spellings still resolve as deprecated aliases for one minor ([#1958](https://github.com/brikdesigns/brik-bds/issues/1958) deletes them). `info` has no Figma source. It is a hand-written gap-fill (`tokens/gap-fills.css:237-240`: background, text, surface and border), declared once in `:root` with no dark-mode value, so it does not flip with the theme. `--border-info` is the blue edge of an `outline` Badge.
+**The `info` signal** — blue, and one of the five valence values. [#1959](https://github.com/brikdesigns/brik-bds/issues/1959) freed the name: the gray family that used to hold `--*-info` is now `--*-neutral`, so `info` means blue and only blue. It is Figma-sourced across all four purposes, the same as the other valence families ([#3239](https://github.com/brikdesigns/brik-bds/issues/3239) added text and border). `--text-info` is the one that flips with the theme — blue.800 on light, blue.200 on dark — so blue text stays readable on both. `--border-info` is the blue edge of an `outline` Badge.
 
 <ColorGrid
   colors={[
     { name: 'background-info', cssVar: '--bds-background-info' },
     { name: 'surface-info', cssVar: '--bds-surface-info' },
-    { name: 'text-info', cssVar: '--text-info', isText: true },
+    { name: 'text-info', cssVar: '--bds-text-info', isText: true },
+    { name: 'border-info', cssVar: '--bds-border-info' },
   ]}
-  columns={3}
+  columns={4}
 />
 
 **The `neutral` intent family** — gray, Figma-sourced across all four purposes since [#1959](https://github.com/brikdesigns/brik-bds/issues/1959). Note the purpose split the rename made honest: `--background-neutral` is the *saturated* charcoal, `--surface-neutral` the subtle tint. A subtle gray Badge or `subtle` Tag wants `--background-neutral-light` with `--text-on-color-light`; a solid gray Badge or the default Tag wants `--background-neutral` with `--text-on-color-dark`.

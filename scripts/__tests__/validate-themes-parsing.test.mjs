@@ -99,12 +99,15 @@ describe('#1965 hazard 2 — prose naming a token must not parse as a declaratio
 });
 
 describe('the shipped registry', () => {
-  it('--bds-text-info resolves in the real gap-fills.css', () => {
+  it('--bds-text-link resolves in the real gap-fills.css', () => {
     // The regression that motivated the fix, asserted against the live file
     // rather than a fixture — a fixture cannot catch the next comment someone
-    // writes above this declaration.
+    // writes above this declaration. `--bds-text-link` sits directly under a
+    // comment that names --bds-text-info and --*-neutral in prose. (The test
+    // used to pin --bds-text-info itself, until #3239 moved it to Figma.)
     const vars = extractBlock(path.join(HERE, '..', '..', 'tokens', 'gap-fills.css'), /:root/);
-    expect(vars['--bds-text-info']).toBe('var(--bds-color-system-blue-500)');
+    expect(vars['--bds-text-link']).toBe('var(--bds-text-text-link)');
+    expect(vars['--bds-text-info']).toBeUndefined();
     expect(vars['--border-info']).toBeUndefined();
   });
 });

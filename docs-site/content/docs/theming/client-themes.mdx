@@ -319,7 +319,7 @@ Not every token is meant to vary per brand. Use the table to decide what to put 
 | Surfaces + page (`--bds-surface-primary`, `--bds-surface-secondary`, `--bds-page-primary`) | **Recommended** | Tune neutrals to the brand. |
 | Fonts (`--bds-font-family-heading`, `--bds-font-family-body`, `--bds-font-family-label`) | **Optional** | See "Typography-only client override" below. |
 | Canonical status (`--background/surface/text/border-positive/negative/warning`) | **Yes** | First-class Figma variables. Override if the brand red/green/yellow clashes with the default. |
-| The `info` signal (`--bds-background-info`, `--bds-surface-info`, `--bds-text-info`) | **No** | Blue, universal semantic meaning. Gap-fills over the system blue primitive. |
+| The `info` signal (`--bds-background-info`, `--bds-surface-info`, `--bds-text-info`, `--bds-border-info`) | **No** | Blue, universal semantic meaning. Figma-sourced over the system blue primitive. |
 | The per-hue accent set (`--text/background/border/surface/page-accent-{hue}`) | **No** | Mirrored 1:1 from the ❖ Brik Brand Kit Figma library and Figma-sourced from the system color primitives, so `accent-purple` is the same purple in every theme. Category color, not a valence. `red` is the one exception — it aliases the brand poppy — see [The per-hue accent set](/docs/foundation/color#the-per-hue-accent-set). |
 | Presence (`--bds-background-presence-online/away/busy/offline`) | **No — intentionally frozen** | Shared chat/status semantics across products. |
 | Shadows + overlay (`--bds-shadow-sunken`..`--bds-shadow-dramatic`, `--bds-background-overlay`) | **No** | Shadows compose from the Figma `elevation` collection (#3058); not expected to vary per brand. |

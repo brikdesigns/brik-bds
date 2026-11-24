@@ -346,6 +346,7 @@
   --bds-text-disabled: var(--bds-color-grayscale-700); /** Disabled button text (all variants) */
   --bds-text-error: var(--bds-color-system-red-500);
   --bds-text-accent-orange: var(--bds-color-system-orange-500);
+  --bds-text-info: var(--bds-color-system-blue-800);
   --bds-border-negative: var(--bds-color-system-red-500);
   --bds-border-positive: var(--bds-color-system-green-500);
   --bds-border-warning: var(--bds-color-system-yellow-500);
@@ -371,6 +372,7 @@
   --bds-border-chart-warning: var(--bds-color-system-yellow-800); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/warning; this one styles a border/stroke. */
   --bds-border-chart-negative: var(--bds-color-system-red-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/negative; this one styles a border/stroke. */
   --bds-border-chart-info: var(--bds-color-system-blue-500); /** Chart stroke — line, outline, axis series mark. Same value as background/chart/info; this one styles a border/stroke. */
+  --bds-border-info: var(--bds-color-system-blue-500);
   --bds-background-negative: var(--bds-color-system-red-500);
   --bds-background-positive: var(--bds-color-system-green-500);
   --bds-background-warning: var(--bds-color-system-yellow-500);
