@@ -225,7 +225,8 @@
     "placement": { "concept": "side of its anchor a floating element opens on", "values": ["top", "bottom", "left", "right"] },
     "side": { "concept": "viewport edge a docked panel anchors to", "values": ["right", "left", "bottom"] },
     "service-line": { "concept": "service line whose surface paints the block", "values": ["brand", "marketing", "information", "product", "back-office"] },
-    "motion": { "concept": "entrance or attention animation", "values": ["enter", "shake", "pulse"] }
+    "motion": { "concept": "entrance or attention animation", "values": ["enter", "shake", "pulse"] },
+    "type": { "concept": "badge or bare-glyph rendering of a mark", "values": ["badge", "glyph"] }
   },
   "docs": {
     "$comment": "token-anatomy.mdx must contain, verbatim, the formula strings derived from tiers above: --{semantic.formula}, --{semantic.roleFormula}, --{primitive.color.body}, --{ids.componentId}-{component.body}, plus the shape (--{id}-{body}) and the scale body (--{primitive.scale.body}) (scripts/lint-naming-grammar-docs.mjs). #2666 rewrote the page around them.",

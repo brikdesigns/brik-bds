@@ -608,7 +608,7 @@ function collectUnions(componentsDir) {
  * unions, which are other concepts, so a value match would misread those. `side`
  * (#1927) is Sheet's own axis and shares `left`, `right` and `bottom` with `placement`.
  */
-const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing', 'service-line', 'placement', 'side']);
+const PREFIX_JUDGED_AXES = new Set(['span', 'fit', 'anchor', 'resize', 'marker', 'underline', 'measure', 'spacing', 'service-line', 'placement', 'side', 'type']);
 
 /**
  * Every axis whose closed list claims this member. A SET, not one axis: ADR-033
@@ -920,7 +920,9 @@ function vocabularyFindings(unions, mods) {
   for (const u of unions) {
     // A union names its axis through its type name — `BannerTone` → tone.
     const lowered = u.name.toLowerCase();
-    const match = governed.find(([axis]) => lowered.endsWith(axis));
+    // `type` governs `--type-*` modifiers only: `*Type` is also the HTML input-type
+    // concept (`AddableEntryPrimaryInputType`), so a type-name match would misjudge it.
+    const match = governed.find(([axis]) => axis !== 'type' && lowered.endsWith(axis));
     if (!match) continue;
     const [axis, spec] = match;
     for (const member of u.members) {

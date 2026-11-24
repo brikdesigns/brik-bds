@@ -667,3 +667,13 @@ OPERATOR SAID 2026-11-19: "let's refactor our elevation logic to ensure alignmen
 - **Frees `pulse`:** it joins the boolean list, because Dot's was its only other emitter and that is a boolean prop.
 
 **Enforcement.** `tokens/naming-grammar.json` gains `axes.motion`. `lint-naming-canon` reads it into `AXES` and `MODIFIER_AXES`, so `--motion-*` carries a blessed prefix and rule 5 default-denies any other value (`--motion-bounce`). `pulse` joins `BOOLEAN_MODIFIERS`. Planted cases in `scripts/__tests__/lint-naming-canon.test.mjs` admit the three values, deny a bare `--shake`, and deny `--motion-bounce`. **Baseline:** −3. The `--animate-in`, `--shake` and `--pulse` rule-4 rows leave `tokens/naming-canon-baseline.json`. No new rule, script or workflow.
+
+### `type` axis (2026-11-24, [#1927](https://github.com/brikdesigns/brik-bds/issues/1927))
+
+**Does an existing § 2 word name this axis?** No. The axis is whether a mark renders as a filled badge or a bare glyph. It is not a valence, a form, a fill treatment (`appearance`) or a hue source (`emphasis`). Negative search over `components/ui/**/*.tsx`: the only unions with these values are `SocialIconType` ([SocialIcon.tsx:15](../../components/ui/SocialIcon/SocialIcon.tsx)) and `ContactIconType` ([ContactIcon.tsx:15](../../components/ui/ContactIcon/ContactIcon.tsx)), both `'badge' | 'glyph'`. The word `type` is the incumbent prop name on both, and the only other `*Type` union, `AddableEntryPrimaryInputType = 'text' | 'url'`, is the HTML input-type concept, so the axis is prefix-judged and `lint-naming-canon` never claims a union by a `*Type` name.
+
+- **Axis:** type: badge or bare-glyph rendering of a mark.
+- **Values:** `badge` · `glyph`.
+- **Migrates:** `.bds-social-icon--badge` / `--glyph` → `--type-badge` / `--type-glyph`; same for `.bds-contact-icon--*`. The `type` prop is unchanged; no alias ships.
+
+**Enforcement.** `tokens/naming-grammar.json` gains `axes.type`, and `type` joins `PREFIX_JUDGED_AXES` in `lint-naming-canon` so `AddableEntryPrimaryInputType` is not misread. Planted cases admit `--type-badge` and `--type-glyph` and deny bare `--glyph` and `--type-ring`. **Baseline:** −2. The `--badge` and `--glyph` rule-4 rows leave `tokens/naming-canon-baseline.json`.

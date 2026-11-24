@@ -24,15 +24,15 @@
    knockout on a colored badge, matching every real-world social badge
    (YouTube red + white play, Facebook blue + white F, …) regardless of the
    app's light/dark mode. */
-.bds-social-icon--badge {
+.bds-social-icon--type-badge {
   color: var(--bds-text-on-color-dark);
 }
 
-.bds-social-icon--badge.bds-social-icon--emphasis-neutral .bds-social-icon__bg {
+.bds-social-icon--type-badge.bds-social-icon--emphasis-neutral .bds-social-icon__bg {
   fill: var(--bds-text-muted);
 }
 
-.bds-social-icon--badge.bds-social-icon--emphasis-accent .bds-social-icon__bg {
+.bds-social-icon--type-badge.bds-social-icon--emphasis-accent .bds-social-icon__bg {
   fill: var(--bds-text-brand-primary);
 }
 
@@ -40,7 +40,7 @@
    brikdesigns marketing site) redefines `--background-*` in its dark root, so
    the badge would flip polarity there; `--surface-*` is the theme-tracking
    pair. The knocked-out white glyph above reads 17.22:1 on it (brik-bds#2274). */
-.bds-social-icon--badge.bds-social-icon--emphasis-inverse .bds-social-icon__bg {
+.bds-social-icon--type-badge.bds-social-icon--emphasis-inverse .bds-social-icon__bg {
   fill: var(--bds-surface-inverse);
 }
 
@@ -49,21 +49,21 @@
    Foundations color system primitive for that platform — every bundled
    platform has one. The old `--bds-social-icon-brand` name is a deprecated
    alias, kept for one minor and removed next major (brik-bds#2651). */
-.bds-social-icon--badge.bds-social-icon--emphasis-brand .bds-social-icon__bg {
+.bds-social-icon--type-badge.bds-social-icon--emphasis-brand .bds-social-icon__bg {
   fill: var(--bds-social-icon-platform-color);
 }
 
 /* ─── type="glyph" — background neutral/transparent, glyph carries the emphasis color ── */
 
-.bds-social-icon--glyph .bds-social-icon__bg {
+.bds-social-icon--type-glyph .bds-social-icon__bg {
   fill: none;
 }
 
-.bds-social-icon--glyph.bds-social-icon--emphasis-neutral {
+.bds-social-icon--type-glyph.bds-social-icon--emphasis-neutral {
   color: var(--bds-text-muted);
 }
 
-.bds-social-icon--glyph.bds-social-icon--emphasis-accent {
+.bds-social-icon--type-glyph.bds-social-icon--emphasis-accent {
   color: var(--bds-text-brand-primary);
 }
 
@@ -78,11 +78,11 @@
    is declared once, unthemed, and is what `--bds-surface-inverse` resolves to in
    all four roots — same reason the per-platform brand bindings below consume a
    primitive directly (brik-bds#2274). */
-.bds-social-icon--glyph.bds-social-icon--emphasis-inverse {
+.bds-social-icon--type-glyph.bds-social-icon--emphasis-inverse {
   color: var(--bds-color-grayscale-950);
 }
 
-.bds-social-icon--glyph.bds-social-icon--emphasis-brand {
+.bds-social-icon--type-glyph.bds-social-icon--emphasis-brand {
   color: var(--bds-social-icon-platform-color);
 }
 

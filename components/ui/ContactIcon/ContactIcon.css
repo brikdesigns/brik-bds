@@ -22,29 +22,29 @@
 /* Constant white regardless of theme (context-pinned, unlike --bds-text-inverse
    which flips with theme polarity) — the glyph always reads as a white
    knockout on a colored badge regardless of the app's light/dark mode. */
-.bds-contact-icon--badge {
+.bds-contact-icon--type-badge {
   color: var(--bds-text-on-color-dark);
 }
 
-.bds-contact-icon--badge.bds-contact-icon--emphasis-neutral .bds-contact-icon__bg {
+.bds-contact-icon--type-badge.bds-contact-icon--emphasis-neutral .bds-contact-icon__bg {
   fill: var(--bds-text-muted);
 }
 
-.bds-contact-icon--badge.bds-contact-icon--emphasis-accent .bds-contact-icon__bg {
+.bds-contact-icon--type-badge.bds-contact-icon--emphasis-accent .bds-contact-icon__bg {
   fill: var(--bds-text-brand-primary);
 }
 
 /* ─── type="glyph" — background neutral/transparent, glyph carries the emphasis color ── */
 
-.bds-contact-icon--glyph .bds-contact-icon__bg {
+.bds-contact-icon--type-glyph .bds-contact-icon__bg {
   fill: none;
 }
 
-.bds-contact-icon--glyph.bds-contact-icon--emphasis-neutral {
+.bds-contact-icon--type-glyph.bds-contact-icon--emphasis-neutral {
   color: var(--bds-text-muted);
 }
 
-.bds-contact-icon--glyph.bds-contact-icon--emphasis-accent {
+.bds-contact-icon--type-glyph.bds-contact-icon--emphasis-accent {
   color: var(--bds-text-brand-primary);
 }
 }
