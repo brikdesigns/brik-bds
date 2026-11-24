@@ -15,7 +15,7 @@
  *
  * What still lives here:
  *   - Semantic tokens not yet promoted to Figma variables
- *   - Status/service/presence semantic tokens
+ *   - Status/service semantic tokens
  *   - Shadow, overlay, and interaction state tokens
  *   - Font weight bridge aliases (Webflow double-dash → SD single-dash)
  *   - Icon size aliases (removed from figma-tokens.css in 2026-04-03 sync)
@@ -185,11 +185,9 @@
   --bds-background-positive-hover:   color-mix(in srgb, var(--bds-color-system-green-500) 85%, black);
   --bds-background-positive-pressed: color-mix(in srgb, var(--bds-color-system-green-500) 70%, black);
 
-  /* Presence (for Avatar online/away/busy/offline indicators) */
-  --bds-background-presence-online:  var(--bds-color-system-green-500);
-  --bds-background-presence-away:    var(--bds-color-system-yellow-500);
-  --bds-background-presence-busy:    var(--bds-color-system-red-500);
-  --bds-background-presence-offline: var(--bds-color-grayscale-500);
+  /* The four `presence` gap-fills that stood here are retired (brik-bds#3239).
+     Avatar's online/away/busy/offline dots read the valence fills
+     (--bds-background-positive, -warning, -negative, -neutral), as Dot does. */
 
   /* --bds-shadow-{sunken,flat,subtle,raised,lifted,dramatic} come from the Figma
      `elevation` collection (tokens/figma-tokens.css, #3058). */
