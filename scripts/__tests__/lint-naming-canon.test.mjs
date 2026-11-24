@@ -1274,3 +1274,19 @@ describe('rule 4 + 5 — the `type` axis (§ Amendments, #1927)', () => {
     expect(out).toMatch(/--type-ring — `ring` is on no closed list for the type axis/);
   });
 });
+
+describe('rule 4 + 5 — the `overflow` axis (§ Amendments, #1927)', () => {
+  it('admits the axis-prefixed overflow modifier TabBar ships', () => {
+    const { code, out } = run({ css: `${CLEAN_CSS}.bds-tab-bar--overflow-scroll { opacity: 1; }\n` });
+    expect(out).not.toMatch(/overflow-/);
+    expect(code).toBe(0);
+  });
+
+  it('still denies an overflow the amendment did NOT admit', () => {
+    const { code, out } = run({
+      css: `${CLEAN_CSS}.bds-tab-bar--overflow-clip { opacity: 1; }\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/--overflow-clip — `clip` is on no closed list for the overflow axis/);
+  });
+});

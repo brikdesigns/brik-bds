@@ -133,7 +133,7 @@ export function TabBar({
 }: TabBarProps) {
   const variantClass = tabBarVariantClass(variant);
   const onColorClass = onColor ? 'bds-tab-bar--emphasis-on-color' : '';
-  const scrollClass = overflow === 'scroll' && orientation === 'horizontal' ? 'bds-tab-bar--scroll' : '';
+  const scrollClass = overflow === 'scroll' && orientation === 'horizontal' ? 'bds-tab-bar--overflow-scroll' : '';
 
   // The tabs keyboard contract only engages once panels are wired, so existing
   // label-only rails keep their current (all-tabbable, no arrow-key) behaviour.

@@ -337,7 +337,7 @@
    as room for both, and an equal negative margin so its footprint on the page
    is unchanged. The `tab` baseline is drawn as a background instead of a
    border, because a border sits outside the clip. */
-.bds-tab-bar--scroll {
+.bds-tab-bar--overflow-scroll {
   --bds-tab-bar-bleed: var(--bds-border-width-lg); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   flex-wrap: nowrap;
   overflow-x: auto;
@@ -346,11 +346,11 @@
   margin-block: calc(-1 * var(--bds-tab-bar-bleed)); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
-.bds-tab-bar--scroll .bds-tab-bar-item {
+.bds-tab-bar--overflow-scroll .bds-tab-bar-item {
   flex-shrink: 0;
 }
 
-.bds-tab-bar--scroll.bds-tab-bar--variant-tab {
+.bds-tab-bar--overflow-scroll.bds-tab-bar--variant-tab {
   --bds-tab-bar-baseline: var(--bds-border-secondary); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
   border-bottom: 0;
   /* The bar keeps its old footprint: bleed above and below, less the 2px the
@@ -362,7 +362,7 @@
   background-position: 0 calc(100% - (var(--bds-tab-bar-bleed) - var(--bds-border-width-md))); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
-.bds-tab-bar--scroll.bds-tab-bar--variant-tab.bds-tab-bar--emphasis-on-color {
+.bds-tab-bar--overflow-scroll.bds-tab-bar--variant-tab.bds-tab-bar--emphasis-on-color {
   --bds-tab-bar-baseline: var(--bds-border-on-color-dark); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 }
