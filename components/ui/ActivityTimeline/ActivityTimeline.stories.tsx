@@ -4,6 +4,7 @@ import { expect, within } from 'storybook/test';
 import { ActivityTimeline } from './ActivityTimeline';
 import { DateTime } from '../DateTime';
 import { Stack } from '../Stack';
+import { StatusList } from '../StatusList';
 import { Tag } from '../Tag';
 import { TagGroup } from '../TagGroup';
 import { TextLink } from '../TextLink';
@@ -90,6 +91,42 @@ const withContentEvents = [
  */
 export const WithContent: Story = {
   args: { events: withContentEvents },
+};
+
+/**
+ * A `StatusList` in an event's `content` is a snapshot of the rows as they
+ * stood at that event's `timestamp`, not live state. Build it from the events
+ * up to that time; the page's own `StatusList` shows the current state.
+ *
+ * @summary Event whose `content` holds a `StatusList` snapshot
+ */
+export const StatusListSnapshot: Story = {
+  args: {
+    events: [
+      { icon: <Icon icon="ph:plus" />, label: 'Setup started', detail: 'by Emily Rivera', timestamp: 'Apr 12, 2026, 1:04 PM', dateTime: '2026-04-12T13:04:00Z', isOrigin: true },
+      {
+        icon: <Icon icon="ph:warning" />,
+        label: 'Setup paused',
+        detail: 'Snapshot of the setup rows at this event',
+        content: (
+          <StatusList
+            items={[
+              { id: 'structure', title: 'Site Structure', status: 'complete' },
+              { id: 'content', title: 'Page Content', status: 'in_progress' },
+              { id: 'hosting', title: 'Hosting Setup', status: 'blocked' },
+            ]}
+          />
+        ),
+        timestamp: 'Apr 12, 2026, 3:15 PM',
+        dateTime: '2026-04-12T15:15:00Z',
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const events = canvasElement.querySelectorAll('ol > li');
+    await expect(events[0].querySelector('ul[role="list"]')).toBeNull();
+    await expect(events[1].querySelector('ul[role="list"]')).not.toBeNull();
+  },
 };
 
 /**

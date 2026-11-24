@@ -1,0 +1,87 @@
+---
+title: Status and events
+description: Which component renders an event, which renders a status, when a status list gives way to its output, and what may nest in a timeline.
+---
+
+import { Callout } from 'fumadocs-ui/components/callout';
+
+A status surface is built from two kinds of data that look alike and are not: an **event** is something that happened, and a **status** is where one subject stands now. Mix them up and a page shows a stale list, a list that never leaves, or a history that rewrites itself. This page fixes which component carries which, so an agent can assemble the surface without asking.
+
+## The model
+
+| Data | Component | Rule |
+|---|---|---|
+| An event | [`ActivityTimeline`](/docs/components/activity-timeline) | Every event, in order. The history is never filtered. |
+| The status of N subjects | [`StatusList`](/docs/components/status-list) | One row per subject, showing its latest event. |
+| The status of 1 subject | [`Badge`](/docs/components/badge) or [`Dot`](/docs/components/dot) | The latest event for that subject. |
+| A status value | A tone | The valence table in [Color](/docs/foundation/color) and the shared status map (`STATUS_MAP`). |
+
+A status is derived, never stored on its own: it is the **latest event per subject**. The icon for each state is covered in [Icons](/docs/components/icons).
+
+## The event shape
+
+Name an event by what happened, and keep the fields small. Brik's portal `client_events` table is the reference shape (`supabase/migrations/00448_create_client_events.sql` in `brik-client-portal`). It is a reference, not a BDS dependency: BDS ships no event type.
+
+| Field | Meaning | `client_events` column |
+|---|---|---|
+| `kind` | `<subject>_<past verb>`, such as `agreement_signed` or `invoice_paid` | `kind` |
+| `occurred_at` | When it happened | `occurred_at` |
+| Actor | A user id, or a label when no user did it | `actor_user_id`, `actor_label` |
+| Source | Where the event came from; the reference uses `system`, `stripe` or `admin` | `source` |
+| Subject reference | The record it is about | `proposal_id`, `agreement_id`, `invoice_id`, `plan_id`, `engagement_id` |
+| Metadata | Optional extra detail | `metadata`, `note` |
+| Derived flag | `true` for an event back-filled rather than recorded live | `is_derived` |
+
+Most reference kinds follow the `<subject>_<past verb>` rule. A few do not (`note`, `write_off`); new kinds should.
+
+`ActivityTimeline` has no `occurred_at` prop. Map it to `timestamp` (the visible text) and `dateTime` (the ISO value on the `<time>` element).
+
+## The lifecycle rule
+
+A `StatusList` shows while any row is not `complete`. Once every row is complete, the page replaces it with the output it was tracking, the thing that was built. The history stays in the timeline.
+
+- It applies to operator surfaces and client surfaces alike.
+- It is a page-composition rule. `StatusList` has no prop for it and takes none: the page decides what to render from the rows it holds.
+- `TaskConsole` already follows the same shape for floating batch work. Its `autoDismissDelay` dismisses the console once every item is done and `onDismiss` is supplied.
+
+A list that stays on the page after the work is done reads as unfinished work. A page that drops the list and shows nothing in its place hides what the work produced; show the output.
+
+## The nesting rule
+
+A `StatusList` placed in an `ActivityTimeline` event's `content` slot is a **snapshot** as of that event's `occurred_at`. It is never live state.
+
+- Build it from the events up to that time, not from the subject's current rows.
+- A snapshot that updates later rewrites the history it sits in.
+- The live list, while one is still needed, sits on the page outside the timeline.
+
+The `StatusListSnapshot` story in `Containers/activity-timeline` shows one.
+
+## The Dot caveat
+
+`in_progress` and `on_hold` share the `info` tone, so a `Dot` cannot tell them apart. Where both can appear, use a `Badge`, whose label names the state. A `Dot` is for space-constrained rows where the states shown are tone-distinct, and it needs an accessible name either way (see [Indicators](/docs/build-standards/indicators)).
+
+## Which component
+
+Start from the data you have.
+
+| Data you have | Component |
+|---|---|
+| One subject's current state | [`Badge`](/docs/components/badge), or [`Dot`](/docs/components/dot) when space is tight and the states shown differ by tone |
+| A set of setup steps under way | [`StatusList`](/docs/components/status-list), then the output once every row is complete |
+| A history of what happened | [`ActivityTimeline`](/docs/components/activity-timeline) |
+| A phase's steps as they stood when an event happened | A `StatusList` snapshot in that event's `content` |
+| Live background work with progress | [`TaskConsole`](/docs/components/task-console) |
+| Ordered, linear steps with a current position | [`ProgressStepper`](/docs/components/progress-stepper) |
+| A page-level condition the reader must notice | [`Banner`](/docs/components/banner) |
+| Transient feedback for an action | [`Toast`](/docs/components/toast) |
+
+<Callout type="info">
+`TaskConsole` items use their own status names (`pending`, `completed`, `failed`), not the `StatusList` names. Map them at the callsite; do not pass one list to both.
+</Callout>
+
+## Related
+
+- [Indicators](/docs/build-standards/indicators) — which small pill a label gets.
+- [Display Choice](/docs/build-standards/display-choice) — which display a shape of data gets.
+- [Color](/docs/foundation/color) — the valence table that turns a status into a tone.
+- [Icons](/docs/components/icons) — the icon each status uses.
