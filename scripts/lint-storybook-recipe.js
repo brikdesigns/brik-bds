@@ -87,9 +87,13 @@ const FLAG_ENFORCE = args.includes('--enforce');
 const REPO_ROOT = path.resolve(__dirname, '..');
 const COMPONENTS_DIR = path.join(REPO_ROOT, 'components', 'ui');
 
+// Page-archetype docs, not component docs: their MDX stem must equal the dir
+// (RAG slugs on the stem, #2576) but the component recipe does not apply.
+const NON_COMPONENT_MDX_DIRS = new Set(['ReadModePage']);
+
 function findComponentMdx() {
   const dirs = fs.readdirSync(COMPONENTS_DIR, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
+    .filter((entry) => entry.isDirectory() && !NON_COMPONENT_MDX_DIRS.has(entry.name))
     .map((entry) => entry.name);
 
   const out = [];
