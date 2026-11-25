@@ -3,6 +3,7 @@
 import {
   useCallback,
   useEffect,
+  useId,
   useMemo,
   useRef,
   useState,
@@ -10,6 +11,7 @@ import {
   type FormEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { Chip } from '../Chip';
 
 /**
  * Brik Dev Feedback Widget
@@ -33,6 +35,14 @@ import { createPortal } from 'react-dom';
  * when the host's stylesheet has failed to load or is mid-swap. Referencing
  * BDS tokens here would defeat the stability guarantee. If you're adding a
  * new host-surface component, use tokens instead.
+ *
+ * The feedback-type picker renders BDS `Chip`s (#3319) — a hand-rolled pill is
+ * a missing component, not a local style (build-standards/indicators). Chip
+ * supplies the anatomy; its fill and text colours are pinned inline from the
+ * object below, because the panel is always white: a host-theme Chip would go
+ * light-on-white in dark mode, and lose its selected state with no stylesheet.
+ * Each Chip is presentation only, with no `onChipClick`: the native radio in
+ * its `<label>` is the one interactive element (ADR-045 § 3).
  */
 
 // ── Brand tokens (inlined — widget is a dev overlay, not consumer surface) ──
@@ -189,6 +199,10 @@ export function DevFeedbackWidget({
 }: DevFeedbackWidgetProps = {}) {
   const [open, setOpen] = useState(false);
   const [type, setType] = useState<string>('bug');
+  // Which type's hidden radio holds keyboard focus — drives the Chip's focus
+  // ring, since inline styles cannot reach `:focus-visible` on a sibling.
+  const [focusedType, setFocusedType] = useState<string | null>(null);
+  const typeGroupName = useId();
   const [description, setDescription] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -475,26 +489,42 @@ export function DevFeedbackWidget({
     letterSpacing: '0.08em',
   };
 
-  const typeGridStyle: CSSProperties = {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
+  const typeGroupStyle: CSSProperties = {
+    display: 'flex',
+    flexWrap: 'wrap',
     gap: '8px', // bds-lint-ignore — dev overlay renders fixed
+    margin: 0,
+    padding: 0,
+    border: 0,
+    minWidth: 0,
   };
 
-  const typeBtnStyle = (active: boolean): CSSProperties => ({
-    padding: '8px 12px',
-    borderRadius: '999px',
-    border: `1px solid ${active ? BDS.poppy : BDS.grayLighter}`,
-    backgroundColor: active ? BDS.poppy : 'transparent',
-    color: active ? BDS.white : BDS.grayDarkest,
-    fontFamily: BDS.fontFamily,
-    fontSize: '13px', // bds-lint-ignore — dev overlay renders fixed
-    fontWeight: 600, // bds-lint-ignore — dev overlay renders fixed
-    letterSpacing: '0.02em',
+  // Visually hidden, still focusable — the native radio carries the
+  // semantics and arrow-key model (ADR-045 § 3), the Chip carries the look.
+  const typeRadioStyle: CSSProperties = {
+    position: 'absolute',
+    width: '1px',
+    height: '1px',
+    padding: 0,
+    margin: '-1px', // bds-lint-ignore — visually-hidden clip pattern
+    overflow: 'hidden',
+    clip: 'rect(0, 0, 0, 0)',
+    whiteSpace: 'nowrap',
+    border: 0,
+  };
+
+  const typeChipStyle = (selected: boolean): CSSProperties => ({
+    backgroundColor: selected ? BDS.poppy : BDS.white,
+    borderColor: selected ? BDS.poppy : BDS.grayLighter,
+    color: selected ? BDS.white : BDS.grayDarkest,
+  });
+
+  const typeOptionStyle = (focused: boolean): CSSProperties => ({
+    display: 'inline-flex',
     cursor: 'pointer',
-    lineHeight: 1, // bds-lint-ignore — dev overlay renders fixed
-    transition:
-      'background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease',
+    borderRadius: '999px',
+    outline: focused ? `2px solid ${BDS.poppy}` : 'none',
+    outlineOffset: '2px',
   });
 
   const textareaStyle: CSSProperties = {
@@ -633,20 +663,39 @@ export function DevFeedbackWidget({
                   gap: '8px', // bds-lint-ignore — dev overlay renders fixed
                 }}
               >
-                <div style={typeGridStyle} role="radiogroup" aria-label="Feedback type">
+                <fieldset style={typeGroupStyle}>
+                  <legend style={typeRadioStyle}>Feedback type</legend>
                   {FEEDBACK_TYPES.map((ft) => (
-                    <button
+                    <label
                       key={ft.value}
-                      type="button"
-                      role="radio"
-                      aria-checked={type === ft.value}
-                      style={typeBtnStyle(type === ft.value)}
-                      onClick={() => setType(ft.value)}
+                      style={typeOptionStyle(focusedType === ft.value)}
                     >
-                      {ft.label}
-                    </button>
+                      <input
+                        type="radio"
+                        name={typeGroupName}
+                        value={ft.value}
+                        checked={type === ft.value}
+                        onChange={() => setType(ft.value)}
+                        onFocus={(e) => {
+                          let keyboard = true;
+                          try {
+                            keyboard = e.currentTarget.matches(':focus-visible');
+                          } catch {
+                            // Older engines without :focus-visible — show the ring.
+                          }
+                          setFocusedType(keyboard ? ft.value : null);
+                        }}
+                        onBlur={() => setFocusedType(null)}
+                        style={typeRadioStyle}
+                      />
+                      <Chip
+                        label={ft.label}
+                        variant={type === ft.value ? 'primary' : 'secondary'}
+                        style={typeChipStyle(type === ft.value)}
+                      />
+                    </label>
                   ))}
-                </div>
+                </fieldset>
 
                 <textarea
                   style={textareaStyle}
