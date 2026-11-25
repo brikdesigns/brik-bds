@@ -119,19 +119,23 @@ export function TableOfContents({
       .filter((el): el is HTMLElement => el !== null);
     if (els.length === 0) return;
 
-    const tops = new Map<string, number>();
+    // Membership only: the observer fires when intersection changes, not when a
+    // section moves, so positions are read fresh below rather than cached.
+    const intersecting = new Set<string>();
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
-          if (entry.isIntersecting) tops.set(entry.target.id, entry.boundingClientRect.top);
-          else tops.delete(entry.target.id);
+          if (entry.isIntersecting) intersecting.add(entry.target.id);
+          else intersecting.delete(entry.target.id);
         }
         let best: string | undefined;
         let bestTop = Infinity;
-        for (const [id, top] of tops) {
+        for (const el of els) {
+          if (!intersecting.has(el.id)) continue;
+          const top = el.getBoundingClientRect().top;
           if (top < bestTop) {
             bestTop = top;
-            best = id;
+            best = el.id;
           }
         }
         if (best) setSpyActive(best);
