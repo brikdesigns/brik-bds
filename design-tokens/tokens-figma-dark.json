@@ -1506,7 +1506,7 @@
         "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke."
       },
       "neutral": {
-        "$value": "{color.grayscale.500}",
+        "$value": "{color.grayscale.400}",
         "$type": "color",
         "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/neutral; this one styles a border/stroke."
       },
@@ -1648,7 +1648,7 @@
         "$type": "color"
       },
       "neutral": {
-        "$value": "{color.grayscale.500}",
+        "$value": "{color.grayscale.400}",
         "$type": "color"
       },
       "positive": {

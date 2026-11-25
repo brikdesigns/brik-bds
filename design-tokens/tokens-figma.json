@@ -1501,7 +1501,7 @@
     },
     "chart": {
       "brand": {
-        "$value": "{color.grayscale.950}",
+        "$value": "{color.grayscale.900}",
         "$type": "color",
         "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke."
       },
@@ -1644,7 +1644,7 @@
     },
     "chart": {
       "brand": {
-        "$value": "{color.grayscale.950}",
+        "$value": "{color.grayscale.900}",
         "$type": "color"
       },
       "neutral": {
