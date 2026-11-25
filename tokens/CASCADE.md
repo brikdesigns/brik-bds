@@ -214,6 +214,8 @@ Each name below is declared by a hand-written file (`gap-fills.css`, `ratios.css
 | `--bds-pageheader-top` | A runtime slot (`0px`). A component or shell sets it per instance, so it carries no design value. |
 | `--bds-subnav-top` | A runtime slot (`0px`). A component or shell sets it per instance, so it carries no design value. |
 | `--bds-slider-percent` | A runtime slot (`0%`). The Slider sets it per instance. |
+| `--bds-slider-thumb-size` | A runtime slot (`20px`). `Slider.tsx:125` sets it per size; the declaration is the pre-hydration default. |
+| `--bds-slider-track-height` | A runtime slot (`4px`). `Slider.tsx:124` sets it per size; the declaration is the pre-hydration default. |
 | `--bds-state-focus` | `currentColor`. A Figma colour variable holds a colour, not `currentColor`. |
 | `--bds-text-transform-field-label` | A text case (`capitalize`, `none`, `uppercase`). A Figma string variable binds to font family, style, weight or text content, not case. |
 | `--bds-text-transform-label` | A text case (`capitalize`, `none`, `uppercase`). A Figma string variable binds to font family, style, weight or text content, not case. |
