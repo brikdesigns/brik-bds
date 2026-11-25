@@ -1,7 +1,7 @@
 import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 import React, { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
-import { Breadcrumb } from './Breadcrumb';
+import { Breadcrumb, type BreadcrumbItem } from './Breadcrumb';
 import figmaTokensCss from '../../../tokens/figma-tokens.css?raw';
 import gapFillsCss from '../../../tokens/gap-fills.css?raw';
 
@@ -39,7 +39,7 @@ const items = [
   { label: 'Services', switcher },
 ];
 
-async function mount(width: number) {
+async function mount(width: number, trail: BreadcrumbItem[] = items) {
   host = document.createElement('div');
   // The portal slot: flex row, the breadcrumb's wrapper is `flex: 1 1 0; min-width: 0`.
   host.style.cssText = `display:flex;width:${width}px`;
@@ -47,7 +47,7 @@ async function mount(width: number) {
   root = createRoot(host);
   await act(async () => {
     root.render(
-      h('div', { style: { flex: '1 1 0', minWidth: 0, display: 'flex' } }, h(Breadcrumb, { items })),
+      h('div', { style: { flex: '1 1 0', minWidth: 0, display: 'flex' } }, h(Breadcrumb, { items: trail })),
     );
   });
   // Let ResizeObserver + layout effects settle.
@@ -76,5 +76,26 @@ describe('Breadcrumb in a shrink-wrapped flex slot', () => {
     expect(nav.getBoundingClientRect().width).toBeGreaterThan(400);
     for (const el of labelsOf(nav)) expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth);
     expect(labelsOf(nav).map((el) => el.style.maxWidth)).toEqual(['', '', '']);
+  });
+
+  // #3378: a trail that FOLDS (not caps) at a narrow first measure used to keep its
+  // nav at the folded width, so widening the slot never unfolded it.
+  const foldingTrail = [
+    { label: 'Companies', href: '/c', switcher },
+    { label: 'Brik Designs', href: '/c/b' },
+    { label: 'Details', switcher },
+  ];
+
+  it.each([300, 330])('unfolds the trail when the slot widens from %ipx to 1000px', async (width) => {
+    await mount(width, foldingTrail);
+    host.style.width = '1000px';
+    await new Promise((r) => setTimeout(r, 300));
+    const nav = host.querySelector('nav')!;
+    const foldButtons = Array.from(nav.querySelectorAll('button[aria-label="More breadcrumbs"]')).filter(
+      (b) => !b.closest('.bds-breadcrumb__measure'),
+    );
+    expect(foldButtons).toHaveLength(0);
+    expect(labelsOf(nav).map((el) => el.textContent)).toEqual(['Companies', 'Brik Designs', 'Details']);
+    for (const el of labelsOf(nav)) expect(el.getBoundingClientRect().width).toBeGreaterThan(0);
   });
 });
