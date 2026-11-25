@@ -72,8 +72,8 @@ describe('Breadcrumb in a shrink-wrapped flex slot', () => {
     host.style.width = '1127px';
     await new Promise((r) => setTimeout(r, 300));
     const nav = host.querySelector('nav')!;
-    // The slot, not the previously capped content, sets the nav's width.
-    expect(nav.getBoundingClientRect().width).toBe(1127);
+    // The nav grows back to the trail's natural width (~490px) instead of staying locked at ~172px.
+    expect(nav.getBoundingClientRect().width).toBeGreaterThan(400);
     for (const el of labelsOf(nav)) expect(el.scrollWidth).toBeLessThanOrEqual(el.clientWidth);
     expect(labelsOf(nav).map((el) => el.style.maxWidth)).toEqual(['', '', '']);
   });

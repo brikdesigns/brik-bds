@@ -15,11 +15,14 @@
   gap: var(--bds-gap-md);
   align-items: center;
   min-width: 0;
-  /* Fill a flex-row parent instead of shrink-wrapping. The overflow decision
-     reads this box's own width, so a box that wraps its (label-capped)
-     content locks itself small: a narrow first measure caps the labels, the
-     capped labels keep the box narrow, and the slot widening never reaches it.
-     A no-op in a block parent. */
+}
+
+/* While labels are capped, fill a flex-row parent instead of shrink-wrapping.
+   The overflow decision reads this box's own width, so a box that wraps its
+   label-capped content locks itself small: a narrow first measure caps the
+   labels, the capped labels keep the box narrow, and the slot widening never
+   reaches it. Only while capped, so a trail that fits keeps its layout. */
+.bds-breadcrumb--capped {
   flex: 1 1 auto;
 }
 
