@@ -512,7 +512,7 @@ function controlActions(
 ): ReactNode {
   if (readOnly) {
     return (
-      <Button variant="ghost" size="sm" href={manageHref ?? '#'}>
+      <Button variant="secondary" size="sm" href={manageHref ?? '#'}>
         Manage on profile
       </Button>
     );

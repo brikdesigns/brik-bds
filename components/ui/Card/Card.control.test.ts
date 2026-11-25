@@ -117,5 +117,8 @@ describe('Card control actions', () => {
     });
     expect(html).toContain('href="/admin/companies/acme"');
     expect(buttonLabels(html)).toEqual(['Manage on profile']);
+    // A card's own action is `secondary` (Card.mdx); `ghost` is for in-row actions.
+    expect(html).toMatch(/<a\b[^>]*bds-button--variant-secondary[^>]*>(?:<[^>]+>)*Manage on profile/);
+    expect(html).not.toContain('bds-button--variant-ghost');
   });
 });
