@@ -5,6 +5,8 @@
   /* Anchors the hidden measuring pass (`__measure`). */
   position: relative;
   display: flex;
+  /* Always fill a flex-row parent instead of shrink-wrapping (see below). */
+  flex: 1 1 auto;
   /* One line, never wraps (#3344). A trail that does not fit folds its middle
      crumbs into the `More breadcrumbs` menu (Breadcrumb.tsx); until that is
      measured — SSR, first paint — and whenever the crumbs left are ones that
@@ -17,14 +19,12 @@
   min-width: 0;
 }
 
-/* While labels are capped, fill a flex-row parent instead of shrink-wrapping.
-   The overflow decision reads this box's own width, so a box that wraps its
-   label-capped content locks itself small: a narrow first measure caps the
-   labels, the capped labels keep the box narrow, and the slot widening never
-   reaches it. Only while capped, so a trail that fits keeps its layout. */
-.bds-breadcrumb[data-label-cap] {
-  flex: 1 1 auto;
-}
+/* Why the box always fills (`flex: 1 1 auto` above). The fold / label-cap
+   decision reads this box's own width, so a shrink-wrapped box locks itself at
+   whatever it first folded or capped to: a narrow first measure folds the
+   middle crumbs (or caps the labels), the shorter content keeps the box
+   narrow, and the slot widening never reaches it (#3378). Filling the slot
+   keeps the measured width the slot's, not the content's. */
 
 /* A floor under the measured cap (Breadcrumb.tsx writes it inline): a capped
    label ellipsises to this much text, never squeezes to nothing. Only while
