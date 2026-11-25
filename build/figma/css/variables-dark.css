@@ -3,6 +3,7 @@
  */
 
 :root[data-theme="dark"] {
+  --bds-background-overlay: rgba(0, 0, 0, 0.4);
   --bds-text-negative: var(--bds-color-system-red-500);
   --bds-text-positive: var(--bds-color-system-green-500);
   --bds-text-warning: var(--bds-color-system-yellow-500);
@@ -20,6 +21,7 @@
   --bds-text-error: var(--bds-color-system-red-500);
   --bds-text-accent-orange: var(--bds-color-system-orange-500);
   --bds-text-info: var(--bds-color-system-blue-200);
+  --bds-text-link: var(--bds-color-system-blue-500);
   --bds-border-negative: var(--bds-color-system-red-500);
   --bds-border-positive: var(--bds-color-system-green-500);
   --bds-border-warning: var(--bds-color-system-yellow-500);
@@ -78,6 +80,11 @@
   --bds-background-chart-negative: var(--bds-color-system-red-500);
   --bds-background-chart-info: var(--bds-color-system-blue-500);
   --bds-background-info: var(--bds-color-system-blue-500);
+  --bds-background-tertiary: var(--bds-color-grayscale-900);
+  --bds-background-tertiary-hover: var(--bds-color-grayscale-800);
+  --bds-background-tertiary-pressed: var(--bds-color-grayscale-700);
+  --bds-background-inverse-hover: var(--bds-color-grayscale-400);
+  --bds-background-inverse-pressed: var(--bds-color-grayscale-500);
   --bds-surface-positive: var(--bds-color-system-green-200);
   --bds-surface-negative: var(--bds-color-system-red-200);
   --bds-surface-warning: var(--bds-color-system-yellow-200);
@@ -109,4 +116,5 @@
   --bds-page-accent-orange: var(--bds-color-system-orange-500);
   --bds-page-accent-red: var(--bds-color-system-red-500);
   --bds-page-accent-purple: var(--bds-color-system-purple-500);
+  --bds-border-focus: var(--bds-border-brand-primary);
 }

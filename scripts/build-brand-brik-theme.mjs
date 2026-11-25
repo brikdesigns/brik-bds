@@ -79,9 +79,10 @@ function block(selector, decls) {
 }
 
 /** Declarations of one top-level block of a hand-written sheet, comments stripped. */
-function blockDeclarations(css, selector) {
+function blockDeclarations(css, selector, { optional = false } = {}) {
   const text = css.replace(/\/\*[\s\S]*?\*\//g, '');
   const start = text.indexOf(`\n${selector} {`);
+  if (start === -1 && optional) return new Map();
   if (start === -1) throw new Error(`build-brand-brik-theme: no "${selector} {" block in gap-fills.css`);
   return declarations(text.slice(start, text.indexOf('\n}', start)));
 }
@@ -108,7 +109,9 @@ const kit = JSON.parse(readFileSync(KIT, 'utf8'));
 // so the diff below re-declares every such name under the Brik class.
 const gapFills = readFileSync(GAP_FILLS, 'utf8');
 const gapLight = blockDeclarations(gapFills, ':root');
-const gapDark = blockDeclarations(gapFills, ':root[data-theme="dark"]');
+// The dark block holds only dark-mode corrections, so it is empty (absent) when
+// Figma carries every dark value (#3338).
+const gapDark = blockDeclarations(gapFills, ':root[data-theme="dark"]', { optional: true });
 // The Brand Kit wins over a gap-fill for every name it declares, so a Brik
 // override can live in Figma even when its name is a gap-fill (#2927). A
 // gap-fill still wins over a Foundations name, as it does on `:root`.

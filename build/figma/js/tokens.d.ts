@@ -80,6 +80,10 @@ export const duration300: string;
 export const duration400: string;
 export const duration500: string;
 export const duration600: string;
+/** Loop period: dwell before auto-advance (carousel, media tabs). Not a tween — tweens use primitives duration/100-600. */
+export const durationAutoplay: string;
+/** Loop period: one full marquee cycle. Not a tween — tweens use primitives duration/100-600. */
+export const durationMarquee: string;
 export const fontSize5: string;
 export const fontSize10: string;
 export const fontSize15: string;
@@ -343,6 +347,7 @@ export const textDisabled: string;
 export const textError: string;
 export const textAccentOrange: string;
 export const textInfo: string;
+export const textLink: string;
 export const borderNegative: string;
 export const borderPositive: string;
 export const borderWarning: string;
@@ -376,6 +381,7 @@ export const borderChartNegative: string;
 /** Chart stroke — line, outline, axis series mark. Same value as background/chart/info; this one styles a border/stroke. */
 export const borderChartInfo: string;
 export const borderInfo: string;
+export const borderFocus: string;
 export const backgroundNegative: string;
 export const backgroundPositive: string;
 export const backgroundWarning: string;
@@ -409,6 +415,12 @@ export const backgroundChartWarning: string;
 export const backgroundChartNegative: string;
 export const backgroundChartInfo: string;
 export const backgroundInfo: string;
+export const backgroundOverlay: string;
+export const backgroundTertiary: string;
+export const backgroundTertiaryHover: string;
+export const backgroundTertiaryPressed: string;
+export const backgroundInverseHover: string;
+export const backgroundInversePressed: string;
 export const surfacePositive: string;
 export const surfaceNegative: string;
 export const surfaceWarning: string;
@@ -451,6 +463,10 @@ export const contentWidthMd: string;
 export const contentWidthSm: string;
 /** Text column — long-form prose, rich-text body (ADR-041). Same in every mode: a text measure does not widen with the page band. CSS --bds-content-width-text-md. */
 export const contentWidthTextMd: string;
+/** TEXT COLUMN — short intro: eyebrow + one-line title. Caps a text column, never a band. Mode-invariant. */
+export const contentWidthTextXs: string;
+/** TEXT COLUMN — section intro: title + description (the default). Caps a text column, never a band. Mode-invariant. */
+export const contentWidthTextSm: string;
 /** Decelerate — most UI transitions. CSS --bds-ease-out. */
 export const easeOut: string;
 /** Accelerate — exits, collapses. CSS --bds-ease-in. */

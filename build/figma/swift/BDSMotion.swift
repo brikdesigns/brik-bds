@@ -14,4 +14,6 @@ public enum BDSMotion {
     public static let duration400: CGFloat = 500
     public static let duration500: CGFloat = 800
     public static let duration600: CGFloat = 1000
+    public static let durationAutoplay: CGFloat = 10 /// Loop period: dwell before auto-advance (carousel, media tabs). Not a tween — tweens use primitives duration/100-600.
+    public static let durationMarquee: CGFloat = 55 /// Loop period: one full marquee cycle. Not a tween — tweens use primitives duration/100-600.
 }

@@ -272,7 +272,7 @@ Every mapping below is positional and measured; values do not change.
 
 ### Named exceptions — not retired
 
-`--size-pill` · `--size-circle` · `--border-radius-pill` · `--border-radius-circle` (shape constants) · `--aspect-{square,cinema,photo-landscape,photo-portrait}` (semantic ratio aliases) · `--iteration-infinite` (CSS keyword) · `--content-width-full` (not a step) · `--shadow-overlay` (a role, not a step) · `--duration-marquee` · `--duration-autoplay` (periodic-motion roles — a loop period and an auto-advance dwell, not points on the fast/normal/slow ramp; [#2044](https://github.com/brikdesigns/brik-bds/issues/2044)) · `--web` · `--tablet` · `--mobile` (slotless carve-out, per [#1912](https://github.com/brikdesigns/brik-bds/pull/1912)) · the bare **service-line** modifiers on service-line-emitting blocks (§ 4, [#1982](https://github.com/brikdesigns/brik-bds/issues/1982) — sourced from `ServiceLine`, never re-listed).
+`--size-pill` · `--size-circle` · `--border-radius-pill` · `--border-radius-circle` (shape constants) · `--aspect-{square,cinema,photo-landscape,photo-portrait}` (semantic ratio aliases) · `--iteration-infinite` (CSS keyword) · `--content-width-full` (not a step) · `--shadow-overlay` (a role, not a step) · `--duration-marquee` · `--duration-autoplay` (periodic-motion roles — a loop period and an auto-advance dwell, not points on the fast/normal/slow ramp; [#2044](https://github.com/brikdesigns/brik-bds/issues/2044); Figma `motion` collection since [#3338](https://github.com/brikdesigns/brik-bds/issues/3338)) · `--web` · `--tablet` · `--mobile` (slotless carve-out, per [#1912](https://github.com/brikdesigns/brik-bds/pull/1912)) · the bare **service-line** modifiers on service-line-emitting blocks (§ 4, [#1982](https://github.com/brikdesigns/brik-bds/issues/1982) — sourced from `ServiceLine`, never re-listed).
 
 ## Alternatives considered
 
@@ -726,3 +726,13 @@ OPERATOR SAID 2026-11-24 (chat, `638610b9-eb8e-48f1-8912-bf3e52a50f43.jsonl:805`
 **Why § 2 still holds.** The case for `status` = presence/lifecycle rests on the word, not on a token family. `AvatarStatus` (`online|offline|busy|away`) and TaskConsole's lifecycle keep the `status` prop. Only the second argument, "orphaning the presence token family", lapses.
 
 **Enforcement.** None new. The four names left `tokens/naming-canon-baseline.json` and `tokens/compat/legacy-token-names.json` in #3360. **Baseline:** unchanged by this amendment.
+
+### Loop periods live in the `motion` collection (2026-11-25, [#3338](https://github.com/brikdesigns/brik-bds/issues/3338))
+
+OPERATOR SAID 2026-11-25 (chat, `75a4bd36-fe57-45c1-b2bc-dc6f7a18a794.jsonl:596`): "1 - yes; 2 - Let's ensure we clarify our band vs text-column width in this collection. You can revisit our tertiary colors per your recs. 3 - yes; 4 - can we add to our motion collection?" OPERATOR SAID 2026-11-25 (same session, `:658`): "updated and published - let's' continue and ensure style dictionary is referencing the latest tokens".
+
+**What changes.** `--duration-marquee` (55s) and `--duration-autoplay` (10s) move out of `tokens/gap-fills.css`. They are now ❖ Brik Foundations `motion/default` → `duration/marquee` · `duration/autoplay`, emitted to `tokens/figma-tokens.css`. The names do not change.
+
+**Why.** § Amendments, "Duration has no Semantic tier", keeps them as named exceptions because they are loop periods, not tweens. That reason still holds. A loop period is a motion role, so it sits beside `ease/*` in the Semantic `motion` collection, not on the numeric Primitive ramp.
+
+**Enforcement.** None new. Both rule-9 rows leave `tokens/naming-canon-baseline.json`. **Baseline:** −2.

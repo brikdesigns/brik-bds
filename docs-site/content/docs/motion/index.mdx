@@ -30,8 +30,7 @@ Load files in this order. Each layer depends on the one before it.
 
 | File | Layer | Required for |
 |---|---|---|
-| `tokens/gap-fills.css` | Token | All tiers — the periodic durations `--bds-duration-marquee` / `-autoplay` (part of the `bds-tokens` bundle) |
-| `tokens/figma-tokens.css` | Token | All tiers — the duration primitives `--bds-duration-100` … `--bds-duration-600` and the six `--bds-ease-*` curves (auto-generated from Figma) |
+| `tokens/figma-tokens.css` | Token | All tiers — the duration primitives `--bds-duration-100` … `--bds-duration-600`, the periodic durations `--bds-duration-marquee` / `-autoplay`, and the six `--bds-ease-*` curves (auto-generated from Figma) |
 | `tokens/compat/bridge.css` | Token | All tiers — `--stagger-1` … `--stagger-6` (ships in `dist/bridge.css`, outside the canonical token registry) |
 | `tokens/animations.css` | Token | All tiers — named keyframes (`bds-fade-in`, `bds-slide-up`, etc.) |
 | `tokens/motion-classes.css` | Token | All tiers — composable utility classes (`.bds-enter-fade`, `.bds-anim-pulse`, `.bds-stagger-1` through `.bds-stagger-6`) built from the token layer |
