@@ -77,6 +77,23 @@ describe('DevFeedbackWidget — feedback-type picker (#3319)', () => {
     expect(chipOf('ui').className).toContain('bds-chip--variant-secondary');
   });
 
+  it('keeps the selected Chip Poppy on a dark host, whatever the theme tokens say', async () => {
+    // The panel is always white, so a theme-following Chip would go light on
+    // white in dark mode. This project loads no token stylesheet, so it also
+    // stands in for the stylesheet-failed case the widget guards against.
+    document.documentElement.setAttribute('data-theme', 'dark');
+    try {
+      const radios = await openPanel();
+      const chipOf = (value: string) =>
+        radios.find((r) => r.value === value)!.closest('label')!.querySelector<HTMLElement>('.bds-chip')!;
+      expect(getComputedStyle(chipOf('bug')).backgroundColor).toBe('rgb(227, 83, 53)');
+      expect(getComputedStyle(chipOf('bug')).color).toBe('rgb(255, 255, 255)');
+      expect(getComputedStyle(chipOf('ui')).backgroundColor).toBe('rgb(255, 255, 255)');
+    } finally {
+      document.documentElement.removeAttribute('data-theme');
+    }
+  });
+
   it('selects a type when its Chip is clicked', async () => {
     const radios = await openPanel();
     const uiChip = radios.find((r) => r.value === 'ui')!.closest('label')!.querySelector('.bds-chip')!;

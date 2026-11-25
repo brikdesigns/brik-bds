@@ -36,9 +36,13 @@ import { Chip } from '../Chip';
  * BDS tokens here would defeat the stability guarantee. If you're adding a
  * new host-surface component, use tokens instead.
  *
- * Exception: the feedback-type picker renders BDS `Chip`s (#3319), so those
- * pills follow the host's tokens and theme. A hand-rolled pill is a missing
- * component, not a local style (build-standards/indicators).
+ * The feedback-type picker renders BDS `Chip`s (#3319) — a hand-rolled pill is
+ * a missing component, not a local style (build-standards/indicators). Chip
+ * supplies the anatomy; its fill and text colours are pinned inline from the
+ * object below, because the panel is always white: a host-theme Chip would go
+ * light-on-white in dark mode, and lose its selected state with no stylesheet.
+ * Each Chip is presentation only, with no `onChipClick`: the native radio in
+ * its `<label>` is the one interactive element (ADR-045 § 3).
  */
 
 // ── Brand tokens (inlined — widget is a dev overlay, not consumer surface) ──
@@ -509,6 +513,12 @@ export function DevFeedbackWidget({
     border: 0,
   };
 
+  const typeChipStyle = (selected: boolean): CSSProperties => ({
+    backgroundColor: selected ? BDS.poppy : BDS.white,
+    borderColor: selected ? BDS.poppy : BDS.grayLighter,
+    color: selected ? BDS.white : BDS.grayDarkest,
+  });
+
   const typeOptionStyle = (focused: boolean): CSSProperties => ({
     display: 'inline-flex',
     cursor: 'pointer',
@@ -681,6 +691,7 @@ export function DevFeedbackWidget({
                       <Chip
                         label={ft.label}
                         variant={type === ft.value ? 'primary' : 'secondary'}
+                        style={typeChipStyle(type === ft.value)}
                       />
                     </label>
                   ))}
