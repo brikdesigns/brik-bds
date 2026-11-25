@@ -726,3 +726,15 @@ OPERATOR SAID 2026-11-24 (chat, `638610b9-eb8e-48f1-8912-bf3e52a50f43.jsonl:805`
 **Why § 2 still holds.** The case for `status` = presence/lifecycle rests on the word, not on a token family. `AvatarStatus` (`online|offline|busy|away`) and TaskConsole's lifecycle keep the `status` prop. Only the second argument, "orphaning the presence token family", lapses.
 
 **Enforcement.** None new. The four names left `tokens/naming-canon-baseline.json` and `tokens/compat/legacy-token-names.json` in #3360. **Baseline:** unchanged by this amendment.
+
+### Dialog's and Modal's confirm styles are curated style lists (2026-11-25, [#3317](https://github.com/brikdesigns/brik-bds/issues/3317))
+
+AGENT DECIDED (revisable): path (b) of #3317. Evidence: both unions pass their value straight to `<Button variant>` ([Dialog.tsx:119](../../components/ui/Dialog/Dialog.tsx), [Modal.tsx:234](../../components/ui/Modal/Modal.tsx)), and brik-client-portal already ships `<Dialog variant="negative">` (`src/components/task-action-modal/index.tsx:1096`). Revert: drop both names from `CURATED_STYLE_UNIONS` and move valence to a `tone` prop (path (a) of #3317).
+
+**What changes.** `DialogVariant` (`default` · `negative`) and `ModalConfirmVariant` (`primary` · `negative`) join `ButtonVariant` as curated style lists. Each member names the finished look of the confirm button, not a form plus a valence.
+
+**Why not path (a).** A `tone` prop on Dialog would style one Button inside it. Button already settled that a designer picks one button style from one list (§ Amendments, #3275). Splitting the confirm style back into `variant` + `tone` would bring back the two-prop choice that amendment removed, for a two-value union.
+
+**Rule for these two unions.** Every member must be a `ButtonVariant` member, or `default`, which resolves to `primary`. A new member is added to Button first.
+
+**Enforcement.** `CURATED_STYLE_UNIONS` gains `DialogVariant` and `ModalConfirmVariant`. That skips rule 3's mixed-axis check for them; the retired-word checks still run. Today neither union trips rule 3, because `default` and `primary` carry no axis. The entry records the exception before #3315 extends the gate to valence words in `variant`. **Baseline:** unchanged.

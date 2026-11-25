@@ -674,6 +674,26 @@ describe('rule 3 — Button\'s curated style list (§ Amendments, #3275)', () =>
   });
 });
 
+describe('rule 3 — Dialog and Modal confirm styles (§ Amendments, #3317)', () => {
+  // Positive control: the same members under a name outside the set are
+  // flagged (the ChipVariant case above), so a pass here is the set, not blindness.
+  it.each(['DialogVariant', 'ModalConfirmVariant'])('skips the mixed-axis check for %s', (name) => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type ${name} = 'primary' | 'ghost' | 'inverse' | 'negative';\n`,
+    });
+    expect(out).not.toMatch(new RegExp(`${name}#mixed`));
+    expect(code).toBe(0);
+  });
+
+  it('still runs the retired-word check on DialogVariant', () => {
+    const { code, out } = run({
+      tsx: `${CLEAN_TSX}export type DialogVariant = 'default' | 'destructive';\n`,
+    });
+    expect(code).toBe(1);
+    expect(out).toMatch(/DialogVariant — retired valence word/);
+  });
+});
+
 describe('rule 4 + 5 — the `span` axis (§ Amendments, #2930)', () => {
   it('admits the axis-prefixed modifier Field emits for span="full"', () => {
     // Before the amendment this was `✗ --span-full — bare modifier`: `span` was

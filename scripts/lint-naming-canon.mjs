@@ -667,9 +667,11 @@ function mixedAxes(members) {
  * member names one finished look (`negative-outline` is one style, not
  * `outline` + `negative`), so the rule 3 axis-mixing check is skipped for
  * them. The retired-word checks still run. A name joins this set only by
- * its own amendment.
+ * its own amendment. DialogVariant and ModalConfirmVariant joined by the
+ * "Dialog's and Modal's confirm styles" amendment (#3317): each picks the
+ * confirm Button's variant.
  */
-const CURATED_STYLE_UNIONS = new Set(['ButtonVariant']);
+const CURATED_STYLE_UNIONS = new Set(['ButtonVariant', 'DialogVariant', 'ModalConfirmVariant']);
 
 function unionFindings(unions) {
   const findings = [];
