@@ -106,7 +106,7 @@ Fixed offsets for sequencing a group of elements into view — apply an increasi
 | Token group | Source | Editable |
 |---|---|---|
 | `--bds-duration-100` … `--bds-duration-600`, all `--bds-ease-*` | Figma → `design-tokens/tokens-studio.json` → `tokens/figma-tokens.css` | Figma only — the CSS is auto-generated |
-| `--bds-duration-marquee`, `--bds-duration-autoplay` | `tokens/gap-fills.css` | Hand-authored named exceptions |
+| `--bds-duration-marquee`, `--bds-duration-autoplay` | Figma `motion` collection → `tokens/figma-tokens.css` | Figma only — loop periods, a named exception to the tween ramp |
 | `--stagger-1` … `--stagger-6` | `tokens/compat/bridge.css` | Hand-authored |
 
 Ready-made utility classes built on these tokens — `.bds-enter-*`, `.bds-anim-*` — live in `tokens/motion-classes.css` over the keyframes in `tokens/animations.css`. Prefer an existing class before writing a new animation.

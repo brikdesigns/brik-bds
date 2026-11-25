@@ -5419,6 +5419,15 @@
         },
         "$type": "color",
         "$value": "{color.system.blue.800}"
+      },
+      "link": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue.500}"
       }
     },
     "border": {
@@ -5664,6 +5673,15 @@
         },
         "$type": "color",
         "$value": "{color.system.blue.500}"
+      },
+      "focus": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{border.brand-primary}"
       }
     },
     "background": {
@@ -5714,7 +5732,7 @@
       },
       "secondary-pressed": {
         "$type": "color",
-        "$value": "{color.grayscale.950}",
+        "$value": "{color.grayscale.900}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -5963,6 +5981,60 @@
         },
         "$type": "color",
         "$value": "{color.system.blue.500}"
+      },
+      "overlay": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "#00000066"
+      },
+      "tertiary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.200}"
+      },
+      "tertiary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.300}"
+      },
+      "tertiary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.400}"
+      },
+      "inverse-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.800}"
+      },
+      "inverse-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.700}"
       }
     },
     "surface": {
@@ -6405,6 +6477,15 @@
         },
         "$type": "color",
         "$value": "{color.system.blue.200}"
+      },
+      "link": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.system.blue.500}"
       }
     },
     "border": {
@@ -6650,6 +6731,15 @@
         },
         "$type": "color",
         "$value": "{color.system.blue.500}"
+      },
+      "focus": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{border.brand-primary}"
       }
     },
     "background": {
@@ -6949,6 +7039,60 @@
         },
         "$type": "color",
         "$value": "{color.system.blue.500}"
+      },
+      "overlay": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "#00000066"
+      },
+      "tertiary": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.900}"
+      },
+      "tertiary-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.800}"
+      },
+      "tertiary-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.700}"
+      },
+      "inverse-hover": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.400}"
+      },
+      "inverse-pressed": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.grayscale.500}"
       }
     },
     "surface": {
@@ -7287,6 +7431,26 @@
         "$type": "string",
         "$value": "720px",
         "$description": "Text column — long-form prose, rich-text body (ADR-041). Same in every mode: a text measure does not widen with the page band. CSS --bds-content-width-text-md."
+      },
+      "text-xs": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "448px",
+        "$description": "TEXT COLUMN — short intro: eyebrow + one-line title. Caps a text column, never a band. Mode-invariant."
+      },
+      "text-sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "600px",
+        "$description": "TEXT COLUMN — section intro: title + description (the default). Caps a text column, never a band. Mode-invariant."
       }
     }
   },
@@ -7341,6 +7505,26 @@
         "$type": "string",
         "$value": "720px",
         "$description": "Text column — long-form prose, rich-text body (ADR-041). Same in every mode: a text measure does not widen with the page band. CSS --bds-content-width-text-md."
+      },
+      "text-xs": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "448px",
+        "$description": "TEXT COLUMN — short intro: eyebrow + one-line title. Caps a text column, never a band. Mode-invariant."
+      },
+      "text-sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "600px",
+        "$description": "TEXT COLUMN — section intro: title + description (the default). Caps a text column, never a band. Mode-invariant."
       }
     }
   },
@@ -7395,6 +7579,26 @@
         "$type": "string",
         "$value": "720px",
         "$description": "Text column — long-form prose, rich-text body (ADR-041). Same in every mode: a text measure does not widen with the page band. CSS --bds-content-width-text-md."
+      },
+      "text-xs": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "448px",
+        "$description": "TEXT COLUMN — short intro: eyebrow + one-line title. Caps a text column, never a band. Mode-invariant."
+      },
+      "text-sm": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "600px",
+        "$description": "TEXT COLUMN — section intro: title + description (the default). Caps a text column, never a band. Mode-invariant."
       }
     }
   },
@@ -7459,6 +7663,28 @@
         "$type": "string",
         "$value": "linear",
         "$description": "Constant velocity — marquees, continuous loops. CSS --bds-ease-linear."
+      }
+    },
+    "duration": {
+      "autoplay": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "10s",
+        "$description": "Loop period: dwell before auto-advance (carousel, media tabs). Not a tween — tweens use primitives duration/100-600."
+      },
+      "marquee": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "55s",
+        "$description": "Loop period: one full marquee cycle. Not a tween — tweens use primitives duration/100-600."
       }
     }
   },

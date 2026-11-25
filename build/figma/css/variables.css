@@ -74,6 +74,8 @@
   --bds-duration-400: 500ms;
   --bds-duration-500: 800ms;
   --bds-duration-600: 1000ms;
+  --bds-duration-autoplay: 10s; /** Loop period: dwell before auto-advance (carousel, media tabs). Not a tween — tweens use primitives duration/100-600. */
+  --bds-duration-marquee: 55s; /** Loop period: one full marquee cycle. Not a tween — tweens use primitives duration/100-600. */
   --bds-font-size-5: 5.690000057220459px;
   --bds-font-size-10: 6.409999847412109px;
   --bds-font-size-15: 8.109999656677246px;
@@ -249,11 +251,14 @@
   --bds-breakpoint-desktop: 1024px;
   --bds-breakpoint-wide: 1280px;
   --bds-breakpoint-wider: 1440px;
+  --bds-background-overlay: rgba(0, 0, 0, 0.4);
   --bds-content-width-xl: 1280px; /** Page-band cap (ADR-041 --bds-content-width-xl). `full` re-points to the content-width-full rung (100%). */
   --bds-content-width-lg: 1024px; /** Band — feature grids, CTA bands. CSS --bds-content-width-lg. */
   --bds-content-width-md: 800px; /** Band — standard text-led body section. CSS --bds-content-width-md. */
   --bds-content-width-sm: 640px; /** Band — narrow band, focused forms. CSS --bds-content-width-sm. */
   --bds-content-width-text-md: 720px; /** Text column — long-form prose, rich-text body (ADR-041). Same in every mode: a text measure does not widen with the page band. CSS --bds-content-width-text-md. */
+  --bds-content-width-text-xs: 448px; /** TEXT COLUMN — short intro: eyebrow + one-line title. Caps a text column, never a band. Mode-invariant. */
+  --bds-content-width-text-sm: 600px; /** TEXT COLUMN — section intro: title + description (the default). Caps a text column, never a band. Mode-invariant. */
   --bds-ease-out: cubic-bezier(0.16, 1, 0.3, 1); /** Decelerate — most UI transitions. CSS --bds-ease-out. */
   --bds-ease-in: cubic-bezier(0.7, 0, 0.84, 0); /** Accelerate — exits, collapses. CSS --bds-ease-in. */
   --bds-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1); /** Symmetric — looping, continuous. CSS --bds-ease-in-out. */
@@ -347,6 +352,7 @@
   --bds-text-error: var(--bds-color-system-red-500);
   --bds-text-accent-orange: var(--bds-color-system-orange-500);
   --bds-text-info: var(--bds-color-system-blue-800);
+  --bds-text-link: var(--bds-color-system-blue-500);
   --bds-border-negative: var(--bds-color-system-red-500);
   --bds-border-positive: var(--bds-color-system-green-500);
   --bds-border-warning: var(--bds-color-system-yellow-500);
@@ -378,7 +384,7 @@
   --bds-background-warning: var(--bds-color-system-yellow-500);
   --bds-background-primary-hover: var(--bds-color-grayscale-100);
   --bds-background-secondary-hover: var(--bds-color-grayscale-800);
-  --bds-background-secondary-pressed: var(--bds-color-grayscale-950);
+  --bds-background-secondary-pressed: var(--bds-color-grayscale-900);
   --bds-background-accent-red: var(--bds-color-system-red-500);
   --bds-background-accent-purple: var(--bds-color-system-purple-500);
   --bds-background-accent-blue: var(--bds-color-system-blue-500);
@@ -405,6 +411,11 @@
   --bds-background-chart-negative: var(--bds-color-system-red-500);
   --bds-background-chart-info: var(--bds-color-system-blue-500);
   --bds-background-info: var(--bds-color-system-blue-500);
+  --bds-background-tertiary: var(--bds-color-grayscale-200);
+  --bds-background-tertiary-hover: var(--bds-color-grayscale-300);
+  --bds-background-tertiary-pressed: var(--bds-color-grayscale-400);
+  --bds-background-inverse-hover: var(--bds-color-grayscale-800);
+  --bds-background-inverse-pressed: var(--bds-color-grayscale-700);
   --bds-surface-positive: var(--bds-color-system-green-200);
   --bds-surface-negative: var(--bds-color-system-red-200);
   --bds-surface-warning: var(--bds-color-system-yellow-200);
@@ -436,4 +447,5 @@
   --bds-page-accent-orange: var(--bds-color-system-orange-500);
   --bds-page-accent-red: var(--bds-color-system-red-500);
   --bds-page-accent-purple: var(--bds-color-system-purple-500);
+  --bds-border-focus: var(--bds-border-brand-primary);
 }

@@ -32,14 +32,6 @@
   box-sizing: border-box;
 }
 
-.bds-chip:hover:not(.bds-chip--disabled) {
-  box-shadow: inset 0 0 0 999px var(--chip-hover-overlay); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
-.bds-chip:active:not(.bds-chip--disabled) {
-  box-shadow: inset 0 0 0 999px var(--chip-pressed-overlay); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
-}
-
 .bds-chip:focus-visible {
   outline: var(--bds-border-width-lg) solid var(--bds-state-focus, currentColor);
   outline-offset: 2px;
@@ -73,6 +65,25 @@
 .bds-chip--variant-primary {
   background-color: var(--bds-background-inverse);
   color: var(--bds-text-inverse);
+}
+
+/* Primary states are solid fills on the inverse ladder (#3338). */
+.bds-chip--variant-primary:hover:not(.bds-chip--disabled) {
+  background-color: var(--bds-background-inverse-hover);
+}
+
+.bds-chip--variant-primary:active:not(.bds-chip--disabled) {
+  background-color: var(--bds-background-inverse-pressed);
+}
+
+/* Secondary keeps the overlay until Foundations' background/secondary-hover and
+   -pressed step one rung off the grayscale-100 fill (today 800/900 in light). */
+.bds-chip--variant-secondary:hover:not(.bds-chip--disabled) {
+  box-shadow: inset 0 0 0 999px var(--chip-hover-overlay); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
+}
+
+.bds-chip--variant-secondary:active:not(.bds-chip--disabled) {
+  box-shadow: inset 0 0 0 999px var(--chip-pressed-overlay); /* bds-lint-ignore — component-scoped CSS variable, not a design token */
 }
 
 .bds-chip--variant-secondary {

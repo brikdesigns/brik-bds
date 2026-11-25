@@ -323,6 +323,16 @@
     "600": {
       "$value": "1000ms",
       "$type": "text"
+    },
+    "autoplay": {
+      "$value": "10s",
+      "$type": "string",
+      "$description": "Loop period: dwell before auto-advance (carousel, media tabs). Not a tween — tweens use primitives duration/100-600."
+    },
+    "marquee": {
+      "$value": "55s",
+      "$type": "string",
+      "$description": "Loop period: one full marquee cycle. Not a tween — tweens use primitives duration/100-600."
     }
   },
   "font-size": {
@@ -1405,6 +1415,10 @@
     "info": {
       "$value": "{color.system.blue.200}",
       "$type": "color"
+    },
+    "link": {
+      "$value": "{color.system.blue.500}",
+      "$type": "color"
     }
   },
   "border": {
@@ -1519,6 +1533,10 @@
     },
     "info": {
       "$value": "{color.system.blue.500}",
+      "$type": "color"
+    },
+    "focus": {
+      "$value": "{border.brand-primary}",
       "$type": "color"
     }
   },
@@ -1652,6 +1670,30 @@
     },
     "info": {
       "$value": "{color.system.blue.500}",
+      "$type": "color"
+    },
+    "overlay": {
+      "$value": "#00000066",
+      "$type": "color"
+    },
+    "tertiary": {
+      "$value": "{color.grayscale.900}",
+      "$type": "color"
+    },
+    "tertiary-hover": {
+      "$value": "{color.grayscale.800}",
+      "$type": "color"
+    },
+    "tertiary-pressed": {
+      "$value": "{color.grayscale.700}",
+      "$type": "color"
+    },
+    "inverse-hover": {
+      "$value": "{color.grayscale.400}",
+      "$type": "color"
+    },
+    "inverse-pressed": {
+      "$value": "{color.grayscale.500}",
       "$type": "color"
     }
   },
@@ -1809,6 +1851,16 @@
       "$value": "720px",
       "$type": "string",
       "$description": "Text column — long-form prose, rich-text body (ADR-041). Same in every mode: a text measure does not widen with the page band. CSS --bds-content-width-text-md."
+    },
+    "text-xs": {
+      "$value": "448px",
+      "$type": "string",
+      "$description": "TEXT COLUMN — short intro: eyebrow + one-line title. Caps a text column, never a band. Mode-invariant."
+    },
+    "text-sm": {
+      "$value": "600px",
+      "$type": "string",
+      "$description": "TEXT COLUMN — section intro: title + description (the default). Caps a text column, never a band. Mode-invariant."
     }
   },
   "ease": {

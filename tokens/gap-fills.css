@@ -50,14 +50,8 @@
 
   /* ── System Color Extras ── */
 
-  /* ── Focus ring (gap-fill — not yet in Figma/SD) ──
-     References the border brand-primary token. Override per-theme for branded focus rings. */
-  --bds-border-focus: var(--bds-border-brand-primary);
-
-  /* ── Missing Semantic Tokens ── */
-  /* Light value here; dark value in the :root[data-theme="dark"] block below.
-     Keep the two in lockstep, and move both together when promoted to Figma. */
-  --bds-background-tertiary: var(--bds-color-grayscale-300);
+  /* --bds-border-focus and --bds-background-tertiary{,-hover,-pressed} come from
+     the Figma `color` collection (tokens/figma-tokens.css, #3338). */
 
   /* ── Slider Component Variables ──
      CSS custom properties set dynamically by the Slider component via JS.
@@ -104,23 +98,17 @@
      Do NOT re-add a `status-` name here; `status` is not a documented purpose
      or scope (docs/primitives/token-anatomy). */
 
-  /* ── Forward-facing alias: hyperlink semantic ──
-     Figma defines this as `text/text-link` (node 22846-1906), backed by
-     the active Brand Kit's primary → resolved to --brand-primary. Style Dictionary
-     emits the path-joined name `--bds-text-text-link` (prefix `text` + token
-     `text-link` joined by `-`), which is awkward at consumer sites. This
-     alias gives consumers a clean canonical name while preserving the alias
-     chain — per-theme --brand-primary overrides still flow through.
-
-     Components (TextLink, Prose) read this alias, never the raw
-     `--bds-text-text-link`, so a consumer override of `--bds-text-link` alone
-     recolors them (brik-bds#1624). The raw name is read only by this alias.
+  /* ── Hyperlink semantic ──
+     --bds-text-link comes from the Figma `color` collection as `text/link`
+     (tokens/figma-tokens.css, #3338); the hand-written alias of the path-joined
+     `--bds-text-text-link` is gone. Components (TextLink, Prose) read
+     --bds-text-link, so a consumer override of it alone recolors them
+     (brik-bds#1624).
 
      ⚠️ Use ONLY for interactive hyperlinks (text that does something on
      click). Categorically distinct from --bds-background-info / --bds-text-info,
      which since brik-bds#1959 are the BLUE informational signal (ADR-033 § 5).
      The gray family that used to hold those names is now --*-neutral. */
-  --bds-text-link: var(--bds-text-text-link); /* color role-alias — sanctioned (ADR-035): both resolve to a --color-* Primitive, so it theme-tracks correctly */
 
   /* ── The `neutral` intent family — now Figma-sourced (brik-bds#1959) ──
      All four purposes come from figma-tokens.css since the Foundations rename
@@ -192,8 +180,8 @@
   /* --bds-shadow-{sunken,flat,subtle,raised,lifted,dramatic} come from the Figma
      `elevation` collection (tokens/figma-tokens.css, #3058). */
 
-  /* Overlay (for Modal, Sheet, Dialog backdrops) */
-  --bds-background-overlay: rgba(0, 0, 0, 0.4);
+  /* --bds-background-overlay (Modal, Sheet, Dialog backdrops) comes from the
+     Figma `color` collection (tokens/figma-tokens.css, #3338). */
 
   /* ── On-color muted steps (ADR-046, #2970) ──
      The on-color family's second step: muted text and hairlines over brand
@@ -234,11 +222,10 @@
      element that OWNS the column sets the width; blocks nested inside it never
      re-cap themselves. Two caps in one column is the defect, not the fix.
 
-     `--bds-content-width-{sm,md,lg,xl,text-md}` come from the Figma
-     `content-width` collection (tokens/figma-tokens.css, #3278). The three
-     below have no Figma variable yet. */
-  --bds-content-width-text-xs:   448px;  /* text — short intro: eyebrow + one-line title */
-  --bds-content-width-text-sm:   600px;  /* text — section intro: title + description (the default) */
+     `--bds-content-width-{sm,md,lg,xl}` (bands) and
+     `--bds-content-width-text-{xs,sm,md}` (text columns) come from the Figma
+     `content-width` collection (tokens/figma-tokens.css, #3278, #3338). The one
+     below has no Figma variable. */
   --bds-content-width-full:      100%;   /* band — full-bleed (use sparingly — prefer explicit widths) */
 
   /* ── Page inset (ADR-025 recipe; ADR-042 value) ──
@@ -335,20 +322,11 @@
      reads this token — do not reintroduce a literal. */
   --bds-state-disabled-opacity: 0.5;
 
-  /* ── Motion semantic aliases ──
-     The periodic durations below are repo-owned (no Figma variable). Transition durations are the Figma `--bds-duration-{100,200,300,400}`
-     primitives; components read them directly. */
-
-  /* Periodic / loop durations — role tokens, NOT steps on the transition ramp
-     above (ADR-033 § Named exceptions). These
-     feed animation-duration on infinite loops and JS auto-advance intervals, so
-     they live in seconds. Reach for --bds-duration-100/200/300 for any tween; only
-     continuous or timed-advance motion uses these. */
-  --bds-duration-marquee:  55s;  /* full marquee loop period — logo tickers, continuous scroll */
-  --bds-duration-autoplay: 10s;  /* dwell before auto-advance — carousels, media tabs */
-
-  /* --bds-ease-{out,in,in-out,spring,spring-soft,linear} come from the Figma
-     `motion` collection (tokens/figma-tokens.css, #3278). */
+  /* ── Motion ──
+     Transition durations are the Figma `--bds-duration-{100..600}` primitives;
+     components read them directly. The loop periods --bds-duration-{marquee,autoplay}
+     (ADR-033 § Named exceptions) and --bds-ease-{out,in,in-out,spring,spring-soft,linear}
+     come from the Figma `motion` collection (tokens/figma-tokens.css, #3278, #3338). */
 
   /* ── DEPRECATED shadow aliases (#3058) — DROP NEXT MINOR ──
      The hand-written --bds-shadow-{sm,md,lg,xl,overlay} were replaced by the
@@ -408,19 +386,5 @@
   --bds-pageheader-top:            0px;
 }
 
-/* ── Dark-mode corrections for generated tokens ──
-   Re-pins generated (figma-tokens-dark.css) values that are wrong in dark mode.
-   Last in cascade + same specificity as the generated :root[data-theme="dark"]
-   block, so these win for ALL consumers (the brand theme also pins them, at
-   higher specificity, in theme-brand-brik.generated.css).
-   RETIRE each entry once the Figma source is corrected and re-synced. */
-:root[data-theme="dark"] {
-  /* Dark value for the --bds-background-tertiary gap-fill (light value above, in
-     :root). It's a hover/preview fill (e.g. SegmentedControl inactive hover),
-     so in dark mode it must read as a step TOWARD the active surface
-     (--bds-background-primary = black), not its light-mode inverse. Mirrors the
-     --bds-background-primary-hover dark step so --bds-text-primary clears AA on it.
-     No dark value previously existed → light #e0e0e0 fill + light #f2f2f2 text
-     = ~1.1:1, invisible. (#916) */
-  --bds-background-tertiary: var(--bds-color-grayscale-950);
-}
+/* The dark-mode correction block that re-pinned --bds-background-tertiary is
+   retired: Figma now carries its dark value (grayscale/900, #3338). */

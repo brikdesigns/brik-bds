@@ -147,7 +147,7 @@
 }
 
 .bds-tab-bar--variant-box .bds-tab-bar-item:active:not(:disabled):not([aria-selected="true"]) {
-  background-color: var(--bds-background-tertiary);
+  background-color: var(--bds-background-primary-pressed);
 }
 
 .bds-tab-bar--variant-box .bds-tab-bar-item[aria-selected="true"]:active:not(:disabled) {
