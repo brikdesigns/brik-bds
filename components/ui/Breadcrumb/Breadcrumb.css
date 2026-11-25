@@ -22,8 +22,16 @@
    label-capped content locks itself small: a narrow first measure caps the
    labels, the capped labels keep the box narrow, and the slot widening never
    reaches it. Only while capped, so a trail that fits keeps its layout. */
-.bds-breadcrumb--capped {
+.bds-breadcrumb[data-label-cap] {
   flex: 1 1 auto;
+}
+
+/* A floor under the measured cap (Breadcrumb.tsx writes it inline): a capped
+   label ellipsises to this much text, never squeezes to nothing. Only while
+   capped, so a short label that fits is never padded out to it. */
+.bds-breadcrumb[data-label-cap] .bds-breadcrumb__link,
+.bds-breadcrumb[data-label-cap] .bds-breadcrumb__current {
+  min-width: calc(var(--bds-content-width-text-xs) / 8);
 }
 
 /* ─── Crumb ──────────────────────────────────────────────────── */
@@ -57,9 +65,7 @@
   /* A label past the max width ends in an ellipsis; the full label is the
      accessible name and the `title` (#3344). No dedicated crumb-width token
      exists, so the cap is half the shortest text rung. */
-  /* A floor under the measured cap (Breadcrumb.tsx writes it inline): a label
-     is ellipsised to this much text, never squeezed to nothing. */
-  min-width: calc(var(--bds-content-width-text-xs) / 8);
+  min-width: 0;
   max-width: calc(var(--bds-content-width-text-xs) / 2);
   overflow: hidden;
   text-overflow: ellipsis;
@@ -81,9 +87,7 @@
   color: var(--bds-text-secondary);
   text-transform: var(--bds-text-transform-label);
   cursor: default;
-  /* A floor under the measured cap (Breadcrumb.tsx writes it inline): a label
-     is ellipsised to this much text, never squeezed to nothing. */
-  min-width: calc(var(--bds-content-width-text-xs) / 8);
+  min-width: 0;
   max-width: calc(var(--bds-content-width-text-xs) / 2);
   overflow: hidden;
   text-overflow: ellipsis;
