@@ -17,6 +17,23 @@
   min-width: 0;
 }
 
+/* While labels are capped, fill a flex-row parent instead of shrink-wrapping.
+   The overflow decision reads this box's own width, so a box that wraps its
+   label-capped content locks itself small: a narrow first measure caps the
+   labels, the capped labels keep the box narrow, and the slot widening never
+   reaches it. Only while capped, so a trail that fits keeps its layout. */
+.bds-breadcrumb[data-label-cap] {
+  flex: 1 1 auto;
+}
+
+/* A floor under the measured cap (Breadcrumb.tsx writes it inline): a capped
+   label ellipsises to this much text, never squeezes to nothing. Only while
+   capped, so a short label that fits is never padded out to it. */
+.bds-breadcrumb[data-label-cap] .bds-breadcrumb__link,
+.bds-breadcrumb[data-label-cap] .bds-breadcrumb__current {
+  min-width: calc(var(--bds-content-width-text-xs) / 8);
+}
+
 /* ─── Crumb ──────────────────────────────────────────────────── */
 
 /* Each crumb is a real flex box holding its own leading separator, so the

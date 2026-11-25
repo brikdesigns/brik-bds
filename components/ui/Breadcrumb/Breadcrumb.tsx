@@ -303,6 +303,7 @@ export function Breadcrumb({
     <nav
       ref={navRef}
       className={bdsClass('bds-breadcrumb', className)}
+      data-label-cap={cap !== null ? '' : undefined}
       style={style}
       aria-label="Breadcrumb"
       {...props}
