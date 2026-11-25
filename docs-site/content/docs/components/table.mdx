@@ -85,7 +85,8 @@ Don't reach for raw `<a>` or `<button>` — use the BDS components below.
 | --- | --- | --- |
 | **Identifier (Name)** | `<TextLink size="sm">` opening the **read sheet** for that row (or navigating to the read page when the table has no sheet, e.g. `customer_stories`, `blog_posts`) | Click target |
 | **Foreign-key reference** | `<TextLink size="sm">` opening the **read sheet of the referenced entity** (Service Line in a Services row, Service in an Offerings row, Company in admin rows) | Click target |
-| **Status / Public / Featured (read-only)** | `<Badge>` or plain text | Not interactive |
+| **Status (read-only)** | `<Badge>` or plain text | Not interactive |
+| **Public / Featured (read-only)** | `<Tag>` or plain text | Not interactive |
 | **Actions** | `<TableActionsCell>` with `[View][Edit][⋯]` icon buttons in `size="sm"` | Click targets |
 
 <Callout type="warn" title="Forbidden — whole-row click">

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PricingCard } from './PricingCard';
-import { Badge } from '../Badge';
+import { Tag } from '../Tag';
 import { Button } from '../Button';
 
 /**
@@ -85,7 +85,7 @@ export const Highlighted: Story = {
     period: '/month',
     description: 'Most popular choice for growing businesses.',
     features: commonFeatures,
-    badge: <Badge status="positive" size="sm">Most popular</Badge>,
+    badge: <Tag size="sm">Most popular</Tag>,
     action: <Button variant="primary" style={{ width: '100%' }}>Get started</Button>,
     highlighted: true,
   },

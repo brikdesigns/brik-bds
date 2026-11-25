@@ -62,7 +62,7 @@ The `[⋯]` is not its own cell component — per [ADR-027](https://github.com/b
 
 <Canvas of={Stories.WithActionsCell} />
 
-The canonical read/edit row has three click-target classes — **Name** (`<TextLink>` opening the read sheet), **foreign-key cells** (`<TextLink>` opening the related entity's read sheet), and **Actions** (`<TableActionsCell>`). Read-only display cells (Status / Public / Featured) stay plain `<Badge>` or text.
+The canonical read/edit row has three click-target classes — **Name** (`<TextLink>` opening the read sheet), **foreign-key cells** (`<TextLink>` opening the related entity's read sheet), and **Actions** (`<TableActionsCell>`). Read-only display cells stay plain text, a `<Badge>` for a status, or a `<Tag>` for Public / Featured.
 
 <Canvas of={Stories.CellLevelInteractivity} />
 

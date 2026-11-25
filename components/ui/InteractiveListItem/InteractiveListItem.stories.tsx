@@ -4,6 +4,7 @@ import { expect, userEvent, within } from 'storybook/test';
 import { InteractiveListItem } from './InteractiveListItem';
 import { Avatar } from '../Avatar';
 import { Badge } from '../Badge';
+import { Tag } from '../Tag';
 import { Icon } from '../Icon';
 import { CheckboxGroup } from '../CheckboxGroup';
 
@@ -92,7 +93,7 @@ export const Default: Story = {
       <InteractiveListItem
         {...args}
         leading={<Avatar name="Emily Rivera" size="md" />}
-        trailing={<Badge tone="info">New hire</Badge>}
+        trailing={<Tag>New hire</Tag>}
         onClick={() => {}}
       />
     </div>
