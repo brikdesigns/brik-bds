@@ -740,6 +740,70 @@ export const OverflowMobile: Story = {
   globals: { viewport: { value: 'mobile', isRotated: false } },
 };
 
+/* Admin top-bar trails where every crumb but the page carries a switcher. */
+const SECTION_SWITCHER = {
+  switchLabel: 'Switch section',
+  options: [
+    { label: 'Companies', href: '#companies', current: true },
+    { label: 'Contacts', href: '#contacts' },
+  ],
+};
+const COMPANY_SWITCHER = { switchLabel: 'Switch company', options: SIBLING_CLIENTS };
+
+const COMPANY_TAB_TRAIL: BreadcrumbItem[] = [
+  { label: 'Companies', href: '#companies', switcher: SECTION_SWITCHER },
+  { label: 'Acme Holdings International', href: '#acme', switcher: COMPANY_SWITCHER },
+  {
+    label: 'Service Agreements',
+    switcher: {
+      switchLabel: 'Switch tab',
+      options: [
+        { label: 'Overview', href: '#overview' },
+        { label: 'Service Agreements', href: '#agreements', current: true },
+      ],
+    },
+  },
+];
+
+const COMPANY_PROJECT_TRAIL: BreadcrumbItem[] = [
+  { label: 'Companies', href: '#companies', switcher: SECTION_SWITCHER },
+  { label: 'Acme Holdings International', href: '#acme', switcher: COMPANY_SWITCHER },
+  {
+    label: 'Projects',
+    href: '#projects',
+    switcher: {
+      switchLabel: 'Switch tab',
+      options: [
+        { label: 'Overview', href: '#overview' },
+        { label: 'Projects', href: '#projects', current: true },
+      ],
+    },
+  },
+  { label: 'Brand Refresh 2026 Signature Package' },
+];
+
+/**
+ * A crumb with its own switcher never folds. `Companies / Company / Tab`, each
+ * with a switcher, too wide for its container: nothing folds, the labels
+ * ellipsise instead and every switcher stays reachable.
+ * @summary Switcher crumbs never fold; their labels ellipsise
+ */
+export const OverflowSwitcherTrail: Story = {
+  args: { items: COMPANY_TAB_TRAIL },
+  decorators: inContainer('400px'),
+};
+
+/**
+ * `Companies / Company / Projects / Project` with switchers on the first three:
+ * the company crumb stays. The longest labels ellipsise first; short ones keep
+ * their text.
+ * @summary Four-crumb switcher trail keeps every crumb
+ */
+export const OverflowSwitcherProjectTrail: Story = {
+  args: { items: COMPANY_PROJECT_TRAIL },
+  decorators: inContainer('560px'),
+};
+
 /**
  * A label longer than the crumb's max width ends in an ellipsis. The full
  * label stays the link's accessible name and shows on hover and focus (`title`).
@@ -825,9 +889,9 @@ export const InteractionTestOverflowLinkComponent: Story = {
 };
 
 /**
- * A crumb folded into the overflow menu is a plain link — its per-crumb
- * switcher is not rendered there. Switchers on visible crumbs keep working.
- * @summary Asserts folded crumbs lose their switcher, visible keep it
+ * A crumb with its own switcher never folds: the switcher-less crumbs around
+ * it fold, each run behind its own button, and both switchers keep working.
+ * @summary Asserts switcher crumbs stay visible while others fold
  */
 export const InteractionTestOverflowSwitchers: Story = {
   tags: ['!manifest', 'interaction-test'],
@@ -848,11 +912,76 @@ export const InteractionTestOverflowSwitchers: Story = {
   },
   decorators: inContainer('520px'),
   play: async ({ canvas }) => {
-    await canvas.findByRole('button', { name: 'More breadcrumbs' });
-    await expect(canvas.queryByRole('button', { name: 'Switch agreement' })).not.toBeInTheDocument();
-    const visible = canvas.getByRole('button', { name: 'Switch amendment' });
-    await userEvent.click(visible);
+    const more = await canvas.findAllByRole('button', { name: 'More breadcrumbs' });
+    await expect(canvas.getByRole('link', { name: 'Service Agreements' })).toBeInTheDocument();
+    await expect(canvas.getByRole('button', { name: 'Switch amendment' })).toBeInTheDocument();
+
+    // No overflow menu lists a switcher crumb.
+    for (const button of more) {
+      await userEvent.click(button);
+      const items = await canvas.findAllByRole('menuitem');
+      await expect(items.map((item) => item.textContent)).not.toContain('Service Agreements');
+      await expect(items.map((item) => item.textContent)).not.toContain('Amendment 4821');
+      await userEvent.keyboard('{Escape}');
+      await waitFor(() => expect(button).toHaveAttribute('aria-expanded', 'false'));
+    }
+
+    await userEvent.click(canvas.getByRole('button', { name: 'Switch agreement' }));
     await expect(await canvas.findAllByRole('menuitem')).toHaveLength(SIBLING_SERVICES.length);
+  },
+};
+
+/** Waits out the measure → decide → render passes (ResizeObserver, then a re-render). */
+const settleLayout = async () => {
+  for (let frame = 0; frame < 4; frame++) {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+  }
+};
+
+/**
+ * `Companies / Company / Tab`, each with a switcher, in a container too narrow
+ * for it: no overflow button, all three switchers present, and the company
+ * label ellipsises with its full text as name and `title`.
+ * @summary Asserts an all-switcher trail never folds
+ */
+export const InteractionTestOverflowSwitcherTrail: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { items: COMPANY_TAB_TRAIL },
+  decorators: inContainer('400px'),
+  play: async ({ canvas }) => {
+    await settleLayout();
+    const company = canvas.getByRole('link', { name: 'Acme Holdings International' });
+    await expect(company.scrollWidth).toBeGreaterThan(company.clientWidth);
+    await expect(canvas.queryByRole('button', { name: 'More breadcrumbs' })).not.toBeInTheDocument();
+    for (const name of ['Switch section', 'Switch company', 'Switch tab']) {
+      await expect(canvas.getByRole('button', { name })).toBeInTheDocument();
+    }
+    await expect(company).toHaveAttribute('title', 'Acme Holdings International');
+    await expect(canvas.getByRole('link', { name: 'Companies' })).toBeInTheDocument();
+    await expect(canvas.getByText('Service Agreements')).toHaveAttribute('aria-current', 'page');
+  },
+};
+
+/**
+ * `Companies / Company / Projects / Project` with switchers on the first three
+ * keeps the company crumb and its switcher in a narrow container.
+ * @summary Asserts the four-crumb switcher trail never folds
+ */
+export const InteractionTestOverflowSwitcherProjectTrail: Story = {
+  tags: ['!manifest', 'interaction-test'],
+  args: { items: COMPANY_PROJECT_TRAIL },
+  decorators: inContainer('560px'),
+  play: async ({ canvas }) => {
+    await settleLayout();
+    const company = canvas.getByRole('link', { name: 'Acme Holdings International' });
+    await expect(company.scrollWidth).toBeGreaterThan(company.clientWidth);
+    await expect(canvas.queryByRole('button', { name: 'More breadcrumbs' })).not.toBeInTheDocument();
+    await expect(canvas.getAllByRole('link')).toHaveLength(3);
+    // The longest labels shrink first; a short one keeps its text.
+    const companies = canvas.getByRole('link', { name: 'Companies' });
+    await expect(companies.scrollWidth).toBeLessThanOrEqual(companies.clientWidth);
+    await userEvent.click(canvas.getByRole('button', { name: 'Switch company' }));
+    await expect(await canvas.findAllByRole('menuitem')).toHaveLength(SIBLING_CLIENTS.length);
   },
 };
 
