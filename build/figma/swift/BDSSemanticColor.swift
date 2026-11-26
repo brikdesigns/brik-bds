@@ -40,7 +40,7 @@ public enum BDSSemanticColor {
     public static let borderAccentPurple = Color(red: 0.6078, green: 0.3176, blue: 0.8784)
     public static let borderAccentOrange = Color(red: 0.9490, green: 0.6000, blue: 0.2902)
     public static let borderAccentRed = Color(red: 0.8980, green: 0.1412, blue: 0.1412)
-    public static let borderChartBrand = Color(red: 0.1059, green: 0.1059, blue: 0.1059) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke.
+    public static let borderChartBrand = Color(red: 0.1529, green: 0.1529, blue: 0.1529) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke.
     public static let borderChartNeutral = Color(red: 0.5098, green: 0.5098, blue: 0.5098) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/neutral; this one styles a border/stroke.
     public static let borderChartPositive = Color(red: 0.0235, green: 0.3333, blue: 0.1647) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/positive; this one styles a border/stroke.
     public static let borderChartWarning = Color(red: 0.3451, green: 0.2627, blue: 0.0000) /// Chart stroke — line, outline, axis series mark. Same value as background/chart/warning; this one styles a border/stroke.
@@ -73,7 +73,7 @@ public enum BDSSemanticColor {
     public static let backgroundBrandPrimaryPressed = Color(red: 0.0000, green: 0.0000, blue: 0.0000)
     public static let backgroundDisabled = Color(red: 0.8784, green: 0.8784, blue: 0.8784) /// Disabled button background (all variants)
     public static let backgroundAccentOrange = Color(red: 0.9490, green: 0.6000, blue: 0.2902)
-    public static let backgroundChartBrand = Color(red: 0.1059, green: 0.1059, blue: 0.1059)
+    public static let backgroundChartBrand = Color(red: 0.1529, green: 0.1529, blue: 0.1529)
     public static let backgroundChartNeutral = Color(red: 0.5098, green: 0.5098, blue: 0.5098)
     public static let backgroundChartPositive = Color(red: 0.0235, green: 0.3333, blue: 0.1647)
     public static let backgroundChartWarning = Color(red: 0.3451, green: 0.2627, blue: 0.0000)

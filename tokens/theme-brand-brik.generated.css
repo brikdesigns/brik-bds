@@ -128,8 +128,8 @@
   --bds-border-chart-categorical-2: var(--bds-color-purple-500);
   --bds-border-chart-categorical-3: var(--bds-color-yellow-800);
   --bds-border-chart-categorical-4: var(--bds-color-green-900);
-  --bds-border-chart-categorical-5: var(--bds-color-pink-700);
-  --bds-border-chart-categorical-6: var(--bds-color-tan-700);
+  --bds-border-chart-categorical-5: var(--bds-color-pink-600);
+  --bds-border-chart-categorical-6: var(--bds-color-orange-500);
   --bds-border-service-brand: var(--bds-color-yellow-500);
   --bds-border-service-information: var(--bds-color-blue-500);
   --bds-border-service-back-office: var(--bds-color-orange-500);
@@ -151,8 +151,8 @@
   --bds-background-chart-categorical-2: var(--bds-color-purple-500);
   --bds-background-chart-categorical-3: var(--bds-color-yellow-800);
   --bds-background-chart-categorical-4: var(--bds-color-green-900);
-  --bds-background-chart-categorical-5: var(--bds-color-pink-700);
-  --bds-background-chart-categorical-6: var(--bds-color-tan-700);
+  --bds-background-chart-categorical-5: var(--bds-color-pink-600);
+  --bds-background-chart-categorical-6: var(--bds-color-orange-500);
   --bds-background-service-brand: var(--bds-color-yellow-500);
   --bds-background-service-brand-on-light: var(--bds-color-yellow-950);
   --bds-background-service-marketing: var(--bds-color-green-400);
@@ -256,8 +256,8 @@
   --bds-border-chart-categorical-2: var(--bds-color-purple-500);
   --bds-border-chart-categorical-3: var(--bds-color-yellow-500);
   --bds-border-chart-categorical-4: var(--bds-color-green-500);
-  --bds-border-chart-categorical-5: var(--bds-color-pink-500);
-  --bds-border-chart-categorical-6: var(--bds-color-tan-500);
+  --bds-border-chart-categorical-5: var(--bds-color-pink-400);
+  --bds-border-chart-categorical-6: var(--bds-color-orange-400);
   --bds-border-service-brand: var(--bds-color-yellow-500);
   --bds-border-service-information: var(--bds-color-blue-500);
   --bds-border-service-back-office: var(--bds-color-orange-500);
@@ -283,8 +283,8 @@
   --bds-background-chart-categorical-2: var(--bds-color-purple-500);
   --bds-background-chart-categorical-3: var(--bds-color-yellow-500);
   --bds-background-chart-categorical-4: var(--bds-color-green-500);
-  --bds-background-chart-categorical-5: var(--bds-color-pink-500);
-  --bds-background-chart-categorical-6: var(--bds-color-tan-500);
+  --bds-background-chart-categorical-5: var(--bds-color-pink-400);
+  --bds-background-chart-categorical-6: var(--bds-color-orange-400);
   --bds-background-service-brand: var(--bds-color-yellow-500);
   --bds-background-service-brand-on-light: var(--bds-color-yellow-950);
   --bds-background-service-marketing: var(--bds-color-green-400);

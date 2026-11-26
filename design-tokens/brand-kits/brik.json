@@ -1526,7 +1526,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.pink.700}"
+          "$value": "{color.pink.600}"
         },
         "categorical-6": {
           "$extensions": {
@@ -1536,7 +1536,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.tan.700}"
+          "$value": "{color.orange.500}"
         }
       }
     },
@@ -2331,7 +2331,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.pink.700}"
+          "$value": "{color.pink.600}"
         },
         "categorical-6": {
           "$extensions": {
@@ -2340,7 +2340,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.tan.700}"
+          "$value": "{color.orange.500}"
         }
       }
     }
@@ -2887,7 +2887,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.pink.500}"
+          "$value": "{color.pink.400}"
         },
         "categorical-6": {
           "$extensions": {
@@ -2897,7 +2897,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.tan.500}"
+          "$value": "{color.orange.400}"
         }
       }
     },
@@ -3692,7 +3692,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.pink.500}"
+          "$value": "{color.pink.400}"
         },
         "categorical-6": {
           "$extensions": {
@@ -3701,7 +3701,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.tan.500}"
+          "$value": "{color.orange.400}"
         }
       }
     }
