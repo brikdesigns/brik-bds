@@ -172,6 +172,16 @@ CLAIM_RENEW_THROTTLE_SECONDS="${CLAIM_RENEW_THROTTLE_SECONDS:-600}"
 # neither row — the pre-#4606 shape, unchanged for an ordinary ticket claim.
 CLAIM_SCOPE="${CLAIM_SCOPE:-}"
 
+# A hold is the claim /hand-off leaves on its `Next:` item (brik-llm#5832). A
+# posted hand-off releases its claims, so the item looks free until the operator
+# runs /resume, and a session pulling from the NOW lane in that gap takes it. The
+# hold is a claim marker with a `Hold for` row naming the hand-off, so every
+# reader that already refuses on a claim (check_issue_claim, claim-probe.sh,
+# claim-write.sh) refuses it too. Only the /resume of THAT hand-off passes
+# (BRIK_RESUME_HANDOFF, set by claim-write.sh --resume-handoff). It ages out at
+# 30 min, not 12h: a hold is a bridge to the next /resume, not a lease on work.
+CLAIM_HOLD_SECONDS="${CLAIM_HOLD_SECONDS:-1800}"
+
 # ── Pure helpers (no network, no git) ──────────────────────────────
 
 # This session's identity. Host discriminates the two machines; branch
@@ -225,7 +235,7 @@ _ic_entry_branch() { printf '%s' "${1#*:}"; }
 _ic_entry_repo()   { case "${1:-}" in *:*) printf '%s' "${1%%:*}" ;; *) printf '' ;; esac; }
 
 claim_marker_body() {
-  local host="${1:?}" branches="${2:?}" stamp="${3:?}" session="${4:-}" peer="${5:-}"
+  local host="${1:?}" branches="${2:?}" stamp="${3:?}" session="${4:-}" peer="${5:-}" hold_for="${6:-}"
   local BT='`' cell="" rest="$branches" entry session_row="" peer_row=""
   while [ -n "$rest" ]; do
     case "$rest" in
@@ -265,6 +275,29 @@ claim_marker_body() {
          && expect_stamp="$(claim_epoch_to_stamp $(( since_epoch + CLAIM_STALE_SECONDS )) 2>/dev/null)"; then
       expect_row="| Expected release | ${expect_stamp} (unless renewed) |"
     fi
+  fi
+  if [ -n "$hold_for" ]; then
+    local hold_expiry="" hold_epoch
+    if hold_epoch="$(claim_stamp_to_epoch "$stamp" 2>/dev/null)"; then
+      hold_expiry="$(claim_epoch_to_stamp $(( hold_epoch + CLAIM_HOLD_SECONDS )) 2>/dev/null)" || hold_expiry=""
+    fi
+    cat <<EOF
+${CLAIM_MARKER}
+🤖 **Held for /resume** — a hand-off named this ticket as its ${BT}Next:${BT} item.
+
+| | |
+| --- | --- |
+| Host | ${BT}${host}${BT} |
+| Branch | ${cell} |
+${session_row:+${session_row}
+}${peer_row:+${peer_row}
+}| Since | ${stamp} |
+| Hold for | ${BT}${hold_for}${BT} |
+${hold_expiry:+| Expected release | ${hold_expiry} (hold) |
+}
+Another session's pickup of this ticket is refused until the /resume of the hand-off posted at ${BT}${hold_for}${BT} takes it, or the hold ages out (${CLAIM_HOLD_SECONDS}s). Never renewed.
+EOF
+    return 0
   fi
   cat <<EOF
 ${CLAIM_MARKER}
@@ -332,6 +365,16 @@ parse_claim_peer() {
 
 # The go's scope, or empty when the claimant did not set CLAIM_SCOPE (an
 # ordinary ticket claim). Same shape as parse_claim_session.
+# Echo the hand-off created_at a hold was placed for; empty for an ordinary claim.
+parse_claim_hold() {
+  local body="${1:-}"
+  case "$body" in
+    *"$CLAIM_MARKER"*) : ;;
+    *) return 1 ;;
+  esac
+  printf '%s\n' "$body" | sed -n 's/^| Hold for | `\(.*\)` |$/\1/p' | head -1
+}
+
 parse_claim_scope() {
   local body="${1:-}"
   case "$body" in
@@ -1101,7 +1144,7 @@ check_issue_claim() {
   my_repo="$(_ic_repo_slug 2>/dev/null || true)"
   my_entry="${my_repo:+${my_repo}:}${my_branch}"
 
-  local found id body parsed their_host their_branch their_session stamp now age
+  local found id body parsed their_host their_branch their_session their_hold="" stamp now age
   local mine=0 release_reason=""
   # Primed HERE, not inside the substitution below: a subshell's assignment to
   # _IC_COMMENTS_NDJSON is lost, and then report_issue_comments would pay for a
@@ -1126,6 +1169,7 @@ check_issue_claim() {
     their_branch="$(printf '%s' "$parsed" | cut -f2)"
     stamp="$(printf '%s' "$parsed" | cut -f3)"
     their_session="$(parse_claim_session "$body")"
+    their_hold="$(parse_claim_hold "$body")"
     now="$(date -u +%s)"
 
     if claim_is_foreign "$their_host" "$their_branch" "$my_host" "$my_branch" \
@@ -1135,11 +1179,23 @@ check_issue_claim() {
       mine=1
     fi
 
-    if [ "$mine" -eq 0 ] && ! claim_is_stale "$stamp" "$now" "$CLAIM_STALE_SECONDS"; then
+    # A hold is taken over by the /resume of the hand-off it was placed for, and
+    # never merged into a branch set: it names no branch.
+    if [ -n "$their_hold" ]; then
+      [ "$mine" -eq 0 ] && [ "${BRIK_RESUME_HANDOFF:-}" = "$their_hold" ] && mine=1
+      [ "$mine" -eq 1 ] && their_branch=""
+    fi
+
+    local claim_window="$CLAIM_STALE_SECONDS"
+    [ -n "$their_hold" ] && claim_window="$CLAIM_HOLD_SECONDS"
+    if [ "$mine" -eq 0 ] && ! claim_is_stale "$stamp" "$now" "$claim_window"; then
       # Within the timer, so ask the three authoritative signals whether that
       # work is actually still in flight (brik-llm#2204). Only reached here —
       # a clear ticket, my own claim, or an already-expired one costs nothing.
-      if release_reason="$(_ic_claim_release_reason "$owner" "$repo" "$num" \
+      # A hold is released by its own timer and by nothing else, including the
+      # hand-off that placed it.
+      if [ -z "$their_hold" ] \
+         && release_reason="$(_ic_claim_release_reason "$owner" "$repo" "$num" \
                             "$their_branch" "$stamp" "$their_session")"; then
         echo -e "${_IC_YELLOW}⚠  A claim by ${their_host} / ${their_branch} is no longer live — ${release_reason}.${_IC_NC}" >&2
         echo -e "${_IC_YELLOW}   Taking the ticket; no NEW_TASK_STEAL_CLAIM needed.${_IC_NC}" >&2
@@ -1151,6 +1207,7 @@ check_issue_claim() {
         echo "    Host:   ${their_host}"
         echo "    Branch: ${their_branch}"
         [ -n "$their_session" ] && echo "    Session: ${their_session}"
+        [ -n "$their_hold" ] && echo "    Held for the /resume of the hand-off posted ${their_hold} (hold, ${CLAIM_HOLD_SECONDS}s)"
         # SendMessage addresses a peer by name, not by session id (brik-llm#4607).
         local their_peer
         their_peer="$(parse_claim_peer "$body")"
@@ -1303,6 +1360,60 @@ release_issue_claim() {
   return 0
 }
 
+# hold_issue_claim <issue-ref> <handoff-created-at> — leave a hold on the
+# `Next:` item of a hand-off that has just posted (brik-llm#5832). Run AFTER the
+# release (/hand-off step 7), which would otherwise delete it: same session id.
+#
+# Returns 0 held · 1 write failed · 2 bad ref, bad stamp or no session id ·
+# 3 left alone, a live claim by another session. The one-claim-per-session rule
+# is not applied: a hold is not a pickup, and session-budget.sh never sees it.
+hold_issue_claim() {
+  local ref="${1:-}" hold_for="${2:-}" my_session resolved owner repo num
+  my_session="$(claim_session_id)"
+  if [ -z "$my_session" ]; then
+    echo -e "${_IC_YELLOW}⚠  No session id (CLAUDE_CODE_SESSION_ID) — a hold needs one. Holding nothing.${_IC_NC}" >&2
+    return 2
+  fi
+  claim_stamp_to_epoch "$hold_for" >/dev/null 2>&1 || {
+    echo "  · '${hold_for}' is not a hand-off timestamp (YYYY-MM-DDTHH:MM:SSZ) — nothing held" >&2
+    return 2
+  }
+  command -v gh >/dev/null 2>&1 || { echo -e "${_IC_YELLOW}⚠  gh not on PATH — nothing held.${_IC_NC}" >&2; return 1; }
+  resolved="$(_ic_resolve_ref "$ref")" || { echo "  · '${ref}' is not an issue reference — skipped" >&2; return 2; }
+  read -r owner repo num <<<"$resolved"
+  { [ -n "$owner" ] && [ -n "$repo" ] && [ -n "$num" ]; } || return 2
+
+  local found id="" body their_session ident my_host stamp new_body
+  found="$(_ic_find_claim "$owner" "$repo" "$num" strict)" || {
+    echo -e "${_IC_YELLOW}⚠  ${owner}/${repo}#${num}: could not read the comments — nothing held.${_IC_NC}" >&2
+    return 1
+  }
+  if [ -n "$found" ]; then
+    id="${found%%$'\t'*}"
+    body="${found#*$'\t'}"
+    their_session="$(parse_claim_session "$body")"
+    if [ "$their_session" != "$my_session" ]; then
+      parsed="$(parse_claim "$body")" && stamp="$(printf '%s' "$parsed" | cut -f3)" \
+        && ! claim_is_stale "$stamp" "$(date -u +%s)" "$CLAIM_STALE_SECONDS" && {
+        echo "  · ${owner}/${repo}#${num}: claimed by session ${their_session:-unknown} — left in place"
+        return 3
+      }
+      id=""
+    fi
+  fi
+
+  ident="$(claim_identity "")"
+  my_host="${ident%%$'\t'*}"
+  new_body="$(claim_marker_body "$my_host" "hold-for-resume" "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$my_session" "$(claim_peer_name)" "$hold_for")"
+  if [ -n "$id" ]; then
+    gh api -X PATCH "repos/$owner/$repo/issues/comments/$id" -f body="$new_body" >/dev/null 2>&1 || return 1
+  else
+    gh api -X POST "repos/$owner/$repo/issues/$num/comments" -f body="$new_body" >/dev/null 2>&1 || return 1
+  fi
+  echo -e "${_IC_GREEN}✓ Held ${owner}/${repo}#${num} for the /resume of the hand-off posted ${hold_for} (${CLAIM_HOLD_SECONDS}s).${_IC_NC}"
+  return 0
+}
+
 # ── Lease renewal (brik-llm#4550) ───────────────────────────────────
 #
 # A claim marker is ALREADY a lease — it carries Host, Session, Since and a TTL
@@ -1400,6 +1511,8 @@ renew_issue_claim() {
   # A marker with no `Since` row is not one this lib wrote; rewriting it would
   # invent a lease rather than renew one.
   parse_claim "$body" >/dev/null 2>&1 || { _ic_renew_touch "$stamp_file" "$now"; return 3; }
+  # A hold is a bridge to the next /resume; renewing it would make it a lease.
+  [ -z "$(parse_claim_hold "$body")" ] || { _ic_renew_touch "$stamp_file" "$now"; return 3; }
 
   stamp="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   # awk, not sed: a claim body is arbitrary text from the API and a sed
