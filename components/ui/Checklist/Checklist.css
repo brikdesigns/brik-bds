@@ -84,7 +84,7 @@
     min-width: 0;
     font-family: var(--bds-font-family-label);
     font-size: var(--bds-label-sm);
-    font-weight: var(--bds-font-weight-medium);
+    font-weight: var(--bds-font-weight-label);
     color: var(--bds-text-primary);
     line-height: var(--bds-font-line-height-normal);
     transition: color var(--bds-duration-200) var(--bds-ease-out);

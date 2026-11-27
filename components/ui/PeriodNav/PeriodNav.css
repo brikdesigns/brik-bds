@@ -12,8 +12,8 @@
 .bds-period-nav__label {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-sm);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-snug);
+  font-weight: var(--bds-font-weight-heading);
+  line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
   text-align: center;
   margin: 0;

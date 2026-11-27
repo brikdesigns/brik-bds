@@ -37,7 +37,7 @@
   margin: 0;
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-heading);
   line-height: var(--bds-font-line-height-tight);
   color: var(--bds-text-primary);
 }
@@ -175,7 +175,7 @@
 .bds-chart__center-value {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-heading);
   fill: var(--bds-text-primary);
 }
 

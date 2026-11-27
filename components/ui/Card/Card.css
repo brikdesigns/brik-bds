@@ -127,7 +127,7 @@
 .bds-card-title {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-md);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-heading);
   margin: 0;
   color: var(--bds-text-primary);
 }
@@ -137,7 +137,7 @@
   font-size: var(--bds-body-md);
   color: var(--bds-text-secondary);
   margin: 0;
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
 }
 
 .bds-card-footer {
@@ -202,7 +202,7 @@
 .bds-card__control-description {
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-md);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
   color: var(--bds-text-muted);
   margin: 0;
 }
@@ -265,7 +265,7 @@
 .bds-card__control-status-label {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-medium);
+  font-weight: var(--bds-font-weight-label);
   line-height: var(--bds-font-line-height-tight);
 }
 
@@ -275,7 +275,7 @@
   text-align: right;
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-sm);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
   color: var(--bds-text-muted);
 }
 
@@ -505,7 +505,7 @@
   margin: 0;
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-md);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-heading);
   line-height: var(--bds-font-line-height-tight);
   color: var(--bds-text-primary);
 }
@@ -611,7 +611,7 @@
   margin: 0;
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-md);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-heading);
   line-height: var(--bds-font-line-height-tight);
   color: var(--bds-text-primary);
 }
@@ -693,7 +693,7 @@
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-sm);
   font-weight: var(--bds-font-weight-bold);
-  line-height: var(--bds-font-line-height-snug);
+  line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
   margin: 0;
 }
@@ -716,7 +716,7 @@
 .bds-card__pricing-period {
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-sm);
-  font-weight: var(--bds-font-weight-regular);
+  font-weight: var(--bds-font-weight-body);
   color: var(--bds-text-secondary);
 }
 
@@ -741,7 +741,7 @@
   gap: var(--bds-gap-md);
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-sm);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
   color: var(--bds-text-primary);
 }
 

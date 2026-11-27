@@ -93,7 +93,7 @@
 .bds-board-column__count {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-body-xs);
-  font-weight: var(--bds-font-weight-medium);
+  font-weight: var(--bds-font-weight-label);
   color: var(--bds-text-secondary);
   line-height: var(--bds-font-line-height-tight);
 }
@@ -141,7 +141,7 @@
 .bds-board-header__name {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-tiny);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-heading);
   color: var(--bds-text-on-color-dark);
   line-height: var(--bds-font-line-height-tight);
   margin: 0;

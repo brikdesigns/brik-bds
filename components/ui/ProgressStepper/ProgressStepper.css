@@ -130,8 +130,8 @@
 
 .bds-progress-stepper__desc {
   font-family: var(--bds-font-family-body);
-  font-weight: var(--bds-font-weight-regular);
-  line-height: var(--bds-font-line-height-normal);
+  font-weight: var(--bds-font-weight-body);
+  line-height: var(--bds-font-line-height-body);
   color: var(--bds-text-muted);
   margin-top: var(--bds-space-50);
 }

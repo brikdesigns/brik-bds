@@ -492,6 +492,21 @@ export const weight = {
   extrabold: 'var(--bds-font-weight-extrabold)',
   black: 'var(--bds-font-weight-black)',
   heading: 'var(--bds-font-weight-heading)',
+  display: 'var(--bds-font-weight-display)',
+  label: 'var(--bds-font-weight-label)',
+  body: 'var(--bds-font-weight-body)',
+} as const;
+
+/**
+ * Semantic line heights per type role, exposed as `var()` references like
+ * `weight`. One source for "<role> line height" — see
+ * `--bds-font-line-height-<role>` in dist/tokens.css.
+ */
+export const lineHeight = {
+  display: 'var(--bds-font-line-height-display)',
+  heading: 'var(--bds-font-line-height-heading)',
+  label: 'var(--bds-font-line-height-label)',
+  body: 'var(--bds-font-line-height-body)',
 } as const;
 
 // ─── Shared typography presets ────────────────────────────────────────
@@ -509,8 +524,8 @@ export const text = {
   body: {
     fontFamily: 'var(--bds-font-family-body)',
     fontSize: 'var(--bds-body-md)',
-    fontWeight: weight.regular,
-    lineHeight: 'var(--bds-font-line-height-normal)',
+    fontWeight: weight.body,
+    lineHeight: lineHeight.body,
     color: 'var(--bds-text-primary)',
   } satisfies CSSProperties,
 
@@ -518,8 +533,8 @@ export const text = {
   bodyLg: {
     fontFamily: 'var(--bds-font-family-body)',
     fontSize: 'var(--bds-body-lg)',
-    fontWeight: weight.regular,
-    lineHeight: 'var(--bds-font-line-height-normal)',
+    fontWeight: weight.body,
+    lineHeight: lineHeight.body,
     color: 'var(--bds-text-primary)',
   } satisfies CSSProperties,
 
@@ -527,8 +542,8 @@ export const text = {
   bodySmall: {
     fontFamily: 'var(--bds-font-family-body)',
     fontSize: 'var(--bds-body-sm)',
-    fontWeight: weight.regular,
-    lineHeight: 'var(--bds-font-line-height-normal)',
+    fontWeight: weight.body,
+    lineHeight: lineHeight.body,
     color: 'var(--bds-text-secondary)',
   } satisfies CSSProperties,
 
@@ -536,8 +551,8 @@ export const text = {
   bodyXs: {
     fontFamily: 'var(--bds-font-family-body)',
     fontSize: 'var(--bds-body-xs)',
-    fontWeight: weight.regular,
-    lineHeight: 'var(--bds-font-line-height-normal)',
+    fontWeight: weight.body,
+    lineHeight: lineHeight.body,
     color: 'var(--bds-text-muted)',
   } satisfies CSSProperties,
 
@@ -545,8 +560,8 @@ export const text = {
   muted: {
     fontFamily: 'var(--bds-font-family-body)',
     fontSize: 'var(--bds-body-md)',
-    fontWeight: weight.regular,
-    lineHeight: 'var(--bds-font-line-height-normal)',
+    fontWeight: weight.body,
+    lineHeight: lineHeight.body,
     color: 'var(--bds-text-secondary)',
   } satisfies CSSProperties,
 } as const;
@@ -557,7 +572,7 @@ export const heading = {
     fontFamily: 'var(--bds-font-family-heading)',
     fontSize: 'var(--bds-heading-lg)',
     fontWeight: weight.heading,
-    lineHeight: 'var(--bds-font-line-height-snug)',
+    lineHeight: lineHeight.heading,
     color: 'var(--bds-text-primary)',
     margin: 0,
   } satisfies CSSProperties,
@@ -604,7 +619,7 @@ export const heading = {
     fontFamily: 'var(--bds-font-family-heading)',
     fontSize: 'var(--bds-heading-md)',
     fontWeight: weight.heading,
-    lineHeight: 'var(--bds-font-line-height-snug)',
+    lineHeight: lineHeight.heading,
     color: 'var(--bds-text-primary)',
     margin: 0,
   } satisfies CSSProperties,
@@ -614,7 +629,7 @@ export const heading = {
     fontFamily: 'var(--bds-font-family-heading)',
     fontSize: 'var(--bds-heading-sm)',
     fontWeight: weight.heading,
-    lineHeight: 'var(--bds-font-line-height-snug)',
+    lineHeight: lineHeight.heading,
     color: 'var(--bds-text-primary)',
     margin: 0,
   } satisfies CSSProperties,
@@ -625,7 +640,7 @@ export const label = {
   subtitle: {
     fontFamily: 'var(--bds-font-family-label)',
     fontSize: 'var(--bds-label-sm)',
-    fontWeight: weight.medium,
+    fontWeight: weight.label,
     color: 'var(--bds-text-secondary)',
     textTransform: 'uppercase' as const,
     letterSpacing: 'var(--bds-letter-spacing-wide)',
@@ -635,7 +650,7 @@ export const label = {
   sm: {
     fontFamily: 'var(--bds-font-family-label)',
     fontSize: 'var(--bds-label-sm)',
-    fontWeight: weight.medium,
+    fontWeight: weight.label,
     color: 'var(--bds-text-primary)',
   } satisfies CSSProperties,
 
@@ -643,7 +658,7 @@ export const label = {
   md: {
     fontFamily: 'var(--bds-font-family-label)',
     fontSize: 'var(--bds-label-md)',
-    fontWeight: weight.medium,
+    fontWeight: weight.label,
     color: 'var(--bds-text-primary)',
   } satisfies CSSProperties,
 
@@ -652,7 +667,7 @@ export const label = {
     fontFamily: 'var(--bds-font-family-label)',
     fontSize: 'var(--bds-label-sm)',
     fontWeight: weight.semibold,
-    lineHeight: 'var(--bds-font-line-height-snug)',
+    lineHeight: lineHeight.label,
     color: 'var(--bds-text-primary)',
     whiteSpace: 'nowrap' as const,
     margin: 0,

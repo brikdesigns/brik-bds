@@ -45,7 +45,7 @@
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-lg);
   font-weight: var(--bds-font-weight-bold);
-  line-height: var(--bds-font-line-height-snug);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-primary);
   margin: 0;
 }
@@ -55,7 +55,7 @@
 .bds-accordion-trigger__subtitle {
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-sm);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
   color: var(--bds-text-secondary);
 }
 
@@ -81,7 +81,7 @@
 .bds-accordion-content {
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-md);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
   color: var(--bds-text-primary);
   padding-bottom: var(--bds-padding-xl);
 }
