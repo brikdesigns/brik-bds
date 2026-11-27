@@ -145,7 +145,7 @@ export const Pricing: Story = {
     title: 'Professional',
     price: '$49',
     period: '/month',
-    badge: <Badge status="positive">Most popular</Badge>,
+    badge: <Tag>Most popular</Tag>,
     children: (
       <CardDescription>For growing businesses that need more room to run.</CardDescription>
     ),
@@ -586,7 +586,7 @@ export const Row: Story = {
 export const RowStatusMeta: Story = {
   args: {
     layout: 'row',
-    overline: <Badge>Marketing</Badge>,
+    overline: <Tag>Marketing</Tag>,
     title: 'Web Design Retainer',
     children: <CardDescription>Ongoing design partnership for marketing pages.</CardDescription>,
     status: <Badge status="positive">Active</Badge>,
@@ -615,7 +615,7 @@ export const RowStatusMeta: Story = {
 export const StackStatusMeta: Story = {
   args: {
     layout: 'stack',
-    overline: <Badge>Marketing</Badge>,
+    overline: <Tag>Marketing</Tag>,
     title: 'Web Design Retainer',
     children: <CardDescription>Ongoing design partnership for marketing pages.</CardDescription>,
     status: <Badge status="positive">Active</Badge>,
