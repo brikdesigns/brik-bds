@@ -247,6 +247,18 @@
     "heading": {
       "$value": "{font-weight.semibold}",
       "$type": "number"
+    },
+    "display": {
+      "$value": "{font-weight.semibold}",
+      "$type": "string"
+    },
+    "label": {
+      "$value": "{font-weight.medium}",
+      "$type": "string"
+    },
+    "body": {
+      "$value": "{font-weight.regular}",
+      "$type": "string"
     }
   },
   "font-family": {
@@ -822,6 +834,22 @@
     },
     "moderate": {
       "$value": 138,
+      "$type": "number"
+    },
+    "display": {
+      "$value": "{font-line-height.tight}",
+      "$type": "number"
+    },
+    "heading": {
+      "$value": "{font-line-height.snug}",
+      "$type": "number"
+    },
+    "label": {
+      "$value": "{font-line-height.snug}",
+      "$type": "number"
+    },
+    "body": {
+      "$value": "{font-line-height.normal}",
       "$type": "number"
     }
   },

@@ -10,4 +10,8 @@ public enum BDSLineHeight {
     public static let fontLineHeightLoose: CGFloat = 200
     public static let fontLineHeightNone: CGFloat = 0
     public static let fontLineHeightModerate: CGFloat = 138
+    public static let fontLineHeightDisplay: CGFloat = 110
+    public static let fontLineHeightHeading: CGFloat = 125
+    public static let fontLineHeightLabel: CGFloat = 125
+    public static let fontLineHeightBody: CGFloat = 150
 }

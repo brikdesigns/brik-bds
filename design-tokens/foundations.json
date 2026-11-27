@@ -3937,6 +3937,71 @@
         },
         "$type": "number",
         "$value": "{font-weight.semibold}"
+      },
+      "display": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      },
+      "label": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.medium}"
+      },
+      "body": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.regular}"
+      }
+    },
+    "font-line-height": {
+      "display": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.tight}"
+      },
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.snug}"
+      },
+      "label": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.snug}"
+      },
+      "body": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.normal}"
       }
     }
   },
@@ -4268,6 +4333,71 @@
         },
         "$type": "string",
         "$value": "{font-weight.semibold}"
+      },
+      "display": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      },
+      "label": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.medium}"
+      },
+      "body": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.regular}"
+      }
+    },
+    "font-line-height": {
+      "display": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.tight}"
+      },
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.snug}"
+      },
+      "label": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.snug}"
+      },
+      "body": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.normal}"
       }
     }
   },
@@ -4599,6 +4729,71 @@
         },
         "$type": "string",
         "$value": "{font-weight.semibold}"
+      },
+      "display": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      },
+      "label": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.medium}"
+      },
+      "body": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.regular}"
+      }
+    },
+    "font-line-height": {
+      "display": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.tight}"
+      },
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.snug}"
+      },
+      "label": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.snug}"
+      },
+      "body": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.normal}"
       }
     }
   },
@@ -4930,6 +5125,71 @@
         },
         "$type": "string",
         "$value": "{font-weight.semibold}"
+      },
+      "display": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      },
+      "label": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.medium}"
+      },
+      "body": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.regular}"
+      }
+    },
+    "font-line-height": {
+      "display": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.tight}"
+      },
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.snug}"
+      },
+      "label": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.snug}"
+      },
+      "body": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.normal}"
       }
     }
   },
@@ -5293,6 +5553,71 @@
         },
         "$type": "string",
         "$value": "{font-weight.semibold}"
+      },
+      "display": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.semibold}"
+      },
+      "label": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.medium}"
+      },
+      "body": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "string",
+        "$value": "{font-weight.regular}"
+      }
+    },
+    "font-line-height": {
+      "display": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.tight}"
+      },
+      "heading": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.snug}"
+      },
+      "label": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.snug}"
+      },
+      "body": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "ALL_SCOPES"
+          ]
+        },
+        "$type": "number",
+        "$value": "{font-line-height.normal}"
       }
     }
   },
