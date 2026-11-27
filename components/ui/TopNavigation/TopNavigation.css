@@ -54,7 +54,7 @@
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
   font-weight: var(--bds-font-weight-regular);
-  line-height: var(--bds-font-line-height-snug);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-secondary);
   text-decoration: none;
   transition: color var(--bds-duration-100) var(--bds-ease-out);

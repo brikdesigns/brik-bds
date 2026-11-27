@@ -163,7 +163,7 @@
     gap: var(--bds-gap-sm); /* tight step — --bds-gap-tiny is 0px outside default mode */
     font-family: var(--bds-font-family-body);
     font-size: var(--bds-subtitle-md); /* subtitle-role slot — not --bds-body-xs (a body-role token); both = --bds-font-size-50 today, but --bds-body-xs re-points under ADR-033 (#2384) */
-    line-height: var(--bds-font-line-height-normal);
+    line-height: var(--bds-font-line-height-body);
     color: var(--bds-text-secondary);
   }
 

@@ -57,7 +57,7 @@
      `tight` (110%) line box is shorter than the glyph extent, so it clips
      descenders (g/y/p/q). `snug` (125%) is the shortest line box that still
      contains them (#2519). */
-  line-height: var(--bds-font-line-height-snug);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-brand-primary);
   text-decoration: none;
   text-transform: var(--bds-text-transform-label);
@@ -83,7 +83,7 @@
      collapses onto the link colour and contrast can't carry the distinction. */
   font-weight: var(--bds-font-weight-regular);
   /* `snug` for the same descender-clip reason as `__link` above (#2519). */
-  line-height: var(--bds-font-line-height-snug);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-secondary);
   text-transform: var(--bds-text-transform-label);
   cursor: default;

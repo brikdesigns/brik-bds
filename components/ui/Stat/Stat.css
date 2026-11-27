@@ -25,7 +25,7 @@
 .bds-stat__label {
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-md);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
   text-transform: var(--bds-text-transform-label);
   color: var(--bds-text-secondary);
   margin: 0;
@@ -34,7 +34,7 @@
 .bds-stat__detail {
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-sm);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
   color: var(--bds-text-muted);
   margin: 0;
 }
@@ -53,7 +53,7 @@
   gap: var(--bds-gap-sm);
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-sm);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
   color: var(--bds-text-secondary);
 }
 
@@ -65,7 +65,7 @@
 .bds-stat__description {
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-sm);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
   color: var(--bds-text-muted);
   margin: 0;
   display: -webkit-box;

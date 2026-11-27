@@ -11,4 +11,7 @@ public enum BDSFontWeight {
     public static let fontWeightSemibold: CGFloat = 600
     public static let fontWeightExtrabold: CGFloat = 800
     public static let fontWeightHeading: CGFloat = 600
+    public static let fontWeightDisplay: CGFloat = 600
+    public static let fontWeightLabel: CGFloat = 500
+    public static let fontWeightBody: CGFloat = 400
 }

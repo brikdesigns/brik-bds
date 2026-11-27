@@ -77,7 +77,7 @@
   align-items: center;
   justify-content: center;
   font-family: var(--bds-font-family-heading);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-heading);
   color: var(--bds-text-primary);
   pointer-events: none;
 }

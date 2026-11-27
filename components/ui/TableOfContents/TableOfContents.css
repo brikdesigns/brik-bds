@@ -87,7 +87,7 @@
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
   font-weight: var(--bds-font-weight-bold);
-  line-height: var(--bds-font-line-height-snug);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-secondary);
   background-color: transparent;
 }

@@ -45,9 +45,9 @@
 
 .bds-banner__description {
   font-family: var(--bds-font-family-body);
-  font-weight: var(--bds-font-weight-regular);
+  font-weight: var(--bds-font-weight-body);
   font-size: var(--bds-body-md);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
 }
 
 /* ─── Actions area ───────────────────────────────────────────── */

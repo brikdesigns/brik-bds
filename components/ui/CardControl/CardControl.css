@@ -57,7 +57,7 @@
 .bds-card-control__description {
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-md);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-body);
   color: var(--bds-text-muted);
   margin: 0;
 }

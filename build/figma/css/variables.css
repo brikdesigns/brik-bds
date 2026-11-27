@@ -266,6 +266,9 @@
   --bds-ease-spring-soft: cubic-bezier(0, 1.08, 0.77, 1.01); /** Gentle overshoot settle — media/panel entrance. CSS --bds-ease-spring-soft. */
   --bds-ease-linear: linear; /** Constant velocity — marquees, continuous loops. CSS --bds-ease-linear. */
   --bds-font-weight-heading: var(--bds-font-weight-semibold);
+  --bds-font-weight-display: var(--bds-font-weight-semibold);
+  --bds-font-weight-label: var(--bds-font-weight-medium);
+  --bds-font-weight-body: var(--bds-font-weight-regular);
   --bds-border-radius-lg: var(--bds-border-radius-600);
   --bds-border-radius-md: var(--bds-border-radius-400);
   --bds-border-radius-none: var(--bds-border-radius-0);
@@ -276,6 +279,10 @@
   --bds-border-width-lg: var(--bds-border-width-300);
   --bds-border-width-huge: var(--bds-border-width-500);
   --bds-border-width-none: var(--bds-border-width-0);
+  --bds-font-line-height-display: var(--bds-font-line-height-tight);
+  --bds-font-line-height-heading: var(--bds-font-line-height-snug);
+  --bds-font-line-height-label: var(--bds-font-line-height-snug);
+  --bds-font-line-height-body: var(--bds-font-line-height-normal);
   --bds-padding-xl: var(--bds-space-800);
   --bds-padding-lg: var(--bds-space-600);
   --bds-padding-none: var(--bds-space-0);

@@ -13,7 +13,7 @@
   margin-bottom: var(--bds-gap-sm);
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-medium);
+  font-weight: var(--bds-font-weight-label);
   line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-secondary);
 }
