@@ -690,7 +690,6 @@
     "--text-transform-label",
     "--text-transform-subtitle",
     "--text-warning",
-    "--tooltip-background",
     "--tooltip-text"
   ],
   "wordSteps": {

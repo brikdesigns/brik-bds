@@ -13,7 +13,7 @@
 .bds-tooltip__bubble {
   position: absolute;
   padding: var(--bds-padding-tiny) var(--bds-padding-md);
-  background-color: var(--bds-tooltip-background);
+  background-color: var(--bds-background-inverse);
   color: var(--bds-text-inverse);
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
@@ -90,27 +90,27 @@
   top: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border-top-color: var(--bds-tooltip-background);
+  border-top-color: var(--bds-background-inverse);
 }
 
 .bds-tooltip__arrow--placement-bottom {
   bottom: 100%;
   left: 50%;
   transform: translateX(-50%);
-  border-bottom-color: var(--bds-tooltip-background);
+  border-bottom-color: var(--bds-background-inverse);
 }
 
 .bds-tooltip__arrow--placement-left {
   left: 100%;
   top: 50%;
   transform: translateY(-50%);
-  border-left-color: var(--bds-tooltip-background);
+  border-left-color: var(--bds-background-inverse);
 }
 
 .bds-tooltip__arrow--placement-right {
   right: 100%;
   top: 50%;
   transform: translateY(-50%);
-  border-right-color: var(--bds-tooltip-background);
+  border-right-color: var(--bds-background-inverse);
 }
 }

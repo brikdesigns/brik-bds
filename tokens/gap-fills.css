@@ -195,9 +195,6 @@
   --bds-border-on-color-dark-muted:  color-mix(in srgb, var(--bds-border-on-color-dark) 12%, transparent);
   --bds-border-on-color-light-muted: color-mix(in srgb, var(--bds-border-on-color-light) 12%, transparent);
 
-  /* ── Tooltip component tokens ── */
-  --bds-tooltip-background: var(--bds-color-grayscale-950);
-
   /* ── Layout width tokens ──
      ONE ladder for every horizontal cap on a page — text column and band alike
      (ADR-041, superseding ADR-032 §1). Use with `max-width` on the element that
