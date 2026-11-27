@@ -107,8 +107,8 @@ describe('the last visible series cannot be hidden', () => {
 });
 
 describe('series colour', () => {
-  it('a single series defaults to brand, several to categorical by position', () => {
-    expect(resolveSeriesColors([{ key: 'a', label: 'A' }])[0].color).toBe('brand');
+  it('a single series defaults to categorical-1, several to categorical by position', () => {
+    expect(resolveSeriesColors([{ key: 'a', label: 'A' }])[0].color).toBe('categorical-1');
     expect(
       resolveSeriesColors([
         { key: 'a', label: 'A' },
