@@ -142,7 +142,7 @@ const framed: Array<[string, () => ReactElement, string]> = [
         data: monthly,
         categoryKey: 'month',
         series: [
-          { key: 'revenue', label: 'Revenue', color: 'brand' },
+          { key: 'revenue', label: 'Revenue', color: 'categorical-1' },
           { key: 'target', label: 'Target', color: 'neutral' },
         ],
       }),

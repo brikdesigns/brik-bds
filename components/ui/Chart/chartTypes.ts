@@ -4,13 +4,11 @@ import type { DataViewEmpty } from '../DataView/DataView';
 /**
  * A chart colour — the suffix of one `--bds-background-chart-*` token (ADR-050 § 1, amended 2026-11-19: chart is a role under background/border, not a purpose).
  *
- * - `brand` — the one highlighted series, or a single-series chart.
  * - `neutral` — context: the comparison period, "other", a target line.
- * - `categorical-1` … `-6` — peer series, in this fixed order.
+ * - `categorical-1` … `-6` — peer series, in this fixed order; `categorical-1` is also a single series.
  * - `positive` · `warning` · `negative` · `info` — a series that *is* a status.
  */
 export type ChartColor =
-  | 'brand'
   | 'neutral'
   | 'categorical-1'
   | 'categorical-2'
@@ -40,9 +38,9 @@ export interface ChartSeries {
   /** Text name — shown in the legend, the tooltip and the data table. */
   label: string;
   /**
-   * Colour token suffix. Defaults to `brand` for a single series and to
-   * `categorical-1` … `-6` by position for several. Set it when one data set
-   * must keep one colour across every chart on a page.
+   * Colour token suffix. Defaults to `categorical-1` … `-6` by position, so a
+   * single series is `categorical-1`. Set it when one data set must keep one
+   * colour across every chart on a page.
    */
   color?: ChartColor;
 }
@@ -136,17 +134,13 @@ export function stackSegments(datum: ChartDatum, keys: readonly string[]): Stack
 }
 
 /**
- * Give every series a colour: its own `color`, else `brand` when it is the
- * only series, else the categorical colour at its position.
+ * Give every series a colour: its own `color`, else the categorical colour at
+ * its position (a single series is therefore `categorical-1`).
  */
 export function resolveSeriesColors(series: ChartSeries[]): ResolvedChartSeries[] {
   return series.map((s, i) => ({
     ...s,
-    color:
-      s.color ??
-      (series.length === 1
-        ? 'brand'
-        : CHART_CATEGORICAL_COLORS[i % CHART_CATEGORICAL_COLORS.length]),
+    color: s.color ?? CHART_CATEGORICAL_COLORS[i % CHART_CATEGORICAL_COLORS.length],
   }));
 }
 

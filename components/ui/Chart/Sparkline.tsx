@@ -16,7 +16,7 @@ export interface SparklineProps extends Omit<HTMLAttributes<HTMLDivElement>, 'ch
   label: string;
   /** Name for each point in the hidden data table, e.g. week labels. Default "Point 1", "Point 2", … */
   pointLabels?: string[];
-  /** Colour token suffix. Default `brand`. */
+  /** Colour token suffix. Default `categorical-1`. */
   color?: ChartColor;
   /** Height in px. Default `32`. Width fills the container. */
   height?: number;
@@ -37,7 +37,7 @@ export function Sparkline({
   data,
   label,
   pointLabels,
-  color = 'brand',
+  color = 'categorical-1',
   height = 32,
   valueFormatter = defaultValueFormatter,
   className,

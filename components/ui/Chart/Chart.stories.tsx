@@ -131,7 +131,7 @@ export const GroupedSeries: Story = {
     data: monthlyRevenue,
     categoryKey: 'month',
     series: [
-      { key: 'revenue', label: 'Revenue', color: 'brand' },
+      { key: 'revenue', label: 'Revenue', color: 'categorical-1' },
       { key: 'target', label: 'Target', color: 'neutral' },
     ],
     valueFormatter: dollars,

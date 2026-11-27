@@ -1,11 +1,10 @@
 @layer bds-components {
 /* Chart family — ChartFrame chrome + SVG marks (ADR-050).
-   Colour rule: every mark reads `currentColor`, and the only place a chart
-   colour enters is the `[data-chart-color]` rules at the bottom, each
-   pointing at one `--bds-background-chart-*` token (the fill set; Figma also
-   carries a same-valued `--bds-border-chart-*` stroke set for line, outline
-   and axis marks — chart is a role under the background/border purposes, not
-   a purpose of its own). No hex in this file (brik-bds issue 3182 greps for it). */
+   Colour rule: each mark names its token directly, per `[data-chart-color]`
+   at the bottom — fills (bar, dot, slice, swatch, sparkline dot) read
+   `--bds-background-chart-*`, strokes (line, sparkline line, swatch border)
+   read `--bds-border-chart-*` — so DevTools shows the token, never
+   `currentColor`. No hex in this file (brik-bds issue 3182 greps for it). */
 
 /* ─── Frame ───────────────────────────────────────────── */
 
@@ -130,13 +129,9 @@
   box-sizing: border-box;
   width: 12px; /* bds-lint-ignore — legend swatch glyph size, matches the 12px chart key convention */
   height: 12px; /* bds-lint-ignore — legend swatch glyph size */
-  border: var(--bds-border-width-md) solid currentColor;
+  border-width: var(--bds-border-width-md);
+  border-style: solid;
   border-radius: var(--bds-border-radius-sm);
-  background-color: currentColor;
-}
-
-.bds-chart__swatch--hidden {
-  background-color: transparent;
 }
 
 /* ─── SVG marks ───────────────────────────────────────── */
@@ -179,13 +174,8 @@
   fill: var(--bds-text-primary);
 }
 
-.bds-chart__bar {
-  fill: currentColor;
-}
-
 .bds-chart__line {
   fill: none;
-  stroke: currentColor;
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -195,7 +185,6 @@
    separate (ADR-050 § 1 "Separate adjacent fills"). */
 .bds-chart__dot,
 .bds-chart__slice {
-  fill: currentColor;
   stroke: var(--bds-surface-primary);
   stroke-width: 2;
 }
@@ -286,31 +275,139 @@
 
 .bds-sparkline__line {
   fill: none;
-  stroke: currentColor;
   stroke-width: 1.5;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.bds-sparkline__dot {
-  fill: currentColor;
+/* ─── Chart colour — every mark names its token directly ────────────────
+   Fill marks read --bds-background-chart-X, stroke marks --bds-border-chart-X
+   (ADR-050 § 1). Dots and slices keep their surface-primary stroke; the
+   transparent hit target is not matched here and so carries no chart colour. */
+
+[data-chart-color='neutral'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-neutral);
+}
+[data-chart-color='neutral'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-neutral);
+}
+.bds-chart__swatch[data-chart-color='neutral'] {
+  border-color: var(--bds-border-chart-neutral);
+  background-color: var(--bds-background-chart-neutral);
 }
 
-/* ─── Chart colour — the only entry point for --bds-background-chart-* ──
-   `color` is the currentColor carrier every mark reads through fill/stroke
-   (ADR-050 § 1), so the fill token sits in the text slot on purpose; each rule
-   waives token-family for that reason. */
+[data-chart-color='categorical-1'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-categorical-1);
+}
+[data-chart-color='categorical-1'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-categorical-1);
+}
+.bds-chart__swatch[data-chart-color='categorical-1'] {
+  border-color: var(--bds-border-chart-categorical-1);
+  background-color: var(--bds-background-chart-categorical-1);
+}
 
-[data-chart-color='brand'] { color: var(--bds-background-chart-brand); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='neutral'] { color: var(--bds-background-chart-neutral); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='categorical-1'] { color: var(--bds-background-chart-categorical-1); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='categorical-2'] { color: var(--bds-background-chart-categorical-2); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='categorical-3'] { color: var(--bds-background-chart-categorical-3); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='categorical-4'] { color: var(--bds-background-chart-categorical-4); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='categorical-5'] { color: var(--bds-background-chart-categorical-5); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='categorical-6'] { color: var(--bds-background-chart-categorical-6); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='positive'] { color: var(--bds-background-chart-positive); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='warning'] { color: var(--bds-background-chart-warning); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='negative'] { color: var(--bds-background-chart-negative); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
-[data-chart-color='info'] { color: var(--bds-background-chart-info); } /* bds-lint-ignore token-family — currentColor carrier, brik-bds#3247 */
+[data-chart-color='categorical-2'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-categorical-2);
+}
+[data-chart-color='categorical-2'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-categorical-2);
+}
+.bds-chart__swatch[data-chart-color='categorical-2'] {
+  border-color: var(--bds-border-chart-categorical-2);
+  background-color: var(--bds-background-chart-categorical-2);
+}
+
+[data-chart-color='categorical-3'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-categorical-3);
+}
+[data-chart-color='categorical-3'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-categorical-3);
+}
+.bds-chart__swatch[data-chart-color='categorical-3'] {
+  border-color: var(--bds-border-chart-categorical-3);
+  background-color: var(--bds-background-chart-categorical-3);
+}
+
+[data-chart-color='categorical-4'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-categorical-4);
+}
+[data-chart-color='categorical-4'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-categorical-4);
+}
+.bds-chart__swatch[data-chart-color='categorical-4'] {
+  border-color: var(--bds-border-chart-categorical-4);
+  background-color: var(--bds-background-chart-categorical-4);
+}
+
+[data-chart-color='categorical-5'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-categorical-5);
+}
+[data-chart-color='categorical-5'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-categorical-5);
+}
+.bds-chart__swatch[data-chart-color='categorical-5'] {
+  border-color: var(--bds-border-chart-categorical-5);
+  background-color: var(--bds-background-chart-categorical-5);
+}
+
+[data-chart-color='categorical-6'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-categorical-6);
+}
+[data-chart-color='categorical-6'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-categorical-6);
+}
+.bds-chart__swatch[data-chart-color='categorical-6'] {
+  border-color: var(--bds-border-chart-categorical-6);
+  background-color: var(--bds-background-chart-categorical-6);
+}
+
+[data-chart-color='positive'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-positive);
+}
+[data-chart-color='positive'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-positive);
+}
+.bds-chart__swatch[data-chart-color='positive'] {
+  border-color: var(--bds-border-chart-positive);
+  background-color: var(--bds-background-chart-positive);
+}
+
+[data-chart-color='warning'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-warning);
+}
+[data-chart-color='warning'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-warning);
+}
+.bds-chart__swatch[data-chart-color='warning'] {
+  border-color: var(--bds-border-chart-warning);
+  background-color: var(--bds-background-chart-warning);
+}
+
+[data-chart-color='negative'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-negative);
+}
+[data-chart-color='negative'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-negative);
+}
+.bds-chart__swatch[data-chart-color='negative'] {
+  border-color: var(--bds-border-chart-negative);
+  background-color: var(--bds-background-chart-negative);
+}
+
+[data-chart-color='info'] :is(.bds-chart__bar, .bds-chart__dot, .bds-chart__slice, .bds-sparkline__dot) {
+  fill: var(--bds-background-chart-info);
+}
+[data-chart-color='info'] :is(.bds-chart__line, .bds-sparkline__line) {
+  stroke: var(--bds-border-chart-info);
+}
+.bds-chart__swatch[data-chart-color='info'] {
+  border-color: var(--bds-border-chart-info);
+  background-color: var(--bds-background-chart-info);
+}
+
+/* After the colour rules: a hidden series keeps a hollow swatch (outline only). */
+.bds-chart__swatch--hidden[data-chart-color] {
+  background-color: transparent;
+}
 }
