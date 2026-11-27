@@ -1035,28 +1035,44 @@
       "label": "Categorical series 3 fill on page",
       "fg": "--bds-background-chart-categorical-3",
       "bg": "--bds-page-primary",
-      "thresholdType": "AA-large"
+      "thresholdType": "AA-large",
+      "lightException": {
+        "issue": 3400,
+        "reason": "Brik brand environment (portal, brikdesigns.com, docs) a11y exception per operator 2026-11-27; client kits stay gated. Every series keeps a text label and a data-table alternative"
+      }
     },
     {
       "group": "chart",
       "label": "Categorical series 3 fill on card surface",
       "fg": "--bds-background-chart-categorical-3",
       "bg": "--bds-surface-primary",
-      "thresholdType": "AA-large"
+      "thresholdType": "AA-large",
+      "lightException": {
+        "issue": 3400,
+        "reason": "Brik brand environment (portal, brikdesigns.com, docs) a11y exception per operator 2026-11-27; client kits stay gated. Every series keeps a text label and a data-table alternative"
+      }
     },
     {
       "group": "chart",
       "label": "Categorical series 4 fill on page",
       "fg": "--bds-background-chart-categorical-4",
       "bg": "--bds-page-primary",
-      "thresholdType": "AA-large"
+      "thresholdType": "AA-large",
+      "lightException": {
+        "issue": 3400,
+        "reason": "Brik brand environment (portal, brikdesigns.com, docs) a11y exception per operator 2026-11-27; client kits stay gated. Every series keeps a text label and a data-table alternative"
+      }
     },
     {
       "group": "chart",
       "label": "Categorical series 4 fill on card surface",
       "fg": "--bds-background-chart-categorical-4",
       "bg": "--bds-surface-primary",
-      "thresholdType": "AA-large"
+      "thresholdType": "AA-large",
+      "lightException": {
+        "issue": 3400,
+        "reason": "Brik brand environment (portal, brikdesigns.com, docs) a11y exception per operator 2026-11-27; client kits stay gated. Every series keeps a text label and a data-table alternative"
+      }
     },
     {
       "group": "chart",
