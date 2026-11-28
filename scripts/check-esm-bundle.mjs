@@ -245,6 +245,80 @@ if (!existsSync(distDir)) {
   }
 }
 
+/* ── `@brikdesigns/bds/tokens` — the server-safe preset entry ─────────────
+ * brik-client-portal#7430 / brik-bds#3396. A Next.js Server Component must be
+ * able to READ `text` / `heading` / `label`. That needs three things at once,
+ * and each fails silently somewhere else: the subpath exists in `exports`, the
+ * emitted module carries no 'use client' banner (it would be a client
+ * reference), and it pulls no React in (the module would not be server-safe
+ * even banner-free). The values must also be the SAME ones the package root
+ * exports — a copy that drifted would defeat the point. */
+{
+  const TOKENS_SUBPATH = './tokens';
+  const entry = pkg.exports?.[TOKENS_SUBPATH];
+  if (!entry || typeof entry !== 'object' || !entry.import || !entry.require || !entry.types) {
+    fail(
+      `❌ tokens entry check FAILED — package.json "exports" has no complete \`${TOKENS_SUBPATH}\` ` +
+        `(types + import + require). Server components have no banner-free path to the presets.`,
+    );
+  } else {
+    const bannerRe = /^\s*(['"])use client\1\s*;?/;
+    const reactRe = /(?:from\s*|import\s*\(?\s*|require\(\s*)['"]react(?:\/[^'"]*)?['"]/;
+    let entryOk = true;
+    for (const cond of ['import', 'require']) {
+      const rel = entry[cond];
+      const abs = resolve(pkgRoot, rel);
+      if (!existsSync(abs)) {
+        fail(`❌ tokens entry check FAILED — \`${TOKENS_SUBPATH}\` ${cond} target \`${rel}\` does not exist.`);
+        entryOk = false;
+        continue;
+      }
+      // The entry plus every module it pulls in by relative import: a banner or
+      // a React import one hop in still makes the subpath unsafe.
+      const src = readFileSync(abs, 'utf8');
+      const hops = [...src.matchAll(/(?:from\s*|require\()\s*["'](\.[^"']+)["']/g)].map((m) =>
+        join(dirname(abs), m[1]),
+      );
+      for (const file of [abs, ...hops]) {
+        if (!existsSync(file)) continue;
+        const text = readFileSync(file, 'utf8');
+        const where = relative(pkgRoot, file);
+        if (bannerRe.test(text)) {
+          fail(
+            `❌ tokens entry check FAILED — \`${where}\` carries 'use client'. A server component would ` +
+              `receive client references for text/heading/label. Keep it in SERVER_SAFE_MODULES.`,
+          );
+          entryOk = false;
+        }
+        if (reactRe.test(text)) {
+          fail(`❌ tokens entry check FAILED — \`${where}\` imports React; the entry must stay pure data.`);
+          entryOk = false;
+        }
+      }
+    }
+    const typesAbs = resolve(pkgRoot, entry.types);
+    if (!existsSync(typesAbs)) {
+      fail(`❌ tokens entry check FAILED — types target \`${entry.types}\` does not exist.`);
+      entryOk = false;
+    }
+    if (entryOk) {
+      const sub = await import(pathToFileURL(resolve(pkgRoot, entry.import)).href);
+      const root = await import(pathToFileURL(resolve(pkgRoot, pkg.module)).href);
+      const missing = ['text', 'heading', 'label'].filter(
+        (k) => !sub[k] || JSON.stringify(sub[k]) !== JSON.stringify(root[k]),
+      );
+      if (missing.length) {
+        fail(
+          `❌ tokens entry check FAILED — ${missing.join(', ')} missing from \`${TOKENS_SUBPATH}\` ` +
+            `or different from the package root's value.`,
+        );
+      } else {
+        console.log(`✅ tokens entry: \`${TOKENS_SUBPATH}\` banner-free, React-free, text/heading/label match the root.`);
+      }
+    }
+  }
+}
+
 if (failed) {
   console.error('\nESM checks failed — see above.\n');
   process.exit(1);

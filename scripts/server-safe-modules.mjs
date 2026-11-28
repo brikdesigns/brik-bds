@@ -47,6 +47,16 @@ export const SERVER_SAFE_MODULES = [
   // type-only imports, no React runtime. A server layout calls them to build the
   // trail before handing it to <Breadcrumb>, so they must be real values.
   'components/ui/Breadcrumb/navTrail',
+  // The typography / space / colour presets (`text`, `heading`, `label`, …),
+  // published at `@brikdesigns/bds/tokens` and re-exported from the root. Plain
+  // objects; every import in the source is `import type`, so no React reaches
+  // the emit. With the banner a server component got client references for them
+  // (brik-client-portal#7430, brik-bds#3396).
+  'tokens/index',
+  // `tokens/index` re-exports the theme registry (pure functions over a plain
+  // array, no imports). Left bannered, the subpath would still hold a client
+  // boundary one hop in.
+  'tokens/theme-registry',
 ];
 
 /** `true` if the chunk/module name shipped banner-free. */

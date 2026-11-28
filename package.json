@@ -15,6 +15,11 @@
       "import": "./dist/lib-entry.mjs",
       "require": "./dist/lib-entry.cjs"
     },
+    "./tokens": {
+      "types": "./dist/tokens/index.d.ts",
+      "import": "./dist/tokens/index.mjs",
+      "require": "./dist/tokens/index.cjs"
+    },
     "./content-system": {
       "types": "./dist/content-system/index.d.ts",
       "import": "./dist/content-system/index.mjs"

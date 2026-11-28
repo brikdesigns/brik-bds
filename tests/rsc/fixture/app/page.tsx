@@ -16,7 +16,15 @@ import {
   PageHeader,
   Breadcrumb,
   breadcrumbTrailFromNav,
+  text as rootText,
 } from '@brikdesigns/bds';
+// The server-safe preset entry (brik-bds#3396). A client reference would not
+// be a plain object, so the checks below throw if the banner comes back.
+import {
+  text as tokensText,
+  heading as tokensHeading,
+  label as tokensLabel,
+} from '@brikdesigns/bds/tokens';
 
 /**
  * Assert a root-exported array is readable as real data on the server.
@@ -53,6 +61,23 @@ export default function Page() {
   });
   if (trail.length !== 2 || trail[1].label !== 'Services' || trail[1].href !== undefined) {
     throw new Error('RSC smoke FAILED — breadcrumbTrailFromNav returned ' + JSON.stringify(trail));
+  }
+
+  for (const [name, preset] of Object.entries({
+    text: tokensText,
+    heading: tokensHeading,
+    label: tokensLabel,
+  })) {
+    if (typeof preset !== 'object' || preset === null || Object.keys(preset).length === 0) {
+      throw new Error(
+        `RSC smoke FAILED — @brikdesigns/bds/tokens ${name} is not a populated object in a ` +
+          `server component (typeof ${typeof preset}). It is reaching the server as a client ` +
+          `reference: 'tokens/index' must stay in SERVER_SAFE_MODULES (brik-bds#3396).`,
+      );
+    }
+  }
+  if (JSON.stringify(tokensText) !== JSON.stringify(rootText)) {
+    throw new Error('RSC smoke FAILED — @brikdesigns/bds/tokens text differs from the package root text.');
   }
 
   assertServerReadableArray('SOCIAL_ICON_PLATFORMS', SOCIAL_ICON_PLATFORMS, 10);
