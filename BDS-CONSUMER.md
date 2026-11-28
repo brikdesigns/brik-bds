@@ -63,6 +63,12 @@ import { font, color, space, gap, border } from '@/lib/tokens';
 import { text, heading, label } from '@/lib/styles';
 ```
 
+**In a Server Component** — import the BDS presets from `@brikdesigns/bds/tokens` (banner-free, React-free; `text`, `heading`, `label`, scales, theme registry). The package root also reads as data from a server component, but this subpath pulls no component graph.
+
+```tsx
+import { text, heading, label } from '@brikdesigns/bds/tokens';
+```
+
 Full pattern in [React Composition Layer](https://design.brikdesigns.com/docs/getting-started/react-composition) (typed primitives, style presets, `Prose` markdown renderer, pre-commit gate).
 
 ---
