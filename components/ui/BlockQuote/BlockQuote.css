@@ -36,7 +36,7 @@
   .bds-block-quote__cite {
     font-family: var(--bds-font-family-label);
     font-size: var(--bds-label-md);
-    font-weight: var(--bds-font-weight-semibold);
+    font-weight: var(--bds-font-weight-label);
     font-style: normal;
     line-height: var(--bds-font-line-height-label);
     color: var(--bds-text-muted);

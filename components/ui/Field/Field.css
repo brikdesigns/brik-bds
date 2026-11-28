@@ -52,8 +52,8 @@
    * wins inside a Sheet without needing `!important` or a longer selector.
    */
   font-size: var(--bds-field-label-size, var(--bds-label-md));
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-muted);
   text-transform: var(--bds-text-transform-field-label);
   margin: 0;
@@ -118,8 +118,8 @@
 .bds-field__helper {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-xs);
-  font-weight: var(--bds-font-weight-regular);
-  line-height: var(--bds-font-line-height-normal);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-muted);
   margin: 0;
   display: block;

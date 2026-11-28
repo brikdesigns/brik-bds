@@ -73,7 +73,7 @@
 .bds-table-head {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   color: var(--bds-text-muted);
   text-align: left;
   white-space: nowrap;
@@ -267,7 +267,7 @@
 .bds-table-text-cell__primary {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-body-sm);
-  font-weight: var(--bds-font-weight-medium);
+  font-weight: var(--bds-font-weight-heading);
   color: var(--bds-text-primary);
 }
 

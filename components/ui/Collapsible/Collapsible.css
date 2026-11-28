@@ -55,7 +55,7 @@
   color: var(--bds-text-secondary);
   text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-heading);
   margin: 0;
 }
 
@@ -63,10 +63,10 @@
 
 .bds-collapsible__title {
   font-family: var(--bds-font-family-heading);
-  font-weight: var(--bds-font-weight-bold);
+  font-weight: var(--bds-font-weight-heading);
   font-size: var(--bds-heading-sm);
   color: var(--bds-text-primary);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-heading);
   margin: 0;
 }
 

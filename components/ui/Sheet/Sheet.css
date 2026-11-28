@@ -102,7 +102,7 @@
 .bds-sheet__title {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-md);
-  font-weight: var(--bds-font-weight-bold);
+  font-weight: var(--bds-font-weight-heading);
   line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
   margin: 0;
@@ -112,8 +112,8 @@
 .bds-sheet__subtitle {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-xs);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-muted);
   text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);
@@ -151,7 +151,7 @@
   padding: var(--bds-padding-sm) 0;
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-body-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   color: var(--bds-text-muted);
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;

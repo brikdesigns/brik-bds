@@ -57,8 +57,8 @@
 .bds-empty-state__title {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-md);
-  font-weight: var(--bds-font-weight-bold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-heading);
+  line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
   margin: 0;
   text-align: center;

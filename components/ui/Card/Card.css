@@ -193,8 +193,8 @@
 .bds-card__control-title {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-lg);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-primary);
   margin: 0;
 }
@@ -266,7 +266,7 @@
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
   font-weight: var(--bds-font-weight-label);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-label);
 }
 
 /* Stamp line (kind + DateTime + actor) — drops below the dot+label row */
@@ -506,7 +506,7 @@
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-md);
   font-weight: var(--bds-font-weight-heading);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
 }
 
@@ -612,7 +612,7 @@
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-md);
   font-weight: var(--bds-font-weight-heading);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
 }
 
@@ -692,7 +692,7 @@
 .bds-card__pricing-title {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-sm);
-  font-weight: var(--bds-font-weight-bold);
+  font-weight: var(--bds-font-weight-heading);
   line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
   margin: 0;
@@ -707,8 +707,8 @@
 .bds-card__pricing-price {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-xl);
-  font-weight: var(--bds-font-weight-bold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-heading);
+  line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
   margin: 0;
 }

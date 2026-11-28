@@ -59,7 +59,7 @@
 .bds-modal__title {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-md);
-  font-weight: var(--bds-font-weight-bold);
+  font-weight: var(--bds-font-weight-heading);
   line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
   margin: 0;
@@ -117,7 +117,7 @@
 .bds-modal__confirm-title {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-sm);
-  font-weight: var(--bds-font-weight-bold);
+  font-weight: var(--bds-font-weight-heading);
   line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
   margin: 0;

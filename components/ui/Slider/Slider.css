@@ -32,7 +32,7 @@
   margin: 0;
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-primary);
   text-transform: var(--bds-text-transform-field-label);
@@ -41,7 +41,7 @@
 .bds-slider__value {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-regular);
+  font-weight: var(--bds-font-weight-label);
   color: var(--bds-text-secondary);
 }
 
