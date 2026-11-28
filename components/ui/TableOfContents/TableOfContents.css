@@ -86,7 +86,7 @@
   border-radius: 0;
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-bold);
+  font-weight: var(--bds-font-weight-label);
   line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-secondary);
   background-color: transparent;

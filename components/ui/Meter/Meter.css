@@ -99,7 +99,7 @@
 .bds-meter__value {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-lg);
-  font-weight: var(--bds-font-weight-bold);
+  font-weight: var(--bds-font-weight-heading);
   color: var(--bds-text-primary);
 }
 

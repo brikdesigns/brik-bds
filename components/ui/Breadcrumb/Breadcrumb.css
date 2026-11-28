@@ -52,7 +52,7 @@
 .bds-breadcrumb__link {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   /* `snug`, not `tight`: the ellipsis below needs `overflow: hidden`, and a
      `tight` (110%) line box is shorter than the glyph extent, so it clips
      descenders (g/y/p/q). `snug` (125%) is the shortest line box that still
@@ -100,7 +100,7 @@
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-md);
   color: var(--bds-text-muted);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-label);
   padding: 0 var(--bds-padding-tiny);
   flex-shrink: 0;
 }

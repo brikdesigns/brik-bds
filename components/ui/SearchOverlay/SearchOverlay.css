@@ -63,7 +63,7 @@
   padding-inline: var(--bds-padding-md);
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   color: var(--bds-text-secondary);
 }
 
@@ -151,7 +151,7 @@
   background-color: var(--bds-background-secondary);
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-md);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   color: var(--bds-text-primary);
   cursor: pointer;
   transition: background-color var(--bds-duration-100) var(--bds-ease-out);

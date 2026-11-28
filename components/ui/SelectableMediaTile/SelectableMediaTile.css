@@ -95,7 +95,7 @@
     font-family: var(--bds-font-family-label);
     font-size: var(--bds-label-sm);
     font-weight: var(--bds-font-weight-label);
-    line-height: var(--bds-font-line-height-tight);
+    line-height: var(--bds-font-line-height-label);
     color: var(--bds-text-secondary);
     white-space: nowrap;
     overflow: hidden;

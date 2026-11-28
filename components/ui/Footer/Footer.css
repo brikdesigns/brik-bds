@@ -135,7 +135,7 @@
 .bds-footer__heading {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-md);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   line-height: var(--bds-font-line-height-label);
   margin: 0;
 }
@@ -185,7 +185,7 @@
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-xs);
   font-weight: var(--bds-font-weight-body);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-body);
   margin: 0;
 }
 
@@ -211,7 +211,7 @@
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-xs);
   font-weight: var(--bds-font-weight-body);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-body);
   text-decoration: none;
   transition: opacity var(--bds-duration-100) var(--bds-ease-out);
 }
@@ -223,7 +223,7 @@
 .bds-footer__bottom-sep {
   font-family: var(--bds-font-family-body);
   font-size: var(--bds-body-xs);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-body);
   user-select: none;
 }
 

@@ -29,7 +29,7 @@
 .bds-card-testimonial__quote-mark {
   font-family: var(--bds-font-family-display);
   font-size: var(--bds-heading-huge);
-  font-weight: var(--bds-font-weight-bold);
+  font-weight: var(--bds-font-weight-display);
   line-height: var(--bds-font-line-height-display);
   margin: 0;
   user-select: none;
@@ -64,7 +64,7 @@
 .bds-card-testimonial__name {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-md);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   line-height: var(--bds-font-line-height-label);
   font-style: normal;
   margin: 0;

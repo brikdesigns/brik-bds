@@ -63,8 +63,8 @@
 .bds-task-console__title {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-md);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-primary);
   white-space: nowrap;
   overflow: hidden;

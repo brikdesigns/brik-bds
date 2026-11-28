@@ -148,7 +148,7 @@
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-xl);
   font-weight: var(--bds-font-weight-heading);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-heading);
   margin: 0;
 }
 
@@ -219,8 +219,8 @@
 .bds-page-header__metadata-label {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-primary);
 }
 

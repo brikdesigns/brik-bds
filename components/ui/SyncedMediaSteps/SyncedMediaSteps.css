@@ -88,7 +88,7 @@
   flex-shrink: 0;
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   font-variant-numeric: tabular-nums;
   color: var(--bds-text-muted);
   transition: color var(--bds-duration-200) var(--bds-ease-out);

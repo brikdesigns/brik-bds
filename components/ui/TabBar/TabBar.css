@@ -242,8 +242,8 @@
 .bds-tab-bar-item {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-md);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   text-align: center;
   white-space: nowrap;
   cursor: pointer;

@@ -49,7 +49,7 @@
 .bds-pricing-card__title {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-sm);
-  font-weight: var(--bds-font-weight-bold);
+  font-weight: var(--bds-font-weight-heading);
   line-height: var(--bds-font-line-height-heading);
   color: var(--bds-text-primary);
   margin: 0;
@@ -66,8 +66,8 @@
 .bds-pricing-card__price {
   font-family: var(--bds-font-family-heading);
   font-size: var(--bds-heading-xl);
-  font-weight: var(--bds-font-weight-bold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-heading);
+  line-height: var(--bds-font-line-height-heading);
   /* Override hook (ADR-014): a service-themed surface sets the price ink here. */
   color: var(--bds-pricing-card-price-color, var(--bds-text-primary));
   margin: 0;
