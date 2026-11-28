@@ -347,7 +347,6 @@ export const textInverse: string;
 export const textOnColorDark: string;
 export const textOnColorLight: string;
 export const textNeutral: string;
-export const textBrandPrimary: string;
 export const textTextLink: string;
 /** Disabled button text (all variants) */
 export const textDisabled: string;
@@ -366,7 +365,6 @@ export const borderInverse: string;
 export const borderOnColorDark: string;
 export const borderOnColorLight: string;
 export const borderNeutral: string;
-export const borderBrandPrimary: string;
 /** Disabled button border (all variants) */
 export const borderDisabled: string;
 export const borderAccentYellow: string;
@@ -375,8 +373,6 @@ export const borderAccentGreen: string;
 export const borderAccentPurple: string;
 export const borderAccentOrange: string;
 export const borderAccentRed: string;
-/** Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke. */
-export const borderChartBrand: string;
 /** Chart stroke — line, outline, axis series mark. Same value as background/chart/neutral; this one styles a border/stroke. */
 export const borderChartNeutral: string;
 /** Chart stroke — line, outline, axis series mark. Same value as background/chart/positive; this one styles a border/stroke. */
@@ -409,13 +405,9 @@ export const backgroundOnColorDark: string;
 export const backgroundOnColorLight: string;
 export const backgroundAccentYellow: string;
 export const backgroundNeutral: string;
-export const backgroundBrandPrimary: string;
-export const backgroundBrandPrimaryHover: string;
-export const backgroundBrandPrimaryPressed: string;
 /** Disabled button background (all variants) */
 export const backgroundDisabled: string;
 export const backgroundAccentOrange: string;
-export const backgroundChartBrand: string;
 export const backgroundChartNeutral: string;
 export const backgroundChartPositive: string;
 export const backgroundChartWarning: string;
@@ -442,9 +434,6 @@ export const surfaceSecondary: string;
 export const surfaceSecondaryPressed: string;
 export const surfaceInverse: string;
 export const surfaceNeutral: string;
-export const surfaceBrandPrimary: string;
-export const surfaceBrandPrimaryHover: string;
-export const surfaceBrandPrimaryPressed: string;
 export const surfaceAccentYellow: string;
 export const surfaceAccentBlue: string;
 export const surfaceAccentGreen: string;
@@ -455,7 +444,6 @@ export const surfaceInfo: string;
 export const pagePrimary: string;
 export const pageSecondary: string;
 export const pageInverse: string;
-export const pageBrandPrimary: string;
 export const pageAccentYellow: string;
 export const pageAccentOrange: string;
 export const pageAccentRed: string;
