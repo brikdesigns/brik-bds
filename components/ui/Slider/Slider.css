@@ -41,7 +41,7 @@
 .bds-slider__value {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-label);
+  font-weight: var(--bds-font-weight-regular);
   color: var(--bds-text-secondary);
 }
 

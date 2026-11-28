@@ -118,8 +118,8 @@
 .bds-field__helper {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-xs);
-  font-weight: var(--bds-font-weight-label);
-  line-height: var(--bds-font-line-height-label);
+  font-weight: var(--bds-font-weight-regular);
+  line-height: var(--bds-font-line-height-normal);
   color: var(--bds-text-muted);
   margin: 0;
   display: block;
