@@ -38,7 +38,7 @@
 .bds-calendar__day-number {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
 }
 
 .bds-calendar__day-header--today {

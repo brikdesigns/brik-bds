@@ -10,7 +10,7 @@
   background-color: var(--bds-background-brand-primary);
   color: var(--bds-text-on-color-dark);
   font-family: var(--bds-font-family-label);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   flex-shrink: 0;
   user-select: none;
 }

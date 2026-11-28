@@ -14,7 +14,7 @@
   align-items: center;
   width: fit-content;
   font-family: var(--bds-font-family-label);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   line-height: 1; /* bds-lint-ignore — collapse line box so padding controls spacing symmetrically */
   border-radius: var(--bds-border-radius-pill);
   white-space: nowrap;

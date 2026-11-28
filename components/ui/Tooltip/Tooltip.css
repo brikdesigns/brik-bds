@@ -17,7 +17,7 @@
   color: var(--bds-text-inverse);
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  line-height: var(--bds-font-line-height-normal);
+  line-height: var(--bds-font-line-height-label);
   border-radius: var(--bds-border-radius-sm);
   white-space: nowrap;
   z-index: var(--bds-z-tooltip);

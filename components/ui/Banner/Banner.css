@@ -36,9 +36,9 @@
 
 .bds-banner__title {
   font-family: var(--bds-font-family-label);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   font-size: var(--bds-label-md);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-label);
 }
 
 /* ─── Description ────────────────────────────────────────────── */

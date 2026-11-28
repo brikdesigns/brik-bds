@@ -25,8 +25,8 @@
 
 .bds-date-picker__label {
   font-family: var(--bds-font-family-label);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   text-transform: var(--bds-text-transform-field-label);
 }
 
@@ -137,7 +137,7 @@
 .bds-date-picker__month-label {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-body-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   color: var(--bds-text-primary);
 }
 

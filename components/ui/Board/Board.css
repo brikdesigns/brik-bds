@@ -82,11 +82,11 @@
 .bds-board-column__title {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   color: var(--bds-text-secondary);
   text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: 0.04em;
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-label);
   margin: 0;
 }
 
@@ -95,7 +95,7 @@
   font-size: var(--bds-body-xs);
   font-weight: var(--bds-font-weight-label);
   color: var(--bds-text-secondary);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-label);
 }
 
 .bds-board-column__items {
@@ -143,7 +143,7 @@
   font-size: var(--bds-heading-tiny);
   font-weight: var(--bds-font-weight-heading);
   color: var(--bds-text-on-color-dark);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-heading);
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
@@ -234,9 +234,9 @@
 .bds-board-card__title {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-lg);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   color: var(--bds-text-primary);
-  line-height: var(--bds-font-line-height-tight);
+  line-height: var(--bds-font-line-height-label);
   margin: 0;
 }
 

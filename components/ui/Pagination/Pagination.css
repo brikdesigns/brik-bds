@@ -82,8 +82,8 @@
 .bds-pagination__page {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-muted);
   padding: var(--bds-padding-sm);
   background: none;
@@ -103,8 +103,8 @@
 .bds-pagination__ellipsis {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-sm);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-tight);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-muted);
   padding: var(--bds-padding-sm);
   min-width: 24px; /* bds-lint-ignore — fixed 24px min tap target, not a spacing-grid token */

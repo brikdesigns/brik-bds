@@ -74,7 +74,7 @@
 .bds-file-uploader__label {
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-label-md);
-  font-weight: var(--bds-font-weight-semibold);
+  font-weight: var(--bds-font-weight-label);
   line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-primary);
   margin: 0;

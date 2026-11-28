@@ -56,8 +56,8 @@
   margin-bottom: var(--bds-gap-sm);
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-body-xs);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-normal);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-secondary);
   text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);
@@ -107,8 +107,8 @@
   padding: var(--bds-padding-tiny) var(--bds-padding-tiny) 0;
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-body-xs);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-normal);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-secondary);
   text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);

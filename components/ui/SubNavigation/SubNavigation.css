@@ -74,8 +74,8 @@
   padding: var(--bds-padding-sm) var(--bds-padding-md) var(--bds-padding-tiny);
   font-family: var(--bds-font-family-label);
   font-size: var(--bds-body-xs);
-  font-weight: var(--bds-font-weight-semibold);
-  line-height: var(--bds-font-line-height-normal);
+  font-weight: var(--bds-font-weight-label);
+  line-height: var(--bds-font-line-height-label);
   color: var(--bds-text-secondary);
   text-transform: var(--bds-text-transform-subtitle);
   letter-spacing: var(--bds-letter-spacing-wide);
