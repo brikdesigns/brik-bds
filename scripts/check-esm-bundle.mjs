@@ -296,11 +296,8 @@ if (!existsSync(distDir)) {
         }
       }
     }
-    const typesAbs = resolve(pkgRoot, entry.types);
-    if (!existsSync(typesAbs)) {
-      fail(`❌ tokens entry check FAILED — types target \`${entry.types}\` does not exist.`);
-      entryOk = false;
-    }
+    // `types` is asserted present above; this job runs `vite build` only, so the
+    // .d.ts emit (build:types) is not on disk here.
     if (entryOk) {
       const sub = await import(pathToFileURL(resolve(pkgRoot, entry.import)).href);
       const root = await import(pathToFileURL(resolve(pkgRoot, pkg.module)).href);
