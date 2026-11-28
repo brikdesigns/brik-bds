@@ -63,7 +63,7 @@ export interface SubNavigationProps {
  *
  * At tablet width and up it is a sticky, full-height rail: it sticks at
  * `--bds-subnav-top` (default `0`; a shell with a top bar sets it to the
- * `--bds-shell-top-bar-height` token on an ancestor) and scrolls on its own
+ * bar height, `--bds-size-1600` for AppBar, on an ancestor) and scrolls on its own
  * only when its items overflow. Below the tablet breakpoint it becomes a single
  * horizontally scrolling row.
  *

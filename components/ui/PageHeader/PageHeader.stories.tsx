@@ -357,7 +357,7 @@ function StickyFrame({ children, shellOffset = false }: { children: ReactNode; s
         height: 320,
         overflowY: 'auto',
         background: 'var(--bds-surface-primary)',
-        ...(shellOffset ? ({ '--bds-pageheader-top': 'var(--bds-shell-top-bar-height)' } as CSSProperties) : {}),
+        ...(shellOffset ? ({ '--bds-pageheader-top': 'var(--bds-size-1600)' } as CSSProperties) : {}),
       }}
     >
       {children}

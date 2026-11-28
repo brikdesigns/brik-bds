@@ -185,7 +185,7 @@ export const StickyRailBelowTopBar: Story = {
   tags: ['!manifest', 'interaction-test'],
   args: { items: groupedItems },
   render: (args) => (
-    <div style={{ display: 'flex', alignItems: 'flex-start', '--bds-subnav-top': 'var(--bds-shell-top-bar-height)' } as React.CSSProperties}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', '--bds-subnav-top': 'var(--bds-size-1600)' } as React.CSSProperties}>
       <SubNavigationStory {...args} />
       <div style={{ flex: 1, height: '300vh', padding: 'var(--bds-padding-lg)' }}>
         Tall page content below a 64px shell top bar.
@@ -194,7 +194,7 @@ export const StickyRailBelowTopBar: Story = {
   ),
   play: async ({ canvasElement }) => {
     const rail = canvasElement.querySelector('.bds-subnav') as HTMLElement;
-    // --bds-shell-top-bar-height is --bds-size-1600, 64px.
+    // The top bar is --bds-size-1600, 64px.
     await expect(getComputedStyle(rail).top).toBe('64px');
     await expect(Math.round(rail.getBoundingClientRect().height)).toBe(window.innerHeight - 64);
   },

@@ -12,7 +12,7 @@
   align-self: flex-start;
   /* Sticky section rail, flush to the top by default (--bds-subnav-top is 0px on
      :root). A shell with a top bar sets --bds-subnav-top:
-     var(--bds-shell-top-bar-height) on the rail or an ancestor. Never declared
+     var(--bds-size-1600) on the rail or an ancestor. Never declared
      here — a declaration on the rail would shadow an ancestor's value. */
   position: sticky;
   top: var(--bds-subnav-top);

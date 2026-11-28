@@ -166,17 +166,17 @@ The scale runs `--size-0` (0) through `--size-2200` (100px).
 
 ## Shell sizes
 
-Fixed dimension of the product app shell. Use it for the layout the shell owns — the fixed top bar — so a consumer never repeats the px.
+The product app shell's fixed top bar (`AppBar`) is `--bds-size-1600`, 64px. Read that size step for the layout the shell owns, so a consumer never repeats the px.
 
-| Token | Value | Source |
+| Token | Value | Use |
 |---|---|---|
-| `--bds-shell-top-bar-height` | 64px (`--bds-size-1600`) | Portal top bar height |
+| `--bds-size-1600` | 64px | Top bar height; the sticky offset below it |
 
 ```css
 .shell__rail {
   position: sticky;
-  top: var(--bds-shell-top-bar-height);
-  height: calc(100vh - var(--bds-shell-top-bar-height));
+  top: var(--bds-size-1600);
+  height: calc(100vh - var(--bds-size-1600));
 }
 ```
 

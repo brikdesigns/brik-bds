@@ -36,7 +36,7 @@
    Opt-in via the `sticky` prop. Pins to the top of the nearest scroll
    container; the opaque surface keeps body content from showing through.
    --bds-pageheader-top is 0px on :root. A shell with a top bar sets it to
-   var(--bds-shell-top-bar-height) on an ancestor. Never declared here — a
+   var(--bds-size-1600) on an ancestor. Never declared here — a
    declaration on the header would shadow an ancestor's value (brik-bds#2842).
    --bds-z-page-header sits above page content and the section rail but below
    the shell top bar, dropdowns and overlays. No variant changes height on

@@ -9,7 +9,7 @@
   gap: var(--bds-gap-md);
   box-sizing: border-box;
   width: 100%;
-  height: var(--bds-shell-top-bar-height);
+  height: var(--bds-size-1600);
   padding: 0 var(--bds-padding-xl);
   background-color: var(--bds-surface-primary);
   border-bottom: var(--bds-border-width-md) solid var(--bds-border-secondary);

@@ -17,8 +17,8 @@
 /* A top bar sets the sticky offsets SubNavigation and PageHeader read. Set on
    the shell, an ancestor of both — never on them, which would shadow it. */
 .bds-app-shell[data-top-bar="true"] {
-  --bds-subnav-top: var(--bds-shell-top-bar-height);
-  --bds-pageheader-top: var(--bds-shell-top-bar-height);
+  --bds-subnav-top: var(--bds-size-1600);
+  --bds-pageheader-top: var(--bds-size-1600);
 }
 
 /* ─── Top bar ────────────────────────────────────────────────── */
@@ -29,7 +29,7 @@
   z-index: var(--bds-z-shell);
   box-sizing: border-box;
   flex: none;
-  height: var(--bds-shell-top-bar-height);
+  height: var(--bds-size-1600);
   background-color: var(--bds-surface-primary);
 }
 
@@ -62,9 +62,9 @@
 
 /* The sidebar sticks below the top bar, not under it. */
 .bds-app-shell[data-top-bar="true"] .bds-app-shell__nav .bds-sidebar-nav {
-  top: var(--bds-shell-top-bar-height);
-  height: calc(100vh - var(--bds-shell-top-bar-height));
-  height: calc(100dvh - var(--bds-shell-top-bar-height));
+  top: var(--bds-size-1600);
+  height: calc(100vh - var(--bds-size-1600));
+  height: calc(100dvh - var(--bds-size-1600));
 }
 
 /* `main` is the flex-column parent Page's fill-height body requires. */

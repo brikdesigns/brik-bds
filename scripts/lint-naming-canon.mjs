@@ -227,9 +227,9 @@ const RETIRED_AXIS_VALUES = {
  * is the source of truth for the Foundations families
  * (`docs-site/content/docs/foundation/index.mdx:12`) and every one of its
  * ladders is worded — `tiny · xs · sm · md · lg · xl · (xxl) · huge`, no numeric
- * rung anywhere. `3xs`/`2xs`/`2xl`/`3xl` stay in the set: `--icon-2xs` and
- * `--icon-2xl` are real gap-fill rungs (`tokens/gap-fills.css`), and the 13
- * names #2229 minted ship one more minor as deprecated aliases.
+ * rung anywhere. `3xs`/`2xs`/`2xl`/`3xl` stay in the set: the 13 names #2229
+ * minted ship one more minor as deprecated aliases. (The `--icon-2xs` /
+ * `--icon-2xl` gap-fill rungs were retired onto `--bds-size-*` by #3338.)
  *
  * Ordering, low to high: tiny · 3xs · 2xs · xs · sm · md · lg · xl · 2xl · xxl · 3xl · huge.
  * `--padding-*` alone extends below `tiny` with `3nano · 2nano · nano` (FAMILY_STEPS).
