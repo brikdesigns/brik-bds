@@ -1419,10 +1419,6 @@
       "$value": "{color.grayscale.800}",
       "$type": "color"
     },
-    "brand-primary": {
-      "$value": "{color.grayscale.950}",
-      "$type": "color"
-    },
     "text-link": {
       "$value": "{color.system.blue.500}",
       "$type": "color"
@@ -1494,10 +1490,6 @@
       "$value": "{color.grayscale.700}",
       "$type": "color"
     },
-    "brand-primary": {
-      "$value": "{color.grayscale.950}",
-      "$type": "color"
-    },
     "disabled": {
       "$value": "{color.grayscale.500}",
       "$type": "color",
@@ -1528,23 +1520,18 @@
       "$type": "color"
     },
     "chart": {
-      "brand": {
-        "$value": "{color.grayscale.900}",
-        "$type": "color",
-        "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke."
-      },
       "neutral": {
         "$value": "{color.grayscale.500}",
         "$type": "color",
         "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/neutral; this one styles a border/stroke."
       },
       "positive": {
-        "$value": "{color.system.green.800}",
+        "$value": "{color.system.green.500}",
         "$type": "color",
         "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/positive; this one styles a border/stroke."
       },
       "warning": {
-        "$value": "{color.system.yellow.800}",
+        "$value": "{color.system.yellow.500}",
         "$type": "color",
         "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/warning; this one styles a border/stroke."
       },
@@ -1564,7 +1551,7 @@
       "$type": "color"
     },
     "focus": {
-      "$value": "{border.brand-primary}",
+      "$value": "{border.accent-blue}",
       "$type": "color"
     }
   },
@@ -1586,11 +1573,11 @@
       "$type": "color"
     },
     "secondary-hover": {
-      "$value": "{color.grayscale.800}",
+      "$value": "{color.grayscale.200}",
       "$type": "color"
     },
     "secondary-pressed": {
-      "$value": "{color.grayscale.900}",
+      "$value": "{color.grayscale.300}",
       "$type": "color"
     },
     "accent-red": {
@@ -1649,18 +1636,6 @@
       "$value": "{color.grayscale.800}",
       "$type": "color"
     },
-    "brand-primary": {
-      "$value": "{color.grayscale.950}",
-      "$type": "color"
-    },
-    "brand-primary-hover": {
-      "$value": "{color.grayscale.800}",
-      "$type": "color"
-    },
-    "brand-primary-pressed": {
-      "$value": "{color.grayscale.black}",
-      "$type": "color"
-    },
     "disabled": {
       "$value": "{color.grayscale.300}",
       "$type": "color",
@@ -1671,20 +1646,16 @@
       "$type": "color"
     },
     "chart": {
-      "brand": {
-        "$value": "{color.grayscale.900}",
-        "$type": "color"
-      },
       "neutral": {
         "$value": "{color.grayscale.500}",
         "$type": "color"
       },
       "positive": {
-        "$value": "{color.system.green.800}",
+        "$value": "{color.system.green.500}",
         "$type": "color"
       },
       "warning": {
-        "$value": "{color.system.yellow.800}",
+        "$value": "{color.system.yellow.500}",
         "$type": "color"
       },
       "negative": {
@@ -1779,18 +1750,6 @@
       "$value": "{color.grayscale.300}",
       "$type": "color"
     },
-    "brand-primary": {
-      "$value": "{color.grayscale.950}",
-      "$type": "color"
-    },
-    "brand-primary-hover": {
-      "$value": "{color.grayscale.800}",
-      "$type": "color"
-    },
-    "brand-primary-pressed": {
-      "$value": "{color.grayscale.black}",
-      "$type": "color"
-    },
     "accent-yellow": {
       "$value": "{color.system.yellow.200}",
       "$type": "color"
@@ -1830,10 +1789,6 @@
       "$type": "color"
     },
     "inverse": {
-      "$value": "{color.grayscale.950}",
-      "$type": "color"
-    },
-    "brand-primary": {
       "$value": "{color.grayscale.950}",
       "$type": "color"
     },

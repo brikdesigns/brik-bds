@@ -2342,6 +2342,16 @@
           "$type": "color",
           "$value": "{color.orange.500}"
         }
+      },
+      "focus": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.700}",
+        "$description": "Focus ring. Brik light uses blue/700 (3.25:1 on white) so the ring clears WCAG 2.4.7 / 1.4.11; dark keeps blue/500. brik-bds#3404."
       }
     }
   },
@@ -3703,6 +3713,16 @@
           "$type": "color",
           "$value": "{color.orange.400}"
         }
+      },
+      "focus": {
+        "$extensions": {
+          "com.figma.scopes": [
+            "STROKE_COLOR"
+          ]
+        },
+        "$type": "color",
+        "$value": "{color.blue.500}",
+        "$description": "Focus ring. Brik light uses blue/700 (3.25:1 on white) so the ring clears WCAG 2.4.7 / 1.4.11; dark keeps blue/500. brik-bds#3404."
       }
     }
   },

@@ -975,25 +975,11 @@
     },
     {
       "group": "chart",
-      "label": "Brand series fill on page",
-      "fg": "--bds-background-chart-brand",
-      "bg": "--bds-page-primary",
-      "thresholdType": "AA-large",
-      "note": "ADR-050 § 1. A chart fill is a non-text graphic object (WCAG 1.4.11), so it is gated at 3:1 against the surfaces a chart sits on, in both themes. No text is set on a chart colour, and colour is never the only carrier of meaning: every series also has a label, legend entry or pattern."
-    },
-    {
-      "group": "chart",
-      "label": "Brand series fill on card surface",
-      "fg": "--bds-background-chart-brand",
-      "bg": "--bds-surface-primary",
-      "thresholdType": "AA-large"
-    },
-    {
-      "group": "chart",
       "label": "Neutral series fill on page",
       "fg": "--bds-background-chart-neutral",
       "bg": "--bds-page-primary",
-      "thresholdType": "AA-large"
+      "thresholdType": "AA-large",
+      "note": "ADR-050 § 1. A chart fill is a non-text graphic object (WCAG 1.4.11), so it is gated at 3:1 against the surfaces a chart sits on, in both themes. No text is set on a chart colour, and colour is never the only carrier of meaning: every series also has a label, legend entry or pattern."
     },
     {
       "group": "chart",
@@ -1107,28 +1093,44 @@
       "label": "Positive series fill on page",
       "fg": "--bds-background-chart-positive",
       "bg": "--bds-page-primary",
-      "thresholdType": "AA-large"
+      "thresholdType": "AA-large",
+      "lightException": {
+        "issue": 3400,
+        "reason": "Brik brand environment (portal, brikdesigns.com, docs) a11y exception per operator 2026-11-27; client kits stay gated. Positive/warning moved 800 → 500 per operator 2026-11-28 (brik-bds#3404). Every series keeps a text label and a data-table alternative"
+      }
     },
     {
       "group": "chart",
       "label": "Positive series fill on card surface",
       "fg": "--bds-background-chart-positive",
       "bg": "--bds-surface-primary",
-      "thresholdType": "AA-large"
+      "thresholdType": "AA-large",
+      "lightException": {
+        "issue": 3400,
+        "reason": "Brik brand environment (portal, brikdesigns.com, docs) a11y exception per operator 2026-11-27; client kits stay gated. Positive/warning moved 800 → 500 per operator 2026-11-28 (brik-bds#3404). Every series keeps a text label and a data-table alternative"
+      }
     },
     {
       "group": "chart",
       "label": "Warning series fill on page",
       "fg": "--bds-background-chart-warning",
       "bg": "--bds-page-primary",
-      "thresholdType": "AA-large"
+      "thresholdType": "AA-large",
+      "lightException": {
+        "issue": 3400,
+        "reason": "Brik brand environment (portal, brikdesigns.com, docs) a11y exception per operator 2026-11-27; client kits stay gated. Positive/warning moved 800 → 500 per operator 2026-11-28 (brik-bds#3404). Every series keeps a text label and a data-table alternative"
+      }
     },
     {
       "group": "chart",
       "label": "Warning series fill on card surface",
       "fg": "--bds-background-chart-warning",
       "bg": "--bds-surface-primary",
-      "thresholdType": "AA-large"
+      "thresholdType": "AA-large",
+      "lightException": {
+        "issue": 3400,
+        "reason": "Brik brand environment (portal, brikdesigns.com, docs) a11y exception per operator 2026-11-27; client kits stay gated. Positive/warning moved 800 → 500 per operator 2026-11-28 (brik-bds#3404). Every series keeps a text label and a data-table alternative"
+      }
     },
     {
       "group": "chart",

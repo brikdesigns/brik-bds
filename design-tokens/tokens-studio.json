@@ -5690,15 +5690,6 @@
         "$type": "color",
         "$value": "{color.grayscale.800}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.950}"
-      },
       "text-link": {
         "$extensions": {
           "com.figma.scopes": [
@@ -5855,15 +5846,6 @@
         "$type": "color",
         "$value": "{color.grayscale.700}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.950}"
-      },
       "disabled": {
         "$extensions": {
           "com.figma.scopes": [
@@ -5929,16 +5911,6 @@
         "$value": "{color.system.red.500}"
       },
       "chart": {
-        "brand": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "STROKE_COLOR"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.grayscale.900}",
-          "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke."
-        },
         "neutral": {
           "$extensions": {
             "com.figma.scopes": [
@@ -5956,7 +5928,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.system.green.800}",
+          "$value": "{color.system.green.500}",
           "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/positive; this one styles a border/stroke."
         },
         "warning": {
@@ -5966,7 +5938,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.system.yellow.800}",
+          "$value": "{color.system.yellow.500}",
           "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/warning; this one styles a border/stroke."
         },
         "negative": {
@@ -6006,7 +5978,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{border.brand-primary}"
+        "$value": "{border.accent-blue}"
       }
     },
     "background": {
@@ -6048,7 +6020,7 @@
       },
       "secondary-hover": {
         "$type": "color",
-        "$value": "{color.grayscale.800}",
+        "$value": "{color.grayscale.200}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -6057,7 +6029,7 @@
       },
       "secondary-pressed": {
         "$type": "color",
-        "$value": "{color.grayscale.900}",
+        "$value": "{color.grayscale.300}",
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -6190,33 +6162,6 @@
         "$type": "color",
         "$value": "{color.grayscale.800}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.950}"
-      },
-      "brand-primary-hover": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.800}"
-      },
-      "brand-primary-pressed": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.black}"
-      },
       "disabled": {
         "$extensions": {
           "com.figma.scopes": [
@@ -6237,16 +6182,6 @@
         "$value": "{color.system.orange.500}"
       },
       "chart": {
-        "brand": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "FRAME_FILL",
-              "SHAPE_FILL"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.grayscale.900}"
-        },
         "neutral": {
           "$extensions": {
             "com.figma.scopes": [
@@ -6265,7 +6200,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.system.green.800}"
+          "$value": "{color.system.green.500}"
         },
         "warning": {
           "$extensions": {
@@ -6275,7 +6210,7 @@
             ]
           },
           "$type": "color",
-          "$value": "{color.system.yellow.800}"
+          "$value": "{color.system.yellow.500}"
         },
         "negative": {
           "$extensions": {
@@ -6481,33 +6416,6 @@
         "$type": "color",
         "$value": "{color.grayscale.300}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.950}"
-      },
-      "brand-primary-hover": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.800}"
-      },
-      "brand-primary-pressed": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.black}"
-      },
       "accent-yellow": {
         "$extensions": {
           "com.figma.scopes": [
@@ -6592,15 +6500,6 @@
         "$value": "{color.grayscale.100}"
       },
       "inverse": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.950}"
-      },
-      "brand-primary": {
         "$extensions": {
           "com.figma.scopes": [
             "ALL_SCOPES"
@@ -6747,15 +6646,6 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.800}"
-      },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.100}"
       },
       "text-link": {
         "$extensions": {
@@ -6913,15 +6803,6 @@
         "$type": "color",
         "$value": "{color.grayscale.700}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.100}"
-      },
       "disabled": {
         "$extensions": {
           "com.figma.scopes": [
@@ -6987,16 +6868,6 @@
         "$value": "{color.system.red.500}"
       },
       "chart": {
-        "brand": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "STROKE_COLOR"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.grayscale.100}",
-          "$description": "Chart stroke — line, outline, axis series mark. Same value as background/chart/brand; this one styles a border/stroke."
-        },
         "neutral": {
           "$extensions": {
             "com.figma.scopes": [
@@ -7064,7 +6935,7 @@
           ]
         },
         "$type": "color",
-        "$value": "{border.brand-primary}"
+        "$value": "{border.accent-blue}"
       }
     },
     "background": {
@@ -7248,33 +7119,6 @@
         "$type": "color",
         "$value": "{color.grayscale.800}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.950}"
-      },
-      "brand-primary-hover": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.800}"
-      },
-      "brand-primary-pressed": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.black}"
-      },
       "disabled": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7295,16 +7139,6 @@
         "$value": "{color.system.orange.500}"
       },
       "chart": {
-        "brand": {
-          "$extensions": {
-            "com.figma.scopes": [
-              "FRAME_FILL",
-              "SHAPE_FILL"
-            ]
-          },
-          "$type": "color",
-          "$value": "{color.grayscale.100}"
-        },
         "neutral": {
           "$extensions": {
             "com.figma.scopes": [
@@ -7539,33 +7373,6 @@
         "$type": "color",
         "$value": "{color.grayscale.300}"
       },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.950}"
-      },
-      "brand-primary-hover": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.800}"
-      },
-      "brand-primary-pressed": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.black}"
-      },
       "accent-yellow": {
         "$extensions": {
           "com.figma.scopes": [
@@ -7657,15 +7464,6 @@
         },
         "$type": "color",
         "$value": "{color.grayscale.100}"
-      },
-      "brand-primary": {
-        "$extensions": {
-          "com.figma.scopes": [
-            "ALL_SCOPES"
-          ]
-        },
-        "$type": "color",
-        "$value": "{color.grayscale.950}"
       },
       "accent-yellow": {
         "$extensions": {

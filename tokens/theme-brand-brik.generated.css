@@ -117,7 +117,6 @@
   --bds-text-accent: var(--bds-color-tan-700);
   --bds-border-secondary: var(--bds-color-grayscale-300);
   --bds-border-muted: var(--bds-color-grayscale-300);
-  --bds-border-brand-primary: var(--bds-color-poppy-500);
   --bds-border-accent-yellow: var(--bds-color-yellow-500);
   --bds-border-accent-blue: var(--bds-color-blue-500);
   --bds-border-accent-green: var(--bds-color-green-500);
@@ -130,6 +129,8 @@
   --bds-border-chart-categorical-4: var(--bds-color-green-700);
   --bds-border-chart-categorical-5: var(--bds-color-pink-600);
   --bds-border-chart-categorical-6: var(--bds-color-orange-500);
+  --bds-border-focus: var(--bds-color-blue-700);
+  --bds-border-brand-primary: var(--bds-color-poppy-500);
   --bds-border-service-brand: var(--bds-color-yellow-500);
   --bds-border-service-information: var(--bds-color-blue-500);
   --bds-border-service-back-office: var(--bds-color-orange-500);
@@ -143,9 +144,6 @@
   --bds-background-accent-blue: var(--bds-color-blue-500);
   --bds-background-accent-green: var(--bds-color-green-500);
   --bds-background-accent-yellow: var(--bds-color-yellow-500);
-  --bds-background-brand-primary: var(--bds-color-poppy-500);
-  --bds-background-brand-primary-hover: var(--bds-color-poppy-700);
-  --bds-background-brand-primary-pressed: var(--bds-color-poppy-800);
   --bds-background-accent-orange: var(--bds-color-orange-400);
   --bds-background-chart-categorical-1: var(--bds-color-blue-700);
   --bds-background-chart-categorical-2: var(--bds-color-purple-500);
@@ -153,6 +151,9 @@
   --bds-background-chart-categorical-4: var(--bds-color-green-700);
   --bds-background-chart-categorical-5: var(--bds-color-pink-600);
   --bds-background-chart-categorical-6: var(--bds-color-orange-500);
+  --bds-background-brand-primary: var(--bds-color-poppy-500);
+  --bds-background-brand-primary-hover: var(--bds-color-poppy-700);
+  --bds-background-brand-primary-pressed: var(--bds-color-poppy-800);
   --bds-background-service-brand: var(--bds-color-yellow-500);
   --bds-background-service-brand-on-light: var(--bds-color-yellow-950);
   --bds-background-service-marketing: var(--bds-color-green-400);
@@ -171,15 +172,15 @@
   --bds-background-accent: var(--bds-color-tan-400);
   --bds-background-brand-secondary: var(--bds-color-tan-100);
   --bds-background-image-brand: var(--bds-color-poppy-500);
-  --bds-surface-brand-primary: var(--bds-color-poppy-500);
-  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700);
-  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800);
   --bds-surface-accent-yellow: var(--bds-color-yellow-200);
   --bds-surface-accent-blue: var(--bds-color-blue-300);
   --bds-surface-accent-green: var(--bds-color-green-200);
   --bds-surface-accent-purple: var(--bds-color-purple-200);
   --bds-surface-accent-orange: var(--bds-color-orange-200);
   --bds-surface-accent-red: var(--bds-color-poppy-500);
+  --bds-surface-brand-primary: var(--bds-color-poppy-500);
+  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700);
+  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800);
   --bds-surface-service-brand: var(--bds-color-yellow-500);
   --bds-surface-service-marketing: var(--bds-color-green-500);
   --bds-surface-service-product: var(--bds-color-purple-400);
@@ -202,11 +203,11 @@
   --bds-surface-service-brand-inverse: var(--bds-color-grayscale-white);
   --bds-surface-accent: var(--bds-color-tan-100);
   --bds-surface-brand-secondary: var(--bds-color-tan-100);
-  --bds-page-brand-primary: var(--bds-color-poppy-500);
   --bds-page-accent-yellow: var(--bds-color-yellow-500);
   --bds-page-accent-orange: var(--bds-color-orange-500);
   --bds-page-accent-red: var(--bds-color-poppy-500);
   --bds-page-accent-purple: var(--bds-color-purple-500);
+  --bds-page-brand-primary: var(--bds-color-poppy-500);
   --bds-page-service-brand: var(--bds-color-yellow-600);
   --bds-page-service-marketing: var(--bds-color-green-600);
   --bds-page-service-product: var(--bds-color-purple-600);
@@ -215,7 +216,6 @@
   --bds-page-accent: var(--bds-color-tan-100);
   --bds-page-service-green: var(--bds-color-green-500);
   --bds-page-service-blue: var(--bds-color-blue-200);
-  --bds-border-focus: var(--bds-border-brand-primary);
 }
 
 :root[data-theme="dark"] .theme-brand-brik {
@@ -244,7 +244,6 @@
   --bds-border-secondary: var(--bds-color-grayscale-700);
   --bds-border-muted: var(--bds-color-grayscale-700);
   --bds-border-inverse: var(--bds-color-grayscale-black);
-  --bds-border-brand-primary: var(--bds-color-poppy-500);
   --bds-border-disabled: var(--bds-color-grayscale-800);
   --bds-border-accent-yellow: var(--bds-color-yellow-500);
   --bds-border-accent-blue: var(--bds-color-blue-500);
@@ -258,6 +257,8 @@
   --bds-border-chart-categorical-4: var(--bds-color-green-500);
   --bds-border-chart-categorical-5: var(--bds-color-pink-400);
   --bds-border-chart-categorical-6: var(--bds-color-orange-400);
+  --bds-border-focus: var(--bds-color-blue-500);
+  --bds-border-brand-primary: var(--bds-color-poppy-500);
   --bds-border-service-brand: var(--bds-color-yellow-500);
   --bds-border-service-information: var(--bds-color-blue-500);
   --bds-border-service-back-office: var(--bds-color-orange-500);
@@ -275,9 +276,6 @@
   --bds-background-inverse: var(--bds-color-grayscale-100);
   --bds-background-input: var(--bds-color-grayscale-950);
   --bds-background-accent-yellow: var(--bds-color-yellow-500);
-  --bds-background-brand-primary: var(--bds-color-poppy-500);
-  --bds-background-brand-primary-hover: var(--bds-color-poppy-700);
-  --bds-background-brand-primary-pressed: var(--bds-color-poppy-800);
   --bds-background-accent-orange: var(--bds-color-orange-400);
   --bds-background-chart-categorical-1: var(--bds-color-blue-500);
   --bds-background-chart-categorical-2: var(--bds-color-purple-500);
@@ -285,6 +283,9 @@
   --bds-background-chart-categorical-4: var(--bds-color-green-500);
   --bds-background-chart-categorical-5: var(--bds-color-pink-400);
   --bds-background-chart-categorical-6: var(--bds-color-orange-400);
+  --bds-background-brand-primary: var(--bds-color-poppy-500);
+  --bds-background-brand-primary-hover: var(--bds-color-poppy-700);
+  --bds-background-brand-primary-pressed: var(--bds-color-poppy-800);
   --bds-background-service-brand: var(--bds-color-yellow-500);
   --bds-background-service-brand-on-light: var(--bds-color-yellow-950);
   --bds-background-service-marketing: var(--bds-color-green-400);
@@ -304,15 +305,15 @@
   --bds-background-brand-secondary: var(--bds-color-grayscale-950);
   --bds-background-image-brand: var(--bds-color-poppy-500);
   --bds-surface-primary: var(--bds-color-grayscale-black);
-  --bds-surface-brand-primary: var(--bds-color-poppy-500);
-  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700);
-  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800);
   --bds-surface-accent-yellow: var(--bds-color-yellow-200);
   --bds-surface-accent-blue: var(--bds-color-blue-200);
   --bds-surface-accent-green: var(--bds-color-green-100);
   --bds-surface-accent-purple: var(--bds-color-purple-200);
   --bds-surface-accent-orange: var(--bds-color-orange-100);
   --bds-surface-accent-red: var(--bds-color-poppy-500);
+  --bds-surface-brand-primary: var(--bds-color-poppy-500);
+  --bds-surface-brand-primary-hover: var(--bds-color-poppy-700);
+  --bds-surface-brand-primary-pressed: var(--bds-color-poppy-800);
   --bds-surface-service-brand: var(--bds-color-yellow-500);
   --bds-surface-service-marketing: var(--bds-color-green-500);
   --bds-surface-service-product: var(--bds-color-purple-400);
@@ -337,11 +338,11 @@
   --bds-surface-brand-secondary: var(--bds-color-grayscale-950);
   --bds-surface-nav: var(--bds-color-grayscale-black);
   --bds-page-secondary: var(--bds-color-grayscale-800);
-  --bds-page-brand-primary: var(--bds-color-poppy-500);
   --bds-page-accent-yellow: var(--bds-color-yellow-500);
   --bds-page-accent-orange: var(--bds-color-orange-500);
   --bds-page-accent-red: var(--bds-color-poppy-500);
   --bds-page-accent-purple: var(--bds-color-purple-500);
+  --bds-page-brand-primary: var(--bds-color-poppy-500);
   --bds-page-service-brand: var(--bds-color-yellow-600);
   --bds-page-service-marketing: var(--bds-color-green-600);
   --bds-page-service-product: var(--bds-color-purple-600);
@@ -350,6 +351,5 @@
   --bds-page-accent: var(--bds-color-tan-950);
   --bds-page-service-green: var(--bds-color-green-500);
   --bds-page-service-blue: var(--bds-color-blue-200);
-  --bds-border-focus: var(--bds-border-brand-primary);
   --bds-text-on-color-light-muted: color-mix(in srgb, var(--bds-text-on-color-light) 70%, transparent);
 }
