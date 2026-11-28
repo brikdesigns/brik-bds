@@ -90,7 +90,7 @@ export interface PageHeaderProps extends HTMLAttributes<HTMLDivElement> {
    * ancestor; ensure that container, not the window, owns the scroll.
    *
    * The offset is `--bds-pageheader-top` (default `0px`). A shell with a top
-   * bar sets it to the `--bds-shell-top-bar-height` token on an ancestor, so the
+   * bar sets it to the bar's height (`--bds-size-1600` for AppBar) on an ancestor, so the
    * header pins below the bar instead of under it.
    */
   sticky?: boolean;

@@ -293,7 +293,7 @@ export const InteractionTestShellOffset: Story = {
     const subnav = canvasElement.querySelector('.bds-subnav') as HTMLElement;
     const header = canvasElement.querySelector('.bds-page-header') as HTMLElement;
 
-    // --bds-shell-top-bar-height is --bds-size-1600 (64px).
+    // The top bar is --bds-size-1600 (64px).
     await expect(getComputedStyle(subnav).top).toBe('64px');
     await expect(getComputedStyle(header).top).toBe('64px');
     await expect(Math.round(topBar.getBoundingClientRect().height)).toBe(64);

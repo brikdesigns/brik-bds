@@ -60,21 +60,6 @@
   --bds-slider-thumb-size:   20px;
   --bds-slider-track-height: 4px;
 
-  /* ── Icon size extensions (gap-fill — not yet in Figma; see #758) ──
-     The base icon ramp (--bds-icon-tiny/xs/sm/md/lg/xl/huge) is Figma-sourced again
-     via figma-tokens.css, so the 2026-04-03 "restore the full set" block was
-     removed here to end the duplication. Only the two size-scale bridges stay:
-     12px / 24px are not on the font-size scale.
-
-     These two are the ONLY numeric rungs in the icon ladder, and they are
-     gap-fills with no ❖ Brik Foundations variable behind them. ADR-033 §3 read
-     them as evidence that the icon ramp "already ships 2xs and 2xl" and renamed
-     the Figma-backed tiny/huge to 3xs/3xl on that basis — the reasoning-from-
-     our-own-fill-ins that #2594 reverts. Promote or rename them via Figma
-     (#758), never by inferring a ladder from this file. */
-  --bds-icon-2xs: var(--bds-size-300);   /* 12px — Button xs icon; between icon-tiny (~11.5px) and icon-xs (14px) */
-  --bds-icon-2xl: var(--bds-size-600);   /* 24px — Button xl icon; between icon-xl (~22.5px) and icon-huge (~25.3px) */
-
   /* ── Semantic Tokens Not Yet in Figma/SD ── */
   --bds-surface-nav: var(--bds-color-grayscale-white);
   --bds-surface-brand-secondary: var(--bds-color-grayscale-100); /* Foundations default; yellow-500 was a Brand Kit primitive, and Brik pins its own in the Brand Kit (#2927) */
@@ -364,22 +349,16 @@
   --bds-z-tooltip:      1200;
   --bds-z-max:          9999;
 
-  /* ── Product shell sizes (brik-bds#2840) ──
-     Fixed dimensions of the product app shell. Sources:
-       top bar 64px  — brik-client-portal src/components/portal-top-bar.tsx:57
-                       (height: '64px') and src/app/globals.css:970-971; aliases
-                       --bds-size-1600 (tokens/figma-tokens.css:284) */
-  --bds-shell-top-bar-height:       var(--bds-size-1600);
-
   /* SubNavigation sticky offset (brik-bds#2841). 0px, not the top-bar height:
-     the canonical app shell has no top bar. A shell with one sets it to
-     var(--bds-shell-top-bar-height) on an ancestor. Unit-bearing because the
-     rail subtracts it inside calc(). */
+     the canonical app shell has no top bar. A shell with one sets it to the
+     bar's height (AppBar: var(--bds-size-1600), 64px) on an ancestor.
+     Unit-bearing because the rail subtracts it inside calc(). */
   --bds-subnav-top:                 0px;
 
   /* PageHeader sticky offset (brik-bds#2842). Same contract as --bds-subnav-top:
-     0px by default, set var(--bds-shell-top-bar-height) on an ancestor when the
-     shell has a top bar. Unit-bearing so a consumer can use it inside calc(). */
+     0px by default, set to the bar's height (AppBar: var(--bds-size-1600)) on an
+     ancestor when the shell has a top bar. Unit-bearing so a consumer can use it
+     inside calc(). */
   --bds-pageheader-top:            0px;
 }
 
